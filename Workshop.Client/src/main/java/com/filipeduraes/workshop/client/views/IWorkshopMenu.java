@@ -8,5 +8,6 @@ package com.filipeduraes.workshop.client.views;
  */
 public interface IWorkshopMenu 
 {
+    public String GetMenuDisplayName();
     public void ShowMenu();
 }

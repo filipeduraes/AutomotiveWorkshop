@@ -3,7 +3,7 @@
 package com.filipeduraes.workshop.client;
 
 import com.filipeduraes.workshop.client.views.IWorkshopMenu;
-import com.filipeduraes.workshop.client.views.LoginMenu;
+import com.filipeduraes.workshop.client.views.EnterUserMenu;
 
 /**
  * 
@@ -11,7 +11,7 @@ import com.filipeduraes.workshop.client.views.LoginMenu;
  */
 public class WorkshopClient 
 {
-    private static IWorkshopMenu currentMenu = new LoginMenu();
+    private static IWorkshopMenu currentMenu = new EnterUserMenu();
     
     public static void main(String[] args)
     {
