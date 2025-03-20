@@ -16,6 +16,6 @@ public class LoginMenu implements IWorkshopMenu
         System.out.println("\nInsira a senha: ");
         String password = ConsoleInput.ReadLine();
         
-        System.out.println(String.format("\nUser: %s, Password: %s", userName, password));
+        System.out.println(String.format("\nUser: %s, Password: %d", userName, password.hashCode()));
     }
 }
