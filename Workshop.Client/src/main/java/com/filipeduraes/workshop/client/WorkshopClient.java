@@ -1,20 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
+// Copyright Filipe Durães. All rights reserved.
 
 package com.filipeduraes.workshop.client;
 
 import com.filipeduraes.workshop.core.Workshop;
+import com.filipeduraes.workshop.client.views.IWorkshopMenu;
+import com.filipeduraes.workshop.client.views.LoginMenu;
 
 /**
- *
- * @author fhdd
+ * 
+ * @author Filipe Durães
  */
 public class WorkshopClient 
 {
+    private static IWorkshopMenu currentMenu = new LoginMenu();
+    
     public static void main(String[] args) 
     {
-        Workshop workshop = new Workshop();
-        System.out.println("Hello World!");
+        currentMenu.ShowMenu();
     }
 }
