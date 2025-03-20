@@ -2,7 +2,6 @@
 
 package com.filipeduraes.workshop.client;
 
-import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.client.views.IWorkshopMenu;
 import com.filipeduraes.workshop.client.views.LoginMenu;
 
@@ -14,7 +13,7 @@ public class WorkshopClient
 {
     private static IWorkshopMenu currentMenu = new LoginMenu();
     
-    public static void main(String[] args) 
+    public static void main(String[] args)
     {
         currentMenu.ShowMenu();
     }
