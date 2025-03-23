@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.client.views;
+package com.filipeduraes.workshop.client.consoleview;
 
 /**
  * Base for all menus in the client.
@@ -8,6 +8,6 @@ package com.filipeduraes.workshop.client.views;
  */
 public interface IWorkshopMenu 
 {
-    public String GetMenuDisplayName();
-    public void ShowMenu();
+    public String getMenuDisplayName();
+    public boolean showMenu(MenuManager menuManager);
 }

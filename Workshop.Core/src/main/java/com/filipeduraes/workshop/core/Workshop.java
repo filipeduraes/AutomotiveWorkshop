@@ -8,8 +8,10 @@ package com.filipeduraes.workshop.core;
  */
 public class Workshop 
 {
-    public void Test()
+    private AuthModule authModule = new AuthModule();
+    
+    public AuthModule getAuthModule()
     {
-        System.out.println("Teste Core");
+        return authModule;
     }
 }

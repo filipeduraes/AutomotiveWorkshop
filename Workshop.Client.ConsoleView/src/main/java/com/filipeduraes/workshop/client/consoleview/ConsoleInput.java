@@ -1,5 +1,5 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.client.views;
+package com.filipeduraes.workshop.client.consoleview;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 public class ConsoleInput 
 {
     private static ConsoleInput inputInstance;
-    private BufferedReader reader;
+    private final BufferedReader reader;
     
     private ConsoleInput()
     {
@@ -29,6 +29,7 @@ public class ConsoleInput
         catch (IOException e)
         {
             System.err.println(String.format("Erro ao ler entrada do usuário: %s", e.getMessage()));
+            e.printStackTrace(System.out);
             return "";
         }
     }

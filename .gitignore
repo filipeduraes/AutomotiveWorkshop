@@ -24,3 +24,7 @@ hs_err_pid*
 replay_pid*
 /Workshop.Core/target/
 /Workshop.Client/target/
+/Workshop.Client.ViewModel/target/
+/Workshop.Client.Model/target/
+/Workshop.Client.ConsoleView/target/
+Workshop.Client/Data/Users.workshop
