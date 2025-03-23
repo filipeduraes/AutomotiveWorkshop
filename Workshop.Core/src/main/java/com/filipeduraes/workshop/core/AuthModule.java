@@ -38,9 +38,9 @@ public class AuthModule
     {
         try
         {
-            Map<String, Employee> registeredUsers = LoadRegisteredUsers();
+            Map<UUID, Employee> registeredUsers = LoadRegisteredUsers();
             
-            String uniqueID = generateUniqueID(registeredUsers);
+            UUID uniqueID = generateUniqueID(registeredUsers);
             user = new Employee(uniqueID, user);
             
             registeredUsers.put(uniqueID, user);
@@ -63,7 +63,7 @@ public class AuthModule
     
     public boolean tryLogIn(String email, int passwordHash)
     {
-        Map<String, Employee> registeredUsers = LoadRegisteredUsers();
+        Map<UUID, Employee> registeredUsers = LoadRegisteredUsers();
         Employee userToValidate = null;
         
         for(Employee employee : registeredUsers.values())
@@ -90,7 +90,7 @@ public class AuthModule
         return passwordIsValid;
     }
     
-    private Map<String, Employee> LoadRegisteredUsers()
+    private Map<UUID, Employee> LoadRegisteredUsers()
     {
         try 
         {
@@ -99,7 +99,7 @@ public class AuthModule
             FileReader fileReader = new FileReader(UsersPath);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            HashMap<String, Employee> result = new HashMap<>();
+            HashMap<UUID, Employee> result = new HashMap<>();
             StringBuilder builder = new StringBuilder();
             String currentLine;
 
@@ -136,13 +136,13 @@ public class AuthModule
         }
     }
 
-    private String generateUniqueID(Map<String, Employee> registeredUsers) 
+    private UUID generateUniqueID(Map<UUID, Employee> registeredUsers) 
     {
-        String uniqueID = UUID.randomUUID().toString();
+        UUID uniqueID = UUID.randomUUID();
         
         while(registeredUsers.containsKey(uniqueID))
         {
-            uniqueID = UUID.randomUUID().toString();
+            uniqueID = UUID.randomUUID();
         }
         
         return uniqueID;

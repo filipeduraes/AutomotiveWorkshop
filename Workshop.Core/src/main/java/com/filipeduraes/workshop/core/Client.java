@@ -2,6 +2,7 @@
 package com.filipeduraes.workshop.core;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  *
@@ -9,9 +10,9 @@ import java.util.ArrayList;
  */
 public class Client extends Entity
 {
-    private ArrayList<String> ownedVehiclesIDs = new ArrayList<>();
+    private ArrayList<UUID> ownedVehiclesIDs = new ArrayList<>();
     
-    public Client(String id, String name, String email) 
+    public Client(UUID id, String name, String email) 
     {
         super(id, name, email);
     }
