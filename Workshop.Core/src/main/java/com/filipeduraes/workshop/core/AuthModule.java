@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.lang.reflect.Type;
 
 /**
@@ -38,7 +39,11 @@ public class AuthModule
         try
         {
             Map<String, Employee> registeredUsers = LoadRegisteredUsers();
-            registeredUsers.put(user.getEmail(), user);
+            
+            String uniqueID = generateUniqueID(registeredUsers);
+            user = new Employee(uniqueID, user);
+            
+            registeredUsers.put(uniqueID, user);
             
             FileWriter fileWriter = new FileWriter(UsersPath);
             
@@ -59,13 +64,22 @@ public class AuthModule
     public boolean tryLogIn(String email, int passwordHash)
     {
         Map<String, Employee> registeredUsers = LoadRegisteredUsers();
-            
-        if(!registeredUsers.containsKey(email))
+        Employee userToValidate = null;
+        
+        for(Employee employee : registeredUsers.values())
+        {
+            if(employee.getEmail().equals(email))
+            {
+                userToValidate = employee;
+                break;
+            }
+        }
+        
+        if(userToValidate == null)
         {
             return false;
         }
 
-        Employee userToValidate = registeredUsers.get(email);
         boolean passwordIsValid = userToValidate.isPasswordValid(passwordHash);
         
         if(passwordIsValid)
@@ -120,5 +134,17 @@ public class AuthModule
         {
             Files.createFile(path);
         }
+    }
+
+    private String generateUniqueID(Map<String, Employee> registeredUsers) 
+    {
+        String uniqueID = UUID.randomUUID().toString();
+        
+        while(registeredUsers.containsKey(uniqueID))
+        {
+            uniqueID = UUID.randomUUID().toString();
+        }
+        
+        return uniqueID;
     }
 }

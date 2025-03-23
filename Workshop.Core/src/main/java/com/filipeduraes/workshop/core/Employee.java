@@ -5,29 +5,34 @@ package com.filipeduraes.workshop.core;
  *
  * @author Filipe Durães
  */
-public class Employee
+public class Employee extends Entity
 {
-    private final String name;
-    private final String email;
     private final EmployeeRole role;
     private final int hashPassword;
     
+    public Employee(String id, Employee copy)
+    {
+        super(id, copy.getName(), copy.getEmail());
+        
+        this.role = copy.getRole();
+        this.hashPassword = copy.hashPassword;        
+    }
+    
+    
     public Employee(String name, String email, EmployeeRole role, int hashPassword)
     {
-        this.name = name;
-        this.email = email;
+        super(name, email);
+        
         this.role = role;
         this.hashPassword = hashPassword;        
     }
     
-    public String getName()
+    public Employee(String id, String name, String email, EmployeeRole role, int hashPassword)
     {
-        return name;
-    }
-    
-    public String getEmail()
-    {
-        return email;
+        super(id, name, email);
+        
+        this.role = role;
+        this.hashPassword = hashPassword;        
     }
     
     public EmployeeRole getRole()
