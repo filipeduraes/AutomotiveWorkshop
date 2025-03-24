@@ -4,9 +4,9 @@ package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
-import com.filipeduraes.workshop.core.AuthModule;
-import com.filipeduraes.workshop.core.Employee;
-import com.filipeduraes.workshop.core.EmployeeRole;
+import com.filipeduraes.workshop.core.auth.AuthModule;
+import com.filipeduraes.workshop.core.auth.Employee;
+import com.filipeduraes.workshop.core.auth.EmployeeRole;
 import java.util.ArrayList;
 
 /**

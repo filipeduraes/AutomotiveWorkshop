@@ -2,6 +2,8 @@
 
 package com.filipeduraes.workshop.core;
 
+import com.filipeduraes.workshop.core.auth.AuthModule;
+
 /**
  *
  * @author Filipe Durães

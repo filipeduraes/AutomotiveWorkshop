@@ -1,5 +1,5 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.core;
+package com.filipeduraes.workshop.core.auth;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,6 +23,7 @@ public class AuthModule
 {
     private Employee loggedUser = null;
     private static final String UsersPath = "./Data/Users.workshop";
+    private Map<UUID, Employee> registeredUsers;
     
     public Employee getLoggedUser()
     {
@@ -38,17 +39,17 @@ public class AuthModule
     {
         try
         {
-            Map<UUID, Employee> registeredUsers = LoadRegisteredUsers();
+            Map<UUID, Employee> currentRegisteredUsers = loadRegisteredUsers();
             
-            UUID uniqueID = generateUniqueID(registeredUsers);
+            UUID uniqueID = generateUniqueID(currentRegisteredUsers);
             user = new Employee(uniqueID, user);
             
-            registeredUsers.put(uniqueID, user);
+            currentRegisteredUsers.put(uniqueID, user);
             
             FileWriter fileWriter = new FileWriter(UsersPath);
             
             Gson gson = new Gson();
-            String usersJson = gson.toJson(registeredUsers);
+            String usersJson = gson.toJson(currentRegisteredUsers);
             
             try (BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) 
             {
@@ -63,7 +64,7 @@ public class AuthModule
     
     public boolean tryLogIn(String email, int passwordHash)
     {
-        Map<UUID, Employee> registeredUsers = LoadRegisteredUsers();
+        registeredUsers = loadRegisteredUsers();
         Employee userToValidate = null;
         
         for(Employee employee : registeredUsers.values())
@@ -90,7 +91,17 @@ public class AuthModule
         return passwordIsValid;
     }
     
-    private Map<UUID, Employee> LoadRegisteredUsers()
+    public Employee getUserFromID(UUID userID)
+    {
+        if(!registeredUsers.containsKey(userID))
+        {
+            return null;
+        }
+        
+        return registeredUsers.get(userID);
+    }
+    
+    private Map<UUID, Employee> loadRegisteredUsers()
     {
         try 
         {
