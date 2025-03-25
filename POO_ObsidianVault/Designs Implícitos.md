@@ -19,11 +19,19 @@ Precisa de um controle de ponto
 - Deve ser possível registrar e fazer login com vários usuários. A chave de identificação deles será o email, já que é único.
 
 ---
-#### Módulo de Serviços
+#### Módulo de Manutenção
+
+A inspeção também gerará um serviço com um determinado custo?
+
+LISTA DE SERVIÇOS: Uma manutenção pode haver vários serviços diferentes, com diferentes preços. **NMI** - Cada serviço vai ter um preço pré-determinado, ou o mecânico determina o preço na hora? Design inicial: o mecânico irá inserir o nome e o preço do serviço, já que coisas como o tempo podem influenciar.
+
+**NMI** - Após passar do mecânico geral para o mecânico especialista, o mecânico especialista inserirá o tempo previsto? Ou o mecânico geral determinará isso?
+
+Uma manutenção pode ter também uma lista de vendas, que são as peças usadas junto com o seu preço. (Comunicação entre o sistema de vendas e o de manutenção)
 
 - Acessos: 
 	- Atendente: Lançamentos de vendas e agendamento preliminar de serviços
-	- Mecânico Geral: Visualização de agendamentos preliminares e transferência para o especialista. //Verificar fluxo: Sempre será transferido para o especialista ou o mecânico geral pode já realizar o serviço.
+	- Mecânico Geral: Visualização de agendamentos preliminares e transferência para o especialista. **NMI** - Verificar fluxo: Sempre será transferido para o especialista ou o mecânico geral pode já realizar o serviço.
 	- Mecânico Especialista: Visualização do agendamento transferido com mensagem do mecânico geral. Lançamento do agendamento completo e preço das peças e do serviço.
 
 **NMI** - Quando a atendente lançar o pré-agendamento, ela vai especificar qual mecânico geral vai receber ele? ou todos os mecânicos gerais vão receber esse alerta, e o primeiro que estiver livre pode pegar ele, e irá desaparecer para os outros.
@@ -31,13 +39,21 @@ Precisa de um controle de ponto
 **NMI** - Como funciona a agenda no pré-agendamento? No pré-agendamento, a agenda a ser verificada é de um mecânico específico ou geral da oficina? O tempo de cada atendimento é fixo (ex: 30min)? E em caso de atrasos ou adiantamentos, a agenda deve ser ajustada dinamicamente ou segue fixa? O especialista também tem uma agenda? Quando ele recebe o trabalho ele estima o tempo necessário e isso adiciona esse conserto na agenda?
 #### Módulo de Vendas
 
+#### Módulo de Agenda do Funcionário
+
+- Será necessário controlar os serviços que um determinado mecânico tem na fila. A partir da última manutenção na fila, deve ser possível adicionar um planejamento de quando começará o serviço.
+- Na hora de lançar que hora uma manutenção realmente começou e quando realmente finalizou, deve atualizar toda a fila para prever qualquer tipo de atraso ou adiantamento.
+- Duas funções: Iniciar manutenção, finalizar manutenção. Mudam o estado atual da manutenção e atualizam as datas e a fila.
+
 #### Módulo de Controle de Ponto
 
 ---
 #### Módulo Financeiro
 
 Acessos: 
- - Gerente/Dono: Visualização e geração do balanço. Lançamento de despesas. //Confirmar se haverá um auxiliar administrativo.
+ - Gerente/Dono: Visualização e geração do balanço. Lançamento de despesas. 
+	 **NMI** - Confirmar se haverá um auxiliar administrativo.
+ 
 Armazena:
 - Despesas da oficina
 	- Precisa do valor, descrição e data

@@ -1,56 +1,37 @@
 {
   "main": {
-    "id": "226fa1e7fb6f9283",
+    "id": "2ff737666712549a",
     "type": "split",
     "children": [
       {
-        "id": "e218e632c8c26b88",
+        "id": "b19f35ad54ec245f",
         "type": "tabs",
         "children": [
           {
-            "id": "8a3452f4e139636f",
+            "id": "6748b343b6b51491",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Requisitos - Projeto.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Requisitos - Projeto"
-            }
-          },
-          {
-            "id": "87d5edce0c8987b1",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Designs Implícitos.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Designs Implícitos"
+              "title": "Nova aba"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "96df66033886c2f6",
+    "id": "9679b6ae45fe19c4",
     "type": "split",
     "children": [
       {
-        "id": "9b5a4e262cf80086",
+        "id": "451b95d30c9219cc",
         "type": "tabs",
         "children": [
           {
-            "id": "1f9b486b06474651",
+            "id": "73a688282fb9fce0",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -63,7 +44,7 @@
             }
           },
           {
-            "id": "629b164c376b0bad",
+            "id": "faa4a965553c33cd",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -76,17 +57,17 @@
                 "sortOrder": "alphabetical"
               },
               "icon": "lucide-search",
-              "title": "Search"
+              "title": "Procurar"
             }
           },
           {
-            "id": "43004a75a6c94170",
+            "id": "8300a6ce1308a3a4",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
               "state": {},
               "icon": "lucide-bookmark",
-              "title": "Bookmarks"
+              "title": "Marcadores"
             }
           }
         ]
@@ -96,20 +77,19 @@
     "width": 300
   },
   "right": {
-    "id": "5518f5d007d61e6a",
+    "id": "bc7a97035e8f83c1",
     "type": "split",
     "children": [
       {
-        "id": "96b4bbed6d05e884",
+        "id": "34cbae935224c83b",
         "type": "tabs",
         "children": [
           {
-            "id": "db189b0e5e36cd6a",
+            "id": "514beb972448a8d1",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Untitled.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,25 +99,24 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Untitled"
+              "title": "Backlinks"
             }
           },
           {
-            "id": "30677826bca1acf3",
+            "id": "b6dd5ecb080b7fd9",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Untitled.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Untitled"
+              "title": "Links de saída"
             }
           },
           {
-            "id": "325fb6c61aeac6d7",
+            "id": "62b903bd33654269",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -152,18 +131,17 @@
             }
           },
           {
-            "id": "55a4b826c52ac256",
+            "id": "a730d4012cfda8b4",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "Untitled.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Untitled"
+              "title": "Sumário"
             }
           }
         ]
@@ -183,11 +161,6 @@
       "command-palette:Abrir paleta de comandos": false
     }
   },
-  "active": "87d5edce0c8987b1",
-  "lastOpenFiles": [
-    "Requisitos - Projeto.md",
-    "Registro.md",
-    "Designs Implícitos.md",
-    "Welcome.md"
-  ]
+  "active": "6748b343b6b51491",
+  "lastOpenFiles": []
 }

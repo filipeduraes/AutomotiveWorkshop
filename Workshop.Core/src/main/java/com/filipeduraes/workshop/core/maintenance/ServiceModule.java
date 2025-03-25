@@ -1,5 +1,5 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.core.services;
+package com.filipeduraes.workshop.core.maintenance;
 
 /**
  *
@@ -7,5 +7,5 @@ package com.filipeduraes.workshop.core.services;
  */
 public class ServiceModule 
 {
-    private Service[] userServices;
+    private ActiveMaintenance[] userServices;
 }
