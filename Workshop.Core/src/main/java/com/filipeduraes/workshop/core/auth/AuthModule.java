@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  *
@@ -22,8 +24,16 @@ import java.lang.reflect.Type;
 public class AuthModule 
 {
     private Employee loggedUser = null;
-    private static final String UsersPath = "./Data/Users.workshop";
     private Map<UUID, Employee> registeredUsers;
+    private boolean useObfuscation;
+    
+    private static final String UsersPath = "./Data/Users.workshop";
+    private static final byte Key = 12;
+    
+    public AuthModule(boolean useObfuscation)
+    {
+        this.useObfuscation = useObfuscation;
+    }
     
     public Employee getLoggedUser()
     {
@@ -50,10 +60,11 @@ public class AuthModule
             
             Gson gson = new Gson();
             String usersJson = gson.toJson(currentRegisteredUsers);
+            String obfuscatedUsers = useObfuscation ? obfuscate(usersJson) : usersJson;
             
             try (BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) 
             {
-                bufferedWriter.write(usersJson);
+                bufferedWriter.write(obfuscatedUsers);
             }
         }
         catch(IOException exception)
@@ -111,17 +122,13 @@ public class AuthModule
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             HashMap<UUID, Employee> result = new HashMap<>();
-            StringBuilder builder = new StringBuilder();
-            String currentLine;
-
-            while ((currentLine = bufferedReader.readLine()) != null) 
-            {
-                builder.append(currentLine).append(System.lineSeparator());
-            }
+            String obfuscatedUsers = Files.readString(Path.of(UsersPath), StandardCharsets.UTF_8);
             
             Gson gson = new Gson();
             Type type = new TypeToken<HashMap<String, Employee>>(){}.getType();
-            result = gson.fromJson(builder.toString(), type);
+            
+            String usersJson = useObfuscation ? deobfuscate(obfuscatedUsers) : obfuscatedUsers;
+            result = gson.fromJson(usersJson, type);
             return result == null ? new HashMap<>() : result;
         } 
         catch (IOException e) 
@@ -157,5 +164,29 @@ public class AuthModule
         }
         
         return uniqueID;
+    }
+    
+    private String obfuscate(String text)
+    {        
+        byte[] buffer = text.getBytes(StandardCharsets.UTF_8);
+
+        for (int i = 0; i < buffer.length; i++)
+        {
+            buffer[i] ^= Key;
+        }
+
+        return Base64.getEncoder().encodeToString(buffer);
+    }
+
+    private String deobfuscate(String base64)
+    {
+        byte[] buffer = Base64.getDecoder().decode(base64);
+
+        for (int i = 0; i < buffer.length; i++)
+        {
+            buffer[i] ^= Key;
+        }
+
+        return new String(buffer, StandardCharsets.UTF_8);
     }
 }

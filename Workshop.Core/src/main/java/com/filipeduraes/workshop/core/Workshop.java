@@ -10,7 +10,7 @@ import com.filipeduraes.workshop.core.auth.AuthModule;
  */
 public class Workshop 
 {
-    private AuthModule authModule = new AuthModule();
+    private AuthModule authModule = new AuthModule(false);
     
     public AuthModule getAuthModule()
     {
