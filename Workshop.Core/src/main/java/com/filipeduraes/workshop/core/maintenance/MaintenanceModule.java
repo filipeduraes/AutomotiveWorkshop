@@ -1,0 +1,32 @@
+// Copyright Filipe Durães. All rights reserved.
+package com.filipeduraes.workshop.core.maintenance;
+
+import com.filipeduraes.workshop.core.auth.Employee;
+import com.filipeduraes.workshop.core.persistence.Persistence;
+import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author Filipe Durães
+ */
+public class MaintenanceModule
+{
+    private Maintenance[] userServices;
+    private Employee loggedEmployee;
+    
+    public MaintenanceModule(Employee loggedEmployee)
+    {
+        this.loggedEmployee = loggedEmployee;
+    }
+    
+    public void registerNewAppointment(Vehicle vehicle, String problemDescription)
+    {
+        Appointment appointment = new Appointment(vehicle, problemDescription, loggedEmployee);
+        ArrayList<Appointment> appointments = Persistence.loadFile(WorkshopPaths.OpenedAppointmentsPath, new ArrayList<>());
+        
+        appointments.add(appointment);
+        
+        Persistence.saveFile(appointments, WorkshopPaths.OpenedAppointmentsPath);
+    }
+}

@@ -5,8 +5,8 @@ package com.filipeduraes.workshop.client.model;
 import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import com.filipeduraes.workshop.core.auth.AuthModule;
-import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.auth.EmployeeRole;
+import com.filipeduraes.workshop.core.auth.LocalEmployee;
 import java.util.ArrayList;
 
 /**
@@ -66,7 +66,7 @@ public class LoginController
             case SIGNIN_REQUESTED:
                 int selectedRole = viewModel.getSelectedRole();
                 EmployeeRole role = EmployeeRole.values()[selectedRole];
-                Employee newUser = new Employee(viewModel.getName(), viewModel.getEmail(), role, viewModel.getPasswordHash());
+                LocalEmployee newUser = new LocalEmployee(viewModel.getName(), viewModel.getEmail(), role, viewModel.getPasswordHash());
                 
                 authModule.registerUser(newUser);
                 break;

@@ -8,13 +8,16 @@ package com.filipeduraes.workshop.core.maintenance;
  */
 public class Vehicle
 {
+    private transient Client owner;
     private String model;
     private String color;
     private String type;
     private String licensePlate;
+    private VehicleStatus status = VehicleStatus.RECEIVED;
     
-    public Vehicle(String model, String color, String type, String licensePlate)
+    public Vehicle(Client owner, String model, String color, String type, String licensePlate)
     {
+        this.owner = owner;
         this.model = model;
         this.color = color;
         this.type = type;
@@ -39,5 +42,15 @@ public class Vehicle
     public String getLicensePlate() 
     {
         return licensePlate;
+    }
+    
+    public VehicleStatus getStatus()
+    {
+        return status;
+    }
+    
+    public void setStatus(VehicleStatus status)
+    {
+        this.status = status;
     }
 }

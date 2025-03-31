@@ -7,34 +7,28 @@ import java.util.UUID;
  *
  * @author Filipe Durães
  */
-public class Employee extends Entity
+public class Employee
 {
+    private UUID id;
+    private String name;
+    private String email;
     private final EmployeeRole role;
-    private final int hashPassword;
     
-    public Employee(UUID id, Employee copy)
+    public Employee(String name, String email, EmployeeRole role)
     {
-        super(id, copy.getName(), copy.getEmail());
-        
-        this.role = copy.getRole();
-        this.hashPassword = copy.hashPassword;        
+        this.name = name;
+        this.email = email;
+        this.role = role;
     }
     
-    
-    public Employee(String name, String email, EmployeeRole role, int hashPassword)
+    public UUID getID()
     {
-        super(name, email);
-        
-        this.role = role;
-        this.hashPassword = hashPassword;        
+        return id;
     }
     
-    public Employee(UUID id, String name, String email, EmployeeRole role, int hashPassword)
+    public void setID(UUID id)
     {
-        super(id, name, email);
-        
-        this.role = role;
-        this.hashPassword = hashPassword;        
+        this.id = id;
     }
     
     public EmployeeRole getRole()
@@ -42,8 +36,13 @@ public class Employee extends Entity
         return role;
     }
     
-    public boolean isPasswordValid(int comparedHashPassword)
+    public String getName()
     {
-        return comparedHashPassword == hashPassword;
+        return name;
+    }
+    
+    public String getEmail()
+    {
+        return email;
     }
 }
