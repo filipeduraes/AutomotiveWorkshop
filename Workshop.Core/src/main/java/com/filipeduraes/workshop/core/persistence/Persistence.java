@@ -4,10 +4,10 @@ package com.filipeduraes.workshop.core.persistence;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -68,15 +68,13 @@ public final class Persistence
         }
     }
     
-    public static <T> T loadFile(String path, T defaultValue)
+    public static <T> T loadFile(String path, ParameterizedType type, T defaultValue)
     {
         try
         {
             Path filePath = Path.of(path);
             ensureUsersDirectoriesAndFileExists(filePath);
             String obfuscatedUsers = Files.readString(filePath, StandardCharsets.UTF_8);
-
-            Type type = new TypeToken<T>(){}.getType();
 
             String json = UseObfuscation ? deobfuscate(obfuscatedUsers) : obfuscatedUsers;
             T result = gson.fromJson(json, type);
@@ -100,6 +98,30 @@ public final class Persistence
         }
         
         return uniqueID;
+    }
+    
+    public static ParameterizedType createParameterizedType(Class<?> raw, Type... args)
+    {
+        return new ParameterizedType() 
+        {
+            @Override
+            public Type[] getActualTypeArguments() 
+            {
+                return args;
+            }
+
+            @Override
+            public Type getRawType() 
+            {
+                return raw;
+            }
+
+            @Override
+            public Type getOwnerType() 
+            {
+                return null;
+            }
+        };
     }
     
     private static void ensureUsersDirectoriesAndFileExists(Path path) throws IOException

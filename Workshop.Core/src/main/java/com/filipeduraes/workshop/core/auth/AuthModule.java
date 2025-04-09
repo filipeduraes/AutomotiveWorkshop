@@ -3,6 +3,7 @@ package com.filipeduraes.workshop.core.auth;
 
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -85,6 +86,7 @@ public class AuthModule
     
     private Map<UUID, LocalEmployee> loadRegisteredLocalUsers()
     {
-        return Persistence.loadFile(WorkshopPaths.RegisteredEmployeesPath, new HashMap<>());
+        ParameterizedType type = Persistence.createParameterizedType(HashMap.class, UUID.class, LocalEmployee.class);
+        return Persistence.loadFile(WorkshopPaths.RegisteredEmployeesPath, type, new HashMap<>());
     }
 }

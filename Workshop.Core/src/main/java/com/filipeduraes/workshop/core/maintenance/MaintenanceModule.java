@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.core.maintenance;
 import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 
 /**
@@ -23,7 +24,9 @@ public class MaintenanceModule
     public void registerNewAppointment(Vehicle vehicle, String problemDescription)
     {
         Appointment appointment = new Appointment(vehicle, problemDescription, loggedEmployee);
-        ArrayList<Appointment> appointments = Persistence.loadFile(WorkshopPaths.OpenedAppointmentsPath, new ArrayList<>());
+        
+        ParameterizedType type = Persistence.createParameterizedType(ArrayList.class, Appointment.class);
+        ArrayList<Appointment> appointments = Persistence.loadFile(WorkshopPaths.OpenedAppointmentsPath, type, new ArrayList<>());
         
         appointments.add(appointment);
         
