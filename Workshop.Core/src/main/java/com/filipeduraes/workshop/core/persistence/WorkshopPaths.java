@@ -12,4 +12,5 @@ public final class WorkshopPaths
     
     public static final String RegisteredEmployeesPath = "./Data/Users.workshop";
     public static final String OpenedAppointmentsPath = "./Data/OpenedApointments.workshop";
+    public static final String RegisteredClientsPath = "./Data/Clients.workshop";
 }

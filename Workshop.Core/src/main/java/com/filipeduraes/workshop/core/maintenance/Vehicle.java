@@ -2,6 +2,8 @@
 
 package com.filipeduraes.workshop.core.maintenance;
 
+import com.filipeduraes.workshop.core.client.Client;
+
 /**
  *
  * @author Filipe Durães

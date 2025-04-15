@@ -1,7 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.client.consoleview;
 
-import com.filipeduraes.workshop.consoleview.servicemodule.ServiceModuleMenu;
+import com.filipeduraes.workshop.consoleview.maintanencemodule.ServiceModuleMenu;
 
 /**
  *

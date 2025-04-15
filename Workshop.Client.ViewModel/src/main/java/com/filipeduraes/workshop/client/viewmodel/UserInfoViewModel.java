@@ -1,5 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.client.viewmodel;
+import com.filipeduraes.workshop.client.utils.Delegate;
 import java.util.ArrayList;
 
 /**
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  */
 public class UserInfoViewModel 
 {
-    public ArrayList<Runnable> OnLoginStateChanged = new ArrayList<>();
+    public Delegate OnLoginStateChanged = new Delegate();
     
     private ArrayList<String> possibleRoles = new ArrayList<>();
     private LoginState loginState = LoginState.WAITING;
@@ -28,14 +29,7 @@ public class UserInfoViewModel
         if(newLoginState != loginState)
         {
             loginState = newLoginState;
-            
-            for(Runnable runnable : OnLoginStateChanged)
-            {
-                if(runnable != null)
-                {
-                    runnable.run();
-                }
-            }
+            OnLoginStateChanged.broadcast();
         }
     }
     

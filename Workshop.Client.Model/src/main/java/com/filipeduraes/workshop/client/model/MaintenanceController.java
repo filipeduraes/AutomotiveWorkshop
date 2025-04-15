@@ -2,7 +2,7 @@
 
 package com.filipeduraes.workshop.client.model;
 
-import com.filipeduraes.workshop.core.maintenance.Client;
+import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.maintenance.Vehicle;
 import java.util.UUID;
@@ -15,8 +15,8 @@ public class MaintenanceController
 {
     public MaintenanceController(MaintenanceModule maintenanceModule)
     {
-        Vehicle vehicle = new Vehicle(new Client(UUID.randomUUID(), "", "", "", "", ""), "", "", "", "");
-        String problemDescription = "";
-        maintenanceModule.registerNewAppointment(vehicle, problemDescription);
+        //Vehicle vehicle = new Vehicle(new Client(UUID.randomUUID(), "", "", "", "", ""), "", "", "", "");
+        //String problemDescription = "";
+        //maintenanceModule.registerNewAppointment(vehicle, problemDescription);
     }
 }

@@ -1,6 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 
 package com.filipeduraes.workshop.client.consoleview;
+import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import java.util.Stack;
 
@@ -12,15 +13,22 @@ public class MenuManager
 {
     private final Stack<IWorkshopMenu> menuStack = new Stack<>();
     private final UserInfoViewModel userInfoViewModel;
+    private final ClientViewModel clientViewModel;
     
-    public MenuManager(UserInfoViewModel userInfoViewModel)
+    public MenuManager(UserInfoViewModel userInfoViewModel, ClientViewModel clientViewModel)
     {
         this.userInfoViewModel = userInfoViewModel;
+        this.clientViewModel = clientViewModel;
     }
     
     public UserInfoViewModel getUserInfoViewModel()
     {
         return userInfoViewModel;
+    }
+    
+    public ClientViewModel getClientViewModel()
+    {
+        return clientViewModel;
     }
         
     public void pushMenu(IWorkshopMenu menu)

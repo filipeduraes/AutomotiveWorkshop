@@ -20,6 +20,12 @@ public class ConsoleInput
         reader = new BufferedReader(new InputStreamReader(System.in));
     }
     
+    public static String ReadLine(String message)
+    {
+        System.out.println(message);        
+        return ReadLine();
+    }
+    
     public static String ReadLine()
     {
         try

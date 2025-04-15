@@ -21,10 +21,10 @@ public class LoginController
     
     public LoginController(UserInfoViewModel viewModel, AuthModule authModule)
     {
-        updateLoginStateLambda = () -> UpdateLoginState();
+        updateLoginStateLambda = () -> updateLoginState();
         this.viewModel = viewModel;
 
-        this.viewModel.OnLoginStateChanged.add(updateLoginStateLambda);
+        this.viewModel.OnLoginStateChanged.addListener(updateLoginStateLambda);
         this.authModule = authModule;
         
         EmployeeRole[] employeeRoles = EmployeeRole.values();
@@ -38,12 +38,13 @@ public class LoginController
         this.viewModel.setPossibleRoles(possibleRoles);
     }
     
-    public void Dispose()
+    public void dispose()
     {
-        viewModel.OnLoginStateChanged.remove(updateLoginStateLambda);
+        viewModel.OnLoginStateChanged.removeListener
+        (updateLoginStateLambda);
     }
     
-    private void UpdateLoginState()
+    private void updateLoginState()
     {
         LoginState loginState = viewModel.getLoginState();
         

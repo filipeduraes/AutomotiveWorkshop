@@ -1,5 +1,5 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.consoleview.servicemodule;
+package com.filipeduraes.workshop.consoleview.maintanencemodule;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
@@ -19,6 +19,7 @@ public class ServiceModuleMenu implements IWorkshopMenu
     @Override
     public boolean showMenu(MenuManager menuManager) 
     {
+        
         return true;
     }
 }
