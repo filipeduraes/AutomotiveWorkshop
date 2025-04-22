@@ -20,13 +20,26 @@ public class ConsoleInput
         reader = new BufferedReader(new InputStreamReader(System.in));
     }
     
-    public static String ReadLine(String message)
+    public static String readLine(String message)
     {
         System.out.println(message);        
-        return ReadLine();
+        return readLine();
     }
     
-    public static String ReadLine()
+    public static int readLineInteger(String message)
+    {
+        System.out.println(message);
+        return readLineInteger();
+    }
+    
+    public static int readLineInteger()
+    {
+        String input = ConsoleInput.readLine();
+        input = input.trim();
+        return Integer.parseInt(input);
+    }
+    
+    public static String readLine()
     {
         try
         {

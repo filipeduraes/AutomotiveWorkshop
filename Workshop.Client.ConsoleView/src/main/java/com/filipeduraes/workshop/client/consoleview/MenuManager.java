@@ -51,19 +51,7 @@ public class MenuManager
         while(!menuStack.isEmpty())
         {
             IWorkshopMenu currentMenu = menuStack.peek();
-            String menuDisplayName = currentMenu.getMenuDisplayName();
-            String titleSeparator = "";
-            
-            for(int i = 0; i < menuDisplayName.length(); i++)
-            {
-                titleSeparator += '=';
-            }
-            
-            System.out.println("");
-            System.out.println(titleSeparator);
-            System.out.println(menuDisplayName);
-            System.out.println(titleSeparator);
-            System.out.println("");
+            showMenuTitle(currentMenu);
             
             boolean shouldPop = currentMenu.showMenu(this);
 
@@ -84,8 +72,16 @@ public class MenuManager
             System.out.println(optionMessage);
         }
         
-        String indexInput = ConsoleInput.ReadLine();
+        showLastOption(options.length);
+        
+        String indexInput = ConsoleInput.readLine();
         int index = Integer.parseInt(indexInput);
+        
+        if(index == options.length)
+        {
+            menuStack.pop();
+            return null;
+        }
         
         if(index < 0 || index >= options.length)
         {
@@ -94,5 +90,28 @@ public class MenuManager
         }
         
         return options[index];
+    }
+    
+    private void showMenuTitle(IWorkshopMenu currentMenu) 
+    {
+        String menuDisplayName = currentMenu.getMenuDisplayName();
+        String titleSeparator = "";
+        
+        for(int i = 0; i < menuDisplayName.length(); i++)
+        {
+            titleSeparator += '=';
+        }
+        
+        System.out.println("");
+        System.out.println(titleSeparator);
+        System.out.println(menuDisplayName);
+        System.out.println(titleSeparator);
+    }
+
+    private void showLastOption(int index) 
+    {
+        String formatText = menuStack.size() == 1 ? "[%d] Sair" : "[%d] Voltar";
+        String lastOptionText = String.format(formatText, index);
+        System.out.println(lastOptionText);
     }
 }

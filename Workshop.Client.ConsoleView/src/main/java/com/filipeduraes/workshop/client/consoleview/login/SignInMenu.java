@@ -27,7 +27,7 @@ public class SignInMenu implements IWorkshopMenu
         UserInfoViewModel viewModel = menuManager.getUserInfoViewModel();
         
         System.out.println(" - Insira o nome completo: ");
-        String userName = ConsoleInput.ReadLine();
+        String userName = ConsoleInput.readLine();
         
         System.out.println("");
         ArrayList<String> possibleRoles = viewModel.getPossibleRoles();
@@ -39,13 +39,13 @@ public class SignInMenu implements IWorkshopMenu
         }
         
         System.out.println(" - Insira o seu cargo: ");
-        int selectedRole = Integer.parseInt(ConsoleInput.ReadLine());
+        int selectedRole = Integer.parseInt(ConsoleInput.readLine());
         
         System.out.println("\n - Insira o email: ");
-        String email = ConsoleInput.ReadLine();
+        String email = ConsoleInput.readLine();
         
         System.out.println("\n - Insira a senha: ");
-        String password = ConsoleInput.ReadLine();
+        String password = ConsoleInput.readLine();
         
         viewModel.setName(userName);
         viewModel.setEmail(email);

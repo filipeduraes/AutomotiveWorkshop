@@ -9,7 +9,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
  * @author Filipe Durães
  */
 public class ServiceModuleMenu implements IWorkshopMenu
-{
+{    
     @Override
     public String getMenuDisplayName() 
     {

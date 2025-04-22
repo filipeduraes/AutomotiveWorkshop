@@ -56,6 +56,11 @@ public class ClientViewModel
     {
         this.selectedFoundClientIndex = selectedFoundClientIndex;
     }
+    
+    public void resetSelectedFoundClientIndex() 
+    {
+        selectedFoundClientIndex = -1;
+    }
 
     
     public String getName() 

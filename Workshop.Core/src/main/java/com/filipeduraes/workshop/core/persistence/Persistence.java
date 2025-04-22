@@ -51,6 +51,7 @@ public final class Persistence
     {
         try
         {
+            path = appendPathSuffix(path);
             ensureUsersDirectoriesAndFileExists(Path.of(path));
             FileWriter fileWriter = new FileWriter(path);
             
@@ -72,6 +73,7 @@ public final class Persistence
     {
         try
         {
+            path = appendPathSuffix(path);
             Path filePath = Path.of(path);
             ensureUsersDirectoriesAndFileExists(filePath);
             String obfuscatedUsers = Files.readString(filePath, StandardCharsets.UTF_8);
@@ -122,6 +124,16 @@ public final class Persistence
                 return null;
             }
         };
+    }
+    
+    private static String appendPathSuffix(String path)
+    {
+        int extensionIndex = path.lastIndexOf(".");
+        
+        final String pathWithoutExtension = path.substring(0, extensionIndex);
+        final String pathSuffix = UseObfuscation ? "_Obfuscated" : "_Regular";
+        final String pathExtension = path.substring(extensionIndex, path.length());
+        return pathWithoutExtension + pathSuffix + pathExtension;
     }
     
     private static void ensureUsersDirectoriesAndFileExists(Path path) throws IOException
