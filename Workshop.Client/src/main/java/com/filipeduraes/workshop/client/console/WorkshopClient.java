@@ -36,6 +36,6 @@ public class WorkshopClient
         menuManager.run();
         
         loginController.dispose();
-        clientController.dispose();        
+        clientController.dispose();
     }
 }

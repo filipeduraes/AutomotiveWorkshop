@@ -50,7 +50,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -197,10 +197,10 @@
       "command-palette:Abrir paleta de comandos": false
     }
   },
-  "active": "baff1d9d00573b90",
+  "active": "87d5edce0c8987b1",
   "lastOpenFiles": [
-    "Designs Implícitos.md",
     "Maintenance Module.md",
+    "Designs Implícitos.md",
     "Requisitos - Projeto.md",
     "Registro.md",
     "Welcome.md"
