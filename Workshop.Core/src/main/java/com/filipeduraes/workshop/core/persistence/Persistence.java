@@ -40,8 +40,8 @@ public final class Persistence
 
         for(SerializationAdapterGroup group : adapters) 
         {
-            builder.registerTypeAdapter(group.type(), group.serializer());
-            builder.registerTypeAdapter(group.type(), group.deserializer());
+            builder.registerTypeAdapter(group.getType(), group.getSerializer());
+            builder.registerTypeAdapter(group.getType(), group.getDeserializer());
         }
 
         gson = builder.create();
