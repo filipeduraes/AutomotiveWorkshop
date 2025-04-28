@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- *
+ * Controls authentication, login and registration of users.
+ * Manages user sessions and validate credentials.
  * @author Filipe Durães
  */
 public class AuthModule 
@@ -17,22 +18,40 @@ public class AuthModule
     private Employee loggedUser = null;
     private Map<UUID, LocalEmployee> publicUsers;
     
+    /**
+     * Creates a new instance of the authentication module.
+     * Can use obfuscation to make persistent data harder to read by humans.
+     * @param useObfuscation
+     */
     public AuthModule(boolean useObfuscation)
     {
         Persistence.setUseObfuscation(useObfuscation);
         publicUsers = loadRegisteredLocalUsers();
     }
     
+    /**
+     * Gets the current logged user.
+     * Returns null if no user has logged in.
+     * @return logged user
+     */
     public Employee getLoggedUser()
     {
         return loggedUser;
     }
     
+    /**
+     * Checks if there's any user logged in.
+     * @return true if a user is logged in, false otherwise
+     */
     public boolean isLoggedIn()
     {
         return loggedUser != null;
     }
     
+    /**
+     * Register an user based on the given data.
+     * @param user
+     */
     public void registerUser(LocalEmployee user)
     {
         Map<UUID, LocalEmployee> currentRegisteredUsers = loadRegisteredLocalUsers();
@@ -45,6 +64,12 @@ public class AuthModule
         Persistence.saveFile(currentRegisteredUsers, WorkshopPaths.RegisteredEmployeesPath);
     }
     
+    /**
+     * Tries to log in with the given email and hashed password.
+     * @param email
+     * @param passwordHash
+     * @return log in was successful
+     */
     public boolean tryLogIn(String email, int passwordHash)
     {
         publicUsers = loadRegisteredLocalUsers();
@@ -74,6 +99,11 @@ public class AuthModule
         return passwordIsValid;
     }
     
+    /**
+     * Finds a registered user based on their ID.
+     * @param userID
+     * @return found user
+     */
     public Employee getUserFromID(UUID userID)
     {
         if(!publicUsers.containsKey(userID))
