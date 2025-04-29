@@ -36,7 +36,17 @@ public class LoginMenu implements IWorkshopMenu
         if(viewModel.getLoginState() == LoginState.LOGIN_FAILED)
         {
             System.out.println("Login falhou, tente novamente.");
-            return false;
+            System.out.println("[0] Tentar novamente");
+            System.out.println("[1] Voltar");
+
+            int userInput = ConsoleInput.readLineInteger("Escolha: ");
+
+            if(userInput == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
         
         return true;

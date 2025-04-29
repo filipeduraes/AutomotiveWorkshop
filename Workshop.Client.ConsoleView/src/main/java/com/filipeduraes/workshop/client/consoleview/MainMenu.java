@@ -1,8 +1,8 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.client.consoleview;
 
-import com.filipeduraes.workshop.consoleview.maintanencemodule.ClientModuleMenu;
-import com.filipeduraes.workshop.consoleview.maintanencemodule.ServiceModuleMenu;
+import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMenu;
+import com.filipeduraes.workshop.client.consoleview.maintenancemodule.MaintenanceModuleMenu;
 
 /**
  *
@@ -12,7 +12,7 @@ public class MainMenu implements IWorkshopMenu
 {
     private final IWorkshopMenu[] menus = 
     {
-        new ServiceModuleMenu(),
+        new MaintenanceModuleMenu(),
         new ClientModuleMenu()
     };
 

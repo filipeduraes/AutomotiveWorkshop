@@ -1,5 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.consoleview.maintanencemodule;
+
+package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
@@ -8,17 +9,19 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
  *
  * @author Filipe Durães
  */
-public class ServiceModuleMenu implements IWorkshopMenu
-{    
+public class SelectVehicleMenu implements IWorkshopMenu
+{
+
     @Override
     public String getMenuDisplayName() 
     {
-        return "Modulo de Servicos";
+        return "Selecionar Veículo";
     }
 
     @Override
     public boolean showMenu(MenuManager menuManager) 
     {
+        
         
         return true;
     }

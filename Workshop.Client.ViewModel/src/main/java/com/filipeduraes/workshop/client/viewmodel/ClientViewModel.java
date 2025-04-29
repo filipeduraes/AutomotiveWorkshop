@@ -61,6 +61,11 @@ public class ClientViewModel
     {
         selectedFoundClientIndex = -1;
     }
+    
+    public boolean hasSelectedClient()
+    {
+        return selectedFoundClientIndex >= 0;
+    }
 
     
     public String getName() 
