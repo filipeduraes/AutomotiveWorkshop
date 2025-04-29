@@ -27,7 +27,8 @@ replay_pid*
 /Workshop.Client.ViewModel/target/
 /Workshop.Client.Model/target/
 /Workshop.Client.ConsoleView/target/
-Workshop.Client/Data/Users.workshop
+Workshop.Client/Data/*.workshop
+./Data/*.workshop
 
 # User-specific stuff
 .idea/**/workspace.xml
