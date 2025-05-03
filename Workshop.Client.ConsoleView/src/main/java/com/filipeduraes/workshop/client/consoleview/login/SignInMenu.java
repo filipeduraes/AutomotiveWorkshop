@@ -41,10 +41,10 @@ public class SignInMenu implements IWorkshopMenu
         System.out.println(" - Insira o seu cargo: ");
         int selectedRole = Integer.parseInt(ConsoleInput.readLine());
         
-        System.out.println("\n - Insira o email: ");
+        System.out.println(" - Insira o email: ");
         String email = ConsoleInput.readLine();
         
-        System.out.println("\n - Insira a senha: ");
+        System.out.println(" - Insira a senha: ");
         String password = ConsoleInput.readLine();
         
         viewModel.setName(userName);

@@ -4,6 +4,9 @@ package com.filipeduraes.workshop.client.consoleview;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import java.util.Stack;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -51,7 +54,7 @@ public class MenuManager
         while(!menuStack.isEmpty())
         {
             IWorkshopMenu currentMenu = menuStack.peek();
-            showMenuTitle(currentMenu);
+            showMenuTitle();
             
             boolean shouldPop = currentMenu.showMenu(this);
 
@@ -64,54 +67,39 @@ public class MenuManager
     
     public IWorkshopMenu showSubmenuOptions(String headerText, IWorkshopMenu[] options)
     {
-        System.out.println(headerText);
+        return showSubmenuOptions(headerText, options, true);
+    }
+    
+    public IWorkshopMenu showSubmenuOptions(String headerText, IWorkshopMenu[] options, boolean showExitOption)
+    {
+        final Stream<String> menuNamesStream = Arrays.stream(options).map(IWorkshopMenu::getMenuDisplayName);
+        final Stream<String> finalStream = Stream.concat(menuNamesStream, Stream.of(getLastOption()));
         
-        for(int i = 0; i < options.length; i++)
-        {
-            String optionMessage = String.format("[%d] %s", i, options[i].getMenuDisplayName());
-            System.out.println(optionMessage);
-        }
-        
-        showLastOption(options.length);
-        
-        String indexInput = ConsoleInput.readLine();
-        int index = Integer.parseInt(indexInput);
-        
-        if(index == options.length)
+        String[] optionList = finalStream.toArray(String[]::new);
+        int selectedOptionIndex = ConsoleInput.readOptionFromList(headerText, optionList);
+
+        if(selectedOptionIndex == options.length)
         {
             menuStack.pop();
             return null;
         }
         
-        if(index < 0 || index >= options.length)
-        {
-            System.out.println("Insira apenas opções válidas");
-            return null;
-        }
-        
-        return options[index];
-    }
-    
-    private void showMenuTitle(IWorkshopMenu currentMenu) 
-    {
-        String menuDisplayName = currentMenu.getMenuDisplayName();
-        String titleSeparator = "";
-        
-        for(int i = 0; i < menuDisplayName.length(); i++)
-        {
-            titleSeparator += '=';
-        }
-        
-        System.out.println("");
-        System.out.println(titleSeparator);
-        System.out.println(menuDisplayName);
-        System.out.println(titleSeparator);
+        return options[selectedOptionIndex];
     }
 
-    private void showLastOption(int index) 
+    private void showMenuTitle()
     {
-        String formatText = menuStack.size() == 1 ? "[%d] Sair" : "[%d] Voltar";
-        String lastOptionText = String.format(formatText, index);
-        System.out.println(lastOptionText);
+        String path = menuStack.stream()
+                               .map(IWorkshopMenu::getMenuDisplayName)
+                               .collect(Collectors.joining(" > "));
+
+        System.out.println("\n" + path);
+        System.out.println("-".repeat(path.length()));
+    }
+
+    private String getLastOption() 
+    {
+        String formatText = menuStack.size() == 1 ? "Sair" : "Voltar";
+        return formatText;
     }
 }

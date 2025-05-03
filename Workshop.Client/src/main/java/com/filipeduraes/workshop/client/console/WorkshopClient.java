@@ -23,6 +23,14 @@ public class WorkshopClient
     
     public static void main(String[] args)
     {
+        String title = " ___________ _____ _____ _____ _   _   ___  \n"
+                     + "|  _  |  ___|_   _/  __ \\_   _| \\ | | / _ \\ \n"
+                     + "| | | | |_    | | | /  \\/ | | |  \\| |/ /_\\ \\\n"
+                     + "| | | |  _|   | | | |     | | | . ` ||  _  |\n"
+                     + "\\ \\_/ / |    _| |_| \\__/\\_| |_| |\\  || | | |\n"
+                     + " \\___/\\_|    \\___/ \\____/\\___/\\_| \\_/\\_| |_/";
+
+        System.out.println(title);
         Workshop workshop = new Workshop();
         
         UserInfoViewModel userInfoViewModel = new UserInfoViewModel();

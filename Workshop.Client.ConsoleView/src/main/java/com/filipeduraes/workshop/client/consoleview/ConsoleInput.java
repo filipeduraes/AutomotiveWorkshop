@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.client.consoleview;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.StringJoiner;
 
 /**
  * Uses a buffered reader to read the System.in inputs
@@ -43,7 +44,7 @@ public class ConsoleInput
     {
         try
         {
-            return GetInstance().reader.readLine();
+            return getInstance().reader.readLine();
         }
         catch (IOException e)
         {
@@ -53,7 +54,29 @@ public class ConsoleInput
         }
     }
     
-    private static ConsoleInput GetInstance()
+    public static int readOptionFromList(String message, String[] options)
+    {
+        StringJoiner joiner = new StringJoiner("\n");
+        
+        for(int i = 0; i < options.length; i++)
+        {
+            joiner.add(String.format("> [%d] %s", i, options[i]));
+        }
+        
+        int input = -1;
+        
+        while(input < 0 || input >= options.length)
+        {
+            System.out.println(joiner.toString());
+            System.out.println(message);
+
+            input = readLineInteger();
+        }
+        
+        return input;
+    }
+    
+    private static ConsoleInput getInstance()
     {
         if(inputInstance == null)
         {

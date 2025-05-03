@@ -29,8 +29,8 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
         if(!clientViewModel.hasSelectedClient())
         {
             System.out.println("- CLIENTE");
-            System.out.println("[0] Selecionar cliente");
-            System.out.println("[1] Cancelar");
+            System.out.println("⇒ [0] Selecionar cliente");
+            System.out.println("⇒ [1] ✖ Cancelar");
 
             int selectedOption = ConsoleInput.readLineInteger();
 

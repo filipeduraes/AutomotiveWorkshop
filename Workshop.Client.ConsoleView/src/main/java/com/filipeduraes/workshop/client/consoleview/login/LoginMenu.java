@@ -25,7 +25,7 @@ public class LoginMenu implements IWorkshopMenu
         System.out.println(" - Insira o email: ");
         String email = ConsoleInput.readLine();
         
-        System.out.println("\n - Insira a senha: ");
+        System.out.println(" - Insira a senha: ");
         String password = ConsoleInput.readLine();
        
         UserInfoViewModel viewModel = menuManager.getUserInfoViewModel();
