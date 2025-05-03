@@ -2,7 +2,7 @@
 
 package com.filipeduraes.workshop.client.viewmodel;
 
-import com.filipeduraes.workshop.client.utils.Delegate;
+import com.filipeduraes.workshop.client.utils.Observer;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class ClientViewModel
 {
-    public Delegate OnClientRequest = new Delegate();
+    public Observer OnClientRequest = new Observer();
     
     private ClientRequest currentRequest;
     

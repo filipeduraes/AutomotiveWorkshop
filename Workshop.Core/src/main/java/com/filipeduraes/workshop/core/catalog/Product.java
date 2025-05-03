@@ -6,16 +6,27 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
+ * Representa um produto ou serviço que pode ser vendido na oficina.
+ * Esta classe é utilizada tanto para itens físicos da loja quanto para serviços prestados.
+ * Os produtos são listados nas notas fiscais dos clientes e no balanço patrimonial do administrador.
  *
  * @author Filipe Durães
  */
-public class Product 
+public class Product
 {
     private UUID id;
     private String name;
     private String description;
     private BigDecimal price;
-    
+
+    /**
+     * Cria uma nova instância de produto ou serviço.
+     *
+     * @param id Identificador único do produto
+     * @param name Nome do produto ou serviço
+     * @param description Descrição detalhada do produto ou serviço
+     * @param price Preço do produto ou serviço em formato string
+     */
     public Product(UUID id, String name, String description, String price)
     {
         this.id = id;

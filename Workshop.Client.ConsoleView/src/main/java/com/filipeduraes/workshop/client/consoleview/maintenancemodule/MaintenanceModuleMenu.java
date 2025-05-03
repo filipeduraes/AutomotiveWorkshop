@@ -18,7 +18,7 @@ public class MaintenanceModuleMenu implements IWorkshopMenu
     @Override
     public String getMenuDisplayName() 
     {
-        return "Modulo de Manutenção";
+        return "Modulo de Manutencao";
     }
 
     @Override
@@ -29,7 +29,7 @@ public class MaintenanceModuleMenu implements IWorkshopMenu
         [1] Listar agendamentos preliminares
         [2] Listar ordens de serviço ativos
         */
-        IWorkshopMenu selectedSubmenu = menuManager.showSubmenuOptions("Escolha a opção: ", submenus);
+        IWorkshopMenu selectedSubmenu = menuManager.showSubmenuOptions("Escolha a opcao: ", submenus);
 
         if(selectedSubmenu == null)
         {

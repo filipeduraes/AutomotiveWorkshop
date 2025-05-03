@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * Classe responsável por gerenciar o catálogo de itens da loja e serviços da oficina.
  *
  * @author Filipe Durães
  */

@@ -4,9 +4,9 @@ package com.filipeduraes.workshop.core.auth;
 import java.util.UUID;
 
 /**
- * Represents an employee with a unique ID, name, email, and role.
- * Provides accessors to retrieve the employee's details.
- * 
+ * Representa um funcionário com ID único, nome, email e cargo.
+ * Fornece métodos para retornar os detalhes do funcionário.
+ *
  * @author Filipe Durães
  */
 public class Employee
@@ -15,13 +15,13 @@ public class Employee
     private String name;
     private String email;
     private final EmployeeRole role;
-    
+
     /**
-     * Creates a new Employee instance with the specified name, email, and role.
-     * 
-     * @param name the name of the employee
-     * @param email the email address of the employee
-     * @param role the role assigned to the employee
+     * Cria uma instância de Employee com o nome, email e cargo especificados.
+     *
+     * @param name  o nome do funcionário
+     * @param email o endereço de email do funcionário
+     * @param role  o cargo atribuído ao funcionário
      */
     public Employee(String name, String email, EmployeeRole role)
     {
@@ -29,51 +29,62 @@ public class Employee
         this.email = email;
         this.role = role;
     }
-    
+
     /**
-     * Gets the unique ID of the employee.
-     * 
-     * @return the ID of the employee
+     * Retorna uma representação em string do funcionário.
+     *
+     * @return uma string contendo o ID, nome, email e cargo do funcionário
+     */
+    @Override
+    public String toString()
+    {
+        return String.format("Employee[id=%s, name='%s', email='%s', role=%s]", id, name, email, role);
+    }
+
+    /**
+     * Obtém o ID único do funcionário.
+     *
+     * @return o ID do funcionário
      */
     public UUID getID()
     {
         return id;
     }
-    
+
     /**
-     * Sets the unique ID of the employee.
-     * 
-     * @param id the unique ID to assign to the employee
+     * Define o ID único do funcionário.
+     *
+     * @param id o ID único a ser atribuído ao funcionário
      */
     public void setID(UUID id)
     {
         this.id = id;
     }
-    
+
     /**
-     * Gets the role of the employee.
-     * 
-     * @return the role of the employee
+     * Obtém o cargo do funcionário.
+     *
+     * @return o cargo do funcionário
      */
     public EmployeeRole getRole()
     {
         return role;
     }
-    
+
     /**
-     * Gets the name of the employee.
-     * 
-     * @return the name of the employee
+     * Obtém o nome do funcionário.
+     *
+     * @return o nome do funcionário
      */
     public String getName()
     {
         return name;
     }
-    
+
     /**
-     * Gets the email address of the employee.
-     * 
-     * @return the email address of the employee
+     * Obtém o endereço de email do funcionário.
+     *
+     * @return o endereço de email do funcionário
      */
     public String getEmail()
     {

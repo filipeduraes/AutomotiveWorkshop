@@ -9,18 +9,20 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Controls authentication, login and registration of users.
- * Manages user sessions and validate credentials.
+ * Controla autenticação, login e registro de usuários.
+ * Gerencia sessões de usuário e valida credenciais.
+ *
  * @author Filipe Durães
  */
-public class AuthModule 
+public class AuthModule
 {
     private Employee loggedUser = null;
     private Map<UUID, LocalEmployee> publicUsers;
-    
+
     /**
-     * Creates a new instance of the authentication module.
-     * Can use obfuscation to make persistent data harder to read by humans.
+     * Cria uma instância do módulo de autenticação.
+     * Pode usar ofuscação para tornar dados persistentes mais difíceis de ler por humanos.
+     *
      * @param useObfuscation
      */
     public AuthModule(boolean useObfuscation)
@@ -28,28 +30,31 @@ public class AuthModule
         Persistence.setUseObfuscation(useObfuscation);
         publicUsers = loadRegisteredLocalUsers();
     }
-    
+
     /**
-     * Gets the current logged user.
-     * Returns null if no user has logged in.
-     * @return logged user
+     * Obtém o usuário atual logado.
+     * Retorna null se nenhum usuário estiver logado.
+     *
+     * @return usuário logado
      */
     public Employee getLoggedUser()
     {
         return loggedUser;
     }
-    
+
     /**
-     * Checks if there's any user logged in.
-     * @return true if a user is logged in, false otherwise
+     * Verifica se há algum usuário logado.
+     *
+     * @return true se um usuário estiver logado, false caso contrário
      */
     public boolean isLoggedIn()
     {
         return loggedUser != null;
     }
-    
+
     /**
-     * Register an user based on the given data.
+     * Registra um usuário com base nos dados fornecidos.
+     *
      * @param user
      */
     public void registerUser(LocalEmployee user)
@@ -63,57 +68,59 @@ public class AuthModule
 
         Persistence.saveFile(currentRegisteredUsers, WorkshopPaths.RegisteredEmployeesPath);
     }
-    
+
     /**
-     * Tries to log in with the given email and hashed password.
+     * Tenta fazer login com o email e senha hash fornecidos.
+     *
      * @param email
      * @param passwordHash
-     * @return log in was successful
+     * @return login foi bem sucedido
      */
     public boolean tryLogIn(String email, int passwordHash)
     {
         publicUsers = loadRegisteredLocalUsers();
         LocalEmployee userToValidate = null;
-        
-        for(LocalEmployee employee : publicUsers.values())
+
+        for (LocalEmployee employee : publicUsers.values())
         {
-            if(employee.getEmail().equals(email))
+            if (employee.getEmail().equals(email))
             {
                 userToValidate = employee;
                 break;
             }
         }
-        
-        if(userToValidate == null)
+
+        if (userToValidate == null)
         {
             return false;
         }
 
         boolean passwordIsValid = userToValidate.isPasswordValid(passwordHash);
-        
-        if(passwordIsValid)
+
+        if (passwordIsValid)
         {
             loggedUser = userToValidate;
         }
-        
+
         return passwordIsValid;
     }
-    
+
     /**
-     * Finds a registered user based on their ID.
+     * Encontra um usuário registrado com base em seu ID.
+     *
      * @param userID
-     * @return found user
+     * @return usuário encontrado
      */
     public Employee getUserFromID(UUID userID)
     {
-        if(!publicUsers.containsKey(userID))
+        if (!publicUsers.containsKey(userID))
         {
             return null;
         }
-        
+
         return publicUsers.get(userID);
     }
-    
+
     private Map<UUID, LocalEmployee> loadRegisteredLocalUsers()
     {
         ParameterizedType type = Persistence.createParameterizedType(HashMap.class, UUID.class, LocalEmployee.class);
