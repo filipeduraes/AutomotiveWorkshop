@@ -5,6 +5,7 @@ package com.filipeduraes.workshop.client.consoleview.clientmodule;
 import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
+import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class ClientSearchMenu implements IWorkshopMenu
     }
 
     @Override
-    public boolean showMenu(MenuManager menuManager) 
+    public MenuResult showMenu(MenuManager menuManager)
     {
         System.out.println("Digite o nome do cliente: ");
         
@@ -50,11 +51,11 @@ public class ClientSearchMenu implements IWorkshopMenu
                     System.out.printf(" - Telefone: %s\n", clientViewModel.getPhoneNumber());
                 }
                 
-                return true;
+                return MenuResult.pop();
             }
         }
         
-        return false;
+        return MenuResult.none();
     }
 
     private void showFoundClients(final ClientViewModel clientViewModel) 

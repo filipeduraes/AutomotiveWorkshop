@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.client.consoleview.login;
 import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
+import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 
@@ -13,6 +14,8 @@ import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
  */
 public class LoginMenu implements IWorkshopMenu 
 {
+    private String[] loginFailOptions = new String[] { "Tentar Novamente", "X Voltar" };
+
     @Override
     public String getMenuDisplayName() 
     {
@@ -20,7 +23,7 @@ public class LoginMenu implements IWorkshopMenu
     }
     
     @Override
-    public boolean showMenu(MenuManager menuManager)
+    public MenuResult showMenu(MenuManager menuManager)
     {
         System.out.println(" - Insira o email: ");
         String email = ConsoleInput.readLine();
@@ -35,20 +38,15 @@ public class LoginMenu implements IWorkshopMenu
         
         if(viewModel.getLoginState() == LoginState.LOGIN_FAILED)
         {
-            System.out.println("Login falhou, tente novamente.");
-            System.out.println("[0] Tentar novamente");
-            System.out.println("[1] Voltar");
-
-            int userInput = ConsoleInput.readLineInteger("Escolha: ");
+            System.out.println("Usuário não encontrado ou senha invalida, confira os dados e tente novamente.");
+            int userInput = ConsoleInput.readOptionFromList("Escolha como prosseguir: ", loginFailOptions);
 
             if(userInput == 0)
             {
-                return false;
+                return MenuResult.none();
             }
-
-            return true;
         }
-        
-        return true;
+
+        return MenuResult.pop();
     }
 }

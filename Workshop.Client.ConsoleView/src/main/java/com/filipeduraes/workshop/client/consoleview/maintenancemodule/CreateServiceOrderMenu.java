@@ -5,6 +5,7 @@ package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
+import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMenu;
 
@@ -14,6 +15,7 @@ import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMen
  */
 public class CreateServiceOrderMenu implements IWorkshopMenu 
 {
+    String[] clientSelectionOptions = new String[] { "Selecionar Cliente", "X Cancelar" };
 
     @Override
     public String getMenuDisplayName() 
@@ -22,26 +24,23 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
     }
 
     @Override
-    public boolean showMenu(MenuManager menuManager) 
+    public MenuResult showMenu(MenuManager menuManager)
     {
         final ClientViewModel clientViewModel = menuManager.getClientViewModel();
 
         if(!clientViewModel.hasSelectedClient())
         {
             System.out.println("- CLIENTE");
-            System.out.println("⇒ [0] Selecionar cliente");
-            System.out.println("⇒ [1] ✖ Cancelar");
-
-            int selectedOption = ConsoleInput.readLineInteger();
+            int selectedOption = ConsoleInput.readOptionFromList("Selecione o cliente", clientSelectionOptions);
 
             if(selectedOption == 0)
             {
-                menuManager.pushMenu(new ClientModuleMenu());
+                return MenuResult.push(new ClientModuleMenu());
             }
 
-            return selectedOption == 1;
+            return MenuResult.pop();
         }
 
-        return true;
+        return MenuResult.none();
     }
 }

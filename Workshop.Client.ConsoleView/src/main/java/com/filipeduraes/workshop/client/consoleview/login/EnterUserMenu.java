@@ -5,6 +5,7 @@ package com.filipeduraes.workshop.client.consoleview.login;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MainMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
+import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 
@@ -27,24 +28,23 @@ public class EnterUserMenu implements IWorkshopMenu
     }
     
     @Override
-    public boolean showMenu(MenuManager menuManager) 
+    public MenuResult showMenu(MenuManager menuManager)
     {
         UserInfoViewModel viewModel = menuManager.getUserInfoViewModel();
         
         if(viewModel.getLoginState() == LoginState.LOGIN_SUCCESS)
         {
             System.out.println(String.format("Login realizado com sucesso como usuario: %s\nCargo: %s", viewModel.getName(), viewModel.getSelectedRoleName()));
-            menuManager.replaceCurrentMenu(new MainMenu());
-            return false;
+            return MenuResult.replace(new MainMenu());
         }
         
         IWorkshopMenu selectedOption = menuManager.showSubmenuOptions("Qual a opcao de login?", menus);
 
         if(selectedOption != null)
         {
-            menuManager.pushMenu(selectedOption);
+            return MenuResult.push(selectedOption);
         }
         
-        return false;
+        return MenuResult.none();
     }
 }

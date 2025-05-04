@@ -67,8 +67,12 @@ public class ConsoleInput
         
         while(input < 0 || input >= options.length)
         {
-            System.out.println(joiner.toString());
-            System.out.println(message);
+            System.out.println(joiner);
+
+            if(message != null && !message.isEmpty())
+            {
+                System.out.println(message);
+            }
 
             input = readLineInteger();
         }

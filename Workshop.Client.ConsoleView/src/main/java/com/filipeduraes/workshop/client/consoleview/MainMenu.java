@@ -23,15 +23,15 @@ public class MainMenu implements IWorkshopMenu
     }
 
     @Override
-    public boolean showMenu(MenuManager menuManager) 
+    public MenuResult showMenu(MenuManager menuManager)
     {
         IWorkshopMenu selectedOption = menuManager.showSubmenuOptions("Qual modulo deseja abrir?", menus);
         
         if(selectedOption != null)
         {
-            menuManager.pushMenu(selectedOption);
+            return MenuResult.push(selectedOption);
         }
         
-        return false;
+        return MenuResult.exit();
     }    
 }

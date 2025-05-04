@@ -5,6 +5,7 @@ package com.filipeduraes.workshop.client.consoleview.clientmodule;
 import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
+import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 
@@ -21,7 +22,7 @@ public class ClientRegistrationMenu implements IWorkshopMenu
     }
 
     @Override
-    public boolean showMenu(MenuManager menuManager) 
+    public MenuResult showMenu(MenuManager menuManager)
     {
         final String userName = ConsoleInput.readLine("Insira o nome completo do cliente: ");
         final String userPhoneNumber = ConsoleInput.readLine("Insira o telefone do cliente: ");
@@ -37,6 +38,6 @@ public class ClientRegistrationMenu implements IWorkshopMenu
         clientViewModel.setCPF(userCPF);
         
         clientViewModel.setCurrentRequest(ClientRequest.REGISTER_CLIENT);
-        return true;
+        return MenuResult.pop();
     }
 }

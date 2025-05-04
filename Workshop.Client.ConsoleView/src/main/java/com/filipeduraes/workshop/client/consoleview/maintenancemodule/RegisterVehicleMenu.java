@@ -2,6 +2,7 @@ package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
+import com.filipeduraes.workshop.client.consoleview.MenuResult;
 
 public class RegisterVehicleMenu implements IWorkshopMenu
 {
@@ -13,9 +14,9 @@ public class RegisterVehicleMenu implements IWorkshopMenu
     }
 
     @Override
-    public boolean showMenu(MenuManager menuManager)
+    public MenuResult showMenu(MenuManager menuManager)
     {
 
-        return false;
+        return MenuResult.none();
     }
 }

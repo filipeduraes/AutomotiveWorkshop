@@ -3,6 +3,7 @@ package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
+import com.filipeduraes.workshop.client.consoleview.MenuResult;
 
 /**
  *
@@ -22,7 +23,7 @@ public class MaintenanceModuleMenu implements IWorkshopMenu
     }
 
     @Override
-    public boolean showMenu(MenuManager menuManager) 
+    public MenuResult showMenu(MenuManager menuManager)
     {
         /*
         [0] Gerar ordem de serviço
@@ -31,12 +32,11 @@ public class MaintenanceModuleMenu implements IWorkshopMenu
         */
         IWorkshopMenu selectedSubmenu = menuManager.showSubmenuOptions("Escolha a opcao: ", submenus);
 
-        if(selectedSubmenu == null)
+        if (selectedSubmenu == null)
         {
-            return false;
+            return MenuResult.pop();
         }
 
-        menuManager.pushMenu(selectedSubmenu);
-        return false;
+        return MenuResult.push(selectedSubmenu);
     }
 }

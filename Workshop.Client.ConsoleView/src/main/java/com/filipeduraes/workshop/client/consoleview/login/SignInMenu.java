@@ -5,6 +5,7 @@ package com.filipeduraes.workshop.client.consoleview.login;
 import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
+import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class SignInMenu implements IWorkshopMenu
     }
     
     @Override
-    public boolean showMenu(MenuManager menuManager)
+    public MenuResult showMenu(MenuManager menuManager)
     {
         UserInfoViewModel viewModel = menuManager.getUserInfoViewModel();
         
@@ -53,6 +54,6 @@ public class SignInMenu implements IWorkshopMenu
         viewModel.setPasswordHash(password.hashCode());
         viewModel.setLoginState(LoginState.SIGNIN_REQUESTED);
         
-        return true;
+        return MenuResult.pop();
     }    
 }

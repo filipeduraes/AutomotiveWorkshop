@@ -18,10 +18,12 @@ public class MenuManager
     private final UserInfoViewModel userInfoViewModel;
     private final ClientViewModel clientViewModel;
     
-    public MenuManager(UserInfoViewModel userInfoViewModel, ClientViewModel clientViewModel)
+    public MenuManager(UserInfoViewModel userInfoViewModel, ClientViewModel clientViewModel, IWorkshopMenu initialMenu)
     {
         this.userInfoViewModel = userInfoViewModel;
         this.clientViewModel = clientViewModel;
+
+        menuStack.push(initialMenu);
     }
     
     public UserInfoViewModel getUserInfoViewModel()
@@ -34,21 +36,6 @@ public class MenuManager
         return clientViewModel;
     }
         
-    public void pushMenu(IWorkshopMenu menu)
-    {
-        menuStack.push(menu);
-    }
-    
-    public void replaceCurrentMenu(IWorkshopMenu newMenu)
-    {
-        if(!menuStack.isEmpty())
-        {
-            menuStack.pop();
-        }
-        
-        menuStack.push(newMenu);
-    }
-    
     public void run()
     {
         while(!menuStack.isEmpty())
@@ -56,11 +43,21 @@ public class MenuManager
             IWorkshopMenu currentMenu = menuStack.peek();
             showMenuTitle();
             
-            boolean shouldPop = currentMenu.showMenu(this);
+            MenuResult menuAction = currentMenu.showMenu(this);
 
-            if(shouldPop)
+            switch (menuAction.getAction())
             {
-                menuStack.pop();
+                case PUSH_MENU ->
+                {
+                    menuStack.push(menuAction.getTargetMenu());
+                }
+                case REPLACE_MENU ->
+                {
+                    menuStack.pop();
+                    menuStack.push(menuAction.getTargetMenu());
+                }
+                case POP_MENU -> menuStack.pop();
+                case EXIT -> menuStack.clear();
             }
         }
     }

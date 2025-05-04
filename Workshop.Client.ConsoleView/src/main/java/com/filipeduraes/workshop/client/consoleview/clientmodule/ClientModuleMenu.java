@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.client.consoleview.clientmodule;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
+import com.filipeduraes.workshop.client.consoleview.MenuResult;
 
 /**
  *
@@ -24,16 +25,15 @@ public class ClientModuleMenu implements IWorkshopMenu
     }
 
     @Override
-    public boolean showMenu(MenuManager menuManager) 
+    public MenuResult showMenu(MenuManager menuManager)
     {
         IWorkshopMenu submenu = menuManager.showSubmenuOptions("O que deseja fazer?", menus);
         
         if(submenu == null)
         {
-            return false;
+            return MenuResult.pop();
         }
-        
-        menuManager.pushMenu(submenu);
-        return false;
+
+        return MenuResult.push(submenu);
     }
 }

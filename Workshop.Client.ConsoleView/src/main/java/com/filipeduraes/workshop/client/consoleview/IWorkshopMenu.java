@@ -9,5 +9,5 @@ package com.filipeduraes.workshop.client.consoleview;
 public interface IWorkshopMenu 
 {
     public String getMenuDisplayName();
-    public boolean showMenu(MenuManager menuManager);
+    public MenuResult showMenu(MenuManager menuManager);
 }

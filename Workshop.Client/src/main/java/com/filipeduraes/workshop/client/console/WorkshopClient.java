@@ -39,8 +39,7 @@ public class WorkshopClient
         LoginController loginController = new LoginController(userInfoViewModel, workshop.getAuthModule());
         ClientController clientController = new ClientController(clientViewModel, workshop.getClientModule());
         
-        menuManager = new MenuManager(userInfoViewModel, clientViewModel);
-        menuManager.pushMenu(new EnterUserMenu());
+        menuManager = new MenuManager(userInfoViewModel, clientViewModel, new EnterUserMenu());
         menuManager.run();
         
         loginController.dispose();
