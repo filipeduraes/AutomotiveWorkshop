@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Workshop.Client.Console",
+    "\\Workshop.Client.Console\\src",
+    "\\Workshop.Client.Console\\src\\main",
+    "\\Workshop.Client.Console\\src\\main\\java",
+    "\\Workshop.Client.Console\\src\\main\\java\\com",
+    "\\Workshop.Client.Console\\src\\main\\java\\com\\filipeduraes",
+    "\\Workshop.Client.Console\\src\\main\\java\\com\\filipeduraes\\workshop",
+    "\\Workshop.Client.Console\\src\\main\\java\\com\\filipeduraes\\workshop\\client",
+    "\\Workshop.Client.Console\\src\\main\\java\\com\\filipeduraes\\workshop\\client\\console"
+  ],
+  "SelectedNode": "\\Workshop.Client.Console\\src\\main\\java\\com\\filipeduraes\\workshop\\client\\console\\WorkshopClient.java",
+  "PreviewInSolutionExplorer": false
+}

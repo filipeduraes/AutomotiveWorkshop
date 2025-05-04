@@ -3,6 +3,8 @@ package com.filipeduraes.workshop.client.consoleview;
 /**
  * Define as ações possíveis que podem ser executadas durante a navegação entre menus.
  * Essas ações determinam como o fluxo de navegação deve ser controlado.
+ *
+ * @author Filipe Durães
  */
 public enum MenuAction
 {

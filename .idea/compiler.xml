@@ -10,8 +10,10 @@
         <module name="Workshop.Client.Model" />
         <module name="Workshop.Core" />
         <module name="Workshop.Client.ConsoleView" />
-        <module name="Workshop.Client.Console" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Workshop.Client.Console" target="20" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -2,7 +2,9 @@
 package com.filipeduraes.workshop.core.maintenance;
 
 import com.filipeduraes.workshop.core.auth.Employee;
+import com.filipeduraes.workshop.core.catalog.Product;
 import com.filipeduraes.workshop.core.store.Purchase;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -10,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Filipe Durães
  */
-public class Maintenance
+public class ServiceOrder
 {
     private Employee mechanic;
     private Inspection inspection;
@@ -18,10 +20,10 @@ public class Maintenance
     private LocalDate startDate;
     private LocalDate finishDate;
     
-    private ArrayList<Service> services = new ArrayList<>();
-    private ArrayList<Purchase> purchases = new ArrayList<>();
+    private ArrayList<Product> services = new ArrayList<>();
+    private Purchase purchase;
     
-    public Maintenance(Inspection inspection, Employee mechanic)
+    public ServiceOrder(Inspection inspection, Employee mechanic)
     {
         this.inspection = inspection;
         this.mechanic = mechanic;
@@ -33,10 +35,10 @@ public class Maintenance
         inspection.getVehicle().setStatus(VehicleStatus.UNDER_MAINTENANCE);
     }
     
-    public void finish(ArrayList<Service> services, ArrayList<Purchase> purchases)
+    public void finish(ArrayList<Product> services, Purchase purchase)
     {
         this.services = services;
-        this.purchases = purchases;
+        this.purchase = purchase;
         
         finishDate = LocalDate.now();
         inspection.getVehicle().setStatus(VehicleStatus.READY_FOR_DELIVERY);

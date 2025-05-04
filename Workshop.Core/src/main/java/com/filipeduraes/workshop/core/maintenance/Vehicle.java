@@ -13,17 +13,19 @@ public class Vehicle
     private transient Client owner;
     private String model;
     private String color;
-    private String type;
+    private String vinNumber;
     private String licensePlate;
+    private int year;
     private VehicleStatus status = VehicleStatus.RECEIVED;
-    
-    public Vehicle(Client owner, String model, String color, String type, String licensePlate)
+
+    public Vehicle(Client owner, String model, String color, String vinNumber, String licensePlate, int year)
     {
         this.owner = owner;
         this.model = model;
         this.color = color;
-        this.type = type;
+        this.vinNumber = vinNumber;
         this.licensePlate = licensePlate;
+        this.year = year;
     }
 
     public String getModel() 
@@ -36,12 +38,7 @@ public class Vehicle
         return color;
     }
 
-    public String getType() 
-    {
-        return type;
-    }
-
-    public String getLicensePlate() 
+    public String getLicensePlate()
     {
         return licensePlate;
     }
@@ -54,5 +51,15 @@ public class Vehicle
     public void setStatus(VehicleStatus status)
     {
         this.status = status;
+    }
+
+    public String getVinNumber()
+    {
+        return vinNumber;
+    }
+
+    public int getYear()
+    {
+        return year;
     }
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class MaintenanceModule
 {
-    private Maintenance[] userServices;
+    private ServiceOrder[] userServices;
     private Employee loggedEmployee;
     
     public MaintenanceModule(Employee loggedEmployee)

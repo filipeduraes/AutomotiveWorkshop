@@ -29,4 +29,14 @@ public class StoreItem extends Product
 
         this.stockAmount = stockAmount;
     }
+
+    /**
+     * Obtém a quantidade disponível em estoque do item.
+     *
+     * @return quantidade disponível em estoque
+     */
+    public int getStockAmount()
+    {
+        return stockAmount;
+    }
 }

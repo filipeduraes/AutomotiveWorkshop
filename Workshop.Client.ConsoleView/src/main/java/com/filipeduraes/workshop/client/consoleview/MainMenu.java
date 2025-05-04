@@ -1,4 +1,5 @@
 // Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview;
 
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMenu;

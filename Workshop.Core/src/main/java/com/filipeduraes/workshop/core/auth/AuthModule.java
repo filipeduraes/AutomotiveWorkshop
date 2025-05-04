@@ -21,13 +21,9 @@ public class AuthModule
 
     /**
      * Cria uma instância do módulo de autenticação.
-     * Pode usar ofuscação para tornar dados persistentes mais difíceis de ler por humanos.
-     *
-     * @param useObfuscation
      */
-    public AuthModule(boolean useObfuscation)
+    public AuthModule()
     {
-        Persistence.setUseObfuscation(useObfuscation);
         publicUsers = loadRegisteredLocalUsers();
     }
 

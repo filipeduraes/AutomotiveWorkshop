@@ -1,8 +1,9 @@
 package com.filipeduraes.workshop.client.consoleview;
 
 /**
- * Representa o resultado de uma operação de menu, contendo a ação a ser executada
- * e o menu alvo desta ação.
+ * Representa o resultado de uma operação de menu, contendo a ação a ser executada e o menu alvo desta ação.
+ *
+ * @author Filipe Durães
  */
 public class MenuResult
 {

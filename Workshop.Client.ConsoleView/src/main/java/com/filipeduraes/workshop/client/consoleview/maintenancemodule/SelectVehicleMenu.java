@@ -12,6 +12,10 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
  */
 public class SelectVehicleMenu implements IWorkshopMenu
 {
+    private IWorkshopMenu[] menuOptions =
+    {
+        new RegisterVehicleMenu()
+    };
 
     @Override
     public String getMenuDisplayName() 

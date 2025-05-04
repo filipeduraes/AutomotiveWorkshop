@@ -34,4 +34,44 @@ public class Product
         this.description = description;
         this.price = new BigDecimal(price);
     }
+
+    /**
+     * Obtém o identificador único do produto.
+     *
+     * @return identificador UUID do produto
+     */
+    public UUID getId()
+    {
+        return id;
+    }
+
+    /**
+     * Obtém o nome do produto ou serviço.
+     *
+     * @return nome do produto
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * Obtém a descrição detalhada do produto ou serviço.
+     *
+     * @return descrição do produto
+     */
+    public String getDescription()
+    {
+        return description;
+    }
+
+    /**
+     * Obtém o preço do produto ou serviço.
+     *
+     * @return preço do produto em BigDecimal
+     */
+    public BigDecimal getPrice()
+    {
+        return price;
+    }
 }
