@@ -15,8 +15,6 @@ public class MaintenanceController
 {
     public MaintenanceController(MaintenanceModule maintenanceModule)
     {
-        //Vehicle vehicle = new Vehicle(new Client(UUID.randomUUID(), "", "", "", "", ""), "", "", "", "");
-        //String problemDescription = "";
-        //maintenanceModule.registerNewAppointment(vehicle, problemDescription);
+
     }
 }

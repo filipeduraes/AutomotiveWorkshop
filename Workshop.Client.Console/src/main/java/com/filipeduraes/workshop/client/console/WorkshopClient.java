@@ -14,34 +14,44 @@ import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import com.filipeduraes.workshop.core.Workshop;
 
 /**
- * 
+ * Aplicação cliente de console para o sistema de oficina mecânica.
+ * Esta classe serve como ponto de entrada principal e gerencia a injeção de dependências
+ * para todos os componentes do sistema de gerenciamento da oficina.
+ *
  * @author Filipe Durães
  */
-public class WorkshopClient 
+public class WorkshopClient
 {
     private static MenuManager menuManager;
-    
+
+    /**
+     * Ponto de entrada da aplicação console da oficina.
+     * Inicializa todos os componentes do sistema, injeta dependências e inicia a interface baseada em menus.
+     * Cria e gerencia o ciclo de vida dos controladores e view models.
+     *
+     * @param args argumentos da linha de comando (não utilizados)
+     */
     public static void main(String[] args)
     {
         String title = " ___________ _____ _____ _____ _   _   ___  \n"
-                     + "|  _  |  ___|_   _/  __ \\_   _| \\ | | / _ \\ \n"
-                     + "| | | | |_    | | | /  \\/ | | |  \\| |/ /_\\ \\\n"
-                     + "| | | |  _|   | | | |     | | | . ` ||  _  |\n"
-                     + "\\ \\_/ / |    _| |_| \\__/\\_| |_| |\\  || | | |\n"
-                     + " \\___/\\_|    \\___/ \\____/\\___/\\_| \\_/\\_| |_/";
+                + "|  _  |  ___|_   _/  __ \\_   _| \\ | | / _ \\ \n"
+                + "| | | | |_    | | | /  \\/ | | |  \\| |/ /_\\ \\\n"
+                + "| | | |  _|   | | | |     | | | . ` ||  _  |\n"
+                + "\\ \\_/ / |    _| |_| \\__/\\_| |_| |\\  || | | |\n"
+                + " \\___/\\_|    \\___/ \\____/\\___/\\_| \\_/\\_| |_/";
 
         System.out.println(title);
         Workshop workshop = new Workshop();
-        
+
         UserInfoViewModel userInfoViewModel = new UserInfoViewModel();
         ClientViewModel clientViewModel = new ClientViewModel();
-        
+
         LoginController loginController = new LoginController(userInfoViewModel, workshop.getAuthModule());
         ClientController clientController = new ClientController(clientViewModel, workshop.getClientModule());
-        
+
         menuManager = new MenuManager(userInfoViewModel, clientViewModel, new EnterUserMenu());
         menuManager.run();
-        
+
         loginController.dispose();
         clientController.dispose();
     }
