@@ -1,0 +1,53 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+-classpath
+'C:/Users/fhdd/.m2/repository/com/filipeduraes/Workshop.Client.ViewModel/1.0-SNAPSHOT/Workshop.Client.ViewModel-1.0-SNAPSHOT.jar'
+-encoding
+'UTF-8'
+-protected
+--release
+20
+-sourcepath
+'D:/Projects/Github/AutomotiveWorkshop/Workshop/Workshop.Client.ConsoleView/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'D:/Projects/Github/AutomotiveWorkshop/Workshop/Workshop.Client.ConsoleView/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Workshop.Client.ConsoleView 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'Workshop.Client.ConsoleView 1.0-SNAPSHOT API'
+com.filipeduraes.workshop.client.consoleview.clientmodule
+com.filipeduraes.workshop.client.consoleview
+com.filipeduraes.workshop.client.consoleview.login
+com.filipeduraes.workshop.client.consoleview.maintenancemodule
+C:\Users\fhdd\.m2\repository\com\filipeduraes\Workshop.Client.ViewModel\1.0-SNAPSHOT\Workshop.Client.ViewModel-1.0-SNAPSHOT.jar = 1746411079534
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\src\main\java = 1746383005234
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\allclasses-index.html = 1746411089254
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\allpackages-index.html = 1746411089256
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\copy.svg = 1746411089277
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\element-list = 1746411089175
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\help-doc.html = 1746411089275
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\index-all.html = 1746411089270
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\index.html = 1746411089245
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\member-search-index.js = 1746411089259
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\module-search-index.js = 1746411089257
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\overview-summary.html = 1746411089272
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\overview-tree.html = 1746411089242
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\package-search-index.js = 1746411089258
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\script.js = 1746411089277
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\search-page.js = 1746411089279
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\search.html = 1746411089271
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\search.js = 1746411089278
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\stylesheet.css = 1746411089276
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\tag-search-index.js = 1746411089260
+D:\Projects\Github\AutomotiveWorkshop\Workshop\Workshop.Client.ConsoleView\target\reports\apidocs\type-search-index.js = 1746411089258

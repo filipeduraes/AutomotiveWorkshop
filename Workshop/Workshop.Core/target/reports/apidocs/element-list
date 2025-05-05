@@ -1,0 +1,8 @@
+com.filipeduraes.workshop.core
+com.filipeduraes.workshop.core.auth
+com.filipeduraes.workshop.core.catalog
+com.filipeduraes.workshop.core.client
+com.filipeduraes.workshop.core.maintenance
+com.filipeduraes.workshop.core.persistence
+com.filipeduraes.workshop.core.persistence.serializers
+com.filipeduraes.workshop.core.store

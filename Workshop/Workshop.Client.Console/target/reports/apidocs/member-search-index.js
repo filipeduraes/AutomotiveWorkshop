@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"com.filipeduraes.workshop.client.console","c":"WorkshopClient","l":"main(String[])","u":"main(java.lang.String[])"},{"p":"com.filipeduraes.workshop.client.console","c":"WorkshopClient","l":"WorkshopClient()","u":"%3Cinit%3E()"}];updateSearchResults();

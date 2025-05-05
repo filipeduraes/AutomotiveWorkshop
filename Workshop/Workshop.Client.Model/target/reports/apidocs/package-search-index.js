@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.filipeduraes.workshop.client.model"}];updateSearchResults();
