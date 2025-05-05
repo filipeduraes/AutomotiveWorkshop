@@ -6,6 +6,9 @@ import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMen
 import com.filipeduraes.workshop.client.consoleview.maintenancemodule.MaintenanceModuleMenu;
 
 /**
+ * Menu principal do sistema que permite a navegação entre os diferentes módulos.
+ * Responsável por apresentar e gerenciar as opções de acesso aos módulos de 
+ * manutenção e cliente.
  *
  * @author Filipe Durães
  */

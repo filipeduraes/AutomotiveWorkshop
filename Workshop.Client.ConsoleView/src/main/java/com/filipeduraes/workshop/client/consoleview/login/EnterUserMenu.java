@@ -10,6 +10,10 @@ import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 
 /**
+ * Menu de entrada do usuário que gerencia as opções de login do sistema.
+ * Fornece opções para login de usuários existentes e registro de novos usuários.
+ * Coordena a navegação entre os submenus de login e registro, e redireciona para
+ * o menu principal após autenticação bem-sucedida.
  *
  * @author Filipe Durães
  */
@@ -17,7 +21,7 @@ public class EnterUserMenu implements IWorkshopMenu
 {
     private IWorkshopMenu[] menus = 
     {
-        new LoginMenu(),
+        new LogInMenu(),
         new SignInMenu()
     };
     

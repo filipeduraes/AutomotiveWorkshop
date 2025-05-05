@@ -11,6 +11,9 @@ import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import java.util.ArrayList;
 
 /**
+ * Menu responsável pelo cadastro de novos usuários no sistema.
+ * Coleta informações como nome completo, cargo, email e senha.
+ * Gerencia a interface de registro e comunica com o ViewModel para processar o cadastro.
  *
  * @author Filipe Durães
  */

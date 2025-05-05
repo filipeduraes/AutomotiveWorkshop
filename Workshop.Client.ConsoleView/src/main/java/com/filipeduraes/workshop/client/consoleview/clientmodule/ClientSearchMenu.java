@@ -11,6 +11,9 @@ import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import java.util.ArrayList;
 
 /**
+ * Menu responsável por pesquisar e exibir clientes cadastrados no sistema.
+ * Permite que o usuário busque clientes pelo nome, visualize os resultados
+ * da pesquisa e selecione um cliente específico para ver seus detalhes.
  *
  * @author Filipe Durães
  */

@@ -144,7 +144,7 @@ public class MenuManager
 
     private String getLastOption()
     {
-        String formatText = menuStack.size() == 1 ? "Sair" : "Voltar";
+        String formatText = menuStack.size() == 1 ? "X Sair" : "X Voltar";
         return formatText;
     }
 }

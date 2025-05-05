@@ -10,6 +10,8 @@ import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 
 /**
+ * Menu responsável pelo cadastro de novos clientes no sistema.
+ * Coleta informações básicas do cliente como nome, telefone, email, endereço e CPF.
  *
  * @author Filipe Durães
  */

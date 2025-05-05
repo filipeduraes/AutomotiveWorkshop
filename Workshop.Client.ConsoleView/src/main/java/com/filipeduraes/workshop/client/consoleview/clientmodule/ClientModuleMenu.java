@@ -7,6 +7,8 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 
 /**
+ * Menu principal do módulo de clientes que gerencia as operações relacionadas aos clientes.
+ * Fornece acesso aos submenus de registro e pesquisa de clientes.
  *
  * @author Filipe Durães
  */

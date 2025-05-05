@@ -9,12 +9,19 @@ import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 
 /**
+ * Implementa o menu de login do sistema da oficina.
+ * Gerencia a interface de entrada de credenciais do usuário,
+ * coletando email e senha para autenticação.
  *
  * @author Filipe Durães
  */
-public class LoginMenu implements IWorkshopMenu 
+public class LogInMenu implements IWorkshopMenu
 {
-    private String[] loginFailOptions = new String[] { "Tentar Novamente", "X Voltar" };
+    private String[] loginFailOptions = new String[]
+    {
+        "Tentar Novamente",
+        "X Voltar"
+    };
 
     @Override
     public String getMenuDisplayName() 

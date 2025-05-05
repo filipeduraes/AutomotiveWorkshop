@@ -13,7 +13,7 @@ public interface IWorkshopMenu
      *
      * @return nome do menu
      */
-    public String getMenuDisplayName();
+    String getMenuDisplayName();
 
     /**
      * Exibe o menu e retorna a operação de manipulação do menu.
@@ -21,5 +21,5 @@ public interface IWorkshopMenu
      * @param menuManager gerenciador de menus que controla a navegação
      * @return resultado da operação do menu
      */
-    public MenuResult showMenu(MenuManager menuManager);
+    MenuResult showMenu(MenuManager menuManager);
 }
