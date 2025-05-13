@@ -3,6 +3,9 @@
 package com.filipeduraes.workshop.client.consoleview;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
+import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
+import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
+
 import java.util.Stack;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -18,19 +21,22 @@ public class MenuManager
     private final Stack<IWorkshopMenu> menuStack = new Stack<>();
     private final UserInfoViewModel userInfoViewModel;
     private final ClientViewModel clientViewModel;
+    private final VehicleViewModel vehicleViewModel;
 
     /**
      * Cria um novo gerenciador de menus com os modelos de visualização necessários
      * e o menu inicial.
      *
+     * @param initialMenu menu inicial a ser exibido
      * @param userInfoViewModel modelo de visualização com informações do usuário
      * @param clientViewModel modelo de visualização com informações do cliente
-     * @param initialMenu menu inicial a ser exibido
+     * @param vehicleViewModel modelo de visualização com informações do veículo
      */
-    public MenuManager(UserInfoViewModel userInfoViewModel, ClientViewModel clientViewModel, IWorkshopMenu initialMenu)
+    public MenuManager(IWorkshopMenu initialMenu, UserInfoViewModel userInfoViewModel, ClientViewModel clientViewModel, VehicleViewModel vehicleViewModel)
     {
         this.userInfoViewModel = userInfoViewModel;
         this.clientViewModel = clientViewModel;
+        this.vehicleViewModel = vehicleViewModel;
 
         menuStack.push(initialMenu);
     }
@@ -53,6 +59,16 @@ public class MenuManager
     public ClientViewModel getClientViewModel()
     {
         return clientViewModel;
+    }
+
+    /**
+     * Obtém o modelo de visualização que contém as informações do veículo.
+     *
+     * @return modelo de visualização do veículo
+     */
+    public VehicleViewModel getVehicleViewModel()
+    {
+        return vehicleViewModel;
     }
 
     /**

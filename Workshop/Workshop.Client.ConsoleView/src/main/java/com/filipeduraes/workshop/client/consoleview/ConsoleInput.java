@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.client.consoleview;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Set;
 import java.util.StringJoiner;
 
 /**
@@ -15,6 +16,9 @@ public class ConsoleInput
 {
     private static ConsoleInput inputInstance;
     private final BufferedReader reader;
+
+    private static final Set<String> possibleConfirmationMessages = Set.of("sim", "s", "yes", "y", "[s]im");
+    private static final Set<String> possibleDenyMessages = Set.of("nao", "n", "no", "[n]ao");
 
     private ConsoleInput()
     {
@@ -107,6 +111,35 @@ public class ConsoleInput
         }
 
         return input;
+    }
+
+    public static boolean readConfirmation(String message)
+    {
+        message += " (s/n)";
+        System.out.println(message);
+        return readConfirmation();
+    }
+
+    public static boolean readConfirmation()
+    {
+        String answer = readLine();
+        answer = answer.trim().toLowerCase();
+
+        boolean isValidAnswer = false;
+        boolean hasConfirmationAnswer = false;
+
+        while (!isValidAnswer)
+        {
+            hasConfirmationAnswer = possibleConfirmationMessages.contains(answer);
+            isValidAnswer = hasConfirmationAnswer || possibleDenyMessages.contains(answer);
+
+            if(!isValidAnswer)
+            {
+                System.out.println("Resposta invalida, insira apenas [s]im ou [n]ao");
+            }
+        }
+
+        return hasConfirmationAnswer;
     }
 
     private static ConsoleInput getInstance()
