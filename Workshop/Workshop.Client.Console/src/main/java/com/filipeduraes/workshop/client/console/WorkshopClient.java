@@ -11,6 +11,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 
+import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.core.Workshop;
 
 /**
@@ -45,11 +46,12 @@ public class WorkshopClient
 
         UserInfoViewModel userInfoViewModel = new UserInfoViewModel();
         ClientViewModel clientViewModel = new ClientViewModel();
+        VehicleViewModel vehicleViewModel = new VehicleViewModel();
 
         LoginController loginController = new LoginController(userInfoViewModel, workshop.getAuthModule());
         ClientController clientController = new ClientController(clientViewModel, workshop.getClientModule());
 
-        menuManager = new MenuManager(userInfoViewModel, clientViewModel, new EnterUserMenu());
+        menuManager = new MenuManager(new EnterUserMenu(), userInfoViewModel, clientViewModel, vehicleViewModel);
         menuManager.run();
 
         loginController.dispose();

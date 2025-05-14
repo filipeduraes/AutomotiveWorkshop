@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.client.consoleview;
 
 /**
  * Base para todos os menus do cliente.
+ * 
  * @author Filipe Durães
  */
 public interface IWorkshopMenu 

@@ -15,6 +15,7 @@ public class Observer
     
     /**
      * Adiciona um novo observador ao evento.
+     * 
      * @param listener Observador que será chamado quando o evento ocorrer.
      */
     public void addListener(Runnable listener)
@@ -24,6 +25,7 @@ public class Observer
     
     /**
      * Remove um observador do evento.
+     * 
      * @param listener Observador a ser removido.
      */
     public void removeListener(Runnable listener)

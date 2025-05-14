@@ -83,7 +83,8 @@ public final class Persistence
             {
                 bufferedWriter.write(obfuscatedJson);
             }
-        } catch (IOException exception)
+        }
+        catch (IOException exception)
         {
             exception.printStackTrace(System.out);
         }
@@ -111,7 +112,8 @@ public final class Persistence
             T result = gson.fromJson(json, type);
 
             return result == null ? defaultValue : result;
-        } catch (IOException exception)
+        }
+        catch (IOException exception)
         {
             exception.printStackTrace(System.out);
             return defaultValue;
