@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.filipeduraes.workshop.client.consoleview"},{"l":"com.filipeduraes.workshop.client.consoleview.clientmodule"},{"l":"com.filipeduraes.workshop.client.consoleview.login"},{"l":"com.filipeduraes.workshop.client.consoleview.maintenancemodule"}];updateSearchResults();
