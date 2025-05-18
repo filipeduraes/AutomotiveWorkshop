@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.filipeduraes.workshop.client.model","l":"ClientController"},{"p":"com.filipeduraes.workshop.client.model","l":"LoginController"},{"p":"com.filipeduraes.workshop.client.model","l":"MaintenanceController"}];updateSearchResults();
