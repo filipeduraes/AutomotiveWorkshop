@@ -16,7 +16,6 @@ import java.util.ArrayList;
  */
 public class LoginController
 {
-    private final Runnable updateLoginStateLambda;
     private final UserInfoViewModel viewModel;
     private final AuthModule authModule;
 
@@ -28,10 +27,9 @@ public class LoginController
      */
     public LoginController(UserInfoViewModel viewModel, AuthModule authModule)
     {
-        updateLoginStateLambda = () -> updateLoginState();
         this.viewModel = viewModel;
 
-        this.viewModel.OnLoginStateChanged.addListener(updateLoginStateLambda);
+        this.viewModel.OnLoginStateChanged.addListener(this::updateLoginState);
         this.authModule = authModule;
 
         EmployeeRole[] employeeRoles = EmployeeRole.values();
@@ -50,8 +48,7 @@ public class LoginController
      */
     public void dispose()
     {
-        viewModel.OnLoginStateChanged.removeListener
-                (updateLoginStateLambda);
+        viewModel.OnLoginStateChanged.removeListener(this::updateLoginState);
     }
 
     private void updateLoginState()
@@ -61,25 +58,30 @@ public class LoginController
         switch (loginState)
         {
             case LOGIN_REQUESTED:
+            {
                 boolean loginWasSuccessful = authModule.tryLogIn(viewModel.getEmail(), viewModel.getPasswordHash());
 
                 if (loginWasSuccessful)
                 {
                     viewModel.setName(authModule.getLoggedUser().getName());
                     viewModel.setLoginState(LoginState.LOGIN_SUCCESS);
-                } else
+                }
+                else
                 {
                     viewModel.setLoginState(LoginState.LOGIN_FAILED);
                 }
 
                 break;
+            }
             case SIGNIN_REQUESTED:
+            {
                 int selectedRole = viewModel.getSelectedRole();
                 EmployeeRole role = EmployeeRole.values()[selectedRole];
                 LocalEmployee newUser = new LocalEmployee(viewModel.getName(), viewModel.getEmail(), role, viewModel.getPasswordHash());
 
                 authModule.registerUser(newUser);
                 break;
+            }
         }
     }
 }

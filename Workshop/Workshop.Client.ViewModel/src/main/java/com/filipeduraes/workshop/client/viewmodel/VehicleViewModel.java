@@ -67,6 +67,20 @@ public class VehicleViewModel
     }
 
 
+    public boolean hasSelectedVehicle()
+    {
+        return selectedVehicleIndex >= 0 && selectedVehicleIndex < selectedClientVehicles.size();
+    }
+
+    public void cleanCurrentSelectedVehicle()
+    {
+        selectedModel = "";
+        selectedColor = "";
+        selectedVinNumber = "";
+        selectedLicensePlate = "";
+        selectedVehicleIndex = -1;
+    }
+
     public void setSelectedVehicleIndex(int newSelectedVehicleIndex)
     {
         selectedVehicleIndex = newSelectedVehicleIndex;
@@ -83,8 +97,18 @@ public class VehicleViewModel
         selectedClientVehicles = newSelectedClientVehicles;
     }
 
+    public String getSelectedClientVehicleFromIndex(int index)
+    {
+        return selectedClientVehicles.get(index);
+    }
+
     public List<String> getSelectedClientVehicles()
     {
         return selectedClientVehicles;
+    }
+
+    public boolean clientHasVehicles()
+    {
+        return !selectedClientVehicles.isEmpty();
     }
 }

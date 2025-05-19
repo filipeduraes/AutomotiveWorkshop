@@ -4,6 +4,8 @@ package com.filipeduraes.workshop.core.maintenance;
 import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
+import com.filipeduraes.workshop.core.vehicle.Vehicle;
+
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 

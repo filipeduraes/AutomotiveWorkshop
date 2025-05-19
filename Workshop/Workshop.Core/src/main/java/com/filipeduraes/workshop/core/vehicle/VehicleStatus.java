@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.core.maintenance;
+package com.filipeduraes.workshop.core.vehicle;
 
 /**
  * Representa os diferentes estados possíveis de um veículo durante

@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.client.viewmodel;
 
 import com.filipeduraes.workshop.client.utils.Observer;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * ViewModel responsável por gerenciar os dados e estado da interface de cliente,
@@ -24,6 +25,7 @@ public class ClientViewModel
     private String searchPattern;
     private int selectedFoundClientIndex = -1;
 
+    private UUID id;
     private String name;
     private String phoneNumber;
     private String email;
@@ -108,6 +110,27 @@ public class ClientViewModel
     public boolean hasSelectedClient()
     {
         return selectedFoundClientIndex >= 0;
+    }
+
+
+    /**
+     * Obtém o ID do cliente.
+     *
+     * @return ID do cliente
+     */
+    public UUID getID()
+    {
+        return id;
+    }
+
+    /**
+     * Define o id do cliente.
+     *
+     * @param newID novo ID do cliente
+     */
+    public void setID(UUID newID)
+    {
+        id = newID;
     }
 
 

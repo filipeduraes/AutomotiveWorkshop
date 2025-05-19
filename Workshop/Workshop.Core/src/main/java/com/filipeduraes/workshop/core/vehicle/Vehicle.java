@@ -1,8 +1,10 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.core.maintenance;
+package com.filipeduraes.workshop.core.vehicle;
 
 import com.filipeduraes.workshop.core.client.Client;
+
+import java.util.UUID;
 
 /**
  *
@@ -11,6 +13,7 @@ import com.filipeduraes.workshop.core.client.Client;
 public class Vehicle
 {
     private transient Client owner;
+    private UUID id;
     private String model;
     private String color;
     private String vinNumber;
@@ -26,6 +29,12 @@ public class Vehicle
         this.vinNumber = vinNumber;
         this.licensePlate = licensePlate;
         this.year = year;
+    }
+
+    public void setID(UUID id)
+    {
+        this.id = id;
+        owner.addOwnedVehicle(id);
     }
 
     public String getModel() 

@@ -1,4 +1,4 @@
-package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
+package com.filipeduraes.workshop.client.consoleview.vehiclemodule;
 
 import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
@@ -13,7 +13,7 @@ public class RegisterVehicleMenu implements IWorkshopMenu
     @Override
     public String getMenuDisplayName()
     {
-        return "Registrar Veículo";
+        return "Registrar Veiculo";
     }
 
     @Override

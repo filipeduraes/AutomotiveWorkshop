@@ -36,13 +36,35 @@ public class ClientModule
      *
      * @param client O cliente a ser registrado
      */
-    public void registerNewClient(Client client)
+    public UUID registerNewClient(Client client)
     {
         UUID uniqueID = Persistence.generateUniqueID(loadedClients);
         client.setID(uniqueID);
 
         loadedClients.put(uniqueID, client);
+        saveCurrentClients();
+        return uniqueID;
+    }
+
+    public void saveCurrentClients()
+    {
         Persistence.saveFile(loadedClients, WorkshopPaths.RegisteredClientsPath);
+    }
+
+    /**
+     * Busca um cliente específico pelo seu ID único.
+     *
+     * @param clientID O identificador único do cliente a ser buscado
+     * @return O cliente encontrado ou null caso não exista cliente com o ID especificado
+     */
+    public Client findClientByID(UUID clientID)
+    {
+        if (!loadedClients.containsKey(clientID))
+        {
+            return null;
+        }
+
+        return loadedClients.get(clientID);
     }
 
     /**

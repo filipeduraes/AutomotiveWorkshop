@@ -7,6 +7,7 @@ import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.client.ClientModule;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Controlador responsável por gerenciar as operações relacionadas aos clientes,
@@ -21,7 +22,6 @@ public class ClientController
     private final ClientModule clientModule;
 
     private ArrayList<Client> foundClients;
-    private Runnable processClientRequest;
 
     /**
      * Cria uma nova instância do controlador de clientes.
@@ -34,8 +34,7 @@ public class ClientController
         this.clientViewModel = clientViewModel;
         this.clientModule = clientModule;
 
-        processClientRequest = () -> processClientRequest();
-        clientViewModel.OnClientRequest.addListener(processClientRequest);
+        clientViewModel.OnClientRequest.addListener(this::processClientRequest);
     }
 
     /**
@@ -44,7 +43,7 @@ public class ClientController
      */
     public void dispose()
     {
-        clientViewModel.OnClientRequest.removeListener(processClientRequest);
+        clientViewModel.OnClientRequest.removeListener(this::processClientRequest);
     }
 
     private void processClientRequest()
@@ -60,7 +59,8 @@ public class ClientController
                 final String address = clientViewModel.getAddress();
 
                 Client newClient = new Client(name, email, phoneNumber, address, cpf);
-                clientModule.registerNewClient(newClient);
+                UUID clientID = clientModule.registerNewClient(newClient);
+                clientViewModel.setID(clientID);
                 break;
             }
             case SEARCH_CLIENTS:
@@ -80,6 +80,7 @@ public class ClientController
                 {
                     Client selectedFoundClient = foundClients.get(selectedFoundClientIndex);
 
+                    clientViewModel.setID(selectedFoundClient.getID());
                     clientViewModel.setName(selectedFoundClient.getName());
                     clientViewModel.setEmail(selectedFoundClient.getEmail());
                     clientViewModel.setPhoneNumber(selectedFoundClient.getPhoneNumber());

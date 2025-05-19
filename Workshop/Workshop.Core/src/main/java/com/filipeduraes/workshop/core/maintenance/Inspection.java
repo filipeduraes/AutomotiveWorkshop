@@ -3,6 +3,9 @@
 package com.filipeduraes.workshop.core.maintenance;
 
 import com.filipeduraes.workshop.core.auth.Employee;
+import com.filipeduraes.workshop.core.vehicle.Vehicle;
+import com.filipeduraes.workshop.core.vehicle.VehicleStatus;
+
 import java.time.LocalDate;
 
 /**

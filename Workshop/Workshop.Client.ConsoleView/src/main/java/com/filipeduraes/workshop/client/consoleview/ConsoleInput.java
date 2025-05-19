@@ -4,8 +4,10 @@ package com.filipeduraes.workshop.client.consoleview;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * Utiliza um buffered reader para ler as entradas do System.in
@@ -19,6 +21,7 @@ public class ConsoleInput
 
     private static final Set<String> possibleConfirmationMessages = Set.of("sim", "s", "yes", "y", "[s]im");
     private static final Set<String> possibleDenyMessages = Set.of("nao", "n", "no", "[n]ao");
+    private static final String cancelOptionMessage = "X Cancelar";
 
     private ConsoleInput()
     {
@@ -59,7 +62,16 @@ public class ConsoleInput
     {
         String input = ConsoleInput.readLine();
         input = input.trim();
-        return Integer.parseInt(input);
+
+        try
+        {
+            int readInteger = Integer.parseInt(input);
+            return readInteger;
+        }
+        catch (Exception e)
+        {
+            return -1;
+        }
     }
 
     /**
@@ -74,7 +86,7 @@ public class ConsoleInput
             return getInstance().reader.readLine();
         } catch (IOException e)
         {
-            System.err.println(String.format("Erro ao ler entrada do usuário: %s", e.getMessage()));
+            System.err.println(String.format("Erro ao ler entrada do usuiario: %s", e.getMessage()));
             e.printStackTrace(System.out);
             return "";
         }
@@ -89,6 +101,19 @@ public class ConsoleInput
      */
     public static int readOptionFromList(String message, String[] options)
     {
+        return readOptionFromList(message, options, false);
+    }
+
+    /**
+     * Exibe uma lista numerada de opções e lê a escolha do usuário.
+     *
+     * @param message mensagem a ser exibida antes das opções
+     * @param options array com as opções disponíveis
+     * @param showCancelOption mostra uma opção para cancelar a ação
+     * @return índice da opção escolhida pelo usuário
+     */
+    public static int readOptionFromList(String message, String[] options, boolean showCancelOption)
+    {
         StringJoiner joiner = new StringJoiner("\n");
 
         for (int i = 0; i < options.length; i++)
@@ -96,9 +121,15 @@ public class ConsoleInput
             joiner.add(String.format("> [%d] %s", i, options[i]));
         }
 
-        int input = -1;
+        if(showCancelOption)
+        {
+            joiner.add(String.format("> [%d] %s", options.length, cancelOptionMessage));
+        }
 
-        while (input < 0 || input >= options.length)
+        int input = -1;
+        int realSize = showCancelOption ? options.length + 1 : options.length;
+
+        while (input < 0 || input >= realSize)
         {
             System.out.println(joiner);
 

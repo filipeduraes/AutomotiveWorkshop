@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.core.maintenance;
 import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.catalog.Product;
 import com.filipeduraes.workshop.core.store.Purchase;
+import com.filipeduraes.workshop.core.vehicle.VehicleStatus;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
