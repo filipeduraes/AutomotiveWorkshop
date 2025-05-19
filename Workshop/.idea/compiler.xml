@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="AutomotiveWorkshop" target="1.5" />
+      <module name="Workshop.Client.Console" target="20" />
+      <module name="Workshop.Client.ConsoleView" target="20" />
+      <module name="Workshop.Client.Model" target="20" />
+      <module name="Workshop.Client.ViewModel" target="20" />
+      <module name="Workshop.Core" target="20" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
