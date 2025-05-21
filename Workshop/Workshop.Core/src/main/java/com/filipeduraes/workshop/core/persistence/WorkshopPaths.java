@@ -2,6 +2,8 @@
 
 package com.filipeduraes.workshop.core.persistence;
 
+import java.util.UUID;
+
 /**
  * Armazena todos os caminhos relativos que estão sendo usados no projeto.
  *
@@ -9,10 +11,28 @@ package com.filipeduraes.workshop.core.persistence;
  */
 public final class WorkshopPaths 
 {
+    private static final String DataDirectoryPath = "./Data/";
+    public static final String RegisteredEmployeesPath = DataDirectoryPath + "Users.workshop";
+    public static final String OpenedServicesPath = DataDirectoryPath + "OpenedServices.workshop";
+    public static final String RegisteredClientsPath = DataDirectoryPath + "Clients.workshop";
+    public static final String RegisteredVehiclesPath = DataDirectoryPath + "Vehicles.workshop";
+
+    private static UUID loggedUserID;
+
     private WorkshopPaths() {}
-    
-    public static final String RegisteredEmployeesPath = "./Data/Users.workshop";
-    public static final String OpenedAppointmentsPath = "./Data/OpenedApointments.workshop";
-    public static final String RegisteredClientsPath = "./Data/Clients.workshop";
-    public static final String RegisteredVehiclesPath = "./Data/Vehicles.workshop";
+
+    public static void setCurrentLoggedUserID(UUID newLoggedUserID)
+    {
+        loggedUserID = newLoggedUserID;
+    }
+
+    public static String getUserServicesPath()
+    {
+        return getUserServicesPath(loggedUserID);
+    }
+
+    public static String getUserServicesPath(UUID userID)
+    {
+        return DataDirectoryPath + "Services/" + userID + "_Services.workshop";
+    }
 }

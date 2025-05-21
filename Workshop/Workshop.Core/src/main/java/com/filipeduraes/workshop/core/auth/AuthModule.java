@@ -96,6 +96,7 @@ public class AuthModule
         if (passwordIsValid)
         {
             loggedUser = userToValidate;
+            WorkshopPaths.setCurrentLoggedUserID(loggedUser.getID());
         }
 
         return passwordIsValid;

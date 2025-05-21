@@ -84,7 +84,8 @@ public class ConsoleInput
         try
         {
             return getInstance().reader.readLine();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             System.err.println(String.format("Erro ao ler entrada do usuiario: %s", e.getMessage()));
             e.printStackTrace(System.out);

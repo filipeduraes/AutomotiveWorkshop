@@ -17,8 +17,8 @@ import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
  */
 public class CreateServiceOrderMenu implements IWorkshopMenu 
 {
-    private String selectClientMessage = "Selecionar Cliente";
-    private String selectVehicleMessage = "Selecionar Veiculo";
+    private final String selectClientMessage = "Selecionar Cliente";
+    private final String selectVehicleMessage = "Selecionar Veiculo";
 
     @Override
     public String getMenuDisplayName() 

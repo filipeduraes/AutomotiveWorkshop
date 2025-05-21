@@ -1,47 +1,44 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.core.maintenance;
 
-import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.catalog.Product;
 import com.filipeduraes.workshop.core.store.Purchase;
-import com.filipeduraes.workshop.core.vehicle.VehicleStatus;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Stack;
+import java.util.UUID;
 
 /**
- *
  * @author Filipe Durães
  */
 public class ServiceOrder
 {
-    private Employee mechanic;
-    private Inspection inspection;
-    
-    private LocalDate startDate;
-    private LocalDate finishDate;
-    
+    private UUID id;
+
+    private Stack<ServiceStep> steps = new Stack<>();
     private ArrayList<Product> services = new ArrayList<>();
+
     private Purchase purchase;
-    
-    public ServiceOrder(Inspection inspection, Employee mechanic)
+    private UUID vehicleID;
+
+    public ServiceOrder(UUID serviceID, UUID vehicleID)
     {
-        this.inspection = inspection;
-        this.mechanic = mechanic;
+        this.vehicleID = vehicleID;
     }
-    
-    public void start()
+
+    public void registerStep(ServiceStep step)
     {
-        startDate = LocalDate.now();
-        inspection.getVehicle().setStatus(VehicleStatus.UNDER_MAINTENANCE);
+        steps.push(step);
     }
-    
+
+    public ServiceStep getCurrentStep()
+    {
+        return steps.peek();
+    }
+
     public void finish(ArrayList<Product> services, Purchase purchase)
     {
         this.services = services;
         this.purchase = purchase;
-        
-        finishDate = LocalDate.now();
-        inspection.getVehicle().setStatus(VehicleStatus.READY_FOR_DELIVERY);
     }
 }
