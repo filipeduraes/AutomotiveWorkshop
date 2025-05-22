@@ -1,7 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.client.viewmodel;
 
-import com.filipeduraes.workshop.client.utils.Observer;
+import com.filipeduraes.workshop.utils.Observer;
 import java.util.ArrayList;
 
 /**

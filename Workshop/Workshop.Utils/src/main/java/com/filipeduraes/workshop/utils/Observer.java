@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.client.utils;
+package com.filipeduraes.workshop.utils;
 
 import java.util.ArrayList;
 
