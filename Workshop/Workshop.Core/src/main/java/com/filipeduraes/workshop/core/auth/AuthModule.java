@@ -3,6 +3,8 @@ package com.filipeduraes.workshop.core.auth;
 
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
+import com.filipeduraes.workshop.utils.Observer;
+
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +18,7 @@ import java.util.UUID;
  */
 public class AuthModule
 {
+    public Observer OnUserLogged = new Observer();
     private Employee loggedUser = null;
     private Map<UUID, LocalEmployee> publicUsers;
 
@@ -96,7 +99,7 @@ public class AuthModule
         if (passwordIsValid)
         {
             loggedUser = userToValidate;
-            WorkshopPaths.setCurrentLoggedUserID(loggedUser.getID());
+            OnUserLogged.broadcast();
         }
 
         return passwordIsValid;

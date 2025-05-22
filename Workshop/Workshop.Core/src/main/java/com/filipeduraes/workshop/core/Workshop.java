@@ -3,10 +3,12 @@
 package com.filipeduraes.workshop.core;
 
 import com.filipeduraes.workshop.core.auth.AuthModule;
+import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.client.ClientModule;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.SerializationAdapterGroup;
+import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 import com.filipeduraes.workshop.core.persistence.serializers.DateTimeSerializer;
 import com.filipeduraes.workshop.core.vehicle.VehicleModule;
 
@@ -38,6 +40,13 @@ public class Workshop
 
         Persistence.setUseObfuscation(useObfuscation);
         Persistence.registerCustomSerializationAdapters(adapters);
+
+        authModule.OnUserLogged.addListener(this::initializeUserData);
+    }
+
+    public void dispose()
+    {
+        authModule.OnUserLogged.removeListener(this::initializeUserData);
     }
 
     /**
@@ -78,5 +87,12 @@ public class Workshop
     public MaintenanceModule getMaintenanceModule()
     {
         return maintenanceModule;
+    }
+
+    private void initializeUserData()
+    {
+        Employee loggedUser = authModule.getLoggedUser();
+        WorkshopPaths.setCurrentLoggedUserID(loggedUser.getID());
+        maintenanceModule = new MaintenanceModule(loggedUser.getID());
     }
 }

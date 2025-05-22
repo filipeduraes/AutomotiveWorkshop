@@ -59,5 +59,7 @@ public class WorkshopClient
         loginController.dispose();
         clientController.dispose();
         vehicleController.dispose();
+
+        workshop.dispose();
     }
 }
