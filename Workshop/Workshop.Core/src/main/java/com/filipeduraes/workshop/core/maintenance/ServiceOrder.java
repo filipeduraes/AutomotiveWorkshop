@@ -26,6 +26,11 @@ public class ServiceOrder
         this.vehicleID = vehicleID;
     }
 
+    public UUID getID()
+    {
+        return id;
+    }
+
     public void registerStep(ServiceStep step)
     {
         steps.push(step);
@@ -34,6 +39,11 @@ public class ServiceOrder
     public ServiceStep getCurrentStep()
     {
         return steps.peek();
+    }
+
+    public MaintenanceStep getCurrentMaintenanceStep()
+    {
+        return MaintenanceStep.fromInt(steps.size());
     }
 
     public void finish(ArrayList<Product> services, Purchase purchase)

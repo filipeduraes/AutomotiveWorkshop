@@ -5,10 +5,7 @@ import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  *
@@ -16,56 +13,58 @@ import java.util.UUID;
  */
 public class MaintenanceModule
 {
-    private Map<UUID, ServiceOrder> userServices;
-    private Map<UUID, ServiceOrder> openServices;
+    private Map<UUID, ServiceOrder> ongoingServices;
+    private List<UUID> userServices;
+    private List<UUID> openedServices;
     private UUID loggedEmployeeID;
     
     public MaintenanceModule(UUID loggedEmployeeID)
     {
         this.loggedEmployeeID = loggedEmployeeID;
 
-        ParameterizedType type = Persistence.createParameterizedType(ArrayList.class, ServiceOrder.class);
+        ParameterizedType ongoingServicesType = Persistence.createParameterizedType(HashMap.class, UUID.class, ServiceOrder.class);
+        ParameterizedType serviceIDListType = Persistence.createParameterizedType(ArrayList.class, UUID.class);
 
-        openServices = Persistence.loadFile(WorkshopPaths.OpenedServicesPath, type, new HashMap<>());
-        userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), type, new HashMap<>());
+        ongoingServices = Persistence.loadFile(WorkshopPaths.OngoingServicesPath, ongoingServicesType, new HashMap<>());
+        openedServices = Persistence.loadFile(WorkshopPaths.OpenedServicesPath, serviceIDListType, new ArrayList<>());
+        userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDListType, new ArrayList<>());
     }
 
     public void registerNewAppointment(UUID vehicleID, String problemDescription)
     {
-        UUID serviceID = Persistence.generateUniqueID(openServices);
+        UUID serviceID = Persistence.generateUniqueID(ongoingServices);
 
         ServiceOrder serviceOrder = new ServiceOrder(serviceID, vehicleID);
         serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
         serviceOrder.getCurrentStep().setDescription(problemDescription);
 
-        openServices.put(serviceID, serviceOrder);
+        ongoingServices.put(serviceID, serviceOrder);
 
-        Persistence.saveFile(openServices, WorkshopPaths.OpenedServicesPath);
+        Persistence.saveFile(ongoingServices, WorkshopPaths.OngoingServicesPath);
     }
 
     public void startInspection(UUID serviceID)
     {
-        ServiceOrder serviceOrder = openServices.get(serviceID);
+        ServiceOrder serviceOrder = ongoingServices.get(serviceID);
 
         if (serviceOrder != null)
         {
             serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
-            openServices.remove(serviceID);
-            userServices.put(serviceID, serviceOrder);
+            openedServices.remove(serviceID);
+            userServices.add(serviceID);
 
-            Persistence.saveFile(openServices, WorkshopPaths.OpenedServicesPath);
+            Persistence.saveFile(openedServices, WorkshopPaths.OpenedServicesPath);
             Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
         }
     }
 
     public void finishInspection(UUID serviceID, UUID newEmployee, String description)
     {
-        ServiceOrder serviceOrder = userServices.get(serviceID);
+        ServiceOrder serviceOrder = ongoingServices.get(serviceID);
 
         if (serviceOrder != null)
         {
             serviceOrder.getCurrentStep().setDescription(description);
-            serviceOrder.registerStep(new ServiceStep(newEmployee));
 
             userServices.remove(serviceID);
         }

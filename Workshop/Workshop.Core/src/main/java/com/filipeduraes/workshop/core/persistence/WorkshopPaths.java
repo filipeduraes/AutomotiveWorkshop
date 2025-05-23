@@ -14,6 +14,7 @@ public final class WorkshopPaths
     private static final String DataDirectoryPath = "./Data/";
     public static final String RegisteredEmployeesPath = DataDirectoryPath + "Users.workshop";
     public static final String OpenedServicesPath = DataDirectoryPath + "OpenedServices.workshop";
+    public static final String OngoingServicesPath = DataDirectoryPath + "Services.workshop";
     public static final String RegisteredClientsPath = DataDirectoryPath + "Clients.workshop";
     public static final String RegisteredVehiclesPath = DataDirectoryPath + "Vehicles.workshop";
 
