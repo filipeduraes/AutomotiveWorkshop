@@ -2,6 +2,7 @@
 
 package com.filipeduraes.workshop.client.model;
 
+import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.core.client.Client;
@@ -52,15 +53,11 @@ public class ClientController
         {
             case REGISTER_CLIENT:
             {
-                final String name = clientViewModel.getName();
-                final String email = clientViewModel.getEmail();
-                final String phoneNumber = clientViewModel.getPhoneNumber();
-                final String cpf = clientViewModel.getCPF();
-                final String address = clientViewModel.getAddress();
 
-                Client newClient = new Client(name, email, phoneNumber, address, cpf);
+                ClientDTO client = clientViewModel.getClient();
+                Client newClient = convertDTOToClient(client);
                 UUID clientID = clientModule.registerNewClient(newClient);
-                clientViewModel.setID(clientID);
+                client.setID(clientID);
                 break;
             }
             case SEARCH_CLIENTS:
@@ -79,13 +76,7 @@ public class ClientController
                 if (selectedFoundClientIndex >= 0 && selectedFoundClientIndex < foundClients.size())
                 {
                     Client selectedFoundClient = foundClients.get(selectedFoundClientIndex);
-
-                    clientViewModel.setID(selectedFoundClient.getID());
-                    clientViewModel.setName(selectedFoundClient.getName());
-                    clientViewModel.setEmail(selectedFoundClient.getEmail());
-                    clientViewModel.setPhoneNumber(selectedFoundClient.getPhoneNumber());
-                    clientViewModel.setAddress(selectedFoundClient.getAddress());
-                    clientViewModel.setCPF(selectedFoundClient.getMaskedCPF());
+                    clientViewModel.setClient(convertClientToDTO(selectedFoundClient));
                 }
                 break;
             }
@@ -104,5 +95,38 @@ public class ClientController
         }
 
         return clientNames;
+    }
+
+    private ClientDTO convertClientToDTO(Client client)
+    {
+        return new ClientDTO
+        (
+            client.getID(),
+            client.getName(),
+            client.getEmail(),
+            client.getPhoneNumber(),
+            client.getAddress(),
+            client.getMaskedCPF()
+        );
+    }
+
+    private Client convertDTOToClient(ClientDTO clientDTO)
+    {
+        return new Client
+        (
+            clientDTO.getName(),
+            clientDTO.getEmail(),
+            clientDTO.getPhoneNumber(),
+            clientDTO.getAddress(),
+            maskCPF(clientDTO.getCPF())
+        );
+    }
+
+    private String maskCPF(String cpf)
+    {
+        String numberOnlyCPF = cpf.replaceAll("\\D", ""); // Substitui qualquer caractere não numérico por uma string vazia
+        String thirdPart = numberOnlyCPF.substring(6, 9);
+        String fourthPart = numberOnlyCPF.substring(9);
+        return String.format("XXX.XXX.%s-%s", thirdPart, fourthPart);
     }
 }

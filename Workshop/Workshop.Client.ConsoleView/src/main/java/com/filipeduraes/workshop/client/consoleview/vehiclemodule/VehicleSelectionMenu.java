@@ -9,7 +9,7 @@ import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 
 import java.util.List;
 
-public class SelectRegisteredClientVehicleMenu implements IWorkshopMenu
+public class VehicleSelectionMenu implements IWorkshopMenu
 {
 
     @Override

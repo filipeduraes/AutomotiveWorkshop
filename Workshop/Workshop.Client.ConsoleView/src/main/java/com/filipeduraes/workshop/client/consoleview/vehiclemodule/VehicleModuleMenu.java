@@ -11,18 +11,18 @@ import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
  *
  * @author Filipe Durães
  */
-public class SelectVehicleMenu implements IWorkshopMenu
+public class VehicleModuleMenu implements IWorkshopMenu
 {
     private IWorkshopMenu[] menuOptions =
     {
         new RegisterVehicleMenu(),
-        new SelectRegisteredClientVehicleMenu()
+        new VehicleSelectionMenu()
     };
 
     @Override
     public String getMenuDisplayName() 
     {
-        return "Selecionar Veiculo";
+        return "Modulo de Veiculos";
     }
 
     @Override

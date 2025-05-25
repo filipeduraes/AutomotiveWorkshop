@@ -1,5 +1,6 @@
 package com.filipeduraes.workshop.client.model;
 
+import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
@@ -81,13 +82,9 @@ public class VehicleController
 
         if(selectedClient != null)
         {
-            String model = vehicleViewModel.getSelectedModel();
-            String color = vehicleViewModel.getSelectedColor();
-            String vinNumber = vehicleViewModel.getSelectedVinNumber();
-            String licensePlate = vehicleViewModel.getSelectedLicensePlate();
-            int year = vehicleViewModel.getSelectedYear();
+            VehicleDTO registerRequestedVehicle = vehicleViewModel.getSelectedVehicle();
 
-            Vehicle vehicle = new Vehicle(selectedClient, model, color, vinNumber, licensePlate, year);
+            Vehicle vehicle = convertDTOToVehicle(selectedClient, registerRequestedVehicle);
             vehicleModule.registerVehicle(vehicle);
             clientModule.saveCurrentClients();
 
@@ -109,7 +106,9 @@ public class VehicleController
                 UUID selectedVehicleID = ownedVehiclesIDs.get(selectedVehicleIndex);
                 Vehicle vehicle = vehicleModule.findVehicleByID(selectedVehicleID);
 
-                vehicleViewModel.setSelectedVehicleData(vehicle.getModel(), vehicle.getColor(), vehicle.getVinNumber(), vehicle.getLicensePlate(), vehicle.getYear());
+                VehicleDTO selectedVehicle = convertVehicleToDTO(vehicle);
+
+                vehicleViewModel.setSelectedVehicle(selectedVehicle);
                 vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_SUCCESS);
             }
             else
@@ -119,6 +118,34 @@ public class VehicleController
         }
     }
 
+    private Vehicle convertDTOToVehicle(Client selectedClient, VehicleDTO registerRequestedVehicle)
+    {
+        Vehicle vehicle = new Vehicle
+        (
+            selectedClient.getID(),
+            registerRequestedVehicle.getModel(),
+            registerRequestedVehicle.getColor(),
+            registerRequestedVehicle.getVinNumber(),
+            registerRequestedVehicle.getLicensePlate(),
+            registerRequestedVehicle.getYear()
+        );
+
+        return vehicle;
+    }
+
+    private VehicleDTO convertVehicleToDTO(Vehicle vehicle)
+    {
+        VehicleDTO selectedVehicle = new VehicleDTO
+        (
+            vehicle.getModel(),
+            vehicle.getColor(),
+            vehicle.getVinNumber(),
+            vehicle.getLicensePlate(),
+            vehicle.getYear()
+        );
+
+        return selectedVehicle;
+    }
 
     private Client getSelectedClient()
     {
@@ -129,7 +156,7 @@ public class VehicleController
             return null;
         }
 
-        UUID selectedClientID = clientViewModel.getID();
+        UUID selectedClientID = clientViewModel.getClient().getID();
         Client client = clientModule.findClientByID(selectedClientID);
         return client;
     }

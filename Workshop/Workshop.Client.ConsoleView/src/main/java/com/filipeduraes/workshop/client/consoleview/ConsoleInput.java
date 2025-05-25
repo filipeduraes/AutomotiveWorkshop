@@ -4,10 +4,8 @@ package com.filipeduraes.workshop.client.consoleview;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.StringJoiner;
-import java.util.stream.Stream;
 
 /**
  * Utiliza um buffered reader para ler as entradas do System.in
@@ -21,7 +19,7 @@ public class ConsoleInput
 
     private static final Set<String> possibleConfirmationMessages = Set.of("sim", "s", "yes", "y", "[s]im");
     private static final Set<String> possibleDenyMessages = Set.of("nao", "n", "no", "[n]ao");
-    private static final String cancelOptionMessage = "X Cancelar";
+    private static final String CANCEL_OPTION_MESSAGE = "X Cancelar";
 
     private ConsoleInput()
     {
@@ -124,7 +122,7 @@ public class ConsoleInput
 
         if(showCancelOption)
         {
-            joiner.add(String.format("> [%d] %s", options.length, cancelOptionMessage));
+            joiner.add(String.format("> [%d] %s", options.length, CANCEL_OPTION_MESSAGE));
         }
 
         int input = -1;

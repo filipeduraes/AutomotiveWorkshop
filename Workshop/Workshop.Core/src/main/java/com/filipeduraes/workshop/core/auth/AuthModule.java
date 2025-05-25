@@ -65,7 +65,7 @@ public class AuthModule
 
         currentRegisteredUsers.put(uniqueID, user);
 
-        Persistence.saveFile(currentRegisteredUsers, WorkshopPaths.RegisteredEmployeesPath);
+        Persistence.saveFile(currentRegisteredUsers, WorkshopPaths.REGISTERED_EMPLOYEES_PATH);
     }
 
     /**
@@ -124,6 +124,6 @@ public class AuthModule
     private Map<UUID, LocalEmployee> loadRegisteredLocalUsers()
     {
         ParameterizedType type = Persistence.createParameterizedType(HashMap.class, UUID.class, LocalEmployee.class);
-        return Persistence.loadFile(WorkshopPaths.RegisteredEmployeesPath, type, new HashMap<>());
+        return Persistence.loadFile(WorkshopPaths.REGISTERED_EMPLOYEES_PATH, type, new HashMap<>());
     }
 }

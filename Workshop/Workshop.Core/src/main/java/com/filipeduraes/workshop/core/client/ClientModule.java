@@ -27,7 +27,7 @@ public class ClientModule
     public ClientModule()
     {
         final ParameterizedType type = Persistence.createParameterizedType(HashMap.class, UUID.class, Client.class);
-        loadedClients = Persistence.loadFile(WorkshopPaths.RegisteredClientsPath, type, loadedClients);
+        loadedClients = Persistence.loadFile(WorkshopPaths.REGISTERED_CLIENTS_PATH, type, loadedClients);
     }
 
     /**
@@ -46,9 +46,16 @@ public class ClientModule
         return uniqueID;
     }
 
+    public void registerVehicleToOwner(UUID ownerID, UUID vehicleID)
+    {
+        Client ownerClient = findClientByID(ownerID);
+        ownerClient.addOwnedVehicle(vehicleID);
+        saveCurrentClients();
+    }
+
     public void saveCurrentClients()
     {
-        Persistence.saveFile(loadedClients, WorkshopPaths.RegisteredClientsPath);
+        Persistence.saveFile(loadedClients, WorkshopPaths.REGISTERED_CLIENTS_PATH);
     }
 
     /**

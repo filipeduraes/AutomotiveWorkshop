@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 
@@ -33,12 +34,9 @@ public class ClientRegistrationMenu implements IWorkshopMenu
         final String userCPF = ConsoleInput.readLine("Insira o CPF do cliente: ");
         
         final ClientViewModel clientViewModel = menuManager.getClientViewModel();
-        clientViewModel.setName(userName);
-        clientViewModel.setPhoneNumber(userPhoneNumber);
-        clientViewModel.setEmail(userEmail);
-        clientViewModel.setAddress(userAddress);
-        clientViewModel.setCPF(userCPF);
-        
+        ClientDTO clientDTO = new ClientDTO(userName, userPhoneNumber, userEmail, userAddress, userCPF);
+        clientViewModel.setClient(clientDTO);
+
         clientViewModel.setCurrentRequest(ClientRequest.REGISTER_CLIENT);
         return MenuResult.pop();
     }

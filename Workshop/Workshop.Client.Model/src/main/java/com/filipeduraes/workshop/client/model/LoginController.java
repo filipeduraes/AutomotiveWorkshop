@@ -59,29 +59,38 @@ public class LoginController
         {
             case LOGIN_REQUESTED:
             {
-                boolean loginWasSuccessful = authModule.tryLogIn(viewModel.getEmail(), viewModel.getPasswordHash());
-
-                if (loginWasSuccessful)
-                {
-                    viewModel.setName(authModule.getLoggedUser().getName());
-                    viewModel.setLoginState(LoginState.LOGIN_SUCCESS);
-                }
-                else
-                {
-                    viewModel.setLoginState(LoginState.LOGIN_FAILED);
-                }
-
+                processLoginRequest();
                 break;
             }
             case SIGNIN_REQUESTED:
             {
-                int selectedRole = viewModel.getSelectedRole();
-                EmployeeRole role = EmployeeRole.values()[selectedRole];
-                LocalEmployee newUser = new LocalEmployee(viewModel.getName(), viewModel.getEmail(), role, viewModel.getPasswordHash());
-
-                authModule.registerUser(newUser);
+                processSignInRequest();
                 break;
             }
         }
+    }
+
+    private void processLoginRequest()
+    {
+        boolean loginWasSuccessful = authModule.tryLogIn(viewModel.getEmail(), viewModel.getPasswordHash());
+
+        if (loginWasSuccessful)
+        {
+            viewModel.setName(authModule.getLoggedUser().getName());
+            viewModel.setLoginState(LoginState.LOGIN_SUCCESS);
+        }
+        else
+        {
+            viewModel.setLoginState(LoginState.LOGIN_FAILED);
+        }
+    }
+
+    private void processSignInRequest()
+    {
+        int selectedRole = viewModel.getSelectedRole();
+        EmployeeRole role = EmployeeRole.values()[selectedRole];
+        LocalEmployee newUser = new LocalEmployee(viewModel.getName(), viewModel.getEmail(), role, viewModel.getPasswordHash());
+
+        authModule.registerUser(newUser);
     }
 }

@@ -49,6 +49,6 @@ public class EnterUserMenu implements IWorkshopMenu
             return MenuResult.push(selectedOption);
         }
         
-        return MenuResult.none();
+        return MenuResult.exit();
     }
 }

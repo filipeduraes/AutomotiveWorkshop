@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.client.consoleview;
 
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMenu;
 import com.filipeduraes.workshop.client.consoleview.maintenancemodule.MaintenanceModuleMenu;
+import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleModuleMenu;
 
 /**
  * Menu principal do sistema que permite a navegação entre os diferentes módulos.
@@ -17,7 +18,8 @@ public class MainMenu implements IWorkshopMenu
     private final IWorkshopMenu[] menus = 
     {
         new MaintenanceModuleMenu(),
-        new ClientModuleMenu()
+        new ClientModuleMenu(),
+        new VehicleModuleMenu()
     };
 
     @Override

@@ -5,7 +5,11 @@ import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.UUID;
+import java.util.List;
 
 /**
  *
@@ -13,10 +17,10 @@ import java.util.*;
  */
 public class MaintenanceModule
 {
-    private Map<UUID, ServiceOrder> ongoingServices;
-    private List<UUID> userServices;
-    private List<UUID> openedServices;
-    private UUID loggedEmployeeID;
+    private final Map<UUID, ServiceOrder> ongoingServices;
+    private final List<UUID> userServices;
+    private final List<UUID> openedServices;
+    private final UUID loggedEmployeeID;
     
     public MaintenanceModule(UUID loggedEmployeeID)
     {
@@ -25,8 +29,8 @@ public class MaintenanceModule
         ParameterizedType ongoingServicesType = Persistence.createParameterizedType(HashMap.class, UUID.class, ServiceOrder.class);
         ParameterizedType serviceIDListType = Persistence.createParameterizedType(ArrayList.class, UUID.class);
 
-        ongoingServices = Persistence.loadFile(WorkshopPaths.OngoingServicesPath, ongoingServicesType, new HashMap<>());
-        openedServices = Persistence.loadFile(WorkshopPaths.OpenedServicesPath, serviceIDListType, new ArrayList<>());
+        ongoingServices = Persistence.loadFile(WorkshopPaths.ONGOING_SERVICES_PATH, ongoingServicesType, new HashMap<>());
+        openedServices = Persistence.loadFile(WorkshopPaths.OPENED_SERVICES_PATH, serviceIDListType, new ArrayList<>());
         userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDListType, new ArrayList<>());
     }
 
@@ -40,20 +44,20 @@ public class MaintenanceModule
 
         ongoingServices.put(serviceID, serviceOrder);
 
-        Persistence.saveFile(ongoingServices, WorkshopPaths.OngoingServicesPath);
+        Persistence.saveFile(ongoingServices, WorkshopPaths.ONGOING_SERVICES_PATH);
     }
 
     public void startInspection(UUID serviceID)
     {
         ServiceOrder serviceOrder = ongoingServices.get(serviceID);
 
-        if (serviceOrder != null)
+        if (serviceOrder != null && serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.APPOINTMENT)
         {
             serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
             openedServices.remove(serviceID);
             userServices.add(serviceID);
 
-            Persistence.saveFile(openedServices, WorkshopPaths.OpenedServicesPath);
+            Persistence.saveFile(openedServices, WorkshopPaths.OPENED_SERVICES_PATH);
             Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
         }
     }
@@ -62,11 +66,19 @@ public class MaintenanceModule
     {
         ServiceOrder serviceOrder = ongoingServices.get(serviceID);
 
-        if (serviceOrder != null)
+        if (serviceOrder != null && serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
         {
             serviceOrder.getCurrentStep().setDescription(description);
-
             userServices.remove(serviceID);
+        
+            Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
+            
+            ParameterizedType serviceIDListType = Persistence.createParameterizedType(ArrayList.class, UUID.class);
+            String newEmployeeUserPath = WorkshopPaths.getUserServicesPath(newEmployee);
+            
+            List<UUID> newEmployeeUserServices = Persistence.loadFile(newEmployeeUserPath, serviceIDListType, new ArrayList<>());
+            newEmployeeUserServices.add(serviceID);
+            Persistence.saveFile(newEmployeeUserServices, newEmployeeUserPath);
         }
     }
 }

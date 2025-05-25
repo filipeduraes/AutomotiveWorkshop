@@ -4,6 +4,7 @@ import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 
@@ -35,7 +36,8 @@ public class RegisterVehicleMenu implements IWorkshopMenu
         int vehicleYear = ConsoleInput.readLineInteger();
 
         VehicleViewModel vehicleViewModel = menuManager.getVehicleViewModel();
-        vehicleViewModel.setSelectedVehicleData(vehicleModel, vehicleColor, vehicleVinNumber, vehicleLicensePlate, vehicleYear);
+        VehicleDTO vehicleDTO = new VehicleDTO(vehicleModel, vehicleColor, vehicleVinNumber, vehicleLicensePlate, vehicleYear);
+        vehicleViewModel.setSelectedVehicle(vehicleDTO);
 
         vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_VEHICLE_REGISTRATION);
         VehicleRequest currentVehicleRequest = vehicleViewModel.getCurrentVehicleRequest();

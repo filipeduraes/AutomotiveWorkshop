@@ -3,7 +3,6 @@
 package com.filipeduraes.workshop.client.consoleview;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
-import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 
 import java.util.Stack;

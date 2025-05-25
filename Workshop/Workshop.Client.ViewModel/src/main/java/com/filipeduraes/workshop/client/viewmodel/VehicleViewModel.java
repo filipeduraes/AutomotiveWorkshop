@@ -1,5 +1,6 @@
 package com.filipeduraes.workshop.client.viewmodel;
 
+import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.utils.Observer;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +10,7 @@ public class VehicleViewModel
     public Observer OnVehicleRequest = new Observer();
 
     private VehicleRequest currentVehicleRequest;
-    private String selectedModel;
-    private String selectedColor;
-    private String selectedVinNumber;
-    private String selectedLicensePlate;
-    private int selectedYear;
+    private VehicleDTO selectedVehicle;
 
     private int selectedVehicleIndex = -1;
     private ArrayList<String> selectedClientVehicles = new ArrayList<>();
@@ -32,40 +29,15 @@ public class VehicleViewModel
         }
     }
 
-    public void setSelectedVehicleData(String model, String color, String vinNumber, String licensePlate, int year)
+    public VehicleDTO getSelectedVehicle()
     {
-        selectedModel = model;
-        selectedColor = color;
-        selectedVinNumber = vinNumber;
-        selectedLicensePlate = licensePlate;
-        selectedYear = year;
+        return selectedVehicle;
     }
 
-    public String getSelectedModel()
+    public void setSelectedVehicle(VehicleDTO selectedVehicle)
     {
-        return selectedModel;
+        this.selectedVehicle = selectedVehicle;
     }
-
-    public String getSelectedColor()
-    {
-        return selectedColor;
-    }
-
-    public String getSelectedVinNumber()
-    {
-        return selectedVinNumber;
-    }
-
-    public String getSelectedLicensePlate()
-    {
-        return selectedLicensePlate;
-    }
-
-    public int getSelectedYear()
-    {
-        return selectedYear;
-    }
-
 
     public boolean hasSelectedVehicle()
     {
@@ -74,10 +46,7 @@ public class VehicleViewModel
 
     public void cleanCurrentSelectedVehicle()
     {
-        selectedModel = "";
-        selectedColor = "";
-        selectedVinNumber = "";
-        selectedLicensePlate = "";
+        selectedVehicle = null;
         selectedVehicleIndex = -1;
     }
 

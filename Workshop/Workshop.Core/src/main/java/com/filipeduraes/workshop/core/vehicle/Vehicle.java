@@ -2,8 +2,6 @@
 
 package com.filipeduraes.workshop.core.vehicle;
 
-import com.filipeduraes.workshop.core.client.Client;
-
 import java.util.UUID;
 
 /**
@@ -12,8 +10,8 @@ import java.util.UUID;
  */
 public class Vehicle
 {
-    private transient Client owner;
     private UUID id;
+    private UUID ownerID;
     private String model;
     private String color;
     private String vinNumber;
@@ -21,9 +19,9 @@ public class Vehicle
     private int year;
     private VehicleStatus status = VehicleStatus.RECEIVED;
 
-    public Vehicle(Client owner, String model, String color, String vinNumber, String licensePlate, int year)
+    public Vehicle(UUID ownerID, String model, String color, String vinNumber, String licensePlate, int year)
     {
-        this.owner = owner;
+        this.ownerID = ownerID;
         this.model = model;
         this.color = color;
         this.vinNumber = vinNumber;
@@ -31,10 +29,14 @@ public class Vehicle
         this.year = year;
     }
 
+    public UUID getID()
+    {
+        return id;
+    }
+
     public void setID(UUID id)
     {
         this.id = id;
-        owner.addOwnedVehicle(id);
     }
 
     public String getModel() 
@@ -70,5 +72,10 @@ public class Vehicle
     public int getYear()
     {
         return year;
+    }
+
+    public UUID getOwnerID()
+    {
+        return ownerID;
     }
 }

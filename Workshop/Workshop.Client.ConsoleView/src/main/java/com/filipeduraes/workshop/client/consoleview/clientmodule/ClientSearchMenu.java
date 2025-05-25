@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import java.util.ArrayList;
@@ -47,11 +48,13 @@ public class ClientSearchMenu implements IWorkshopMenu
             {
                 if(clientViewModel.getSelectedFoundClientIndex() >= 0)
                 {
+                    ClientDTO client = clientViewModel.getClient();
+
                     System.out.println("Cliente selecionado: ");
-                    System.out.printf(" - Nome: %s\n", clientViewModel.getName());
-                    System.out.printf(" - Email: %s\n", clientViewModel.getEmail());
-                    System.out.printf(" - CPF: %s\n", clientViewModel.getCPF());
-                    System.out.printf(" - Telefone: %s\n", clientViewModel.getPhoneNumber());
+                    System.out.printf(" - Nome: %s\n", client.getName());
+                    System.out.printf(" - Email: %s\n", client.getEmail());
+                    System.out.printf(" - CPF: %s\n", client.getCPF());
+                    System.out.printf(" - Telefone: %s\n", client.getPhoneNumber());
                 }
                 
                 return MenuResult.pop();

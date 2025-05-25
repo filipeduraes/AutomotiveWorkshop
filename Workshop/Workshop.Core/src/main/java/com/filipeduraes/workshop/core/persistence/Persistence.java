@@ -26,7 +26,7 @@ import java.util.UUID;
 public final class Persistence
 {
     private static boolean UseObfuscation = false;
-    private static final byte Key = 12;
+    private static final byte KEY = 12;
     private static Gson gson = new Gson();
 
     private Persistence()
@@ -201,7 +201,7 @@ public final class Persistence
 
         for (int i = 0; i < buffer.length; i++)
         {
-            buffer[i] ^= Key;
+            buffer[i] ^= KEY;
         }
 
         return Base64.getEncoder().encodeToString(buffer);
@@ -213,7 +213,7 @@ public final class Persistence
 
         for (int i = 0; i < buffer.length; i++)
         {
-            buffer[i] ^= Key;
+            buffer[i] ^= KEY;
         }
 
         return new String(buffer, StandardCharsets.UTF_8);

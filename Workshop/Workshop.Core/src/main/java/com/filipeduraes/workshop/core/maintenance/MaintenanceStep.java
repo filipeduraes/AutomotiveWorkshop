@@ -1,4 +1,4 @@
-﻿package com.filipeduraes.workshop.core.maintenance;
+package com.filipeduraes.workshop.core.maintenance;
 
 public enum MaintenanceStep
 {
