@@ -8,6 +8,7 @@ import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.client.ClientModule;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -22,7 +23,7 @@ public class ClientController
     private final ClientViewModel clientViewModel;
     private final ClientModule clientModule;
 
-    private ArrayList<Client> foundClients;
+    private List<Client> foundClients;
 
     /**
      * Cria uma nova instância do controlador de clientes.
@@ -65,7 +66,7 @@ public class ClientController
                 final String searchPattern = clientViewModel.getSearchPattern();
                 foundClients = clientModule.searchClientsWithPattern(searchPattern);
 
-                ArrayList<String> clientNames = convertClientsToClientNames(foundClients);
+                List<String> clientNames = convertClientsToClientNames(foundClients);
                 clientViewModel.setFoundClientNames(clientNames);
                 break;
             }
@@ -85,7 +86,7 @@ public class ClientController
         clientViewModel.setCurrentRequest(ClientRequest.NONE);
     }
 
-    private ArrayList<String> convertClientsToClientNames(ArrayList<Client> clients)
+    private List<String> convertClientsToClientNames(List<Client> clients)
     {
         ArrayList<String> clientNames = new ArrayList<>();
 
@@ -125,6 +126,12 @@ public class ClientController
     private String maskCPF(String cpf)
     {
         String numberOnlyCPF = cpf.replaceAll("\\D", ""); // Substitui qualquer caractere não numérico por uma string vazia
+
+        if(numberOnlyCPF.length() != 11)
+        {
+            return "";
+        }
+
         String thirdPart = numberOnlyCPF.substring(6, 9);
         String fourthPart = numberOnlyCPF.substring(9);
         return String.format("XXX.XXX.%s-%s", thirdPart, fourthPart);

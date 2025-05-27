@@ -10,6 +10,7 @@ import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Menu responsável por pesquisar e exibir clientes cadastrados no sistema.
@@ -66,7 +67,7 @@ public class ClientSearchMenu implements IWorkshopMenu
 
     private void showFoundClients(final ClientViewModel clientViewModel) 
     {
-        final ArrayList<String> foundClientNames = clientViewModel.getFoundClientNames();
+        final List<String> foundClientNames = clientViewModel.getFoundClientNames();
         
         for(int i = 0; i < foundClientNames.size(); i++)
         {
@@ -79,7 +80,7 @@ public class ClientSearchMenu implements IWorkshopMenu
 
     private boolean selectedClientSuccessfuly(int selectedClient, final ClientViewModel clientViewModel) 
     {
-        final ArrayList<String> foundClientNames = clientViewModel.getFoundClientNames();
+        final List<String> foundClientNames = clientViewModel.getFoundClientNames();
         
         if (selectedClient >= 0 && selectedClient < foundClientNames.size()) 
         {

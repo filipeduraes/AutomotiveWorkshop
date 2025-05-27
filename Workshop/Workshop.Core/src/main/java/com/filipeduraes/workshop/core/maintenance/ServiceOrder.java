@@ -5,6 +5,7 @@ import com.filipeduraes.workshop.core.catalog.Product;
 import com.filipeduraes.workshop.core.store.Purchase;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public class ServiceOrder
     private UUID id;
 
     private Stack<ServiceStep> steps = new Stack<>();
-    private ArrayList<Product> services = new ArrayList<>();
+    private List<Product> services = new ArrayList<>();
 
     private Purchase purchase;
     private UUID vehicleID;

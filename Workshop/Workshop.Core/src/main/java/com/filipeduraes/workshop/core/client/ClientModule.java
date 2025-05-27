@@ -4,11 +4,12 @@ package com.filipeduraes.workshop.core.client;
 
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
+import com.filipeduraes.workshop.utils.FuzzyTokenMatcher;
+
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Módulo responsável pelo gerenciamento de clientes no sistema.
@@ -80,20 +81,10 @@ public class ClientModule
      * @param pattern O padrão de texto para busca no nome dos clientes
      * @return Uma lista com os clientes encontrados que correspondem ao padrão
      */
-    public ArrayList<Client> searchClientsWithPattern(String pattern)
+    public List<Client> searchClientsWithPattern(String pattern)
     {
-        //TODO: optimize
-        ArrayList<Client> foundClients = new ArrayList<>();
-        pattern = pattern.trim();
-
-        for (Client loadedClient : loadedClients.values())
-        {
-            if (loadedClient.hasMatchingName(pattern))
-            {
-                foundClients.add(loadedClient);
-            }
-        }
-
-        return foundClients;
+        Function<Client, String> clientNameGetter = Client::getName;
+        List<Client> matchedClients = FuzzyTokenMatcher.findSimilarItems(loadedClients.values(), pattern, 0.5, clientNameGetter);
+        return matchedClients;
     }
 }

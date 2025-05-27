@@ -3,6 +3,7 @@ package com.filipeduraes.workshop.client.viewmodel;
 
 import com.filipeduraes.workshop.utils.Observer;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ViewModel responsável por gerenciar e armazenar informações do usuário logado,
@@ -17,7 +18,7 @@ public class UserInfoViewModel
      */
     public Observer OnLoginStateChanged = new Observer();
 
-    private ArrayList<String> possibleRoles = new ArrayList<>();
+    private List<String> possibleRoles = new ArrayList<>();
     private LoginState loginState = LoginState.WAITING;
     private String name;
     private String email;
@@ -138,7 +139,7 @@ public class UserInfoViewModel
      *
      * @return lista de papéis disponíveis
      */
-    public ArrayList<String> getPossibleRoles()
+    public List<String> getPossibleRoles()
     {
         return possibleRoles;
     }

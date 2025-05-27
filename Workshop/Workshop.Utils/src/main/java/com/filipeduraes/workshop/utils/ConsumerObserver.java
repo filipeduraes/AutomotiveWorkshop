@@ -3,6 +3,7 @@
 package com.filipeduraes.workshop.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -14,7 +15,7 @@ import java.util.function.Consumer;
  */
 public class ConsumerObserver<T>
 {
-    private ArrayList<Consumer<T>> listeners = new ArrayList<>();
+    private List<Consumer<T>> listeners = new ArrayList<>();
 
     /**
      * Adiciona um novo observador ao evento.

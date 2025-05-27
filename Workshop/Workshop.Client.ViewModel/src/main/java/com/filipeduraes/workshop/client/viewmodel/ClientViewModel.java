@@ -5,7 +5,7 @@ package com.filipeduraes.workshop.client.viewmodel;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.utils.Observer;
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.List;
 
 /**
  * ViewModel responsável por gerenciar os dados e estado da interface de cliente,
@@ -22,7 +22,7 @@ public class ClientViewModel
 
     private ClientRequest currentRequest;
 
-    private ArrayList<String> foundClientNames = new ArrayList<>();
+    private List<String> foundClientNames = new ArrayList<>();
     private String searchPattern;
     private int selectedFoundClientIndex = -1;
 
@@ -33,7 +33,7 @@ public class ClientViewModel
      *
      * @return lista de nomes dos clientes encontrados
      */
-    public ArrayList<String> getFoundClientNames()
+    public List<String> getFoundClientNames()
     {
         return foundClientNames;
     }
@@ -43,7 +43,7 @@ public class ClientViewModel
      *
      * @param foundClientNames nova lista de nomes dos clientes
      */
-    public void setFoundClientNames(ArrayList<String> foundClientNames)
+    public void setFoundClientNames(List<String> foundClientNames)
     {
         this.foundClientNames = foundClientNames;
     }

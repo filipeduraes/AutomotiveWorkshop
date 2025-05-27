@@ -19,7 +19,7 @@ public class Client
     private String address;
     private String maskedCPF;
 
-    private ArrayList<UUID> ownedVehiclesIDs = new ArrayList<>();
+    private List<UUID> ownedVehiclesIDs = new ArrayList<>();
 
     /**
      * Construtor para criar um novo cliente com suas informações básicas.

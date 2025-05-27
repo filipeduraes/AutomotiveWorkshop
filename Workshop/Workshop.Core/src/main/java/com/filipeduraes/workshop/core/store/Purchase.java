@@ -7,6 +7,7 @@ import com.filipeduraes.workshop.core.catalog.StoreItem;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -18,7 +19,7 @@ public class Purchase
 {
     private UUID id;
     private LocalDate date;
-    private ArrayList<StoreItem> items;
+    private List<StoreItem> items;
 
     /**
      * Cria uma nova compra com o ID, data e itens especificados.
@@ -60,7 +61,7 @@ public class Purchase
      *
      * @return lista de itens comprados
      */
-    public ArrayList<StoreItem> getItems()
+    public List<StoreItem> getItems()
     {
         return items;
     }

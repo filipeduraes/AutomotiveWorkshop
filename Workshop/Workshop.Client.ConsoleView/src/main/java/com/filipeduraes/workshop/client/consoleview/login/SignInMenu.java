@@ -9,6 +9,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Menu responsável pelo cadastro de novos usuários no sistema.
@@ -34,7 +35,7 @@ public class SignInMenu implements IWorkshopMenu
         String userName = ConsoleInput.readLine();
         
         System.out.println("");
-        ArrayList<String> possibleRoles = viewModel.getPossibleRoles();
+        List<String> possibleRoles = viewModel.getPossibleRoles();
         
         for(int i = 0; i < possibleRoles.size(); i++)
         {

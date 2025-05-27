@@ -3,6 +3,7 @@
 package com.filipeduraes.workshop.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementa o padrão Observer pattern.
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Observer 
 {
-    private ArrayList<Runnable> listeners = new ArrayList<>();
+    private List<Runnable> listeners = new ArrayList<>();
     
     /**
      * Adiciona um novo observador ao evento.

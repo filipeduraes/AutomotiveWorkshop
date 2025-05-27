@@ -20,6 +20,13 @@ public class RegisterVehicleMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
+        if(!menuManager.getClientViewModel().hasSelectedClient())
+        {
+            System.out.println("Nenhum cliente selecionado para o qual o veiculo sera registrado.");
+            System.out.println("Por favor selecione um cliente antes de prosseguir.");
+            return MenuResult.pop();
+        }
+
         System.out.println("Insira o modelo do veiculo:");
         String vehicleModel = ConsoleInput.readLine();
 
