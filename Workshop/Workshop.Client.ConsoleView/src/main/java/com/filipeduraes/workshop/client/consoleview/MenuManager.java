@@ -5,7 +5,8 @@ import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,7 +18,7 @@ import java.util.stream.Stream;
  */
 public class MenuManager
 {
-    private final Stack<IWorkshopMenu> menuStack = new Stack<>();
+    private final Deque<IWorkshopMenu> menuStack = new ArrayDeque<>();
     private final UserInfoViewModel userInfoViewModel;
     private final ClientViewModel clientViewModel;
     private final VehicleViewModel vehicleViewModel;

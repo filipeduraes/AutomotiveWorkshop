@@ -4,10 +4,7 @@ package com.filipeduraes.workshop.core.maintenance;
 import com.filipeduraes.workshop.core.catalog.Product;
 import com.filipeduraes.workshop.core.store.Purchase;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Filipe Durães
@@ -16,7 +13,7 @@ public class ServiceOrder
 {
     private UUID id;
 
-    private Stack<ServiceStep> steps = new Stack<>();
+    private Deque<ServiceStep> steps = new ArrayDeque<>();
     private List<Product> services = new ArrayList<>();
 
     private Purchase purchase;
