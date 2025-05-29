@@ -2,6 +2,7 @@
 
 package com.filipeduraes.workshop.client.consoleview;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
+import com.filipeduraes.workshop.client.viewmodel.MaintenanceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 
@@ -22,6 +23,7 @@ public class MenuManager
     private final UserInfoViewModel userInfoViewModel;
     private final ClientViewModel clientViewModel;
     private final VehicleViewModel vehicleViewModel;
+    private final MaintenanceViewModel maintenanceViewModel;
 
     /**
      * Cria um novo gerenciador de menus com os modelos de visualização necessários
@@ -32,11 +34,12 @@ public class MenuManager
      * @param clientViewModel modelo de visualização com informações do cliente
      * @param vehicleViewModel modelo de visualização com informações do veículo
      */
-    public MenuManager(IWorkshopMenu initialMenu, UserInfoViewModel userInfoViewModel, ClientViewModel clientViewModel, VehicleViewModel vehicleViewModel)
+    public MenuManager(IWorkshopMenu initialMenu, UserInfoViewModel userInfoViewModel, ClientViewModel clientViewModel, VehicleViewModel vehicleViewModel, MaintenanceViewModel maintenanceViewModel)
     {
         this.userInfoViewModel = userInfoViewModel;
         this.clientViewModel = clientViewModel;
         this.vehicleViewModel = vehicleViewModel;
+        this.maintenanceViewModel = maintenanceViewModel;
 
         menuStack.push(initialMenu);
     }
@@ -69,6 +72,16 @@ public class MenuManager
     public VehicleViewModel getVehicleViewModel()
     {
         return vehicleViewModel;
+    }
+
+    /**
+     * Obtém o modelo de visualização que contém as informações de manutenções.
+     *
+     * @return modelo de visualização de manutenção
+     */
+    public MaintenanceViewModel getMaintenanceViewModel()
+    {
+        return maintenanceViewModel;
     }
 
     /**

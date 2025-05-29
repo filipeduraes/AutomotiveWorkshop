@@ -5,7 +5,7 @@ package com.filipeduraes.workshop.core.store;
 import com.filipeduraes.workshop.core.catalog.StoreItem;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Purchase
 {
     private UUID id;
-    private LocalDate date;
+    private LocalDateTime date;
     private List<StoreItem> items;
 
     /**
@@ -28,7 +28,7 @@ public class Purchase
      * @param date data em que a compra foi realizada
      * @param items lista de itens incluídos nesta compra
      */
-    public Purchase(UUID id, LocalDate date, ArrayList<StoreItem> items)
+    public Purchase(UUID id, LocalDateTime date, ArrayList<StoreItem> items)
     {
         this.id = id;
         this.date = date;
@@ -51,7 +51,7 @@ public class Purchase
      *
      * @return a data da compra
      */
-    public LocalDate getDate()
+    public LocalDateTime getDate()
     {
         return date;
     }

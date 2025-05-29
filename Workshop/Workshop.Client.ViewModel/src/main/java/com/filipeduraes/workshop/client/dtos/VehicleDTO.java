@@ -1,12 +1,25 @@
 package com.filipeduraes.workshop.client.dtos;
 
+import java.util.UUID;
+
 public class VehicleDTO
 {
-    private String model;
-    private String color;
-    private String vinNumber;
-    private String licensePlate;
-    private int year;
+    private UUID id;
+    private final String model;
+    private final String color;
+    private final String vinNumber;
+    private final String licensePlate;
+    private final int year;
+
+    public VehicleDTO(UUID id, String model, String color, String vinNumber, String licensePlate, int year)
+    {
+        this.id = id;
+        this.model = model;
+        this.color = color;
+        this.vinNumber = vinNumber;
+        this.licensePlate = licensePlate;
+        this.year = year;
+    }
 
     public VehicleDTO(String model, String color, String vinNumber, String licensePlate, int year)
     {
@@ -15,6 +28,16 @@ public class VehicleDTO
         this.vinNumber = vinNumber;
         this.licensePlate = licensePlate;
         this.year = year;
+    }
+
+    public UUID getId()
+    {
+        return id;
+    }
+
+    public void setID(UUID id)
+    {
+        this.id = id;
     }
 
     public String getModel()

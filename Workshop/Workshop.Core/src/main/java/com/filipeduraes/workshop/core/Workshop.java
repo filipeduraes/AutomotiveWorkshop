@@ -13,7 +13,7 @@ import com.filipeduraes.workshop.core.persistence.serializers.DateTimeSerializer
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
 import com.filipeduraes.workshop.core.vehicle.VehicleModule;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -40,7 +40,7 @@ public class Workshop
         DateTimeSerializer dateTimeSerializer = new DateTimeSerializer();
 
         ArrayList<SerializationAdapterGroup> adapters = new ArrayList<>();
-        adapters.add(new SerializationAdapterGroup(LocalDate.class, dateTimeSerializer, dateTimeSerializer));
+        adapters.add(new SerializationAdapterGroup(LocalDateTime.class, dateTimeSerializer, dateTimeSerializer));
 
         Persistence.setUseObfuscation(useObfuscation);
         Persistence.registerCustomSerializationAdapters(adapters);

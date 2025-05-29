@@ -8,8 +8,10 @@ import com.filipeduraes.workshop.client.model.ClientController;
 import com.filipeduraes.workshop.client.consoleview.login.EnterUserMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 
+import com.filipeduraes.workshop.client.model.MaintenanceController;
 import com.filipeduraes.workshop.client.model.VehicleController;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
+import com.filipeduraes.workshop.client.viewmodel.MaintenanceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
@@ -48,17 +50,20 @@ public class WorkshopClient
         UserInfoViewModel userInfoViewModel = new UserInfoViewModel();
         ClientViewModel clientViewModel = new ClientViewModel();
         VehicleViewModel vehicleViewModel = new VehicleViewModel();
+        MaintenanceViewModel maintenanceViewModel = new MaintenanceViewModel();
 
         LoginController loginController = new LoginController(userInfoViewModel, workshop.getAuthModule());
         ClientController clientController = new ClientController(clientViewModel, workshop.getClientModule());
         VehicleController vehicleController = new VehicleController(vehicleViewModel, clientViewModel, workshop.getVehicleModule(), workshop.getClientModule());
+        MaintenanceController maintenanceController = new MaintenanceController(maintenanceViewModel, vehicleViewModel, workshop);
 
-        menuManager = new MenuManager(new EnterUserMenu(), userInfoViewModel, clientViewModel, vehicleViewModel);
+        menuManager = new MenuManager(new EnterUserMenu(), userInfoViewModel, clientViewModel, vehicleViewModel, maintenanceViewModel);
         menuManager.run();
 
         loginController.dispose();
         clientController.dispose();
         vehicleController.dispose();
+        maintenanceController.dispose();
 
         workshop.dispose();
     }

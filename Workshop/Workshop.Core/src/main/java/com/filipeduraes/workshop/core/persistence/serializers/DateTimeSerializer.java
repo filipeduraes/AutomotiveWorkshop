@@ -5,34 +5,32 @@ package com.filipeduraes.workshop.core.persistence.serializers;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
  * @author Filipe Durães
  */
-public class DateTimeSerializer implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate>
+public class DateTimeSerializer implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime>
 {
     @Override
-    public JsonElement serialize(LocalDate localDate, Type type, JsonSerializationContext jsc) 
+    public JsonElement serialize(LocalDateTime localDateTime, Type type, JsonSerializationContext jsc)
     {
-        formattedDate = localDate.toString();
+        final String formattedDate = localDateTime.toString();
         return new JsonPrimitive(formattedDate);
     }
-    private String formattedDate;
 
     @Override
-    public LocalDate deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jdc) throws JsonParseException 
+    public LocalDateTime deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jdc) throws JsonParseException 
     {
         final String formattedDate = jsonElement.getAsString();
-        final LocalDate date = LocalDate.parse(formattedDate);
-        
+        final LocalDateTime date = LocalDateTime.parse(formattedDate);
+
         return date;
     }
 }

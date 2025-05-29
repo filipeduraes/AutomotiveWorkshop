@@ -15,7 +15,7 @@ public class VehicleViewModel
     /**
      * Observer que notifica quando há mudanças nas requisições de veículos.
      */
-    public Observer OnVehicleRequest = new Observer();
+    public final Observer OnVehicleRequest = new Observer();
 
     private VehicleRequest currentVehicleRequest;
     private VehicleDTO selectedVehicle;

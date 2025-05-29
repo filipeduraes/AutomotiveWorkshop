@@ -18,7 +18,7 @@ public class ClientViewModel
     /**
      * Observer notificado quando uma requisição de cliente é alterada
      */
-    public Observer OnClientRequest = new Observer();
+    public final Observer OnClientRequest = new Observer();
 
     private ClientRequest currentRequest;
 

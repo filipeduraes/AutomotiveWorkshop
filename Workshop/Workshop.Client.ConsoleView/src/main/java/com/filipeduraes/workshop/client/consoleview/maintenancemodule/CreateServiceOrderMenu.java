@@ -9,6 +9,8 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleModuleMenu;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMenu;
+import com.filipeduraes.workshop.client.viewmodel.MaintenanceRequest;
+import com.filipeduraes.workshop.client.viewmodel.MaintenanceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 
 /**
@@ -31,6 +33,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
     {
         final ClientViewModel clientViewModel = menuManager.getClientViewModel();
         final VehicleViewModel vehicleViewModel = menuManager.getVehicleViewModel();
+        final MaintenanceViewModel maintenanceViewModel = menuManager.getMaintenanceViewModel();
 
         MenuResult clientSelectionMenuResult = selectClient(clientViewModel);
 
@@ -46,6 +49,17 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
             return vehicleSelectionMenuResult;
         }
 
+        String problemDescription = ConsoleInput.readLine("Digite a descrição do problema: ");
+        maintenanceViewModel.setCurrentStepDescription(problemDescription);
+        maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_REGISTER_APPOINTMENT);
+
+        if(maintenanceViewModel.getMaintenanceRequest() == MaintenanceRequest.REQUEST_SUCCESS)
+        {
+            System.out.printf("Agendamento registrado com sucesso! ID: %s\n", maintenanceViewModel.getCurrentMaintenanceID());
+            return MenuResult.pop();
+        }
+
+        System.out.println("O registro do agendamento falhou, tente novamente.");
         return MenuResult.none();
     }
 

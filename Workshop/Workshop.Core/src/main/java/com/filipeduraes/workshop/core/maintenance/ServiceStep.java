@@ -1,25 +1,25 @@
 package com.filipeduraes.workshop.core.maintenance;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class ServiceStep
 {
-    private UUID employeeID;
-    private LocalDate startDate;
-    private LocalDate finishDate;
+    private final UUID employeeID;
+    private final LocalDateTime startDate;
+    private LocalDateTime finishDate;
     private String description;
 
     public ServiceStep(UUID employeeID)
     {
         this.employeeID = employeeID;
 
-        startDate = LocalDate.now();
+        startDate = LocalDateTime.now();
     }
 
     public void finishStep()
     {
-        finishDate = LocalDate.now();
+        finishDate = LocalDateTime.now();
     }
 
     public void setDescription(String description)
@@ -37,12 +37,12 @@ public class ServiceStep
         return employeeID;
     }
 
-    public LocalDate getStartDate()
+    public LocalDateTime getStartDate()
     {
         return startDate;
     }
 
-    public LocalDate getFinishDate()
+    public LocalDateTime getFinishDate()
     {
         return finishDate;
     }

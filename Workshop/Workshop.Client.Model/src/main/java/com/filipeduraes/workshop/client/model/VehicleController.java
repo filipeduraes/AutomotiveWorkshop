@@ -85,7 +85,8 @@ public class VehicleController
             VehicleDTO registerRequestedVehicle = vehicleViewModel.getSelectedVehicle();
 
             Vehicle vehicle = convertDTOToVehicle(selectedClient, registerRequestedVehicle);
-            vehicleModule.registerVehicle(vehicle);
+            UUID vehicleID = vehicleModule.registerVehicle(vehicle);
+            registerRequestedVehicle.setID(vehicleID);
             clientModule.saveCurrentClients();
 
             vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_SUCCESS);
@@ -137,6 +138,7 @@ public class VehicleController
     {
         VehicleDTO selectedVehicle = new VehicleDTO
         (
+            vehicle.getID(),
             vehicle.getModel(),
             vehicle.getColor(),
             vehicle.getVinNumber(),

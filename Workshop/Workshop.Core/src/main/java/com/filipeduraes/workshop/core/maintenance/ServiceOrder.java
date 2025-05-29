@@ -13,14 +13,16 @@ public class ServiceOrder
 {
     private UUID id;
 
-    private Deque<ServiceStep> steps = new ArrayDeque<>();
+    private final Deque<ServiceStep> steps = new ArrayDeque<>();
     private List<Product> services = new ArrayList<>();
 
     private Purchase purchase;
     private UUID vehicleID;
+    private boolean finished = false;
 
     public ServiceOrder(UUID serviceID, UUID vehicleID)
     {
+        id = serviceID;
         this.vehicleID = vehicleID;
     }
 
@@ -29,8 +31,14 @@ public class ServiceOrder
         return id;
     }
 
+    public boolean getFinished()
+    {
+        return finished;
+    }
+
     public void registerStep(ServiceStep step)
     {
+        finishCurrentStep();
         steps.push(step);
     }
 
@@ -48,5 +56,16 @@ public class ServiceOrder
     {
         this.services = services;
         this.purchase = purchase;
+        finishCurrentStep();
+
+        finished = true;
+    }
+
+    private void finishCurrentStep()
+    {
+        if(!steps.isEmpty())
+        {
+            getCurrentStep().finishStep();
+        }
     }
 }

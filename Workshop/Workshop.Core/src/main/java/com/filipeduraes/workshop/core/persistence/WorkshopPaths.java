@@ -15,7 +15,8 @@ public final class WorkshopPaths
     private static final String FILE_EXTENSION = ".workshop";
     public static final String REGISTERED_EMPLOYEES_PATH = DATA_DIRECTORY_PATH + "Users" + FILE_EXTENSION;
     public static final String OPENED_SERVICES_PATH = DATA_DIRECTORY_PATH + "OpenedServices" + FILE_EXTENSION;
-    public static final String ONGOING_SERVICES_PATH = DATA_DIRECTORY_PATH + "Services" + FILE_EXTENSION;
+    public static final String SERVICES_PATH = DATA_DIRECTORY_PATH + "OngoingServices" + FILE_EXTENSION;
+    public static final String FINISHED_SERVICES_PATH = DATA_DIRECTORY_PATH + "FinishedServices" + FILE_EXTENSION;
     public static final String REGISTERED_CLIENTS_PATH = DATA_DIRECTORY_PATH + "Clients" + FILE_EXTENSION;
     public static final String REGISTERED_VEHICLES_PATH = DATA_DIRECTORY_PATH + "Vehicles" + FILE_EXTENSION;
 

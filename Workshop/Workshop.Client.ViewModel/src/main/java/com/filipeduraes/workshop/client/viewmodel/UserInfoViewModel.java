@@ -16,7 +16,7 @@ public class UserInfoViewModel
     /**
      * Observer notificado quando o estado de login do usuário é alterado
      */
-    public Observer OnLoginStateChanged = new Observer();
+    public final Observer OnLoginStateChanged = new Observer();
 
     private List<String> possibleRoles = new ArrayList<>();
     private LoginState loginState = LoginState.WAITING;
