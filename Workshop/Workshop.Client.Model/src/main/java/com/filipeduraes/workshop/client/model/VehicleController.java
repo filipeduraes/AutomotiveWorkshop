@@ -4,6 +4,8 @@ import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
+import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
+import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.client.ClientModule;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
@@ -20,12 +22,12 @@ public class VehicleController
     private final VehicleModule vehicleModule;
     private final ClientModule clientModule;
 
-    public VehicleController(VehicleViewModel vehicleViewModel, ClientViewModel clientViewModel, VehicleModule vehicleModule, ClientModule clientModule)
+    public VehicleController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
-        this.vehicleViewModel = vehicleViewModel;
-        this.clientViewModel = clientViewModel;
-        this.vehicleModule = vehicleModule;
-        this.clientModule = clientModule;
+        this.vehicleViewModel = viewModelRegistry.getVehicleViewModel();
+        this.clientViewModel = viewModelRegistry.getClientViewModel();
+        this.vehicleModule = workshop.getVehicleModule();
+        this.clientModule = workshop.getClientModule();
 
         vehicleViewModel.OnVehicleRequest.addListener(this::processVehicleRequest);
     }

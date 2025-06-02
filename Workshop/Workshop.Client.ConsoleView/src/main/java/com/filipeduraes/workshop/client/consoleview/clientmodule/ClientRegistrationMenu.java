@@ -33,7 +33,7 @@ public class ClientRegistrationMenu implements IWorkshopMenu
         final String userAddress = ConsoleInput.readLine("Insira o endereço do cliente: ");
         final String userCPF = ConsoleInput.readLine("Insira o CPF do cliente: ");
         
-        final ClientViewModel clientViewModel = menuManager.getClientViewModel();
+        final ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
         ClientDTO clientDTO = new ClientDTO(userName, userPhoneNumber, userEmail, userAddress, userCPF);
         clientViewModel.setClient(clientDTO);
 

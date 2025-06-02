@@ -29,7 +29,7 @@ public class SignInMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        UserInfoViewModel viewModel = menuManager.getUserInfoViewModel();
+        UserInfoViewModel viewModel = menuManager.getViewModelRegistry().getUserInfoViewModel();
         
         System.out.println(" - Insira o nome completo: ");
         String userName = ConsoleInput.readLine();

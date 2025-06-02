@@ -1,10 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 
 package com.filipeduraes.workshop.client.consoleview;
-import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.MaintenanceViewModel;
-import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
-import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
+import com.filipeduraes.workshop.client.viewmodel.*;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -20,68 +17,30 @@ import java.util.stream.Stream;
 public class MenuManager
 {
     private final Deque<IWorkshopMenu> menuStack = new ArrayDeque<>();
-    private final UserInfoViewModel userInfoViewModel;
-    private final ClientViewModel clientViewModel;
-    private final VehicleViewModel vehicleViewModel;
-    private final MaintenanceViewModel maintenanceViewModel;
+    private final ViewModelRegistry viewModelRegistry;
 
     /**
      * Cria um novo gerenciador de menus com os modelos de visualização necessários
      * e o menu inicial.
      *
      * @param initialMenu menu inicial a ser exibido
-     * @param userInfoViewModel modelo de visualização com informações do usuário
-     * @param clientViewModel modelo de visualização com informações do cliente
-     * @param vehicleViewModel modelo de visualização com informações do veículo
+     * @param viewModelRegistry registro de modelos de visualização
      */
-    public MenuManager(IWorkshopMenu initialMenu, UserInfoViewModel userInfoViewModel, ClientViewModel clientViewModel, VehicleViewModel vehicleViewModel, MaintenanceViewModel maintenanceViewModel)
+    public MenuManager(IWorkshopMenu initialMenu, ViewModelRegistry viewModelRegistry)
     {
-        this.userInfoViewModel = userInfoViewModel;
-        this.clientViewModel = clientViewModel;
-        this.vehicleViewModel = vehicleViewModel;
-        this.maintenanceViewModel = maintenanceViewModel;
+        this.viewModelRegistry = viewModelRegistry;
 
         menuStack.push(initialMenu);
     }
 
     /**
-     * Obtém o modelo de visualização que contém as informações do usuário.
+     * Obtém o registro de modelos de visualização.
      *
-     * @return modelo de visualização do usuário
+     * @return registro de modelos de visualização
      */
-    public UserInfoViewModel getUserInfoViewModel()
+    public ViewModelRegistry getViewModelRegistry()
     {
-        return userInfoViewModel;
-    }
-
-    /**
-     * Obtém o modelo de visualização que contém as informações do cliente.
-     *
-     * @return modelo de visualização do cliente
-     */
-    public ClientViewModel getClientViewModel()
-    {
-        return clientViewModel;
-    }
-
-    /**
-     * Obtém o modelo de visualização que contém as informações do veículo.
-     *
-     * @return modelo de visualização do veículo
-     */
-    public VehicleViewModel getVehicleViewModel()
-    {
-        return vehicleViewModel;
-    }
-
-    /**
-     * Obtém o modelo de visualização que contém as informações de manutenções.
-     *
-     * @return modelo de visualização de manutenção
-     */
-    public MaintenanceViewModel getMaintenanceViewModel()
-    {
-        return maintenanceViewModel;
+        return viewModelRegistry;
     }
 
     /**

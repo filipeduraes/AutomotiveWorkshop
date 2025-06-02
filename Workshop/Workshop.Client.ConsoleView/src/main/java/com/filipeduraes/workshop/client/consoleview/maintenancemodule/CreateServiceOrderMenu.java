@@ -7,11 +7,8 @@ import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleModuleMenu;
-import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
+import com.filipeduraes.workshop.client.viewmodel.*;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMenu;
-import com.filipeduraes.workshop.client.viewmodel.MaintenanceRequest;
-import com.filipeduraes.workshop.client.viewmodel.MaintenanceViewModel;
-import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 
 /**
  *
@@ -31,18 +28,17 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        final ClientViewModel clientViewModel = menuManager.getClientViewModel();
-        final VehicleViewModel vehicleViewModel = menuManager.getVehicleViewModel();
-        final MaintenanceViewModel maintenanceViewModel = menuManager.getMaintenanceViewModel();
+        ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
+        final MaintenanceViewModel maintenanceViewModel = viewModelRegistry.getMaintenanceViewModel();
 
-        MenuResult clientSelectionMenuResult = selectClient(clientViewModel);
+        MenuResult clientSelectionMenuResult = selectClient(viewModelRegistry.getClientViewModel());
 
         if (clientSelectionMenuResult != null)
         {
             return clientSelectionMenuResult;
         }
 
-        MenuResult vehicleSelectionMenuResult = selectVehicle(vehicleViewModel);
+        MenuResult vehicleSelectionMenuResult = selectVehicle(viewModelRegistry.getVehicleViewModel());
 
         if (vehicleSelectionMenuResult != null)
         {

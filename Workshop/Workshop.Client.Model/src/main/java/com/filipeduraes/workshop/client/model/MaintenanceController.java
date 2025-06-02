@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.MaintenanceRequest;
 import com.filipeduraes.workshop.client.viewmodel.MaintenanceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
+import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 
@@ -21,10 +22,10 @@ public class MaintenanceController
     private final VehicleViewModel vehicleViewModel;
     private final Workshop workshop;
 
-    public MaintenanceController(MaintenanceViewModel maintenanceViewModel, VehicleViewModel vehicleViewModel, Workshop workshop)
+    public MaintenanceController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
-        this.maintenanceViewModel = maintenanceViewModel;
-        this.vehicleViewModel = vehicleViewModel;
+        this.maintenanceViewModel = viewModelRegistry.getMaintenanceViewModel();
+        this.vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         this.workshop = workshop;
 
         maintenanceViewModel.OnMaintenanceRequest.addListener(this::processRequest);

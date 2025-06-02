@@ -28,7 +28,7 @@ public class VehicleModuleMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        VehicleViewModel vehicleViewModel = menuManager.getVehicleViewModel();
+        VehicleViewModel vehicleViewModel = menuManager.getViewModelRegistry().getVehicleViewModel();
 
         if(!vehicleViewModel.hasSelectedVehicle())
         {

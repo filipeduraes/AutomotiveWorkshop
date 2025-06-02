@@ -34,7 +34,7 @@ public class EnterUserMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        UserInfoViewModel viewModel = menuManager.getUserInfoViewModel();
+        UserInfoViewModel viewModel = menuManager.getViewModelRegistry().getUserInfoViewModel();
         
         if(viewModel.getLoginState() == LoginState.LOGIN_SUCCESS)
         {

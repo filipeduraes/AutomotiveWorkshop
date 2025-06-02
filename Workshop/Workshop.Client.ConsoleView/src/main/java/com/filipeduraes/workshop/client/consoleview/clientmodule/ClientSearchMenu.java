@@ -34,7 +34,7 @@ public class ClientSearchMenu implements IWorkshopMenu
         System.out.println("Digite o nome do cliente: ");
         
         final String searchPattern = ConsoleInput.readLine();
-        final ClientViewModel clientViewModel = menuManager.getClientViewModel();
+        final ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
         
         clientViewModel.setSearchPattern(searchPattern);
         clientViewModel.setCurrentRequest(ClientRequest.SEARCH_CLIENTS);

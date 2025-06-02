@@ -7,6 +7,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
+import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 
 public class RegisterVehicleMenu implements IWorkshopMenu
 {
@@ -20,7 +21,9 @@ public class RegisterVehicleMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        if(!menuManager.getClientViewModel().hasSelectedClient())
+        ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
+
+        if(!viewModelRegistry.getClientViewModel().hasSelectedClient())
         {
             System.out.println("Nenhum cliente selecionado para o qual o veiculo sera registrado.");
             System.out.println("Por favor selecione um cliente antes de prosseguir.");
@@ -42,7 +45,7 @@ public class RegisterVehicleMenu implements IWorkshopMenu
         System.out.println("Insira o ano do veiculo:");
         int vehicleYear = ConsoleInput.readLineInteger();
 
-        VehicleViewModel vehicleViewModel = menuManager.getVehicleViewModel();
+        VehicleViewModel vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         VehicleDTO vehicleDTO = new VehicleDTO(vehicleModel, vehicleColor, vehicleVinNumber, vehicleLicensePlate, vehicleYear);
         vehicleViewModel.setSelectedVehicle(vehicleDTO);
 

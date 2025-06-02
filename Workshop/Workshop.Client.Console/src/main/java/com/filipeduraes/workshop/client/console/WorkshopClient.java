@@ -10,11 +10,8 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 
 import com.filipeduraes.workshop.client.model.MaintenanceController;
 import com.filipeduraes.workshop.client.model.VehicleController;
-import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.MaintenanceViewModel;
-import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
+import com.filipeduraes.workshop.client.viewmodel.*;
 
-import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.core.Workshop;
 
 /**
@@ -47,17 +44,14 @@ public class WorkshopClient
         System.out.println(title);
         Workshop workshop = new Workshop(false);
 
-        UserInfoViewModel userInfoViewModel = new UserInfoViewModel();
-        ClientViewModel clientViewModel = new ClientViewModel();
-        VehicleViewModel vehicleViewModel = new VehicleViewModel();
-        MaintenanceViewModel maintenanceViewModel = new MaintenanceViewModel();
+        ViewModelRegistry viewModelRegistry = new ViewModelRegistry();
 
-        LoginController loginController = new LoginController(userInfoViewModel, workshop.getAuthModule());
-        ClientController clientController = new ClientController(clientViewModel, workshop.getClientModule());
-        VehicleController vehicleController = new VehicleController(vehicleViewModel, clientViewModel, workshop.getVehicleModule(), workshop.getClientModule());
-        MaintenanceController maintenanceController = new MaintenanceController(maintenanceViewModel, vehicleViewModel, workshop);
+        LoginController loginController = new LoginController(viewModelRegistry.getUserInfoViewModel(), workshop.getAuthModule());
+        ClientController clientController = new ClientController(viewModelRegistry.getClientViewModel(), workshop.getClientModule());
+        VehicleController vehicleController = new VehicleController(viewModelRegistry, workshop);
+        MaintenanceController maintenanceController = new MaintenanceController(viewModelRegistry, workshop);
 
-        menuManager = new MenuManager(new EnterUserMenu(), userInfoViewModel, clientViewModel, vehicleViewModel, maintenanceViewModel);
+        menuManager = new MenuManager(new EnterUserMenu(), viewModelRegistry);
         menuManager.run();
 
         loginController.dispose();
