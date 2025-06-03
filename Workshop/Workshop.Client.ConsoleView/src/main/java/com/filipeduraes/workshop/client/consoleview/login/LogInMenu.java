@@ -45,7 +45,7 @@ public class LogInMenu implements IWorkshopMenu
         
         if(viewModel.getLoginState() == LoginState.LOGIN_FAILED)
         {
-            System.out.println("Usuiario não encontrado ou senha invalida, confira os dados e tente novamente.");
+            System.out.println("Usuario não encontrado ou senha invalida, confira os dados e tente novamente.");
             int userInput = ConsoleInput.readOptionFromList("Escolha como prosseguir: ", loginFailOptions);
 
             if(userInput == 0)

@@ -7,6 +7,7 @@ import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 import com.filipeduraes.workshop.core.store.Purchase;
 
 import java.lang.reflect.ParameterizedType;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -30,6 +31,26 @@ public class MaintenanceModule
         services = Persistence.loadFile(WorkshopPaths.SERVICES_PATH, ongoingServicesType, new HashMap<>());
         openedServices = Persistence.loadFile(WorkshopPaths.OPENED_SERVICES_PATH, serviceIDListType, new HashSet<>());
         userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDListType, new HashSet<>());
+    }
+
+    public String[] fetchOpenedAppointmentsDescriptions()
+    {
+        String[] descriptions = new String[openedServices.size()];
+        int index = 0;
+
+        for(UUID openedServiceID : openedServices)
+        {
+            ServiceOrder serviceOrder = services.get(openedServiceID);
+            ServiceStep currentStep = serviceOrder.getCurrentStep();
+
+            LocalDateTime startDate = currentStep.getStartDate();
+            String description = currentStep.getDescription();
+
+            descriptions[index] = String.format("%s: %s", startDate.toString(), descriptions);
+            index++;
+        }
+
+        return descriptions;
     }
 
     public UUID registerNewAppointment(UUID vehicleID, String problemDescription)

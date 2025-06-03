@@ -44,6 +44,9 @@ public class MaintenanceController
         {
             case REQUEST_OPENED_APPOINTMENTS:
             {
+                String[] descriptions = maintenanceModule.fetchOpenedAppointmentsDescriptions();
+                maintenanceViewModel.setOpenedAppointmentsDescriptions(descriptions);
+                maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_SUCCESS);
                 break;
             }
             case REQUEST_USER_SERVICES:
