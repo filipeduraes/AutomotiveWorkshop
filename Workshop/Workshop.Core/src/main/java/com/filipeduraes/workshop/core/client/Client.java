@@ -1,6 +1,8 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.core.client;
 
+import com.filipeduraes.workshop.core.WorkshopEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -10,9 +12,8 @@ import java.util.UUID;
  *
  * @author Filipe Durães
  */
-public class Client
+public class Client extends WorkshopEntity
 {
-    private UUID id;
     private String name;
     private String email;
     private String phoneNumber;
@@ -37,26 +38,6 @@ public class Client
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.maskedCPF = maskedCPF;
-    }
-
-    /**
-     * Atribui um novo identificador único ao cliente.
-     *
-     * @param id Identificador único
-     */
-    public void setID(UUID id)
-    {
-        this.id = id;
-    }
-
-    /**
-     * Obtém o identificador único do cliente.
-     *
-     * @return Identificador único
-     */
-    public UUID getID()
-    {
-        return id;
     }
 
     /**
@@ -148,6 +129,6 @@ public class Client
     @Override
     public String toString()
     {
-        return String.format("Cliente{ID: %s, Nome: '%s', Email: '%s', Telefone: '%s', Endereco: '%s', CPF: '%s'}", id, name, email, phoneNumber, address, maskedCPF);
+        return String.format("Cliente{ID: %s, Nome: '%s', Email: '%s', Telefone: '%s', Endereco: '%s', CPF: '%s'}", getID(), name, email, phoneNumber, address, maskedCPF);
     }
 }

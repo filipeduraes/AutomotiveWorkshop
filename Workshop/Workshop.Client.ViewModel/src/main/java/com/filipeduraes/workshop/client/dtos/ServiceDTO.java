@@ -1,4 +1,4 @@
-﻿package com.filipeduraes.workshop.client.dtos;
+package com.filipeduraes.workshop.client.dtos;
 
 public class ServiceDTO
 {

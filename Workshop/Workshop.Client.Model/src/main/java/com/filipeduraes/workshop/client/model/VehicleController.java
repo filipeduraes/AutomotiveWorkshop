@@ -5,11 +5,10 @@ import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
+import com.filipeduraes.workshop.core.CrudModule;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.client.Client;
-import com.filipeduraes.workshop.core.client.ClientModule;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
-import com.filipeduraes.workshop.core.vehicle.VehicleModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,8 @@ public class VehicleController
 {
     private final VehicleViewModel vehicleViewModel;
     private final ClientViewModel clientViewModel;
-    private final VehicleModule vehicleModule;
-    private final ClientModule clientModule;
+    private final CrudModule<Vehicle> vehicleModule;
+    private final CrudModule<Client> clientModule;
 
     public VehicleController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
@@ -69,7 +68,7 @@ public class VehicleController
 
             for (UUID ownedVehiclesID : client.getOwnedVehiclesIDs())
             {
-                Vehicle vehicle = vehicleModule.findVehicleByID(ownedVehiclesID);
+                Vehicle vehicle = vehicleModule.getEntityWithID(ownedVehiclesID);
                 vehicleNames.add(String.format("%s %d - %s", vehicle.getModel(), vehicle.getYear(), vehicle.getLicensePlate()));
             }
 
@@ -84,12 +83,11 @@ public class VehicleController
 
         if(selectedClient != null)
         {
-            VehicleDTO registerRequestedVehicle = vehicleViewModel.getSelectedVehicle();
+            VehicleDTO registerRequestedVehicleDTO = vehicleViewModel.getSelectedVehicle();
 
-            Vehicle vehicle = convertDTOToVehicle(selectedClient, registerRequestedVehicle);
-            UUID vehicleID = vehicleModule.registerVehicle(vehicle);
-            registerRequestedVehicle.setID(vehicleID);
-            clientModule.saveCurrentClients();
+            Vehicle vehicle = convertDTOToVehicle(selectedClient, registerRequestedVehicleDTO);
+            UUID vehicleID = vehicleModule.registerEntity(vehicle);
+            registerRequestedVehicleDTO.setID(vehicleID);
 
             vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_SUCCESS);
         }
@@ -107,7 +105,7 @@ public class VehicleController
             if(selectedVehicleIndex >= 0 && selectedVehicleIndex < ownedVehiclesIDs.size())
             {
                 UUID selectedVehicleID = ownedVehiclesIDs.get(selectedVehicleIndex);
-                Vehicle vehicle = vehicleModule.findVehicleByID(selectedVehicleID);
+                Vehicle vehicle = vehicleModule.getEntityWithID(selectedVehicleID);
 
                 VehicleDTO selectedVehicle = convertVehicleToDTO(vehicle);
 
@@ -121,16 +119,16 @@ public class VehicleController
         }
     }
 
-    private Vehicle convertDTOToVehicle(Client selectedClient, VehicleDTO registerRequestedVehicle)
+    private Vehicle convertDTOToVehicle(Client selectedClient, VehicleDTO vehicleDTO)
     {
         Vehicle vehicle = new Vehicle
         (
             selectedClient.getID(),
-            registerRequestedVehicle.getModel(),
-            registerRequestedVehicle.getColor(),
-            registerRequestedVehicle.getVinNumber(),
-            registerRequestedVehicle.getLicensePlate(),
-            registerRequestedVehicle.getYear()
+            vehicleDTO.getModel(),
+            vehicleDTO.getColor(),
+            vehicleDTO.getVinNumber(),
+            vehicleDTO.getLicensePlate(),
+            vehicleDTO.getYear()
         );
 
         return vehicle;
@@ -161,7 +159,7 @@ public class VehicleController
         }
 
         UUID selectedClientID = clientViewModel.getClient().getID();
-        Client client = clientModule.findClientByID(selectedClientID);
+        Client client = clientModule.getEntityWithID(selectedClientID);
         return client;
     }
 }

@@ -4,14 +4,13 @@ package com.filipeduraes.workshop.core;
 
 import com.filipeduraes.workshop.core.auth.AuthModule;
 import com.filipeduraes.workshop.core.auth.Employee;
-import com.filipeduraes.workshop.core.client.ClientModule;
+import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.SerializationAdapterGroup;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 import com.filipeduraes.workshop.core.persistence.serializers.DateTimeSerializer;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
-import com.filipeduraes.workshop.core.vehicle.VehicleModule;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,8 +24,8 @@ import java.util.UUID;
 public class Workshop
 {
     private final AuthModule authModule = new AuthModule();
-    private final ClientModule clientModule = new ClientModule();
-    private final VehicleModule vehicleModule = new VehicleModule();
+    private final CrudModule<Client> clientModule;
+    private final CrudModule<Vehicle> vehicleModule;
     private MaintenanceModule maintenanceModule;
 
     /**
@@ -45,14 +44,17 @@ public class Workshop
         Persistence.setUseObfuscation(useObfuscation);
         Persistence.registerCustomSerializationAdapters(adapters);
 
+        vehicleModule = new CrudModule<>(WorkshopPaths.REGISTERED_VEHICLES_PATH, Vehicle.class);
+        clientModule = new CrudModule<>(WorkshopPaths.REGISTERED_CLIENTS_PATH, Client.class);
+
         authModule.OnUserLogged.addListener(this::initializeUserData);
-        vehicleModule.OnVehicleRegistered.addListener(this::registerVehicleToOwner);
+        vehicleModule.OnEntityRegistered.addListener(this::registerVehicleToOwner);
     }
 
     public void dispose()
     {
         authModule.OnUserLogged.removeListener(this::initializeUserData);
-        vehicleModule.OnVehicleRegistered.removeListener(this::registerVehicleToOwner);
+        vehicleModule.OnEntityRegistered.removeListener(this::registerVehicleToOwner);
     }
 
     /**
@@ -70,7 +72,7 @@ public class Workshop
      *
      * @return módulo de clientes
      */
-    public ClientModule getClientModule()
+    public CrudModule<Client> getClientModule()
     {
         return clientModule;
     }
@@ -80,7 +82,7 @@ public class Workshop
      *
      * @return módulo de veículos
      */
-    public VehicleModule getVehicleModule()
+    public CrudModule<Vehicle> getVehicleModule()
     {
         return vehicleModule;
     }
@@ -105,6 +107,8 @@ public class Workshop
     private void registerVehicleToOwner(Vehicle vehicle)
     {
         UUID ownerID = vehicle.getOwnerID();
-        clientModule.registerVehicleToOwner(ownerID, vehicle.getID());
+        Client owner = clientModule.getEntityWithID(ownerID);
+        owner.addOwnedVehicle(vehicle.getID());
+        clientModule.updateEntity(owner);
     }
 }

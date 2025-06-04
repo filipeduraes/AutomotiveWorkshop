@@ -2,15 +2,15 @@
 
 package com.filipeduraes.workshop.core.vehicle;
 
+import com.filipeduraes.workshop.core.WorkshopEntity;
 import java.util.UUID;
 
 /**
  *
  * @author Filipe Durães
  */
-public class Vehicle
+public class Vehicle extends WorkshopEntity
 {
-    private UUID id;
     private UUID ownerID;
     private String model;
     private String color;
@@ -27,16 +27,6 @@ public class Vehicle
         this.vinNumber = vinNumber;
         this.licensePlate = licensePlate;
         this.year = year;
-    }
-
-    public UUID getID()
-    {
-        return id;
-    }
-
-    public void setID(UUID id)
-    {
-        this.id = id;
     }
 
     public String getModel() 

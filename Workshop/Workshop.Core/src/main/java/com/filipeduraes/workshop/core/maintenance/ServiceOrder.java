@@ -1,6 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.core.maintenance;
 
+import com.filipeduraes.workshop.core.WorkshopEntity;
 import com.filipeduraes.workshop.core.catalog.Product;
 import com.filipeduraes.workshop.core.store.Purchase;
 
@@ -9,10 +10,8 @@ import java.util.*;
 /**
  * @author Filipe Durães
  */
-public class ServiceOrder
+public class ServiceOrder extends WorkshopEntity
 {
-    private UUID id;
-
     private final Deque<ServiceStep> steps = new ArrayDeque<>();
     private List<Product> services = new ArrayList<>();
 
@@ -20,15 +19,9 @@ public class ServiceOrder
     private UUID vehicleID;
     private boolean finished = false;
 
-    public ServiceOrder(UUID serviceID, UUID vehicleID)
+    public ServiceOrder(UUID vehicleID)
     {
-        id = serviceID;
         this.vehicleID = vehicleID;
-    }
-
-    public UUID getID()
-    {
-        return id;
     }
 
     public boolean getFinished()

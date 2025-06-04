@@ -1,6 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.core.maintenance;
 
+import com.filipeduraes.workshop.core.CrudModule;
 import com.filipeduraes.workshop.core.catalog.Product;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
@@ -16,7 +17,7 @@ import java.util.*;
  */
 public class MaintenanceModule
 {
-    private final Map<UUID, ServiceOrder> services;
+    private final CrudModule<ServiceOrder> serviceOrderModule;
     private final Set<UUID> userServices;
     private final Set<UUID> openedServices;
     private final UUID loggedEmployeeID;
@@ -25,10 +26,9 @@ public class MaintenanceModule
     {
         this.loggedEmployeeID = loggedEmployeeID;
 
-        ParameterizedType ongoingServicesType = Persistence.createParameterizedType(HashMap.class, UUID.class, ServiceOrder.class);
         ParameterizedType serviceIDListType = Persistence.createParameterizedType(ArrayList.class, UUID.class);
 
-        services = Persistence.loadFile(WorkshopPaths.SERVICES_PATH, ongoingServicesType, new HashMap<>());
+        serviceOrderModule = new CrudModule<>(WorkshopPaths.SERVICES_PATH, ServiceOrder.class);
         openedServices = Persistence.loadFile(WorkshopPaths.OPENED_SERVICES_PATH, serviceIDListType, new HashSet<>());
         userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDListType, new HashSet<>());
     }
@@ -40,13 +40,13 @@ public class MaintenanceModule
 
         for(UUID openedServiceID : openedServices)
         {
-            ServiceOrder serviceOrder = services.get(openedServiceID);
+            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(openedServiceID);
             ServiceStep currentStep = serviceOrder.getCurrentStep();
 
             LocalDateTime startDate = currentStep.getStartDate();
             String description = currentStep.getDescription();
 
-            descriptions[index] = String.format("%s: %s", startDate.toString(), descriptions);
+            descriptions[index] = String.format("%s: %s", startDate.toString(), description);
             index++;
         }
 
@@ -55,25 +55,23 @@ public class MaintenanceModule
 
     public UUID registerNewAppointment(UUID vehicleID, String problemDescription)
     {
-        UUID serviceID = Persistence.generateUniqueID(services);
+        ServiceOrder serviceOrder = new ServiceOrder(vehicleID);
 
-        ServiceOrder serviceOrder = new ServiceOrder(serviceID, vehicleID);
         serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
         serviceOrder.getCurrentStep().setDescription(problemDescription);
 
-        services.put(serviceID, serviceOrder);
+        UUID serviceID = serviceOrderModule.registerEntity(serviceOrder);
         openedServices.add(serviceID);
 
-        Persistence.saveFile(services, WorkshopPaths.SERVICES_PATH);
         Persistence.saveFile(openedServices, WorkshopPaths.OPENED_SERVICES_PATH);
         return serviceID;
     }
 
     public void startInspection(UUID serviceID)
     {
-        if(services.containsKey(serviceID))
+        if(serviceOrderModule.hasEntityWithID(serviceID))
         {
-            ServiceOrder serviceOrder = services.get(serviceID);
+            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(serviceID);
 
             if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.APPOINTMENT)
             {
@@ -83,6 +81,7 @@ public class MaintenanceModule
 
                 Persistence.saveFile(openedServices, WorkshopPaths.OPENED_SERVICES_PATH);
                 Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
+                serviceOrderModule.updateEntity(serviceOrder);
             }
         }
     }
@@ -91,7 +90,7 @@ public class MaintenanceModule
     {
         if(loggedUserHasService(serviceID))
         {
-            ServiceOrder serviceOrder = services.get(serviceID);
+            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(serviceID);
 
             if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
             {
@@ -106,6 +105,9 @@ public class MaintenanceModule
                 Set<UUID> newEmployeeUserServices = Persistence.loadFile(newEmployeeUserPath, serviceIDListType, new HashSet<>());
                 newEmployeeUserServices.add(serviceID);
                 Persistence.saveFile(newEmployeeUserServices, newEmployeeUserPath);
+
+                serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
+                serviceOrderModule.updateEntity(serviceOrder);
             }
         }
     }
@@ -114,14 +116,14 @@ public class MaintenanceModule
     {
         if(loggedUserHasService(serviceID))
         {
-            ServiceOrder serviceOrder = services.get(serviceID);
+            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(serviceID);
 
             if(serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
             {
                 ServiceStep serviceStep = new ServiceStep(loggedEmployeeID);
                 serviceOrder.registerStep(serviceStep);
 
-                Persistence.saveFile(services, WorkshopPaths.SERVICES_PATH);
+                serviceOrderModule.updateEntity(serviceOrder);
             }
         }
     }
@@ -130,7 +132,7 @@ public class MaintenanceModule
     {
         if(loggedUserHasService(serviceID))
         {
-            ServiceOrder serviceOrder = this.services.get(serviceID);
+            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(serviceID);
             ServiceStep currentStep = serviceOrder.getCurrentStep();
             currentStep.setDescription(description);
             serviceOrder.finish(services, purchase);
@@ -143,11 +145,12 @@ public class MaintenanceModule
 
             Persistence.saveFile(finishedServices, WorkshopPaths.FINISHED_SERVICES_PATH);
             Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
+            serviceOrderModule.updateEntity(serviceOrder);
         }
     }
 
     private boolean loggedUserHasService(UUID serviceID)
     {
-        return userServices.contains(serviceID) && services.containsKey(serviceID);
+        return userServices.contains(serviceID) && serviceOrderModule.hasEntityWithID(serviceID);
     }
 }

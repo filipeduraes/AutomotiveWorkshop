@@ -1,13 +1,11 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.core.auth;
 
-import com.filipeduraes.workshop.core.persistence.Persistence;
+import com.filipeduraes.workshop.core.CrudModule;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 import com.filipeduraes.workshop.utils.Observer;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -20,14 +18,15 @@ public class AuthModule
 {
     public Observer OnUserLogged = new Observer();
     private Employee loggedUser = null;
-    private Map<UUID, LocalEmployee> publicUsers;
+
+    private final CrudModule<LocalEmployee> employeeCrudModule;
 
     /**
      * Cria uma instância do módulo de autenticação.
      */
     public AuthModule()
     {
-        publicUsers = loadRegisteredLocalUsers();
+        employeeCrudModule = new CrudModule<>(WorkshopPaths.REGISTERED_EMPLOYEES_PATH, LocalEmployee.class);
     }
 
     /**
@@ -54,51 +53,42 @@ public class AuthModule
     /**
      * Registra um usuário com base nos dados fornecidos.
      *
-     * @param user
+     * @param user usuário para registrar
      */
-    public void registerUser(LocalEmployee user)
+    public boolean registerUser(LocalEmployee user)
     {
-        Map<UUID, LocalEmployee> currentRegisteredUsers = loadRegisteredLocalUsers();
+        List<LocalEmployee> usersWithSameEmail = employeeCrudModule.findEntitiesWithPredicate(localEmployee -> localEmployee.getEmail().equals(user.getEmail()));
+        boolean canRegisterUser = usersWithSameEmail.isEmpty();
 
-        UUID uniqueID = Persistence.generateUniqueID(currentRegisteredUsers);
-        user.setID(uniqueID);
+        if(canRegisterUser)
+        {
+            employeeCrudModule.registerEntity(user);
+        }
 
-        currentRegisteredUsers.put(uniqueID, user);
-
-        Persistence.saveFile(currentRegisteredUsers, WorkshopPaths.REGISTERED_EMPLOYEES_PATH);
+        return canRegisterUser;
     }
 
     /**
      * Tenta fazer login com o email e senha hash fornecidos.
      *
-     * @param email
-     * @param passwordHash
+     * @param email email usado para o login
+     * @param passwordHash senha usada para o login convertida em hash
      * @return login foi bem sucedido
      */
     public boolean tryLogIn(String email, int passwordHash)
     {
-        publicUsers = loadRegisteredLocalUsers();
-        LocalEmployee userToValidate = null;
+        LocalEmployee foundUser = employeeCrudModule.findFirstEntityWithPredicate(localEmployee -> localEmployee.getEmail().equals(email));
 
-        for (LocalEmployee employee : publicUsers.values())
-        {
-            if (employee.getEmail().equals(email))
-            {
-                userToValidate = employee;
-                break;
-            }
-        }
-
-        if (userToValidate == null)
+        if (foundUser == null)
         {
             return false;
         }
 
-        boolean passwordIsValid = userToValidate.isPasswordValid(passwordHash);
+        boolean passwordIsValid = foundUser.isPasswordValid(passwordHash);
 
         if (passwordIsValid)
         {
-            loggedUser = userToValidate;
+            loggedUser = foundUser;
             OnUserLogged.broadcast();
         }
 
@@ -108,22 +98,11 @@ public class AuthModule
     /**
      * Encontra um usuário registrado com base em seu ID.
      *
-     * @param userID
+     * @param userID identificador único do usuário
      * @return usuário encontrado
      */
     public Employee getUserFromID(UUID userID)
     {
-        if (!publicUsers.containsKey(userID))
-        {
-            return null;
-        }
-
-        return publicUsers.get(userID);
-    }
-
-    private Map<UUID, LocalEmployee> loadRegisteredLocalUsers()
-    {
-        ParameterizedType type = Persistence.createParameterizedType(HashMap.class, UUID.class, LocalEmployee.class);
-        return Persistence.loadFile(WorkshopPaths.REGISTERED_EMPLOYEES_PATH, type, new HashMap<>());
+        return employeeCrudModule.getEntityWithID(userID);
     }
 }

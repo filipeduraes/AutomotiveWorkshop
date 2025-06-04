@@ -5,8 +5,9 @@ package com.filipeduraes.workshop.client.model;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
+import com.filipeduraes.workshop.core.CrudModule;
 import com.filipeduraes.workshop.core.client.Client;
-import com.filipeduraes.workshop.core.client.ClientModule;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +22,7 @@ import java.util.UUID;
 public class ClientController
 {
     private final ClientViewModel clientViewModel;
-    private final ClientModule clientModule;
+    private final CrudModule<Client> clientModule;
 
     private List<Client> foundClients;
 
@@ -31,7 +32,7 @@ public class ClientController
      * @param clientViewModel Camada intermediária que gerencia o estado e os dados entre a view e o modelo
      * @param clientModule    Módulo de negócios que implementa as operações com clientes
      */
-    public ClientController(ClientViewModel clientViewModel, ClientModule clientModule)
+    public ClientController(ClientViewModel clientViewModel, CrudModule<Client> clientModule)
     {
         this.clientViewModel = clientViewModel;
         this.clientModule = clientModule;
@@ -57,14 +58,14 @@ public class ClientController
 
                 ClientDTO client = clientViewModel.getClient();
                 Client newClient = convertDTOToClient(client);
-                UUID clientID = clientModule.registerNewClient(newClient);
+                UUID clientID = clientModule.registerEntity(newClient);
                 client.setID(clientID);
                 break;
             }
             case SEARCH_CLIENTS:
             {
                 final String searchPattern = clientViewModel.getSearchPattern();
-                foundClients = clientModule.searchClientsWithPattern(searchPattern);
+                foundClients = clientModule.searchEntitiesWithPattern(searchPattern, Client::getName);
 
                 List<String> clientNames = convertClientsToClientNames(foundClients);
                 clientViewModel.setFoundClientNames(clientNames);

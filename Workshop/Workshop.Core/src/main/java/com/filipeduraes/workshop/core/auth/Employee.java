@@ -1,6 +1,8 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.core.auth;
 
+import com.filipeduraes.workshop.core.WorkshopEntity;
+
 import java.util.UUID;
 
 /**
@@ -9,9 +11,8 @@ import java.util.UUID;
  *
  * @author Filipe Durães
  */
-public class Employee
+public class Employee extends WorkshopEntity
 {
-    private UUID id;
     private String name;
     private String email;
     private final EmployeeRole role;
@@ -38,27 +39,7 @@ public class Employee
     @Override
     public String toString()
     {
-        return String.format("Employee[id=%s, name='%s', email='%s', role=%s]", id, name, email, role);
-    }
-
-    /**
-     * Obtém o ID único do funcionário.
-     *
-     * @return o ID do funcionário
-     */
-    public UUID getID()
-    {
-        return id;
-    }
-
-    /**
-     * Define o ID único do funcionário.
-     *
-     * @param id o ID único a ser atribuído ao funcionário
-     */
-    public void setID(UUID id)
-    {
-        this.id = id;
+        return String.format("Employee[id=%s, name='%s', email='%s', role=%s]", getID(), name, email, role);
     }
 
     /**
