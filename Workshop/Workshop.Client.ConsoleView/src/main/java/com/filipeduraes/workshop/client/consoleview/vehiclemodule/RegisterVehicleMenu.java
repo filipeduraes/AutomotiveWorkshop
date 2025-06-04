@@ -30,23 +30,8 @@ public class RegisterVehicleMenu implements IWorkshopMenu
             return MenuResult.pop();
         }
 
-        System.out.println("Insira o modelo do veiculo:");
-        String vehicleModel = ConsoleInput.readLine();
-
-        System.out.println("Insira a cor do veiculo:");
-        String vehicleColor = ConsoleInput.readLine();
-
-        System.out.println("Insira o numero de chassi do veiculo:");
-        String vehicleVinNumber = ConsoleInput.readLine();
-
-        System.out.println("Insira a placa do veiculo:");
-        String vehicleLicensePlate = ConsoleInput.readLine();
-
-        System.out.println("Insira o ano do veiculo:");
-        int vehicleYear = ConsoleInput.readLineInteger();
-
+        VehicleDTO vehicleDTO = requestVehicleData();
         VehicleViewModel vehicleViewModel = viewModelRegistry.getVehicleViewModel();
-        VehicleDTO vehicleDTO = new VehicleDTO(vehicleModel, vehicleColor, vehicleVinNumber, vehicleLicensePlate, vehicleYear);
         vehicleViewModel.setSelectedVehicle(vehicleDTO);
 
         vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_VEHICLE_REGISTRATION);
@@ -68,5 +53,26 @@ public class RegisterVehicleMenu implements IWorkshopMenu
 
         vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.WAITING_REQUEST);
         return MenuResult.none();
+    }
+
+    private static VehicleDTO requestVehicleData()
+    {
+        System.out.println("Insira o modelo do veiculo:");
+        String vehicleModel = ConsoleInput.readLine();
+
+        System.out.println("Insira a cor do veiculo:");
+        String vehicleColor = ConsoleInput.readLine();
+
+        System.out.println("Insira o numero de chassi do veiculo:");
+        String vehicleVinNumber = ConsoleInput.readLine();
+
+        System.out.println("Insira a placa do veiculo:");
+        String vehicleLicensePlate = ConsoleInput.readLine();
+
+        System.out.println("Insira o ano do veiculo:");
+        int vehicleYear = ConsoleInput.readLineInteger();
+
+        VehicleDTO vehicleDTO = new VehicleDTO(vehicleModel, vehicleColor, vehicleVinNumber, vehicleLicensePlate, vehicleYear);
+        return vehicleDTO;
     }
 }

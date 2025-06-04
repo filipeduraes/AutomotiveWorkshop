@@ -2,6 +2,8 @@
 
 package com.filipeduraes.workshop.core.catalog;
 
+import com.filipeduraes.workshop.core.WorkshopEntity;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -12,9 +14,8 @@ import java.util.UUID;
  *
  * @author Filipe Durães
  */
-public class Product
+public class Product extends WorkshopEntity
 {
-    private UUID id;
     private String name;
     private String description;
     private BigDecimal price;
@@ -29,20 +30,9 @@ public class Product
      */
     public Product(UUID id, String name, String description, String price)
     {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.price = new BigDecimal(price);
-    }
-
-    /**
-     * Obtém o identificador único do produto.
-     *
-     * @return identificador UUID do produto
-     */
-    public UUID getId()
-    {
-        return id;
     }
 
     /**

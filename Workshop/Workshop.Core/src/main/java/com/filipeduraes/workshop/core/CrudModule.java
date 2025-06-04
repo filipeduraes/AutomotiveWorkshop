@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class CrudModule<TEntity extends WorkshopEntity>
 {
-    public ConsumerObserver<TEntity> OnEntityRegistered = new ConsumerObserver<>();
+    public final ConsumerObserver<TEntity> OnEntityRegistered = new ConsumerObserver<>();
 
     private final Map<UUID, TEntity> loadedEntities;
     private final String path;

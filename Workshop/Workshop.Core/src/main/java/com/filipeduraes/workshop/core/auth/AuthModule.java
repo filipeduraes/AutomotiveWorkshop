@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public class AuthModule
 {
-    public Observer OnUserLogged = new Observer();
+    public final Observer OnUserLogged = new Observer();
     private Employee loggedUser = null;
 
     private final CrudModule<LocalEmployee> employeeCrudModule;
