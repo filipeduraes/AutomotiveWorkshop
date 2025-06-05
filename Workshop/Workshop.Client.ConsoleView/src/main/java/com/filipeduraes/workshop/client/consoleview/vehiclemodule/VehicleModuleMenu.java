@@ -13,7 +13,7 @@ import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
  */
 public class VehicleModuleMenu implements IWorkshopMenu
 {
-    private IWorkshopMenu[] menuOptions =
+    private final IWorkshopMenu[] menuOptions =
     {
         new RegisterVehicleMenu(),
         new VehicleSelectionMenu()

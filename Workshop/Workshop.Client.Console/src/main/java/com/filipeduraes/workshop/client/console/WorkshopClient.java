@@ -23,8 +23,6 @@ import com.filipeduraes.workshop.core.Workshop;
  */
 public class WorkshopClient
 {
-    private static MenuManager menuManager;
-
     /**
      * Ponto de entrada da aplicação console da oficina.
      * Inicializa todos os componentes do sistema, injeta dependências e inicia a interface baseada em menus.
@@ -34,14 +32,16 @@ public class WorkshopClient
      */
     public static void main(String[] args)
     {
-        String title = " ___________ _____ _____ _____ _   _   ___  \n"
-                + "|  _  |  ___|_   _/  __ \\_   _| \\ | | / _ \\ \n"
-                + "| | | | |_    | | | /  \\/ | | |  \\| |/ /_\\ \\\n"
-                + "| | | |  _|   | | | |     | | | . ` ||  _  |\n"
-                + "\\ \\_/ / |    _| |_| \\__/\\_| |_| |\\  || | | |\n"
-                + " \\___/\\_|    \\___/ \\____/\\___/\\_| \\_/\\_| |_/";
+        String title = """
+         ___________ _____ _____ _____ _   _   ___
+        |  _  |  ___|_   _/  __ \\_   _| \\ | | / _ \\
+        | | | | |_    | | | /  \\/ | | |  \\| |/ /_\\ \\
+        | | | |  _|   | | | |     | | | . ` ||  _  |
+        \\ \\_/ / |    _| |_| \\__/\\_| |_| |\\  || | | |
+         \\___/\\_|    \\___/ \\____/\\___/\\_| \\_/\\_| |_/
+        """;
 
-        System.out.println(title);
+        System.out.print(title);
         Workshop workshop = new Workshop(false);
 
         ViewModelRegistry viewModelRegistry = new ViewModelRegistry();
@@ -51,7 +51,7 @@ public class WorkshopClient
         VehicleController vehicleController = new VehicleController(viewModelRegistry, workshop);
         MaintenanceController maintenanceController = new MaintenanceController(viewModelRegistry, workshop);
 
-        menuManager = new MenuManager(new EnterUserMenu(), viewModelRegistry);
+        MenuManager menuManager = new MenuManager(new EnterUserMenu(), viewModelRegistry);
         menuManager.run();
 
         loginController.dispose();

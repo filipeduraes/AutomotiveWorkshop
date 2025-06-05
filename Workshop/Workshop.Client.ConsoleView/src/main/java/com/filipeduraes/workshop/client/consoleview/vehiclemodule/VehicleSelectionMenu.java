@@ -11,7 +11,6 @@ import java.util.List;
 
 public class VehicleSelectionMenu implements IWorkshopMenu
 {
-
     @Override
     public String getMenuDisplayName()
     {
