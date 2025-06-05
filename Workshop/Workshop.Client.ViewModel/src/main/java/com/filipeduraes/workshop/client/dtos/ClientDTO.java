@@ -64,4 +64,10 @@ public class ClientDTO
     {
         this.id = id;
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("Cliente selecionado:%n - ID: %s%n - Nome: %s%n - Email: %s%n - CPF: %s%n - Telefone: %s", id, name, email, cpf, phoneNumber);
+    }
 }

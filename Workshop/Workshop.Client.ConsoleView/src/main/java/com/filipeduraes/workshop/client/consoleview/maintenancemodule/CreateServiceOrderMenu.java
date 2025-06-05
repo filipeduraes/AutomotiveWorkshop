@@ -51,7 +51,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
         if(maintenanceViewModel.getMaintenanceRequest() == MaintenanceRequest.REQUEST_SUCCESS)
         {
-            System.out.printf("Agendamento registrado com sucesso! ID: %s\n", maintenanceViewModel.getCurrentMaintenanceID());
+            System.out.printf("Agendamento registrado com sucesso! ID: %s%n", maintenanceViewModel.getCurrentMaintenanceID());
             return MenuResult.pop();
         }
 

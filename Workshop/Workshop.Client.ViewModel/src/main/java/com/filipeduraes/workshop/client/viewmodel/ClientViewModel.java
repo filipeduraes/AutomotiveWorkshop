@@ -22,30 +22,41 @@ public class ClientViewModel
 
     private ClientRequest currentRequest;
 
-    private List<String> foundClientNames = new ArrayList<>();
+    private SearchByOption searchByOption;
+    private List<String> foundClientDescriptions = new ArrayList<>();
     private String searchPattern;
     private int selectedFoundClientIndex = -1;
 
     private ClientDTO client;
+
+    public SearchByOption getSearchByOption()
+    {
+        return searchByOption;
+    }
+
+    public void setSearchByOption(SearchByOption searchByOption)
+    {
+        this.searchByOption = searchByOption;
+    }
 
     /**
      * Obtém a lista de nomes de clientes encontrados na busca.
      *
      * @return lista de nomes dos clientes encontrados
      */
-    public List<String> getFoundClientNames()
+    public List<String> getFoundClientDescriptions()
     {
-        return foundClientNames;
+        return foundClientDescriptions;
     }
 
     /**
      * Define a lista de nomes de clientes encontrados na busca.
      *
-     * @param foundClientNames nova lista de nomes dos clientes
+     * @param foundClientDescriptions nova lista de nomes dos clientes
      */
-    public void setFoundClientNames(List<String> foundClientNames)
+    public void setFoundClientDescriptions(List<String> foundClientDescriptions)
     {
-        this.foundClientNames = foundClientNames;
+        this.foundClientDescriptions = foundClientDescriptions;
     }
 
 

@@ -5,12 +5,15 @@ package com.filipeduraes.workshop.client.model;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
+import com.filipeduraes.workshop.client.viewmodel.SearchByOption;
 import com.filipeduraes.workshop.core.CrudModule;
 import com.filipeduraes.workshop.core.client.Client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * Controlador responsável por gerenciar as operações relacionadas aos clientes,
@@ -23,6 +26,14 @@ public class ClientController
 {
     private final ClientViewModel clientViewModel;
     private final CrudModule<Client> clientModule;
+
+    private final Map<SearchByOption, Function<Client, String>> clientSearchOptions = Map.of
+    (
+        SearchByOption.NAME, Client::getName,
+        SearchByOption.CPF, Client::getMaskedCPF,
+        SearchByOption.EMAIL, Client::getEmail,
+        SearchByOption.PHONE, Client::getPhoneNumber
+    );
 
     private List<Client> foundClients;
 
@@ -65,10 +76,11 @@ public class ClientController
             case SEARCH_CLIENTS:
             {
                 final String searchPattern = clientViewModel.getSearchPattern();
-                foundClients = clientModule.searchEntitiesWithPattern(searchPattern, Client::getName);
+                Function<Client, String> clientStringExtractor = clientSearchOptions.get(clientViewModel.getSearchByOption());
+                foundClients = clientModule.searchEntitiesWithPattern(searchPattern, clientStringExtractor);
 
-                List<String> clientNames = convertClientsToClientNames(foundClients);
-                clientViewModel.setFoundClientNames(clientNames);
+                List<String> clientDescriptions = convertClientsToClientDescriptions(foundClients);
+                clientViewModel.setFoundClientDescriptions(clientDescriptions);
                 break;
             }
             case LOAD_CLIENT_DATA:
@@ -87,13 +99,14 @@ public class ClientController
         clientViewModel.setCurrentRequest(ClientRequest.NONE);
     }
 
-    private List<String> convertClientsToClientNames(List<Client> clients)
+    private List<String> convertClientsToClientDescriptions(List<Client> clients)
     {
         ArrayList<String> clientNames = new ArrayList<>();
 
         for (Client client : clients)
         {
-            clientNames.add(client.getName());
+            String clientDescription = String.format("%s - %s", client.getName(), client.getMaskedCPF());
+            clientNames.add(clientDescription);
         }
 
         return clientNames;

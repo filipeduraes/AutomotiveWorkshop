@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
  */
 public class FuzzyTokenMatcher
 {
+    private static final int EXACT_MATCH_SCORE = 3;
+    private static final int PREFIX_SCORE = 2;
+    private static final int APPROXIMATE_SCORE = 1;
+
     /**
      * Encontra itens em uma coleção que são similares a uma string de busca.
      * Utiliza processamento paralelo para melhor performance em grandes coleções.
@@ -74,17 +78,17 @@ public class FuzzyTokenMatcher
             {
                 if (tokenA.equals(tokenB))
                 {
-                    matchScore += 3; // match exato
+                    matchScore += EXACT_MATCH_SCORE; // match exato
                     break;
                 }
                 else if (tokenB.startsWith(tokenA))
                 {
-                    matchScore += 2; // prefixo
+                    matchScore += PREFIX_SCORE; // prefixo
                     break;
                 }
                 else if (Levenshtein.calculateSimilarity(tokenA, tokenB) >= minSimilarity)
                 {
-                    matchScore += 1; // match aproximado
+                    matchScore += APPROXIMATE_SCORE; // match aproximado
                     break;
                 }
             }
@@ -123,8 +127,8 @@ public class FuzzyTokenMatcher
      */
     private static class ScoredItem<T>
     {
-        private T item;
-        private double score;
+        private final T item;
+        private final double score;
 
         private ScoredItem(T item, double score)
         {

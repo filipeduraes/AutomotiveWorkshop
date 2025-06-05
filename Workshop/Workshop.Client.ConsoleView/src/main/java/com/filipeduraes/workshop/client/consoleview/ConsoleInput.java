@@ -85,7 +85,7 @@ public class ConsoleInput
         }
         catch (IOException e)
         {
-            System.err.println(String.format("Erro ao ler entrada do usuiario: %s", e.getMessage()));
+            System.err.printf("Erro ao ler entrada do usuiario: %s%n", e.getMessage());
             e.printStackTrace(System.out);
             return "";
         }

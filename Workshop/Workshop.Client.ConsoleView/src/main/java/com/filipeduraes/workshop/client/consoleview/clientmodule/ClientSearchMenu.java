@@ -9,7 +9,9 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import java.util.ArrayList;
+import com.filipeduraes.workshop.client.viewmodel.SearchByOption;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,9 +23,18 @@ import java.util.List;
  */
 public class ClientSearchMenu implements IWorkshopMenu
 {
+    private final SearchByOption[] options = { SearchByOption.NAME, SearchByOption.CPF, SearchByOption.EMAIL, SearchByOption.PHONE };
+    private String[] optionsDisplayNames;
+
+    public ClientSearchMenu()
+    {
+        optionsDisplayNames = Arrays.stream(options)
+                                    .map(SearchByOption::toString)
+                                    .toArray(String[]::new);
+    }
 
     @Override
-    public String getMenuDisplayName() 
+    public String getMenuDisplayName()
     {
         return "Pesquisar Cliente";
     }
@@ -31,11 +42,21 @@ public class ClientSearchMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        System.out.println("Digite o nome do cliente: ");
-        
-        final String searchPattern = ConsoleInput.readLine();
         final ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
-        
+
+        int searchOptionIndex = ConsoleInput.readOptionFromList("Escolha o campo para pesquisar:", optionsDisplayNames, true);
+
+        if(searchOptionIndex >= optionsDisplayNames.length)
+        {
+            System.out.println("Busca cancelada.");
+            return MenuResult.pop();
+        }
+
+        System.out.printf("Digite o %s do cliente: %n", optionsDisplayNames[searchOptionIndex]);
+
+        final String searchPattern = ConsoleInput.readLine();
+
+        clientViewModel.setSearchByOption(options[searchOptionIndex]);
         clientViewModel.setSearchPattern(searchPattern);
         clientViewModel.setCurrentRequest(ClientRequest.SEARCH_CLIENTS);
         
@@ -45,17 +66,12 @@ public class ClientSearchMenu implements IWorkshopMenu
             
             int selectedClient = ConsoleInput.readLineInteger("Escolha o usuario: ");
             
-            if(selectedClientSuccessfuly(selectedClient, clientViewModel))
+            if(selectedClientSuccessfully(selectedClient, clientViewModel))
             {
                 if(clientViewModel.getSelectedFoundClientIndex() >= 0)
                 {
                     ClientDTO client = clientViewModel.getClient();
-
-                    System.out.println("Cliente selecionado: ");
-                    System.out.printf(" - Nome: %s\n", client.getName());
-                    System.out.printf(" - Email: %s\n", client.getEmail());
-                    System.out.printf(" - CPF: %s\n", client.getCPF());
-                    System.out.printf(" - Telefone: %s\n", client.getPhoneNumber());
+                    System.out.println(client);
                 }
                 
                 return MenuResult.pop();
@@ -67,20 +83,20 @@ public class ClientSearchMenu implements IWorkshopMenu
 
     private void showFoundClients(final ClientViewModel clientViewModel) 
     {
-        final List<String> foundClientNames = clientViewModel.getFoundClientNames();
+        final List<String> foundClientNames = clientViewModel.getFoundClientDescriptions();
         
         for(int i = 0; i < foundClientNames.size(); i++)
         {
-            System.out.printf(" [%d] %s\n", i, foundClientNames.get(i));
+            System.out.printf(" [%d] %s%n", i, foundClientNames.get(i));
         }
         
-        System.out.printf(" [%d] Pesquisar novamente\n", foundClientNames.size());
-        System.out.printf(" [%d] Cancelar busca\n", foundClientNames.size() + 1);
+        System.out.printf(" [%d] Pesquisar novamente%n", foundClientNames.size());
+        System.out.printf(" [%d] Cancelar busca%n", foundClientNames.size() + 1);
     }
 
-    private boolean selectedClientSuccessfuly(int selectedClient, final ClientViewModel clientViewModel) 
+    private boolean selectedClientSuccessfully(int selectedClient, final ClientViewModel clientViewModel)
     {
-        final List<String> foundClientNames = clientViewModel.getFoundClientNames();
+        final List<String> foundClientNames = clientViewModel.getFoundClientDescriptions();
         
         if (selectedClient >= 0 && selectedClient < foundClientNames.size()) 
         {

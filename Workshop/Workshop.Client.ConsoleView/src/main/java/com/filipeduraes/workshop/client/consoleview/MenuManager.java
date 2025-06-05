@@ -126,7 +126,7 @@ public class MenuManager
                 .map(IWorkshopMenu::getMenuDisplayName)
                 .collect(Collectors.joining(" > "));
 
-        System.out.println("\n" + path);
+        System.out.printf("%n%s%n", path);
         System.out.println("-".repeat(path.length()));
     }
 
