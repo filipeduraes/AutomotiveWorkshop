@@ -26,7 +26,7 @@ public class MaintenanceModule
     {
         this.loggedEmployeeID = loggedEmployeeID;
 
-        ParameterizedType serviceIDListType = Persistence.createParameterizedType(ArrayList.class, UUID.class);
+        ParameterizedType serviceIDListType = Persistence.createParameterizedType(HashSet.class, UUID.class);
 
         serviceOrderModule = new CrudModule<>(WorkshopPaths.SERVICES_PATH, ServiceOrder.class);
         openedServices = Persistence.loadFile(WorkshopPaths.OPENED_SERVICES_PATH, serviceIDListType, new HashSet<>());

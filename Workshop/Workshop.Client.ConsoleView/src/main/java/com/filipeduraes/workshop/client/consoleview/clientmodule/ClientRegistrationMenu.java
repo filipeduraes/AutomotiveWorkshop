@@ -2,10 +2,13 @@
 
 package com.filipeduraes.workshop.client.consoleview.clientmodule;
 
-import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
+import com.filipeduraes.workshop.client.consoleview.input.CPFInputValidator;
+import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.consoleview.input.EmailInputValidator;
+import com.filipeduraes.workshop.client.consoleview.input.PhoneInputValidator;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
@@ -28,10 +31,10 @@ public class ClientRegistrationMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         final String userName = ConsoleInput.readLine("Insira o nome completo do cliente: ");
-        final String userPhoneNumber = ConsoleInput.readLine("Insira o telefone do cliente: ");
-        final String userEmail = ConsoleInput.readLine("Insira o email do cliente: ");
+        final String userPhoneNumber = ConsoleInput.readValidatedLine("Insira o telefone do cliente: ", new PhoneInputValidator());
+        final String userEmail = ConsoleInput.readValidatedLine("Insira o email do cliente: ", new EmailInputValidator());
         final String userAddress = ConsoleInput.readLine("Insira o endereço do cliente: ");
-        final String userCPF = ConsoleInput.readLine("Insira o CPF do cliente: ");
+        final String userCPF = ConsoleInput.readValidatedLine("Insira o CPF do cliente: ", new CPFInputValidator());
         
         final ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
         ClientDTO clientDTO = new ClientDTO(userName, userPhoneNumber, userEmail, userAddress, userCPF);

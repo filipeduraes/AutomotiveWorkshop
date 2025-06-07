@@ -1,12 +1,10 @@
 package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 
-import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
+import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
-import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.dtos.ServiceDTO;
-import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.*;
 
 public class SelectOpenedAppointmentMenu implements IWorkshopMenu

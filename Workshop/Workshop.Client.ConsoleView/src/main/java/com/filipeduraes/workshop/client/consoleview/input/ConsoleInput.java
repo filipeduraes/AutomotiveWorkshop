@@ -1,5 +1,5 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.client.consoleview;
+package com.filipeduraes.workshop.client.consoleview.input;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +35,11 @@ public class ConsoleInput
      */
     public static String readLine(String message)
     {
-        System.out.println(message);
+        if(!message.isBlank())
+        {
+            System.out.println(message);
+        }
+
         return readLine();
     }
 
@@ -89,6 +93,24 @@ public class ConsoleInput
             e.printStackTrace(System.out);
             return "";
         }
+    }
+
+    public static String readValidatedLine(IInputValidator inputValidator)
+    {
+        return readValidatedLine("", inputValidator);
+    }
+
+    public static String readValidatedLine(String message, IInputValidator inputValidator)
+    {
+        String input = readLine(message);
+
+        while (!inputValidator.validate(input))
+        {
+            System.out.println(inputValidator.getErrorMessage());
+            input = readLine(message);
+        }
+
+        return input;
     }
 
     /**

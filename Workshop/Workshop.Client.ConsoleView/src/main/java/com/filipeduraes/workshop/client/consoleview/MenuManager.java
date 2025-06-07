@@ -1,6 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 
 package com.filipeduraes.workshop.client.consoleview;
+import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.viewmodel.*;
 
 import java.util.ArrayDeque;

@@ -2,7 +2,7 @@
 
 package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 
-import com.filipeduraes.workshop.client.consoleview.ConsoleInput;
+import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
