@@ -1,4 +1,4 @@
-﻿package com.filipeduraes.workshop.client.consoleview.input;
+package com.filipeduraes.workshop.client.consoleview.input;
 
 public class PhoneInputValidator implements IInputValidator
 {
