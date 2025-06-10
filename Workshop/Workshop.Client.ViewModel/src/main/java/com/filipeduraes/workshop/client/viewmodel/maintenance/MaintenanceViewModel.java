@@ -1,6 +1,6 @@
 package com.filipeduraes.workshop.client.viewmodel.maintenance;
 
-import com.filipeduraes.workshop.client.dtos.ServiceDTO;
+import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
 import com.filipeduraes.workshop.utils.Observer;
 import java.util.UUID;
 
@@ -13,7 +13,7 @@ public class MaintenanceViewModel
     private ServiceFilterType filterType = ServiceFilterType.NONE;
     private String descriptionQueryPattern;
 
-    private ServiceDTO selectedService;
+    private ServiceOrderDTO selectedService;
     private String[] servicesDescriptions;
     private String currentStepDetailedDescription;
     private String currentStepShortDescription;
@@ -57,12 +57,12 @@ public class MaintenanceViewModel
     }
 
 
-    public ServiceDTO getSelectedService()
+    public ServiceOrderDTO getSelectedService()
     {
         return selectedService;
     }
 
-    public void setSelectedService(ServiceDTO selectedService)
+    public void setSelectedService(ServiceOrderDTO selectedService)
     {
         this.selectedService = selectedService;
     }

@@ -20,7 +20,7 @@ public class UserInfoViewModel
     public final Observer OnLoginStateChanged = new Observer();
 
     private List<String> possibleRoles = new ArrayList<>();
-    private LoginState loginState = LoginState.WAITING;
+    private LoginRequest loginRequest = LoginRequest.WAITING;
     private String name;
     private String email;
     private EmployeeRoleDTO selectedRole;
@@ -32,21 +32,21 @@ public class UserInfoViewModel
      *
      * @return estado atual de login
      */
-    public LoginState getLoginState()
+    public LoginRequest getLoginState()
     {
-        return loginState;
+        return loginRequest;
     }
 
     /**
      * Define um novo estado de login para o usuário
      *
-     * @param newLoginState novo estado de login
+     * @param newLoginRequest novo estado de login
      */
-    public void setLoginState(LoginState newLoginState)
+    public void setLoginState(LoginRequest newLoginRequest)
     {
-        if (newLoginState != loginState)
+        if (newLoginRequest != loginRequest)
         {
-            loginState = newLoginState;
+            loginRequest = newLoginRequest;
             OnLoginStateChanged.broadcast();
         }
     }

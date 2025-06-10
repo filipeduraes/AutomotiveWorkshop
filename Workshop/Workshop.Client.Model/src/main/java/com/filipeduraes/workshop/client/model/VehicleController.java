@@ -1,6 +1,7 @@
 package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
+import com.filipeduraes.workshop.client.model.mappers.VehicleMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
@@ -12,10 +13,18 @@ import com.filipeduraes.workshop.core.vehicle.Vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class VehicleController
 {
+    private final Map<VehicleRequest, Runnable> handlers = Map.of
+    (
+        VehicleRequest.REQUEST_CLIENT_VEHICLES, this::processClientVehiclesRequest,
+        VehicleRequest.REQUEST_VEHICLE_REGISTRATION, this::processVehicleRegistrationRequest,
+        VehicleRequest.REQUEST_SELECTED_VEHICLE_DETAILS, this::processVehicleDetailsRequest
+    );
+
     private final VehicleViewModel vehicleViewModel;
     private final ClientViewModel clientViewModel;
     private final CrudModule<Vehicle> vehicleModule;
@@ -38,23 +47,12 @@ public class VehicleController
 
     private void processVehicleRequest()
     {
-        switch (vehicleViewModel.getCurrentVehicleRequest())
+        VehicleRequest vehicleRequest = vehicleViewModel.getCurrentVehicleRequest();
+
+        if(handlers.containsKey(vehicleRequest))
         {
-            case REQUEST_CLIENT_VEHICLES:
-            {
-                processClientVehiclesRequest();
-                break;
-            }
-            case REQUEST_VEHICLE_REGISTRATION:
-            {
-                processVehicleRegistrationRequest();
-                break;
-            }
-            case REQUEST_SELECTED_VEHICLE_DETAILS:
-            {
-                processVehicleDetailsRequest();
-                break;
-            }
+            Runnable handler = handlers.get(vehicleRequest);
+            handler.run();
         }
     }
 
@@ -85,7 +83,7 @@ public class VehicleController
         {
             VehicleDTO registerRequestedVehicleDTO = vehicleViewModel.getSelectedVehicle();
 
-            Vehicle vehicle = convertDTOToVehicle(selectedClient, registerRequestedVehicleDTO);
+            Vehicle vehicle = VehicleMapper.fromDTO(selectedClient.getID(), registerRequestedVehicleDTO);
             UUID vehicleID = vehicleModule.registerEntity(vehicle);
             registerRequestedVehicleDTO.setID(vehicleID);
 
@@ -107,7 +105,7 @@ public class VehicleController
                 UUID selectedVehicleID = ownedVehiclesIDs.get(selectedVehicleIndex);
                 Vehicle vehicle = vehicleModule.getEntityWithID(selectedVehicleID);
 
-                VehicleDTO selectedVehicle = convertVehicleToDTO(vehicle);
+                VehicleDTO selectedVehicle = VehicleMapper.toDTO(vehicle);
 
                 vehicleViewModel.setSelectedVehicle(selectedVehicle);
                 vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_SUCCESS);
@@ -117,36 +115,6 @@ public class VehicleController
                 vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_FAILED);
             }
         }
-    }
-
-    private Vehicle convertDTOToVehicle(Client selectedClient, VehicleDTO vehicleDTO)
-    {
-        Vehicle vehicle = new Vehicle
-        (
-            selectedClient.getID(),
-            vehicleDTO.getModel(),
-            vehicleDTO.getColor(),
-            vehicleDTO.getVinNumber(),
-            vehicleDTO.getLicensePlate(),
-            vehicleDTO.getYear()
-        );
-
-        return vehicle;
-    }
-
-    private VehicleDTO convertVehicleToDTO(Vehicle vehicle)
-    {
-        VehicleDTO selectedVehicle = new VehicleDTO
-        (
-            vehicle.getID(),
-            vehicle.getModel(),
-            vehicle.getColor(),
-            vehicle.getVinNumber(),
-            vehicle.getLicensePlate(),
-            vehicle.getYear()
-        );
-
-        return selectedVehicle;
     }
 
     private Client getSelectedClient()

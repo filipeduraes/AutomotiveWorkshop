@@ -6,7 +6,7 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
-import com.filipeduraes.workshop.client.viewmodel.LoginState;
+import com.filipeduraes.workshop.client.viewmodel.LoginRequest;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 
 /**
@@ -42,9 +42,9 @@ public class LogInMenu implements IWorkshopMenu
         UserInfoViewModel viewModel = menuManager.getViewModelRegistry().getUserInfoViewModel();
         viewModel.setEmail(email);
         viewModel.setPasswordHash(password.hashCode());
-        viewModel.setLoginState(LoginState.LOGIN_REQUESTED);
+        viewModel.setLoginState(LoginRequest.LOGIN_REQUESTED);
         
-        if(viewModel.getLoginState() == LoginState.LOGIN_FAILED)
+        if(viewModel.getLoginState() == LoginRequest.LOGIN_FAILED)
         {
             System.out.println("Usuario não encontrado ou senha invalida, confira os dados e tente novamente.");
             int userInput = ConsoleInput.readOptionFromList("Escolha como prosseguir: ", loginFailOptions);

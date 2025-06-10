@@ -7,7 +7,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.input.EmailInputValidator;
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
-import com.filipeduraes.workshop.client.viewmodel.LoginState;
+import com.filipeduraes.workshop.client.viewmodel.LoginRequest;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 
@@ -33,11 +33,11 @@ public class RegisterAdministrator implements IWorkshopMenu
         userInfoViewModel.setEmail(email);
         userInfoViewModel.setPasswordHash(password.hashCode());
         userInfoViewModel.setSelectedRole(EmployeeRoleDTO.ADMINISTRATOR);
-        userInfoViewModel.setLoginState(LoginState.SIGNIN_REQUESTED);
+        userInfoViewModel.setLoginState(LoginRequest.SIGNIN_REQUESTED);
 
         System.out.println("Cadastro criado com sucesso!");
 
-        userInfoViewModel.setLoginState(LoginState.LOGIN_REQUESTED);
+        userInfoViewModel.setLoginState(LoginRequest.LOGIN_REQUESTED);
 
         return MenuResult.replace(new MainMenu());
     }

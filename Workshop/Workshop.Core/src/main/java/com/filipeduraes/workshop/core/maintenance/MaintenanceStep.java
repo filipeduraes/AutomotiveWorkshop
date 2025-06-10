@@ -4,10 +4,10 @@ public enum MaintenanceStep
 {
     CREATED("Criado"),
     APPOINTMENT("Agendamento"),
-    ASSESSMENT("Avaliacao"),
+    ASSESSMENT("Inspecao"),
     MAINTENANCE("Manutencao");
 
-    private String displayName;
+    private final String displayName;
 
     MaintenanceStep(String displayName)
     {

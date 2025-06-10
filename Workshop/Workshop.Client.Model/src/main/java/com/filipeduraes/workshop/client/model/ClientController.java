@@ -3,6 +3,7 @@
 package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
+import com.filipeduraes.workshop.client.model.mappers.ClientMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.SearchByOption;
@@ -24,8 +25,12 @@ import java.util.function.Function;
  */
 public class ClientController
 {
-    private final ClientViewModel clientViewModel;
-    private final CrudModule<Client> clientModule;
+    private final Map<ClientRequest, Runnable> handlers = Map.of
+    (
+        ClientRequest.REGISTER_CLIENT, this::registerClient,
+        ClientRequest.SEARCH_CLIENTS, this::searchClients,
+        ClientRequest.LOAD_CLIENT_DATA, this::loadClientData
+    );
 
     private final Map<SearchByOption, Function<Client, String>> clientSearchOptions = Map.of
     (
@@ -34,6 +39,9 @@ public class ClientController
         SearchByOption.EMAIL, Client::getEmail,
         SearchByOption.PHONE, Client::getPhoneNumber
     );
+
+    private final ClientViewModel clientViewModel;
+    private final CrudModule<Client> clientModule;
 
     private List<Client> foundClients;
 
@@ -62,41 +70,43 @@ public class ClientController
 
     private void processClientRequest()
     {
-        switch (clientViewModel.getCurrentRequest())
+        ClientRequest clientRequest = clientViewModel.getCurrentRequest();
+
+        if(handlers.containsKey(clientRequest))
         {
-            case REGISTER_CLIENT:
-            {
-
-                ClientDTO client = clientViewModel.getClient();
-                Client newClient = convertDTOToClient(client);
-                UUID clientID = clientModule.registerEntity(newClient);
-                client.setID(clientID);
-                break;
-            }
-            case SEARCH_CLIENTS:
-            {
-                final String searchPattern = clientViewModel.getSearchPattern();
-                Function<Client, String> clientStringExtractor = clientSearchOptions.get(clientViewModel.getSearchByOption());
-                foundClients = clientModule.searchEntitiesWithPattern(searchPattern, clientStringExtractor);
-
-                List<String> clientDescriptions = convertClientsToClientDescriptions(foundClients);
-                clientViewModel.setFoundClientDescriptions(clientDescriptions);
-                break;
-            }
-            case LOAD_CLIENT_DATA:
-            {
-                final int selectedFoundClientIndex = clientViewModel.getSelectedFoundClientIndex();
-
-                if (selectedFoundClientIndex >= 0 && selectedFoundClientIndex < foundClients.size())
-                {
-                    Client selectedFoundClient = foundClients.get(selectedFoundClientIndex);
-                    clientViewModel.setClient(convertClientToDTO(selectedFoundClient));
-                }
-                break;
-            }
+            Runnable handler = handlers.get(clientRequest);
+            handler.run();
+            clientViewModel.setCurrentRequest(ClientRequest.NONE);
         }
+    }
 
-        clientViewModel.setCurrentRequest(ClientRequest.NONE);
+    private void registerClient()
+    {
+        ClientDTO client = clientViewModel.getClient();
+        Client newClient = ClientMapper.fromDTO(client);
+        UUID clientID = clientModule.registerEntity(newClient);
+        client.setID(clientID);
+    }
+
+    private void searchClients()
+    {
+        final String searchPattern = clientViewModel.getSearchPattern();
+        Function<Client, String> clientStringExtractor = clientSearchOptions.get(clientViewModel.getSearchByOption());
+        foundClients = clientModule.searchEntitiesWithPattern(searchPattern, clientStringExtractor);
+
+        List<String> clientDescriptions = convertClientsToClientDescriptions(foundClients);
+        clientViewModel.setFoundClientDescriptions(clientDescriptions);
+    }
+
+    private void loadClientData()
+    {
+        final int selectedFoundClientIndex = clientViewModel.getSelectedFoundClientIndex();
+
+        if (selectedFoundClientIndex >= 0 && selectedFoundClientIndex < foundClients.size())
+        {
+            Client selectedFoundClient = foundClients.get(selectedFoundClientIndex);
+            clientViewModel.setClient(ClientMapper.toDTO(selectedFoundClient));
+        }
     }
 
     private List<String> convertClientsToClientDescriptions(List<Client> clients)
@@ -110,44 +120,5 @@ public class ClientController
         }
 
         return clientNames;
-    }
-
-    private ClientDTO convertClientToDTO(Client client)
-    {
-        return new ClientDTO
-        (
-            client.getID(),
-            client.getName(),
-            client.getEmail(),
-            client.getPhoneNumber(),
-            client.getAddress(),
-            client.getMaskedCPF()
-        );
-    }
-
-    private Client convertDTOToClient(ClientDTO clientDTO)
-    {
-        return new Client
-        (
-            clientDTO.getName(),
-            clientDTO.getEmail(),
-            clientDTO.getPhoneNumber(),
-            clientDTO.getAddress(),
-            maskCPF(clientDTO.getCPF())
-        );
-    }
-
-    private String maskCPF(String cpf)
-    {
-        String numberOnlyCPF = cpf.replaceAll("\\D", ""); // Substitui qualquer caractere não numérico por uma string vazia
-
-        if(numberOnlyCPF.length() != 11)
-        {
-            return "";
-        }
-
-        String thirdPart = numberOnlyCPF.substring(6, 9);
-        String fourthPart = numberOnlyCPF.substring(9);
-        return String.format("XXX.XXX.%s-%s", thirdPart, fourthPart);
     }
 }

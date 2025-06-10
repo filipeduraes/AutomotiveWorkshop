@@ -8,7 +8,7 @@ package com.filipeduraes.workshop.client.viewmodel;
  *
  * @author Filipe Durães
  */
-public enum LoginState
+public enum LoginRequest
 {
     /**
      * Estado inicial quando nenhuma ação de autenticação foi tomada

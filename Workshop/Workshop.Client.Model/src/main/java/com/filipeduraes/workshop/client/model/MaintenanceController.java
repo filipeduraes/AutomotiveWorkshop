@@ -3,8 +3,9 @@
 package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
-import com.filipeduraes.workshop.client.dtos.ServiceDTO;
+import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
+import com.filipeduraes.workshop.client.model.mappers.ServiceOrderMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceRequest;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
@@ -20,7 +21,6 @@ import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.util.function.Predicate;
@@ -31,6 +31,13 @@ import java.util.function.Predicate;
  */
 public class MaintenanceController 
 {
+    private final Map<MaintenanceRequest, Runnable> handlers = Map.of
+    (
+        MaintenanceRequest.REQUEST_REGISTER_APPOINTMENT, this::registerNewService,
+        MaintenanceRequest.REQUEST_SERVICES, this::requestServices,
+        MaintenanceRequest.REQUEST_DETAILED_SERVICE_INFO, this::requestDetailedServiceInfo
+    );
+
     private final MaintenanceViewModel maintenanceViewModel;
     private final VehicleViewModel vehicleViewModel;
     private final ClientViewModel clientViewModel;
@@ -55,31 +62,12 @@ public class MaintenanceController
 
     private void processRequest()
     {
-        switch (maintenanceViewModel.getMaintenanceRequest())
+        MaintenanceRequest maintenanceRequest = maintenanceViewModel.getMaintenanceRequest();
+
+        if(handlers.containsKey(maintenanceRequest))
         {
-            case REQUEST_REGISTER_APPOINTMENT:
-            {
-                registerNewService();
-                break;
-            }
-            case REQUEST_SERVICES:
-            {
-                requestServices();
-                break;
-            }
-            case REQUEST_DETAILED_SERVICE_INFO:
-            {
-                requestDetailedServiceInfo();
-                break;
-            }
-            case REQUEST_START_STEP:
-            {
-                break;
-            }
-            case REQUEST_FINISH_STEP:
-            {
-                break;
-            }
+            Runnable handler = handlers.get(maintenanceRequest);
+            handler.run();
         }
     }
 
@@ -139,17 +127,9 @@ public class MaintenanceController
         }
 
         ServiceOrder serviceOrder = queriedEntities.get(selectedMaintenanceIndex);
+        ServiceOrderDTO serviceOrderDTO = ServiceOrderMapper.toDTO(serviceOrder, workshop);
 
-        String serviceState = serviceOrder.getCurrentMaintenanceStep().toString();
-        String shortDescription = serviceOrder.getCurrentStep().getShortDescription();
-        String detailedDescription = serviceOrder.getCurrentStep().getDetailedDescription();
-
-        Client owner = workshop.getClientModule().getEntityWithID(serviceOrder.getClientID());
-        Vehicle vehicle = workshop.getVehicleModule().getEntityWithID(serviceOrder.getVehicleID());
-
-        ServiceDTO serviceDTO = new ServiceDTO(serviceOrder.getID(), serviceState, shortDescription, detailedDescription, owner.getName(), vehicle.toString());
-
-        maintenanceViewModel.setSelectedService(serviceDTO);
+        maintenanceViewModel.setSelectedService(serviceOrderDTO);
         maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_SUCCESS);
     }
 

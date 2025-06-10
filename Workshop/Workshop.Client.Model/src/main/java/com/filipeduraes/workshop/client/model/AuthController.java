@@ -3,20 +3,28 @@
 package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
-import com.filipeduraes.workshop.client.viewmodel.LoginState;
+import com.filipeduraes.workshop.client.model.mappers.EmployeeRoleMapper;
+import com.filipeduraes.workshop.client.viewmodel.LoginRequest;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import com.filipeduraes.workshop.core.auth.AuthModule;
 import com.filipeduraes.workshop.core.auth.EmployeeRole;
 import com.filipeduraes.workshop.core.auth.LocalEmployee;
-import java.util.ArrayList;
+
+import java.util.Map;
 
 /**
  * Controlador responsável por gerenciar a autenticação e registro de usuários no sistema.
  *
  * @author Filipe Durães
  */
-public class LoginController
+public class AuthController
 {
+    private final Map<LoginRequest, Runnable> handlers = Map.of
+    (
+        LoginRequest.LOGIN_REQUESTED, this::processLoginRequest,
+        LoginRequest.SIGNIN_REQUESTED, this::processSignInRequest
+    );
+
     private final UserInfoViewModel viewModel;
     private final AuthModule authModule;
 
@@ -26,7 +34,7 @@ public class LoginController
      * @param viewModel  ViewModel com dados do usuário
      * @param authModule Módulo de autenticação
      */
-    public LoginController(UserInfoViewModel viewModel, AuthModule authModule)
+    public AuthController(UserInfoViewModel viewModel, AuthModule authModule)
     {
         this.viewModel = viewModel;
 
@@ -44,20 +52,12 @@ public class LoginController
 
     private void updateLoginState()
     {
-        LoginState loginState = viewModel.getLoginState();
+        LoginRequest loginRequest = viewModel.getLoginState();
 
-        switch (loginState)
+        if(handlers.containsKey(loginRequest))
         {
-            case LOGIN_REQUESTED:
-            {
-                processLoginRequest();
-                break;
-            }
-            case SIGNIN_REQUESTED:
-            {
-                processSignInRequest();
-                break;
-            }
+            Runnable handler = handlers.get(loginRequest);
+            handler.run();
         }
     }
 
@@ -71,44 +71,22 @@ public class LoginController
             String userName = authModule.getLoggedUser().getName();
 
             viewModel.setName(userName);
-            viewModel.setSelectedRole(convertRoleToDTO(role));
-            viewModel.setLoginState(LoginState.LOGIN_SUCCESS);
+            viewModel.setSelectedRole(EmployeeRoleMapper.toDTO(role));
+            viewModel.setLoginState(LoginRequest.LOGIN_SUCCESS);
         }
         else
         {
-            viewModel.setLoginState(LoginState.LOGIN_FAILED);
+            viewModel.setLoginState(LoginRequest.LOGIN_FAILED);
         }
     }
 
     private void processSignInRequest()
     {
         EmployeeRoleDTO selectedRole = viewModel.getSelectedRole();
-        EmployeeRole role = convertDTOToRole(selectedRole);
+        EmployeeRole role = EmployeeRoleMapper.fromDTO(selectedRole);
 
         LocalEmployee newUser = new LocalEmployee(viewModel.getName(), viewModel.getEmail(), role, viewModel.getPasswordHash());
 
         authModule.registerUser(newUser);
-    }
-
-    private static EmployeeRole convertDTOToRole(EmployeeRoleDTO selectedRole)
-    {
-        return switch (selectedRole)
-        {
-            case COSTUMER_SERVICE -> EmployeeRole.COSTUMER_SERVICE;
-            case MECHANIC -> EmployeeRole.MECHANIC;
-            case SPECIALIST_MECHANIC -> EmployeeRole.SPECIALIST_MECHANIC;
-            case ADMINISTRATOR -> EmployeeRole.ADMINISTRATOR;
-        };
-    }
-
-    private static EmployeeRoleDTO convertRoleToDTO(EmployeeRole employeeRole)
-    {
-        return switch (employeeRole)
-        {
-            case COSTUMER_SERVICE -> EmployeeRoleDTO.COSTUMER_SERVICE;
-            case MECHANIC -> EmployeeRoleDTO.MECHANIC;
-            case SPECIALIST_MECHANIC -> EmployeeRoleDTO.SPECIALIST_MECHANIC;
-            case ADMINISTRATOR -> EmployeeRoleDTO.ADMINISTRATOR;
-        };
     }
 }

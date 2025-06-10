@@ -5,6 +5,7 @@ import java.util.UUID;
 public class VehicleDTO
 {
     private UUID id;
+    private UUID ownerID;
     private final String model;
     private final String color;
     private final String vinNumber;

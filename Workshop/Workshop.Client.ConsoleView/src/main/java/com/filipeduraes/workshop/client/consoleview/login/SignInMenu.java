@@ -7,10 +7,8 @@ import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
-import com.filipeduraes.workshop.client.viewmodel.LoginState;
+import com.filipeduraes.workshop.client.viewmodel.LoginRequest;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
-
-import java.util.List;
 
 /**
  * Menu responsável pelo cadastro de novos usuários no sistema.
@@ -61,7 +59,7 @@ public class SignInMenu implements IWorkshopMenu
         viewModel.setEmail(email);
         viewModel.setSelectedRole(employeeRoleDTOS[selectedRoleIndex]);
         viewModel.setPasswordHash(password.hashCode());
-        viewModel.setLoginState(LoginState.SIGNIN_REQUESTED);
+        viewModel.setLoginState(LoginRequest.SIGNIN_REQUESTED);
         
         return MenuResult.pop();
     }    

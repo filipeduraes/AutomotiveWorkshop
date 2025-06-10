@@ -2,7 +2,7 @@ package com.filipeduraes.workshop.client.dtos;
 
 import java.util.UUID;
 
-public class ServiceDTO
+public class ServiceOrderDTO
 {
     private final UUID id;
     private final String serviceState;
@@ -11,7 +11,7 @@ public class ServiceDTO
     private final String clientName;
     private final String vehicleDescription;
 
-    public ServiceDTO(UUID id, String serviceState, String shortDescription, String detailedDescription, String clientName, String vehicleDescription)
+    public ServiceOrderDTO(UUID id, String serviceState, String shortDescription, String detailedDescription, String clientName, String vehicleDescription)
     {
         this.id = id;
         this.serviceState = serviceState;
