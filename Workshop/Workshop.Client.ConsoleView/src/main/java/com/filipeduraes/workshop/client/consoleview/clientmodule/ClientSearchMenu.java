@@ -24,7 +24,7 @@ import java.util.List;
 public class ClientSearchMenu implements IWorkshopMenu
 {
     private final SearchByOption[] options = { SearchByOption.NAME, SearchByOption.CPF, SearchByOption.EMAIL, SearchByOption.PHONE };
-    private String[] optionsDisplayNames;
+    private final String[] optionsDisplayNames;
 
     public ClientSearchMenu()
     {
@@ -107,7 +107,7 @@ public class ClientSearchMenu implements IWorkshopMenu
         
         if (selectedClient == foundClientNames.size() + 1) 
         {
-            clientViewModel.resetSelectedFoundClientIndex();
+            clientViewModel.resetSelectedClient();
             return true;
         }
         

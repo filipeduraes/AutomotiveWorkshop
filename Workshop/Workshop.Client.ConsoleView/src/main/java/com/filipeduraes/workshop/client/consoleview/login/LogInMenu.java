@@ -33,10 +33,10 @@ public class LogInMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        System.out.println(" - Insira o email: ");
+        System.out.println(" - Insira o email:");
         String email = ConsoleInput.readLine();
         
-        System.out.println(" - Insira a senha: ");
+        System.out.println(" - Insira a senha:");
         String password = ConsoleInput.readLine();
        
         UserInfoViewModel viewModel = menuManager.getViewModelRegistry().getUserInfoViewModel();
@@ -54,6 +54,9 @@ public class LogInMenu implements IWorkshopMenu
                 return MenuResult.none();
             }
         }
+
+        System.out.println("\nUsuario logado com sucesso!");
+        System.out.printf(" - Nome: %s%n - Cargo: %s%n - Email: %s%n", viewModel.getName(), viewModel.getSelectedRole(), viewModel.getEmail());
 
         return MenuResult.replace(new MainMenu());
     }

@@ -28,12 +28,12 @@ public class ServiceDetailsMenu implements IWorkshopMenu
         {
             ServiceDTO selectedService = maintenanceViewModel.getSelectedService();
             System.out.println("Servico selecionado:");
-            System.out.printf(" - ID: %s", selectedService.getId());
-            System.out.printf(" - Estado: %s", selectedService.getServiceState());
-            System.out.printf(" - Descricao Curta: %s", selectedService.getShortDescription());
-            System.out.printf(" - Descricao Detalhada: %s", selectedService.getDetailedDescription());
-            System.out.printf(" - Cliente: %s", selectedService.getClientName());
-            System.out.printf(" - Veiculo: %s", selectedService.getVehicleDescription());
+            System.out.printf(" - ID: %s%n", selectedService.getId());
+            System.out.printf(" - Estado: %s%n", selectedService.getServiceState());
+            System.out.printf(" - Descricao Curta: %s%n", selectedService.getShortDescription());
+            System.out.printf(" - Descricao Detalhada: %s%n", selectedService.getDetailedDescription());
+            System.out.printf(" - Cliente: %s%n", selectedService.getClientName());
+            System.out.printf(" - Veiculo: %s%n", selectedService.getVehicleDescription());
         }
         else
         {

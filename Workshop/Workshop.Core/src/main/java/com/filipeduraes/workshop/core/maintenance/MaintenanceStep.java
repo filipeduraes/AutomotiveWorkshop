@@ -2,10 +2,23 @@ package com.filipeduraes.workshop.core.maintenance;
 
 public enum MaintenanceStep
 {
-    CREATED,
-    APPOINTMENT,
-    ASSESSMENT,
-    MAINTENANCE;
+    CREATED("Criado"),
+    APPOINTMENT("Agendamento"),
+    ASSESSMENT("Avaliacao"),
+    MAINTENANCE("Manutencao");
+
+    private String displayName;
+
+    MaintenanceStep(String displayName)
+    {
+        this.displayName = displayName;
+    }
+
+    @Override
+    public String toString()
+    {
+        return displayName;
+    }
 
     public static MaintenanceStep fromInt(int stepValue)
     {

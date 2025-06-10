@@ -55,6 +55,13 @@ public class QueryServicesMenu implements IWorkshopMenu
 
         String[] servicesDescriptions = maintenanceViewModel.getServicesDescriptions();
 
+        if(servicesDescriptions.length == 0)
+        {
+            lastSelectedFilter = ServiceFilterType.NONE;
+            boolean tryAgain = ConsoleInput.readConfirmation("Nenhum servico encontrado, deseja tentar novamente?");
+            return tryAgain ? MenuResult.none() : MenuResult.pop();
+        }
+
         System.out.println("Servicos encontados:");
 
         int selectedAppointment = ConsoleInput.readOptionFromList("Selecione um servico aberto", servicesDescriptions, true);
@@ -63,8 +70,11 @@ public class QueryServicesMenu implements IWorkshopMenu
         {
             maintenanceViewModel.setSelectedMaintenanceIndex(selectedAppointment);
 
-            return MenuResult.replace(new ServiceDetailsMenu());
+            return MenuResult.push(new ServiceDetailsMenu());
         }
+
+        viewModelRegistry.getClientViewModel().resetSelectedClient();
+        maintenanceViewModel.resetQuery();
 
         System.out.println("Operacao cancelada, nenhum agendamento selecionado.");
         return MenuResult.pop();
@@ -73,7 +83,7 @@ public class QueryServicesMenu implements IWorkshopMenu
     private ServiceFilterType selectFilterOption()
     {
         boolean filterService = ConsoleInput.readConfirmation("Deseja filtrar os servicos?");
-        int selectedFilterOption = 0;
+        int selectedFilterOption = -1;
 
         ServiceFilterType[] filterTypes = ServiceFilterType.values();
         String[] filterTypesDisplayNames = Arrays.stream(filterTypes)
@@ -85,13 +95,12 @@ public class QueryServicesMenu implements IWorkshopMenu
         {
             selectedFilterOption = ConsoleInput.readOptionFromList("Qual filtro deseja usar?", filterTypesDisplayNames, true);
 
-            if(selectedFilterOption >= filterTypes.length)
+            if(selectedFilterOption >= filterTypesDisplayNames.length)
             {
-                selectedFilterOption = 0;
+                selectedFilterOption = -1;
             }
-
         }
 
-        return filterTypes[selectedFilterOption];
+        return filterTypes[selectedFilterOption + 1];
     }
 }

@@ -67,7 +67,11 @@ public class LoginController
 
         if (loginWasSuccessful)
         {
-            viewModel.setName(authModule.getLoggedUser().getName());
+            EmployeeRole role = authModule.getLoggedUser().getRole();
+            String userName = authModule.getLoggedUser().getName();
+
+            viewModel.setName(userName);
+            viewModel.setSelectedRole(convertRoleToDTO(role));
             viewModel.setLoginState(LoginState.LOGIN_SUCCESS);
         }
         else
@@ -79,17 +83,32 @@ public class LoginController
     private void processSignInRequest()
     {
         EmployeeRoleDTO selectedRole = viewModel.getSelectedRole();
-        EmployeeRole role = EmployeeRole.COSTUMER_SERVICE;
-
-        switch (selectedRole)
-        {
-            case MECHANIC -> role = EmployeeRole.MECHANIC;
-            case SPECIALIST_MECHANIC -> role = EmployeeRole.SPECIALIST_MECHANIC;
-            case ADMINISTRATOR -> role = EmployeeRole.ADMINISTRATOR;
-        }
+        EmployeeRole role = convertDTOToRole(selectedRole);
 
         LocalEmployee newUser = new LocalEmployee(viewModel.getName(), viewModel.getEmail(), role, viewModel.getPasswordHash());
 
         authModule.registerUser(newUser);
+    }
+
+    private static EmployeeRole convertDTOToRole(EmployeeRoleDTO selectedRole)
+    {
+        return switch (selectedRole)
+        {
+            case COSTUMER_SERVICE -> EmployeeRole.COSTUMER_SERVICE;
+            case MECHANIC -> EmployeeRole.MECHANIC;
+            case SPECIALIST_MECHANIC -> EmployeeRole.SPECIALIST_MECHANIC;
+            case ADMINISTRATOR -> EmployeeRole.ADMINISTRATOR;
+        };
+    }
+
+    private static EmployeeRoleDTO convertRoleToDTO(EmployeeRole employeeRole)
+    {
+        return switch (employeeRole)
+        {
+            case COSTUMER_SERVICE -> EmployeeRoleDTO.COSTUMER_SERVICE;
+            case MECHANIC -> EmployeeRoleDTO.MECHANIC;
+            case SPECIALIST_MECHANIC -> EmployeeRoleDTO.SPECIALIST_MECHANIC;
+            case ADMINISTRATOR -> EmployeeRoleDTO.ADMINISTRATOR;
+        };
     }
 }

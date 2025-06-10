@@ -104,9 +104,10 @@ public class ClientViewModel
     /**
      * Reseta a seleção de cliente para nenhum selecionado.
      */
-    public void resetSelectedFoundClientIndex()
+    public void resetSelectedClient()
     {
         selectedFoundClientIndex = -1;
+        client = null;
     }
 
     /**
@@ -116,7 +117,7 @@ public class ClientViewModel
      */
     public boolean hasSelectedClient()
     {
-        return selectedFoundClientIndex >= 0;
+        return selectedFoundClientIndex >= 0 && getClient() != null;
     }
 
     public ClientDTO getClient()

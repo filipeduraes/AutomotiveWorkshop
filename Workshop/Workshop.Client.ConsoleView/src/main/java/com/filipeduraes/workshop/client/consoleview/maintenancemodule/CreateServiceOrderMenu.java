@@ -58,6 +58,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
         if(maintenanceViewModel.getMaintenanceRequest() == MaintenanceRequest.REQUEST_SUCCESS)
         {
             System.out.printf("Agendamento registrado com sucesso! ID: %s%n", maintenanceViewModel.getCurrentMaintenanceID());
+            viewModelRegistry.getClientViewModel().resetSelectedClient();
             return MenuResult.pop();
         }
 
@@ -87,8 +88,6 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
     {
         if(!vehicleViewModel.hasSelectedVehicle())
         {
-            System.out.println("- VEICULO");
-
             int selectedOption = ConsoleInput.readOptionFromList("Selecione o veiculo", new String[] { selectVehicleMessage }, true);
 
             if(selectedOption == 0)

@@ -132,4 +132,11 @@ public class MaintenanceViewModel
     {
         this.selectedMaintenanceIndex = selectedMaintenanceIndex;
     }
+
+    public void resetQuery()
+    {
+        queryType = ServiceQueryType.GENERAL;
+        filterType = ServiceFilterType.NONE;
+        descriptionQueryPattern = "";
+    }
 }

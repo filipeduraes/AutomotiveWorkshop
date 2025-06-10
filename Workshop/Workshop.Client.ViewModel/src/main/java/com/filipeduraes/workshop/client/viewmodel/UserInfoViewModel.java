@@ -135,16 +135,6 @@ public class UserInfoViewModel
     }
 
     /**
-     * Obtém o nome do papel selecionado
-     *
-     * @return nome do papel atual ou "INVALID_ROLE" se inválido
-     */
-    public String getSelectedRoleName()
-    {
-        return selectedRole.toString();
-    }
-
-    /**
      * Obtém o índice do papel selecionado
      *
      * @return índice do papel atual

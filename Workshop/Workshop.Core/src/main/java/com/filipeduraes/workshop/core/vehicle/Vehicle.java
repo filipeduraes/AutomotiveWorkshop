@@ -68,4 +68,10 @@ public class Vehicle extends WorkshopEntity
     {
         return ownerID;
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("%s %s (%s)", model, color, year);
+    }
 }

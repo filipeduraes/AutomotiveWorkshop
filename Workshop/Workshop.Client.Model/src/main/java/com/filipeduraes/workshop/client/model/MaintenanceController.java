@@ -3,6 +3,7 @@
 package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
+import com.filipeduraes.workshop.client.dtos.ServiceDTO;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceRequest;
@@ -18,6 +19,9 @@ import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.TextStyle;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -31,6 +35,8 @@ public class MaintenanceController
     private final VehicleViewModel vehicleViewModel;
     private final ClientViewModel clientViewModel;
     private final Workshop workshop;
+
+    private List<ServiceOrder> queriedEntities = new ArrayList<>();
 
     public MaintenanceController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
@@ -63,6 +69,7 @@ public class MaintenanceController
             }
             case REQUEST_DETAILED_SERVICE_INFO:
             {
+                requestDetailedServiceInfo();
                 break;
             }
             case REQUEST_START_STEP:
@@ -99,29 +106,53 @@ public class MaintenanceController
         ServiceQueryType queryType = maintenanceViewModel.getQueryType();
         ServiceFilterType filterType = maintenanceViewModel.getFilterType();
 
-        List<ServiceOrder> entities = new ArrayList<>();
-
         if(filterType == ServiceFilterType.NONE)
         {
-            entities = getServicesWithoutFiltering(queryType);
+            queriedEntities = getServicesWithoutFiltering(queryType);
         }
         else if(filterType == ServiceFilterType.CLIENT)
         {
-            entities = getServicesFilteringByClient(queryType, clientViewModel.getClient().getID());
+            queriedEntities = getServicesFilteringByClient(queryType, clientViewModel.getClient().getID());
         }
         else if(filterType == ServiceFilterType.DESCRIPTION_PATTERN)
         {
             String descriptionQueryPattern = maintenanceViewModel.getDescriptionQueryPattern();
-            entities = getServicesFilteringByDescription(queryType, descriptionQueryPattern);
+            queriedEntities = getServicesFilteringByDescription(queryType, descriptionQueryPattern);
         }
 
-        String[] descriptions = entities.stream()
+        String[] descriptions = queriedEntities.stream()
                                         .map(this::getServiceListingName)
                                         .toArray(String[]::new);
 
         maintenanceViewModel.setServicesDescriptions(descriptions);
         maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_SUCCESS);
     }
+
+    private void requestDetailedServiceInfo()
+    {
+        int selectedMaintenanceIndex = maintenanceViewModel.getSelectedMaintenanceIndex();
+
+        if(selectedMaintenanceIndex < 0 || selectedMaintenanceIndex >= queriedEntities.size())
+        {
+            maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_FAILED);
+            return;
+        }
+
+        ServiceOrder serviceOrder = queriedEntities.get(selectedMaintenanceIndex);
+
+        String serviceState = serviceOrder.getCurrentMaintenanceStep().toString();
+        String shortDescription = serviceOrder.getCurrentStep().getShortDescription();
+        String detailedDescription = serviceOrder.getCurrentStep().getDetailedDescription();
+
+        Client owner = workshop.getClientModule().getEntityWithID(serviceOrder.getClientID());
+        Vehicle vehicle = workshop.getVehicleModule().getEntityWithID(serviceOrder.getVehicleID());
+
+        ServiceDTO serviceDTO = new ServiceDTO(serviceOrder.getID(), serviceState, shortDescription, detailedDescription, owner.getName(), vehicle.toString());
+
+        maintenanceViewModel.setSelectedService(serviceDTO);
+        maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_SUCCESS);
+    }
+
 
     private String getServiceListingName(ServiceOrder service)
     {
@@ -137,8 +168,11 @@ public class MaintenanceController
             return "INVALID_SERVICE";
         }
 
-        String vehicleDescription = String.format("%s %s (%s)", vehicle.getModel(), vehicle.getColor(), vehicle.getLicensePlate());
-        return String.format("%s — %s — %s — %s", shortDescription, owner.getName(), vehicleDescription, service.getCurrentStep().getFinishDate());
+        LocalDateTime startDate = service.getCurrentStep().getStartDate();
+        String monthName = startDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("pt-br"));
+        String formattedDate = String.format("%d %s %d:%d", startDate.getDayOfMonth(), monthName, startDate.getHour(), startDate.getMinute());
+
+        return String.format("%s — %s — %s — %s", shortDescription, owner.getName(), vehicle, formattedDate);
     }
 
     private List<ServiceOrder> getServicesWithoutFiltering(ServiceQueryType queryType)
@@ -153,7 +187,15 @@ public class MaintenanceController
 
     private List<ServiceOrder> getServicesFilteringByDescription(ServiceQueryType queryType, String pattern)
     {
-        return getServicesFiltering(queryType, s -> s.getCurrentStep().getDetailedDescription().contains(pattern));
+        String lowerCasePattern = pattern.toLowerCase();
+
+        return getServicesFiltering(queryType, s ->
+        {
+            String shortDescription = s.getCurrentStep().getShortDescription().toLowerCase();
+            String detailedDescription = s.getCurrentStep().getDetailedDescription().toLowerCase();
+
+            return shortDescription.contains(lowerCasePattern) || detailedDescription.contains(lowerCasePattern);
+        });
     }
 
     private List<ServiceOrder> getServicesFiltering(ServiceQueryType queryType, Predicate<ServiceOrder> filter)
