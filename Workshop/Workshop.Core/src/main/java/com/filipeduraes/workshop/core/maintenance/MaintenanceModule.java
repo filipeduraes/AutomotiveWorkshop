@@ -8,7 +8,6 @@ import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 import com.filipeduraes.workshop.core.store.Purchase;
 
 import java.lang.reflect.ParameterizedType;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -33,32 +32,28 @@ public class MaintenanceModule
         userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDListType, new HashSet<>());
     }
 
-    public String[] fetchOpenedAppointmentsDescriptions()
+    public CrudModule<ServiceOrder> getServiceOrderModule()
     {
-        String[] descriptions = new String[openedServices.size()];
-        int index = 0;
-
-        for(UUID openedServiceID : openedServices)
-        {
-            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(openedServiceID);
-            ServiceStep currentStep = serviceOrder.getCurrentStep();
-
-            LocalDateTime startDate = currentStep.getStartDate();
-            String description = currentStep.getDescription();
-
-            descriptions[index] = String.format("%s: %s", startDate.toString(), description);
-            index++;
-        }
-
-        return descriptions;
+        return serviceOrderModule;
     }
 
-    public UUID registerNewAppointment(UUID vehicleID, String problemDescription)
+    public Set<UUID> getUserServices()
     {
-        ServiceOrder serviceOrder = new ServiceOrder(vehicleID);
+        return userServices;
+    }
+
+    public Set<UUID> getOpenedServices()
+    {
+        return openedServices;
+    }
+
+    public UUID registerNewAppointment(UUID clientID, UUID vehicleID, String shortDescription, String detailedDescription)
+    {
+        ServiceOrder serviceOrder = new ServiceOrder(clientID, vehicleID);
 
         serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
-        serviceOrder.getCurrentStep().setDescription(problemDescription);
+        serviceOrder.getCurrentStep().setShortDescription(shortDescription);
+        serviceOrder.getCurrentStep().setDetailedDescription(detailedDescription);
 
         UUID serviceID = serviceOrderModule.registerEntity(serviceOrder);
         openedServices.add(serviceID);
@@ -94,7 +89,7 @@ public class MaintenanceModule
 
             if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
             {
-                serviceOrder.getCurrentStep().setDescription(description);
+                serviceOrder.getCurrentStep().setDetailedDescription(description);
                 userServices.remove(serviceID);
 
                 Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
@@ -134,7 +129,7 @@ public class MaintenanceModule
         {
             ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(serviceID);
             ServiceStep currentStep = serviceOrder.getCurrentStep();
-            currentStep.setDescription(description);
+            currentStep.setDetailedDescription(description);
             serviceOrder.finish(services, purchase);
 
             ParameterizedType type = Persistence.createParameterizedType(HashSet.class, UUID.class);

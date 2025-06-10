@@ -12,7 +12,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
  *
  * @author Filipe Durães
  */
-public class ClientModuleMenu implements IWorkshopMenu 
+public class ClientMenu implements IWorkshopMenu
 {
     private final IWorkshopMenu[] menus = 
     {
@@ -23,7 +23,7 @@ public class ClientModuleMenu implements IWorkshopMenu
     @Override
     public String getMenuDisplayName() 
     {
-        return "Modulo de Clientes";
+        return "Cliente";
     }
 
     @Override

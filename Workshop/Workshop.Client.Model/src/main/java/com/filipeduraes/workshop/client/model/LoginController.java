@@ -2,6 +2,7 @@
 
 package com.filipeduraes.workshop.client.model;
 
+import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
 import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 import com.filipeduraes.workshop.core.auth.AuthModule;
@@ -31,16 +32,6 @@ public class LoginController
 
         this.viewModel.OnLoginStateChanged.addListener(this::updateLoginState);
         this.authModule = authModule;
-
-        EmployeeRole[] employeeRoles = EmployeeRole.values();
-        ArrayList<String> possibleRoles = new ArrayList<>();
-
-        for (EmployeeRole role : employeeRoles)
-        {
-            possibleRoles.add(role.getDisplayName());
-        }
-
-        this.viewModel.setPossibleRoles(possibleRoles);
     }
 
     /**
@@ -87,8 +78,16 @@ public class LoginController
 
     private void processSignInRequest()
     {
-        int selectedRole = viewModel.getSelectedRole();
-        EmployeeRole role = EmployeeRole.values()[selectedRole];
+        EmployeeRoleDTO selectedRole = viewModel.getSelectedRole();
+        EmployeeRole role = EmployeeRole.COSTUMER_SERVICE;
+
+        switch (selectedRole)
+        {
+            case MECHANIC -> role = EmployeeRole.MECHANIC;
+            case SPECIALIST_MECHANIC -> role = EmployeeRole.SPECIALIST_MECHANIC;
+            case ADMINISTRATOR -> role = EmployeeRole.ADMINISTRATOR;
+        }
+
         LocalEmployee newUser = new LocalEmployee(viewModel.getName(), viewModel.getEmail(), role, viewModel.getPasswordHash());
 
         authModule.registerUser(newUser);

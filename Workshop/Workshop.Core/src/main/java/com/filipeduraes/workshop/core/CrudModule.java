@@ -5,10 +5,7 @@ import com.filipeduraes.workshop.utils.ConsumerObserver;
 import com.filipeduraes.workshop.utils.FuzzyTokenMatcher;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -61,6 +58,11 @@ public class CrudModule<TEntity extends WorkshopEntity>
         return loadedEntities.get(id);
     }
 
+    public List<TEntity> getAllEntities()
+    {
+        return new ArrayList<>(loadedEntities.values());
+    }
+
     public List<TEntity> findEntitiesWithPredicate(Predicate<TEntity> predicate)
     {
         return loadedEntities.values()
@@ -91,5 +93,15 @@ public class CrudModule<TEntity extends WorkshopEntity>
     public void saveCurrentEntities()
     {
         Persistence.saveFile(loadedEntities, path);
+    }
+
+    public int getEntitiesCount()
+    {
+        return loadedEntities.size();
+    }
+
+    public boolean hasLoadedEntities()
+    {
+        return getEntitiesCount() > 0;
     }
 }

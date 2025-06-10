@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
 import com.filipeduraes.workshop.client.viewmodel.LoginState;
 import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
 
@@ -34,18 +35,22 @@ public class SignInMenu implements IWorkshopMenu
         System.out.println(" - Insira o nome completo: ");
         String userName = ConsoleInput.readLine();
         
-        System.out.println("");
-        List<String> possibleRoles = viewModel.getPossibleRoles();
-        
-        for(int i = 0; i < possibleRoles.size(); i++)
+        System.out.println();
+
+        EmployeeRoleDTO[] employeeRoleDTOS = EmployeeRoleDTO.values();
+        String[] options = new String[employeeRoleDTOS.length];
+
+        for(int i = 0; i < employeeRoleDTOS.length; i++)
         {
-            String option = String.format(" [%d]: %s", i, possibleRoles.get(i));
+            String roleDisplayName = employeeRoleDTOS[i].toString();
+            String option = String.format(" [%d]: %s", i, roleDisplayName);
             System.out.println(option);
+
+            options[i] = roleDisplayName;
         }
-        
-        System.out.println(" - Insira o seu cargo: ");
-        int selectedRole = Integer.parseInt(ConsoleInput.readLine());
-        
+
+        int selectedRoleIndex = ConsoleInput.readOptionFromList(" - Insira o cargo do colaborador:", options);
+
         System.out.println(" - Insira o email: ");
         String email = ConsoleInput.readLine();
         
@@ -54,7 +59,7 @@ public class SignInMenu implements IWorkshopMenu
         
         viewModel.setName(userName);
         viewModel.setEmail(email);
-        viewModel.setSelectedRole(selectedRole);
+        viewModel.setSelectedRole(employeeRoleDTOS[selectedRoleIndex]);
         viewModel.setPasswordHash(password.hashCode());
         viewModel.setLoginState(LoginState.SIGNIN_REQUESTED);
         

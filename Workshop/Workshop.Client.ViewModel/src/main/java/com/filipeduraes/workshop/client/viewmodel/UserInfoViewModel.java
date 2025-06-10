@@ -1,6 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.client.viewmodel;
 
+import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
 import com.filipeduraes.workshop.utils.Observer;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,8 @@ public class UserInfoViewModel
     private LoginState loginState = LoginState.WAITING;
     private String name;
     private String email;
+    private EmployeeRoleDTO selectedRole;
     private int passwordHash;
-    private int selectedRole;
     private int accessLevel;
 
     /**
@@ -133,28 +134,6 @@ public class UserInfoViewModel
         accessLevel = newAccessLevel;
     }
 
-
-    /**
-     * Obtém a lista de papéis possíveis para o usuário
-     *
-     * @return lista de papéis disponíveis
-     */
-    public List<String> getPossibleRoles()
-    {
-        return possibleRoles;
-    }
-
-    /**
-     * Define a lista de papéis possíveis para o usuário
-     *
-     * @param newPossibleRoles nova lista de papéis
-     */
-    public void setPossibleRoles(ArrayList<String> newPossibleRoles)
-    {
-        possibleRoles = newPossibleRoles;
-    }
-
-
     /**
      * Obtém o nome do papel selecionado
      *
@@ -162,12 +141,7 @@ public class UserInfoViewModel
      */
     public String getSelectedRoleName()
     {
-        if (selectedRole >= 0 && selectedRole < possibleRoles.size())
-        {
-            return possibleRoles.get(selectedRole);
-        }
-
-        return "INVALID_ROLE";
+        return selectedRole.toString();
     }
 
     /**
@@ -175,7 +149,7 @@ public class UserInfoViewModel
      *
      * @return índice do papel atual
      */
-    public int getSelectedRole()
+    public EmployeeRoleDTO getSelectedRole()
     {
         return selectedRole;
     }
@@ -185,7 +159,7 @@ public class UserInfoViewModel
      *
      * @param newSelectedRole novo índice de papel
      */
-    public void setSelectedRole(int newSelectedRole)
+    public void setSelectedRole(EmployeeRoleDTO newSelectedRole)
     {
         selectedRole = newSelectedRole;
     }

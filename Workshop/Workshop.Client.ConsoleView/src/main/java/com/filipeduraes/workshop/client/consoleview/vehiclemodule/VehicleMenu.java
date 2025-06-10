@@ -11,7 +11,7 @@ import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
  *
  * @author Filipe Durães
  */
-public class VehicleModuleMenu implements IWorkshopMenu
+public class VehicleMenu implements IWorkshopMenu
 {
     private final IWorkshopMenu[] menuOptions =
     {
@@ -22,7 +22,7 @@ public class VehicleModuleMenu implements IWorkshopMenu
     @Override
     public String getMenuDisplayName() 
     {
-        return "Modulo de Veiculos";
+        return "Veiculo";
     }
 
     @Override

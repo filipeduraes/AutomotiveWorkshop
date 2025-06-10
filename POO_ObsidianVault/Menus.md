@@ -18,10 +18,10 @@ Cadastro criado com sucesso!
 ---
 ### Menu Principal
 
-[0] Servicos
+[0] Servico
 [1] Loja
-[2] Clientes
-[3] Veículos
+[2] Cliente
+[3] Veículo
 [4] Financeiro
 [5] X Sair
 
@@ -31,7 +31,7 @@ Cadastro criado com sucesso!
 ### Servicos
 [0] Criar Ordem de Servico
 [1] Servicos abertos
-[2] Seus servicos
+[2] Meus servicos
 [3] Servicos
 [4] < Voltar
 
@@ -52,7 +52,7 @@ Ordem de servico criada com sucesso! ID: {ID da OS}
 
 
 == Consultar seus servicos > Servicos > Menu Principal ==
-#### [2] Seus servicos
+#### [2] Meus servicos
 {Selecionar modo de consulta = Serviços do Usuário}
 {Redirecionar para o menu de Consultar Serviços}
 

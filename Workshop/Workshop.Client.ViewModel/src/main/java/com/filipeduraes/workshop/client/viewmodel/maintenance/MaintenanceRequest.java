@@ -1,9 +1,8 @@
-package com.filipeduraes.workshop.client.viewmodel;
+package com.filipeduraes.workshop.client.viewmodel.maintenance;
 
 public enum MaintenanceRequest
 {
-    REQUEST_OPENED_APPOINTMENTS,
-    REQUEST_USER_SERVICES,
+    REQUEST_SERVICES,
     REQUEST_DETAILED_SERVICE_INFO,
     REQUEST_REGISTER_APPOINTMENT,
     REQUEST_START_STEP,

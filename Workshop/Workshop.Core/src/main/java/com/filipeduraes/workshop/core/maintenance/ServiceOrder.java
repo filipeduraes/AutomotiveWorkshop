@@ -16,12 +16,14 @@ public class ServiceOrder extends WorkshopEntity
     private List<Product> services = new ArrayList<>();
 
     private Purchase purchase;
-    private UUID vehicleID;
+    private final UUID clientID;
+    private final UUID vehicleID;
     private boolean finished = false;
 
-    public ServiceOrder(UUID vehicleID)
+    public ServiceOrder(UUID clientID, UUID vehicleID)
     {
         this.vehicleID = vehicleID;
+        this.clientID = clientID;
     }
 
     public boolean getFinished()
@@ -60,5 +62,15 @@ public class ServiceOrder extends WorkshopEntity
         {
             getCurrentStep().finishStep();
         }
+    }
+
+    public UUID getClientID()
+    {
+        return clientID;
+    }
+
+    public UUID getVehicleID()
+    {
+        return vehicleID;
     }
 }

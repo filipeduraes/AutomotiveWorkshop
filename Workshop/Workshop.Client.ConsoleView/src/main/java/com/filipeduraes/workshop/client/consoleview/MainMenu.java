@@ -2,9 +2,9 @@
 
 package com.filipeduraes.workshop.client.consoleview;
 
-import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMenu;
-import com.filipeduraes.workshop.client.consoleview.maintenancemodule.MaintenanceModuleMenu;
-import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleModuleMenu;
+import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientMenu;
+import com.filipeduraes.workshop.client.consoleview.maintenancemodule.ServicesMenu;
+import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
 
 /**
  * Menu principal do sistema que permite a navegação entre os diferentes módulos.
@@ -17,9 +17,9 @@ public class MainMenu implements IWorkshopMenu
 {
     private final IWorkshopMenu[] menus = 
     {
-        new MaintenanceModuleMenu(),
-        new ClientModuleMenu(),
-        new VehicleModuleMenu()
+        new ServicesMenu(),
+        new ClientMenu(),
+        new VehicleMenu()
     };
 
     @Override
@@ -31,7 +31,7 @@ public class MainMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        IWorkshopMenu selectedOption = menuManager.showSubmenuOptions("Qual modulo deseja abrir?", menus);
+        IWorkshopMenu selectedOption = menuManager.showSubmenuOptions("Qual menu deseja acessar?", menus);
         
         if(selectedOption != null)
         {

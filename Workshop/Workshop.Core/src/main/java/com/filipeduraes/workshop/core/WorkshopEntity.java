@@ -28,4 +28,9 @@ public class WorkshopEntity
     {
         return id;
     }
+
+    public boolean matchID(UUID otherID)
+    {
+        return id.equals(otherID);
+    }
 }

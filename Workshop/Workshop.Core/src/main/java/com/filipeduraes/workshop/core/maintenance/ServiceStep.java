@@ -8,7 +8,8 @@ public class ServiceStep
     private final UUID employeeID;
     private final LocalDateTime startDate;
     private LocalDateTime finishDate;
-    private String description;
+    private String shortDescription;
+    private String detailedDescription;
 
     public ServiceStep(UUID employeeID)
     {
@@ -22,14 +23,24 @@ public class ServiceStep
         finishDate = LocalDateTime.now();
     }
 
-    public void setDescription(String description)
+    public String getShortDescription()
     {
-        this.description = description;
+        return shortDescription;
     }
 
-    public String getDescription()
+    public void setShortDescription(String shortDescription)
     {
-        return description;
+        this.shortDescription = shortDescription;
+    }
+
+    public void setDetailedDescription(String detailedDescription)
+    {
+        this.detailedDescription = detailedDescription;
+    }
+
+    public String getDetailedDescription()
+    {
+        return detailedDescription;
     }
 
     public UUID getEmployeeID()

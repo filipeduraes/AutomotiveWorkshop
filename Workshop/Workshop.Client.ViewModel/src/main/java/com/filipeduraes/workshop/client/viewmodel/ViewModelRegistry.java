@@ -1,5 +1,7 @@
 package com.filipeduraes.workshop.client.viewmodel;
 
+import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
+
 public class ViewModelRegistry
 {
     private ClientViewModel clientViewModel;

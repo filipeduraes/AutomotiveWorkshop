@@ -95,6 +95,11 @@ public class AuthModule
         return passwordIsValid;
     }
 
+    public boolean isFirstAccess()
+    {
+        return !employeeCrudModule.hasLoadedEntities();
+    }
+
     /**
      * Encontra um usuário registrado com base em seu ID.
      *

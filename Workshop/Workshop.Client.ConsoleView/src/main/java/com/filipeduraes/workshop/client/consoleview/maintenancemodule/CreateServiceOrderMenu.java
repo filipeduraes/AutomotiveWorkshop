@@ -6,9 +6,11 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
-import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleModuleMenu;
+import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
 import com.filipeduraes.workshop.client.viewmodel.*;
-import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientModuleMenu;
+import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientMenu;
+import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceRequest;
+import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
 
 /**
  *
@@ -22,7 +24,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
     @Override
     public String getMenuDisplayName() 
     {
-        return "Criar ordem de serviço";
+        return "Criar ordem de servico";
     }
 
     @Override
@@ -45,8 +47,12 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
             return vehicleSelectionMenuResult;
         }
 
-        String problemDescription = ConsoleInput.readLine("Digite a descrição do problema: ");
-        maintenanceViewModel.setCurrentStepDescription(problemDescription);
+        String shortDescription = ConsoleInput.readLine("Digite uma descricao curta do problema:");
+        String detailedDescription = ConsoleInput.readLine("Digite uma descricao detalhada do problema:");
+
+        maintenanceViewModel.setCurrentStepShortDescription(shortDescription);
+        maintenanceViewModel.setCurrentStepDetailedDescription(detailedDescription);
+
         maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_REGISTER_APPOINTMENT);
 
         if(maintenanceViewModel.getMaintenanceRequest() == MaintenanceRequest.REQUEST_SUCCESS)
@@ -68,7 +74,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
             if(selectedOption == 0)
             {
-                return MenuResult.push(new ClientModuleMenu());
+                return MenuResult.push(new ClientMenu());
             }
 
             return MenuResult.pop();
@@ -87,7 +93,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
             if(selectedOption == 0)
             {
-                return MenuResult.push(new VehicleModuleMenu());
+                return MenuResult.push(new VehicleMenu());
             }
 
             return MenuResult.pop();

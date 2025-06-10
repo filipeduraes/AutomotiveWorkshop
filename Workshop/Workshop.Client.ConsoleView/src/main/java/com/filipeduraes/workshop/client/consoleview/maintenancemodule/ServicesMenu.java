@@ -9,28 +9,26 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
  *
  * @author Filipe Durães
  */
-public class MaintenanceModuleMenu implements IWorkshopMenu
+public class ServicesMenu implements IWorkshopMenu
 {
     private IWorkshopMenu[] submenus =
     {
-        new CreateServiceOrderMenu()
+        new CreateServiceOrderMenu(),
+        new QueryOpenedServicesMenu(),
+        new QueryUserServicesMenu(),
+        new QueryGeneralServicesMenu()
     };
 
     @Override
     public String getMenuDisplayName() 
     {
-        return "Modulo de Manutencao";
+        return "Servico";
     }
 
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        /*
-        [0] Gerar ordem de serviço
-        [1] Listar agendamentos preliminares
-        [2] Listar ordens de serviço ativos
-        */
-        IWorkshopMenu selectedSubmenu = menuManager.showSubmenuOptions("Escolha a opcao: ", submenus);
+        IWorkshopMenu selectedSubmenu = menuManager.showSubmenuOptions("O que deseja fazer?", submenus);
 
         if (selectedSubmenu == null)
         {

@@ -2,10 +2,12 @@
 
 package com.filipeduraes.workshop.client.console;
 
+import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
+import com.filipeduraes.workshop.client.consoleview.administrator.FirstAccessMenu;
+import com.filipeduraes.workshop.client.consoleview.login.LogInMenu;
 import com.filipeduraes.workshop.client.model.LoginController;
 import com.filipeduraes.workshop.client.model.ClientController;
 
-import com.filipeduraes.workshop.client.consoleview.login.EnterUserMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 
 import com.filipeduraes.workshop.client.model.MaintenanceController;
@@ -51,7 +53,10 @@ public class WorkshopClient
         VehicleController vehicleController = new VehicleController(viewModelRegistry, workshop);
         MaintenanceController maintenanceController = new MaintenanceController(viewModelRegistry, workshop);
 
-        MenuManager menuManager = new MenuManager(new EnterUserMenu(), viewModelRegistry);
+        boolean isFirstAccess = workshop.getAuthModule().isFirstAccess();
+        IWorkshopMenu initialMenu = isFirstAccess ? new FirstAccessMenu() : new LogInMenu();
+
+        MenuManager menuManager = new MenuManager(initialMenu, viewModelRegistry);
         menuManager.run();
 
         loginController.dispose();

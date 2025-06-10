@@ -1,6 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.client.consoleview.login;
 
+import com.filipeduraes.workshop.client.consoleview.MainMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
@@ -54,6 +55,6 @@ public class LogInMenu implements IWorkshopMenu
             }
         }
 
-        return MenuResult.pop();
+        return MenuResult.replace(new MainMenu());
     }
 }
