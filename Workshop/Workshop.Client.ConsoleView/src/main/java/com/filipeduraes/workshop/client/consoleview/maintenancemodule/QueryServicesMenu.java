@@ -5,7 +5,6 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSearchMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceRequest;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceFilterType;
@@ -45,9 +44,9 @@ public class QueryServicesMenu implements IWorkshopMenu
             }
         }
 
-        maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_SERVICES);
+        maintenanceViewModel.OnServicesRequest.broadcast();
 
-        if(maintenanceViewModel.getMaintenanceRequest() == MaintenanceRequest.REQUEST_FAILED)
+        if(!maintenanceViewModel.getWasRequestSuccessful())
         {
             System.out.println("Nao foi possivel recuperar os servicos. Tente novamente.");
             return MenuResult.pop();

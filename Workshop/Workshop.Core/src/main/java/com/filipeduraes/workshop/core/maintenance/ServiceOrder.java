@@ -73,4 +73,9 @@ public class ServiceOrder extends WorkshopEntity
     {
         return vehicleID;
     }
+
+    public boolean getCurrentStepWasFinished()
+    {
+        return getCurrentStep().getWasFinished();
+    }
 }

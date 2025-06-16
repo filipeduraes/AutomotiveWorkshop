@@ -3,8 +3,6 @@ package com.filipeduraes.workshop.client.viewmodel;
 
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
 import com.filipeduraes.workshop.utils.Observer;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ViewModel responsável por gerenciar e armazenar informações do usuário logado,
@@ -12,43 +10,27 @@ import java.util.List;
  *
  * @author Filipe Durães
  */
-public class UserInfoViewModel
+public class AuthViewModel
 {
-    /**
-     * Observer notificado quando o estado de login do usuário é alterado
-     */
-    public final Observer OnLoginStateChanged = new Observer();
+    public final Observer OnLoginRequested = new Observer();
+    public final Observer OnSignInRequested = new Observer();
 
-    private List<String> possibleRoles = new ArrayList<>();
-    private LoginRequest loginRequest = LoginRequest.WAITING;
+
+    private boolean requestWasSuccessful = false;
     private String name;
     private String email;
     private EmployeeRoleDTO selectedRole;
     private int passwordHash;
     private int accessLevel;
 
-    /**
-     * Obtém o estado atual de login do usuário
-     *
-     * @return estado atual de login
-     */
-    public LoginRequest getLoginState()
+    public boolean getRequestWasSuccessful()
     {
-        return loginRequest;
+        return requestWasSuccessful;
     }
 
-    /**
-     * Define um novo estado de login para o usuário
-     *
-     * @param newLoginRequest novo estado de login
-     */
-    public void setLoginState(LoginRequest newLoginRequest)
+    public void setRequestWasSuccessful(boolean requestWasSuccessful)
     {
-        if (newLoginRequest != loginRequest)
-        {
-            loginRequest = newLoginRequest;
-            OnLoginStateChanged.broadcast();
-        }
+        this.requestWasSuccessful = requestWasSuccessful;
     }
 
     /**

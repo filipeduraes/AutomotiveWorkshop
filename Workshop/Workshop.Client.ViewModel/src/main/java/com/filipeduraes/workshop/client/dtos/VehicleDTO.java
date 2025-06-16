@@ -65,4 +65,19 @@ public class VehicleDTO
     {
         return year;
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format
+        (
+            " - ID: %s%n - Modelo: %s%n - Cor: %s%n - Chassi: %s%n - Placa: %s%n - Ano: %d",
+            getId(),
+            getModel(),
+            getColor(),
+            getVinNumber(),
+            getLicensePlate(),
+            getYear()
+        );
+    }
 }

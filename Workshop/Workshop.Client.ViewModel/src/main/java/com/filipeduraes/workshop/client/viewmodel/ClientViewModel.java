@@ -15,12 +15,9 @@ import java.util.List;
  */
 public class ClientViewModel
 {
-    /**
-     * Observer notificado quando uma requisição de cliente é alterada
-     */
-    public final Observer OnClientRequest = new Observer();
-
-    private ClientRequest currentRequest;
+    public final Observer OnClientRegisterRequest = new Observer();
+    public final Observer OnClientsSearchRequest = new Observer();
+    public final Observer OnClientLoadDataRequest = new Observer();
 
     private SearchByOption searchByOption;
     private List<String> foundClientDescriptions = new ArrayList<>();
@@ -128,29 +125,5 @@ public class ClientViewModel
     public void setClient(ClientDTO client)
     {
         this.client = client;
-    }
-
-    /**
-     * Obtém a requisição atual do cliente.
-     *
-     * @return requisição atual do cliente
-     */
-    public ClientRequest getCurrentRequest()
-    {
-        return currentRequest;
-    }
-
-    /**
-     * Define uma nova requisição do cliente e notifica os observadores se houver mudança.
-     *
-     * @param newCurrentRequest nova requisição do cliente
-     */
-    public void setCurrentRequest(ClientRequest newCurrentRequest)
-    {
-        if (currentRequest != newCurrentRequest)
-        {
-            currentRequest = newCurrentRequest;
-            OnClientRequest.broadcast();
-        }
     }
 }

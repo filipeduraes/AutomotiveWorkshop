@@ -5,7 +5,6 @@ import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
-import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 
@@ -34,14 +33,13 @@ public class RegisterVehicleMenu implements IWorkshopMenu
         VehicleViewModel vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         vehicleViewModel.setSelectedVehicle(vehicleDTO);
 
-        vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_VEHICLE_REGISTRATION);
-        VehicleRequest currentVehicleRequest = vehicleViewModel.getCurrentVehicleRequest();
+        vehicleViewModel.OnVehicleRegistrationRequest.broadcast();
 
-        if(currentVehicleRequest == VehicleRequest.REQUEST_SUCCESS)
+        if(vehicleViewModel.getWasRequestSuccessful())
         {
             return MenuResult.pop();
         }
-        else if(currentVehicleRequest == VehicleRequest.REQUEST_FAILED)
+        else
         {
             boolean tryRegisteringAgain = ConsoleInput.readConfirmation("Nao foi possivel registrar o veiculo, deseja tentar novamente?");
 
@@ -51,7 +49,6 @@ public class RegisterVehicleMenu implements IWorkshopMenu
             }
         }
 
-        vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.WAITING_REQUEST);
         return MenuResult.none();
     }
 

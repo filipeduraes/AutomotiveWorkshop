@@ -4,7 +4,6 @@ package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.model.mappers.ClientMapper;
-import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.SearchByOption;
 import com.filipeduraes.workshop.core.CrudModule;
@@ -25,13 +24,6 @@ import java.util.function.Function;
  */
 public class ClientController
 {
-    private final Map<ClientRequest, Runnable> handlers = Map.of
-    (
-        ClientRequest.REGISTER_CLIENT, this::registerClient,
-        ClientRequest.SEARCH_CLIENTS, this::searchClients,
-        ClientRequest.LOAD_CLIENT_DATA, this::loadClientData
-    );
-
     private final Map<SearchByOption, Function<Client, String>> clientSearchOptions = Map.of
     (
         SearchByOption.NAME, Client::getName,
@@ -56,7 +48,9 @@ public class ClientController
         this.clientViewModel = clientViewModel;
         this.clientModule = clientModule;
 
-        clientViewModel.OnClientRequest.addListener(this::processClientRequest);
+        clientViewModel.OnClientRegisterRequest.addListener(this::registerClient);
+        clientViewModel.OnClientLoadDataRequest.addListener(this::loadClientData);
+        clientViewModel.OnClientsSearchRequest.addListener(this::searchClients);
     }
 
     /**
@@ -65,19 +59,9 @@ public class ClientController
      */
     public void dispose()
     {
-        clientViewModel.OnClientRequest.removeListener(this::processClientRequest);
-    }
-
-    private void processClientRequest()
-    {
-        ClientRequest clientRequest = clientViewModel.getCurrentRequest();
-
-        if(handlers.containsKey(clientRequest))
-        {
-            Runnable handler = handlers.get(clientRequest);
-            handler.run();
-            clientViewModel.setCurrentRequest(ClientRequest.NONE);
-        }
+        clientViewModel.OnClientRegisterRequest.removeListener(this::registerClient);
+        clientViewModel.OnClientLoadDataRequest.removeListener(this::loadClientData);
+        clientViewModel.OnClientsSearchRequest.removeListener(this::searchClients);
     }
 
     private void registerClient()

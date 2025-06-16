@@ -57,6 +57,12 @@ public class MenuManager
 
             MenuResult menuAction = currentMenu.showMenu(this);
 
+            if(menuAction == null)
+            {
+                System.out.println("Resultado de menu invalido, fechando menu atual.");
+                menuAction = MenuResult.pop();
+            }
+
             switch (menuAction.getAction())
             {
                 case PUSH_MENU ->

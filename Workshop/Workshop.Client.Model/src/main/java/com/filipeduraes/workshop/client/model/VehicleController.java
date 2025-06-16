@@ -3,7 +3,6 @@ package com.filipeduraes.workshop.client.model;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.model.mappers.VehicleMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.VehicleRequest;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.core.CrudModule;
@@ -13,18 +12,10 @@ import com.filipeduraes.workshop.core.vehicle.Vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class VehicleController
 {
-    private final Map<VehicleRequest, Runnable> handlers = Map.of
-    (
-        VehicleRequest.REQUEST_CLIENT_VEHICLES, this::processClientVehiclesRequest,
-        VehicleRequest.REQUEST_VEHICLE_REGISTRATION, this::processVehicleRegistrationRequest,
-        VehicleRequest.REQUEST_SELECTED_VEHICLE_DETAILS, this::processVehicleDetailsRequest
-    );
-
     private final VehicleViewModel vehicleViewModel;
     private final ClientViewModel clientViewModel;
     private final CrudModule<Vehicle> vehicleModule;
@@ -37,23 +28,16 @@ public class VehicleController
         this.vehicleModule = workshop.getVehicleModule();
         this.clientModule = workshop.getClientModule();
 
-        vehicleViewModel.OnVehicleRequest.addListener(this::processVehicleRequest);
+        vehicleViewModel.OnVehicleDetailsRequest.addListener(this::processVehicleDetailsRequest);
+        vehicleViewModel.OnClientVehiclesRequest.addListener(this::processClientVehiclesRequest);
+        vehicleViewModel.OnVehicleRegistrationRequest.addListener(this::processVehicleRegistrationRequest);
     }
 
     public void dispose()
     {
-        vehicleViewModel.OnVehicleRequest.removeListener(this::processVehicleRequest);
-    }
-
-    private void processVehicleRequest()
-    {
-        VehicleRequest vehicleRequest = vehicleViewModel.getCurrentVehicleRequest();
-
-        if(handlers.containsKey(vehicleRequest))
-        {
-            Runnable handler = handlers.get(vehicleRequest);
-            handler.run();
-        }
+        vehicleViewModel.OnVehicleDetailsRequest.removeListener(this::processVehicleDetailsRequest);
+        vehicleViewModel.OnClientVehiclesRequest.removeListener(this::processClientVehiclesRequest);
+        vehicleViewModel.OnVehicleRegistrationRequest.removeListener(this::processVehicleRegistrationRequest);
     }
 
     private void processClientVehiclesRequest()
@@ -71,7 +55,7 @@ public class VehicleController
             }
 
             vehicleViewModel.setSelectedClientVehicles(vehicleNames);
-            vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_SUCCESS);
+            vehicleViewModel.setWasRequestSuccessful(true);
         }
     }
 
@@ -87,7 +71,7 @@ public class VehicleController
             UUID vehicleID = vehicleModule.registerEntity(vehicle);
             registerRequestedVehicleDTO.setID(vehicleID);
 
-            vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_SUCCESS);
+            vehicleViewModel.setWasRequestSuccessful(true);
         }
     }
 
@@ -100,7 +84,9 @@ public class VehicleController
             int selectedVehicleIndex = vehicleViewModel.getSelectedVehicleIndex();
             List<UUID> ownedVehiclesIDs = selectedClient.getOwnedVehiclesIDs();
 
-            if(selectedVehicleIndex >= 0 && selectedVehicleIndex < ownedVehiclesIDs.size())
+            boolean wasRequestSuccessful = selectedVehicleIndex >= 0 && selectedVehicleIndex < ownedVehiclesIDs.size();
+
+            if(wasRequestSuccessful)
             {
                 UUID selectedVehicleID = ownedVehiclesIDs.get(selectedVehicleIndex);
                 Vehicle vehicle = vehicleModule.getEntityWithID(selectedVehicleID);
@@ -108,12 +94,9 @@ public class VehicleController
                 VehicleDTO selectedVehicle = VehicleMapper.toDTO(vehicle);
 
                 vehicleViewModel.setSelectedVehicle(selectedVehicle);
-                vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_SUCCESS);
             }
-            else
-            {
-                vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_FAILED);
-            }
+
+            vehicleViewModel.setWasRequestSuccessful(wasRequestSuccessful);
         }
     }
 
@@ -122,7 +105,7 @@ public class VehicleController
         if(!clientViewModel.hasSelectedClient())
         {
             System.out.println("Nenhum cliente selecionado, por favor selecione um cliente antes de prosseguir.");
-            vehicleViewModel.setCurrentVehicleRequest(VehicleRequest.REQUEST_FAILED);
+            vehicleViewModel.setWasRequestSuccessful(false);
             return null;
         }
 

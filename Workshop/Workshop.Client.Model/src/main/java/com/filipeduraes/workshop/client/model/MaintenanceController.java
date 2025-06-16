@@ -7,7 +7,6 @@ import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.model.mappers.ServiceOrderMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceRequest;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
@@ -31,12 +30,6 @@ import java.util.function.Predicate;
  */
 public class MaintenanceController 
 {
-    private final Map<MaintenanceRequest, Runnable> handlers = Map.of
-    (
-        MaintenanceRequest.REQUEST_REGISTER_APPOINTMENT, this::registerNewService,
-        MaintenanceRequest.REQUEST_SERVICES, this::requestServices,
-        MaintenanceRequest.REQUEST_DETAILED_SERVICE_INFO, this::requestDetailedServiceInfo
-    );
 
     private final MaintenanceViewModel maintenanceViewModel;
     private final VehicleViewModel vehicleViewModel;
@@ -52,23 +45,16 @@ public class MaintenanceController
         clientViewModel = viewModelRegistry.getClientViewModel();
         this.workshop = workshop;
 
-        maintenanceViewModel.OnMaintenanceRequest.addListener(this::processRequest);
+        maintenanceViewModel.OnRegisterAppointmentRequest.addListener(this::registerNewService);
+        maintenanceViewModel.OnServicesRequest.addListener(this::requestServices);
+        maintenanceViewModel.OnDetailedServiceInfoRequest.addListener(this::requestDetailedServiceInfo);
     }
 
     public void dispose()
     {
-        maintenanceViewModel.OnMaintenanceRequest.addListener(this::processRequest);
-    }
-
-    private void processRequest()
-    {
-        MaintenanceRequest maintenanceRequest = maintenanceViewModel.getMaintenanceRequest();
-
-        if(handlers.containsKey(maintenanceRequest))
-        {
-            Runnable handler = handlers.get(maintenanceRequest);
-            handler.run();
-        }
+        maintenanceViewModel.OnRegisterAppointmentRequest.removeListener(this::registerNewService);
+        maintenanceViewModel.OnServicesRequest.removeListener(this::requestServices);
+        maintenanceViewModel.OnDetailedServiceInfoRequest.removeListener(this::requestDetailedServiceInfo);
     }
 
     private void registerNewService()
@@ -85,7 +71,7 @@ public class MaintenanceController
             UUID appointmentID = maintenanceModule.registerNewAppointment(selectedClient.getID(), selectedVehicle.getId(), shortDescription, detailedDescription);
 
             maintenanceViewModel.setCurrentMaintenanceID(appointmentID);
-            maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_SUCCESS);
+            maintenanceViewModel.setWasRequestSuccessful(true);
         }
     }
 
@@ -113,7 +99,7 @@ public class MaintenanceController
                                         .toArray(String[]::new);
 
         maintenanceViewModel.setServicesDescriptions(descriptions);
-        maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_SUCCESS);
+        maintenanceViewModel.setWasRequestSuccessful(true);
     }
 
     private void requestDetailedServiceInfo()
@@ -122,7 +108,7 @@ public class MaintenanceController
 
         if(selectedMaintenanceIndex < 0 || selectedMaintenanceIndex >= queriedEntities.size())
         {
-            maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_FAILED);
+            maintenanceViewModel.setWasRequestSuccessful(false);
             return;
         }
 
@@ -130,7 +116,7 @@ public class MaintenanceController
         ServiceOrderDTO serviceOrderDTO = ServiceOrderMapper.toDTO(serviceOrder, workshop);
 
         maintenanceViewModel.setSelectedService(serviceOrderDTO);
-        maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_SUCCESS);
+        maintenanceViewModel.setWasRequestSuccessful(true);
     }
 
 

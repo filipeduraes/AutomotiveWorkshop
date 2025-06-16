@@ -7,8 +7,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.input.EmailInputValidator;
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
-import com.filipeduraes.workshop.client.viewmodel.LoginRequest;
-import com.filipeduraes.workshop.client.viewmodel.UserInfoViewModel;
+import com.filipeduraes.workshop.client.viewmodel.AuthViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 
 public class RegisterAdministrator implements IWorkshopMenu
@@ -27,17 +26,17 @@ public class RegisterAdministrator implements IWorkshopMenu
         String password = ConsoleInput.readLine("Crie uma senha:");
 
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        UserInfoViewModel userInfoViewModel = viewModelRegistry.getUserInfoViewModel();
+        AuthViewModel authViewModel = viewModelRegistry.getUserInfoViewModel();
 
-        userInfoViewModel.setName(name);
-        userInfoViewModel.setEmail(email);
-        userInfoViewModel.setPasswordHash(password.hashCode());
-        userInfoViewModel.setSelectedRole(EmployeeRoleDTO.ADMINISTRATOR);
-        userInfoViewModel.setLoginState(LoginRequest.SIGNIN_REQUESTED);
+        authViewModel.setName(name);
+        authViewModel.setEmail(email);
+        authViewModel.setPasswordHash(password.hashCode());
+        authViewModel.setSelectedRole(EmployeeRoleDTO.ADMINISTRATOR);
+        authViewModel.OnSignInRequested.broadcast();
 
         System.out.println("Cadastro criado com sucesso!");
 
-        userInfoViewModel.setLoginState(LoginRequest.LOGIN_REQUESTED);
+        authViewModel.OnLoginRequested.broadcast();
 
         return MenuResult.replace(new MainMenu());
     }

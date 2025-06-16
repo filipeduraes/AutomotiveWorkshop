@@ -12,39 +12,25 @@ import java.util.List;
  */
 public class VehicleViewModel
 {
-    /**
-     * Observer que notifica quando há mudanças nas requisições de veículos.
-     */
-    public final Observer OnVehicleRequest = new Observer();
+    public final Observer OnClientVehiclesRequest = new Observer();
+    public final Observer OnVehicleRegistrationRequest = new Observer();
+    public final Observer OnVehicleDetailsRequest = new Observer();
 
-    private VehicleRequest currentVehicleRequest;
     private VehicleDTO selectedVehicle;
 
+    private boolean wasRequestSuccessful = false;
     private int selectedVehicleIndex = -1;
     private List<String> selectedClientVehicles = new ArrayList<>();
 
-    /**
-     * Obtém a requisição atual de veículo.
-     *
-     * @return A requisição atual de veículo
-     */
-    public VehicleRequest getCurrentVehicleRequest()
+
+    public boolean getWasRequestSuccessful()
     {
-        return currentVehicleRequest;
+        return wasRequestSuccessful;
     }
 
-    /**
-     * Define uma nova requisição de veículo e notifica os observadores.
-     *
-     * @param newVehicleRequest Nova requisição de veículo
-     */
-    public void setCurrentVehicleRequest(VehicleRequest newVehicleRequest)
+    public void setWasRequestSuccessful(boolean wasRequestSuccessful)
     {
-        if (newVehicleRequest != currentVehicleRequest)
-        {
-            currentVehicleRequest = newVehicleRequest;
-            OnVehicleRequest.broadcast();
-        }
+        this.wasRequestSuccessful = wasRequestSuccessful;
     }
 
     /**

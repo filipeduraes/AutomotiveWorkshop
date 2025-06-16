@@ -10,6 +10,7 @@ public class ServiceStep
     private LocalDateTime finishDate;
     private String shortDescription;
     private String detailedDescription;
+    private boolean wasFinished = false;
 
     public ServiceStep(UUID employeeID)
     {
@@ -21,6 +22,7 @@ public class ServiceStep
     public void finishStep()
     {
         finishDate = LocalDateTime.now();
+        wasFinished = true;
     }
 
     public String getShortDescription()
@@ -56,5 +58,10 @@ public class ServiceStep
     public LocalDateTime getFinishDate()
     {
         return finishDate;
+    }
+
+    public boolean getWasFinished()
+    {
+        return wasFinished;
     }
 }

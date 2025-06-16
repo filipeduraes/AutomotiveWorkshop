@@ -5,30 +5,32 @@ import java.util.UUID;
 public class ServiceOrderDTO
 {
     private final UUID id;
-    private final String serviceState;
     private final String shortDescription;
     private final String detailedDescription;
     private final String clientName;
     private final String vehicleDescription;
+    private final ServiceStepDTO serviceStep;
+    private final boolean currentStepWasFinished;
 
-    public ServiceOrderDTO(UUID id, String serviceState, String shortDescription, String detailedDescription, String clientName, String vehicleDescription)
+    public ServiceOrderDTO(UUID id, ServiceStepDTO serviceStep, String shortDescription, String detailedDescription, String clientName, String vehicleDescription, boolean currentStepWasFinished)
     {
         this.id = id;
-        this.serviceState = serviceState;
+        this.serviceStep = serviceStep;
         this.shortDescription = shortDescription;
         this.detailedDescription = detailedDescription;
         this.clientName = clientName;
         this.vehicleDescription = vehicleDescription;
+        this.currentStepWasFinished = currentStepWasFinished;
     }
 
-    public UUID getId()
+    public UUID getID()
     {
         return id;
     }
 
-    public String getServiceState()
+    public ServiceStepDTO getServiceStep()
     {
-        return serviceState;
+        return serviceStep;
     }
 
     public String getShortDescription()
@@ -49,5 +51,25 @@ public class ServiceOrderDTO
     public String getVehicleDescription()
     {
         return vehicleDescription;
+    }
+
+    public boolean getCurrentStepWasFinished()
+    {
+        return currentStepWasFinished;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format
+        (
+            " - ID: %s%n - Estado: %s%n - Descricao Curta: %s%n - Descricao Detalhada: %s%n - Cliente: %s%n - Veiculo: %s",
+            getID(),
+            getServiceStep(),
+            getShortDescription(),
+            getDetailedDescription(),
+            getClientName(),
+            getVehicleDescription()
+        );
     }
 }

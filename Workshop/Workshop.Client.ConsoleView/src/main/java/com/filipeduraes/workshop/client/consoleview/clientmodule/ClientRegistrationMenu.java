@@ -10,7 +10,6 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.EmailInputValidator;
 import com.filipeduraes.workshop.client.consoleview.input.PhoneInputValidator;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
-import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 
 /**
@@ -40,7 +39,7 @@ public class ClientRegistrationMenu implements IWorkshopMenu
         ClientDTO clientDTO = new ClientDTO(userName, userPhoneNumber, userEmail, userAddress, userCPF);
         clientViewModel.setClient(clientDTO);
 
-        clientViewModel.setCurrentRequest(ClientRequest.REGISTER_CLIENT);
+        clientViewModel.OnClientRegisterRequest.broadcast();
         return MenuResult.pop();
     }
 }

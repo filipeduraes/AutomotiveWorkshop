@@ -6,9 +6,12 @@ import java.util.UUID;
 
 public class MaintenanceViewModel
 {
-    public final Observer OnMaintenanceRequest = new Observer();
+    public final Observer OnServicesRequest = new Observer();
+    public final Observer OnDetailedServiceInfoRequest = new Observer();
+    public final Observer OnRegisterAppointmentRequest = new Observer();
+    public final Observer OnStartStepRequest = new Observer();
+    public final Observer OnFinishStepRequest = new Observer();
 
-    private MaintenanceRequest maintenanceRequest;
     private ServiceQueryType queryType = ServiceQueryType.GENERAL;
     private ServiceFilterType filterType = ServiceFilterType.NONE;
     private String descriptionQueryPattern;
@@ -19,20 +22,7 @@ public class MaintenanceViewModel
     private String currentStepShortDescription;
     private UUID currentMaintenanceID;
     private int selectedMaintenanceIndex = -1;
-
-    public MaintenanceRequest getMaintenanceRequest()
-    {
-        return maintenanceRequest;
-    }
-
-    public void setMaintenanceRequest(MaintenanceRequest maintenanceRequest)
-    {
-        if(this.maintenanceRequest != maintenanceRequest)
-        {
-            this.maintenanceRequest = maintenanceRequest;
-            OnMaintenanceRequest.broadcast();
-        }
-    }
+    private boolean wasRequestSuccessful = false;
 
 
     public ServiceQueryType getQueryType()
@@ -131,6 +121,16 @@ public class MaintenanceViewModel
     public void setSelectedMaintenanceIndex(int selectedMaintenanceIndex)
     {
         this.selectedMaintenanceIndex = selectedMaintenanceIndex;
+    }
+
+    public boolean getWasRequestSuccessful()
+    {
+        return wasRequestSuccessful;
+    }
+
+    public void setWasRequestSuccessful(boolean wasRequestSuccessful)
+    {
+        this.wasRequestSuccessful = wasRequestSuccessful;
     }
 
     public void resetQuery()

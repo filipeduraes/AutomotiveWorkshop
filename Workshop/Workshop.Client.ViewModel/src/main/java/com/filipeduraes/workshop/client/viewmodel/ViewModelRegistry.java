@@ -4,16 +4,16 @@ import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewMod
 
 public class ViewModelRegistry
 {
-    private ClientViewModel clientViewModel;
-    private MaintenanceViewModel maintenanceViewModel;
-    private UserInfoViewModel userInfoViewModel;
-    private VehicleViewModel vehicleViewModel;
+    private final ClientViewModel clientViewModel;
+    private final MaintenanceViewModel maintenanceViewModel;
+    private final AuthViewModel authViewModel;
+    private final VehicleViewModel vehicleViewModel;
 
     public ViewModelRegistry()
     {
         clientViewModel = new ClientViewModel();
         maintenanceViewModel = new MaintenanceViewModel();
-        userInfoViewModel = new UserInfoViewModel();
+        authViewModel = new AuthViewModel();
         vehicleViewModel = new VehicleViewModel();
     }
 
@@ -27,9 +27,9 @@ public class ViewModelRegistry
         return maintenanceViewModel;
     }
 
-    public UserInfoViewModel getUserInfoViewModel()
+    public AuthViewModel getUserInfoViewModel()
     {
-        return userInfoViewModel;
+        return authViewModel;
     }
 
     public VehicleViewModel getVehicleViewModel()

@@ -9,7 +9,6 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
 import com.filipeduraes.workshop.client.viewmodel.*;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientMenu;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceRequest;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
 
 /**
@@ -53,9 +52,9 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
         maintenanceViewModel.setCurrentStepShortDescription(shortDescription);
         maintenanceViewModel.setCurrentStepDetailedDescription(detailedDescription);
 
-        maintenanceViewModel.setMaintenanceRequest(MaintenanceRequest.REQUEST_REGISTER_APPOINTMENT);
+        maintenanceViewModel.OnRegisterAppointmentRequest.broadcast();
 
-        if(maintenanceViewModel.getMaintenanceRequest() == MaintenanceRequest.REQUEST_SUCCESS)
+        if(maintenanceViewModel.getWasRequestSuccessful())
         {
             System.out.printf("Agendamento registrado com sucesso! ID: %s%n", maintenanceViewModel.getCurrentMaintenanceID());
             viewModelRegistry.getClientViewModel().resetSelectedClient();

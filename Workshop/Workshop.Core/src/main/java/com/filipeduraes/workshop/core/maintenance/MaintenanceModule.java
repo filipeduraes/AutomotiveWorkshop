@@ -54,6 +54,7 @@ public class MaintenanceModule
         serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
         serviceOrder.getCurrentStep().setShortDescription(shortDescription);
         serviceOrder.getCurrentStep().setDetailedDescription(detailedDescription);
+        serviceOrder.getCurrentStep().finishStep();
 
         UUID serviceID = serviceOrderModule.registerEntity(serviceOrder);
         openedServices.add(serviceID);

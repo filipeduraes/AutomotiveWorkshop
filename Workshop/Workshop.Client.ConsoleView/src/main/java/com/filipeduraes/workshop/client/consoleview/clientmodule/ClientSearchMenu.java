@@ -7,7 +7,6 @@ import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
-import com.filipeduraes.workshop.client.viewmodel.ClientRequest;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.SearchByOption;
 
@@ -58,26 +57,24 @@ public class ClientSearchMenu implements IWorkshopMenu
 
         clientViewModel.setSearchByOption(options[searchOptionIndex]);
         clientViewModel.setSearchPattern(searchPattern);
-        clientViewModel.setCurrentRequest(ClientRequest.SEARCH_CLIENTS);
+
+        clientViewModel.OnClientsSearchRequest.broadcast();
         
-        if(clientViewModel.getCurrentRequest() == ClientRequest.NONE)
+        showFoundClients(clientViewModel);
+
+        int selectedClient = ConsoleInput.readLineInteger("Escolha o usuario: ");
+
+        if(selectedClientSuccessfully(selectedClient, clientViewModel))
         {
-            showFoundClients(clientViewModel);
-            
-            int selectedClient = ConsoleInput.readLineInteger("Escolha o usuario: ");
-            
-            if(selectedClientSuccessfully(selectedClient, clientViewModel))
+            if(clientViewModel.getSelectedFoundClientIndex() >= 0)
             {
-                if(clientViewModel.getSelectedFoundClientIndex() >= 0)
-                {
-                    ClientDTO client = clientViewModel.getClient();
-                    System.out.println(client);
-                }
-                
-                return MenuResult.pop();
+                ClientDTO client = clientViewModel.getClient();
+                System.out.println(client);
             }
+
+            return MenuResult.pop();
         }
-        
+
         return MenuResult.none();
     }
 
@@ -101,7 +98,7 @@ public class ClientSearchMenu implements IWorkshopMenu
         if (selectedClient >= 0 && selectedClient < foundClientNames.size()) 
         {
             clientViewModel.setSelectedFoundClientIndex(selectedClient);
-            clientViewModel.setCurrentRequest(ClientRequest.LOAD_CLIENT_DATA);
+            clientViewModel.OnClientLoadDataRequest.broadcast();
             return true;
         }
         

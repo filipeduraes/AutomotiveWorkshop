@@ -68,6 +68,14 @@ public class ClientDTO
     @Override
     public String toString()
     {
-        return String.format("Cliente selecionado:%n - ID: %s%n - Nome: %s%n - Email: %s%n - CPF: %s%n - Telefone: %s", id, name, email, cpf, phoneNumber);
+        return String.format
+        (
+            "Cliente selecionado:%n - ID: %s%n - Nome: %s%n - Email: %s%n - CPF: %s%n - Telefone: %s",
+            getID(),
+            getName(),
+            getEmail(),
+            getCPF(),
+            getPhoneNumber()
+        );
     }
 }
