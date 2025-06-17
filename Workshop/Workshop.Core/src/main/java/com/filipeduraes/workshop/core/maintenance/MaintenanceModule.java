@@ -145,6 +145,11 @@ public class MaintenanceModule
         }
     }
 
+    public void deleteServiceOrder(UUID selectedServiceID)
+    {
+        serviceOrderModule.deleteEntityWithID(selectedServiceID);
+    }
+
     private boolean loggedUserHasService(UUID serviceID)
     {
         return userServices.contains(serviceID) && serviceOrderModule.hasEntityWithID(serviceID);

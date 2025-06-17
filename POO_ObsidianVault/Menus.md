@@ -85,6 +85,14 @@ Ordem de servico criada com sucesso! ID: {ID da OS}
 - Estado do Serviço: {Estado atual}
 
 [0] Iniciar Inspeção / Iniciar Manutenção (Depende do estado do serviço)
+	- {Inspeção/Manutenção} iniciada com sucesso
 [1] Finalizar Inspeção / Finalizar Manutenção (Depende do estado do serviço)
-[2] Editar dados gerais do serviço
-[3] Editar etapa do serviço
+[2] Editar ordem de serviço
+[3] Editar etapa da ordem de serviço
+[4] Excluir ordem de serviço
+
+---
+
+== Finalizar Inspeção > Detalhes > Consultar > [Tipo do Serviço] > Servicos > Menu Principal ==
+
+- Insira a descrição do problema

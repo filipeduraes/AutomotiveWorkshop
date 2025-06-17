@@ -26,7 +26,7 @@ public class RegisterAdministrator implements IWorkshopMenu
         String password = ConsoleInput.readLine("Crie uma senha:");
 
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        AuthViewModel authViewModel = viewModelRegistry.getUserInfoViewModel();
+        AuthViewModel authViewModel = viewModelRegistry.getAuthViewModel();
 
         authViewModel.setName(name);
         authViewModel.setEmail(email);

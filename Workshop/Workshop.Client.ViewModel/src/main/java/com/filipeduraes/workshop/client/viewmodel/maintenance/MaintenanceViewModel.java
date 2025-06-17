@@ -11,6 +11,7 @@ public class MaintenanceViewModel
     public final Observer OnRegisterAppointmentRequest = new Observer();
     public final Observer OnStartStepRequest = new Observer();
     public final Observer OnFinishStepRequest = new Observer();
+    public final Observer OnDeleteRequest = new Observer();
 
     private ServiceQueryType queryType = ServiceQueryType.GENERAL;
     private ServiceFilterType filterType = ServiceFilterType.NONE;

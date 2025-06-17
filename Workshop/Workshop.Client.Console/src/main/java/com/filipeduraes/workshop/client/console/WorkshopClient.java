@@ -4,7 +4,7 @@ package com.filipeduraes.workshop.client.console;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.administrator.FirstAccessMenu;
-import com.filipeduraes.workshop.client.consoleview.login.LogInMenu;
+import com.filipeduraes.workshop.client.consoleview.auth.LogInMenu;
 import com.filipeduraes.workshop.client.model.AuthController;
 import com.filipeduraes.workshop.client.model.ClientController;
 
@@ -48,7 +48,7 @@ public class WorkshopClient
 
         ViewModelRegistry viewModelRegistry = new ViewModelRegistry();
 
-        AuthController authController = new AuthController(viewModelRegistry.getUserInfoViewModel(), workshop.getAuthModule());
+        AuthController authController = new AuthController(viewModelRegistry.getAuthViewModel(), workshop.getAuthModule());
         ClientController clientController = new ClientController(viewModelRegistry.getClientViewModel(), workshop.getClientModule());
         VehicleController vehicleController = new VehicleController(viewModelRegistry, workshop);
         MaintenanceController maintenanceController = new MaintenanceController(viewModelRegistry, workshop);

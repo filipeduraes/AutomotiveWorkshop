@@ -15,7 +15,6 @@ public class AuthViewModel
     public final Observer OnLoginRequested = new Observer();
     public final Observer OnSignInRequested = new Observer();
 
-
     private boolean requestWasSuccessful = false;
     private String name;
     private String email;

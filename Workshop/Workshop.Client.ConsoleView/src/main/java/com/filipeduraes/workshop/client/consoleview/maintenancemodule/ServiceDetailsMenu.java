@@ -33,46 +33,64 @@ public class ServiceDetailsMenu implements IWorkshopMenu
 
         if(maintenanceViewModel.getWasRequestSuccessful())
         {
-            ServiceOrderDTO selectedService = maintenanceViewModel.getSelectedService();
-            System.out.printf("Servico selecionado:%n%s%n%n", selectedService);
+            return getRedirectedMenuOption(maintenanceViewModel);
+        }
 
-            String[] options = buildEditingOptions(selectedService);
-            int selectedOption = ConsoleInput.readOptionFromList("O que deseja fazer?", options, true);
+        System.out.println("Nao foi possivel selecionar o servico. Tente novamente.");
+        return MenuResult.pop();
+    }
 
-            if(selectedOption == 0)
+    private MenuResult getRedirectedMenuOption(MaintenanceViewModel maintenanceViewModel)
+    {
+        ServiceOrderDTO selectedService = maintenanceViewModel.getSelectedService();
+        System.out.printf("Servico selecionado:%n%s%n%n", selectedService);
+
+        String[] options = buildEditingOptions(selectedService);
+        int selectedOption = ConsoleInput.readOptionFromList("O que deseja fazer?", options, true);
+
+        switch (selectedOption)
+        {
+            case 0 ->
             {
-                if(canStartNextStep(selectedService))
+                if (canStartNextStep(selectedService))
                 {
                     maintenanceViewModel.OnStartStepRequest.broadcast();
 
-                    if(maintenanceViewModel.getWasRequestSuccessful())
+                    if (maintenanceViewModel.getWasRequestSuccessful())
                     {
                         System.out.printf("%n%s iniciada com sucesso%n", capitalizeFirstLetter(getDesiredStepName(selectedService)));
                         return MenuResult.none();
                     }
                 }
-                else if(selectedService.getServiceStep() == ServiceStepDTO.ASSESSMENT)
+                else if (selectedService.getServiceStep() == ServiceStepDTO.ASSESSMENT)
                 {
                     return MenuResult.push(new FinishAssessmentMenu());
                 }
-                else if(selectedService.getServiceStep() == ServiceStepDTO.MAINTENANCE)
+                else if (selectedService.getServiceStep() == ServiceStepDTO.MAINTENANCE)
                 {
                     return MenuResult.push(new FinishMaintenanceMenu());
                 }
             }
-            else if(selectedOption == 1)
+            case 1 ->
             {
                 return MenuResult.push(new EditServiceMenu());
             }
-            else if(selectedOption == 2)
+            case 2 ->
             {
                 return MenuResult.push(new EditServiceStepMenu());
             }
+            case 3 ->
+            {
+                boolean canDelete = ConsoleInput.readConfirmation("Tem certeza que deseja excluir a ordem de servico?\nEssa acao nao pode ser desfeita!");
 
-            return MenuResult.pop();
+                if(canDelete)
+                {
+                    maintenanceViewModel.OnDeleteRequest.broadcast();
+                    System.out.println("Ordem de servico deletada com sucesso");
+                }
+            }
         }
 
-        System.out.println("Nao foi possivel selecionar o servico. Tente novamente.");
         return MenuResult.pop();
     }
 
@@ -89,8 +107,9 @@ public class ServiceDetailsMenu implements IWorkshopMenu
             options.add(String.format("Finalizar %s", getDesiredStepName(service)));
         }
 
-        options.add("Editar dados gerais do veiculo");
-        options.add("Editar etapa do veiculo");
+        options.add("Editar ordem de servico");
+        options.add("Editar etapa da ordem de servico");
+        options.add("Excluir ordem de servico");
         return options.toArray(String[]::new);
     }
 

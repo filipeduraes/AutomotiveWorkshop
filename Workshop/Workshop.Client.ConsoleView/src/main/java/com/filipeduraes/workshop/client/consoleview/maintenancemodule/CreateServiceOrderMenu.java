@@ -8,7 +8,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
 import com.filipeduraes.workshop.client.viewmodel.*;
-import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientMenu;
+import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSelectionMenu;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
 
 /**
@@ -74,7 +74,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
             if(selectedOption == 0)
             {
-                return MenuResult.push(new ClientMenu());
+                return MenuResult.push(new ClientSelectionMenu());
             }
 
             return MenuResult.pop();

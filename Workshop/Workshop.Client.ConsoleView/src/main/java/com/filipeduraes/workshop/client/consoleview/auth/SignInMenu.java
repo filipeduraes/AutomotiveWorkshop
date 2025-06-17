@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.client.consoleview.login;
+package com.filipeduraes.workshop.client.consoleview.auth;
 
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
@@ -27,7 +27,7 @@ public class SignInMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        AuthViewModel viewModel = menuManager.getViewModelRegistry().getUserInfoViewModel();
+        AuthViewModel viewModel = menuManager.getViewModelRegistry().getAuthViewModel();
         
         System.out.println(" - Insira o nome completo: ");
         String userName = ConsoleInput.readLine();

@@ -1,5 +1,5 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.client.consoleview.login;
+package com.filipeduraes.workshop.client.consoleview.auth;
 
 import com.filipeduraes.workshop.client.consoleview.MainMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
@@ -38,7 +38,7 @@ public class LogInMenu implements IWorkshopMenu
         System.out.println(" - Insira a senha:");
         String password = ConsoleInput.readLine();
        
-        AuthViewModel viewModel = menuManager.getViewModelRegistry().getUserInfoViewModel();
+        AuthViewModel viewModel = menuManager.getViewModelRegistry().getAuthViewModel();
         viewModel.setEmail(email);
         viewModel.setPasswordHash(password.hashCode());
         viewModel.OnLoginRequested.broadcast();

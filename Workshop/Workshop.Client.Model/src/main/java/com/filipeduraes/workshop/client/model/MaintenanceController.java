@@ -48,6 +48,7 @@ public class MaintenanceController
         maintenanceViewModel.OnRegisterAppointmentRequest.addListener(this::registerNewService);
         maintenanceViewModel.OnServicesRequest.addListener(this::requestServices);
         maintenanceViewModel.OnDetailedServiceInfoRequest.addListener(this::requestDetailedServiceInfo);
+        maintenanceViewModel.OnDeleteRequest.addListener(this::deleteSelectedService);
     }
 
     public void dispose()
@@ -55,6 +56,7 @@ public class MaintenanceController
         maintenanceViewModel.OnRegisterAppointmentRequest.removeListener(this::registerNewService);
         maintenanceViewModel.OnServicesRequest.removeListener(this::requestServices);
         maintenanceViewModel.OnDetailedServiceInfoRequest.removeListener(this::requestDetailedServiceInfo);
+        maintenanceViewModel.OnDeleteRequest.removeListener(this::deleteSelectedService);
     }
 
     private void registerNewService()
@@ -119,6 +121,12 @@ public class MaintenanceController
         maintenanceViewModel.setWasRequestSuccessful(true);
     }
 
+    private void deleteSelectedService()
+    {
+        UUID selectedServiceID = maintenanceViewModel.getSelectedService().getID();
+        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        maintenanceModule.deleteServiceOrder(selectedServiceID);
+    }
 
     private String getServiceListingName(ServiceOrder service)
     {

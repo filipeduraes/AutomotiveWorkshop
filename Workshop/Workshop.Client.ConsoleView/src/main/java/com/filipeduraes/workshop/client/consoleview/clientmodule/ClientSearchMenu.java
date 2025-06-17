@@ -47,6 +47,7 @@ public class ClientSearchMenu implements IWorkshopMenu
 
         if(searchOptionIndex >= optionsDisplayNames.length)
         {
+            clientViewModel.resetSelectedClient();
             System.out.println("Busca cancelada.");
             return MenuResult.pop();
         }
@@ -66,12 +67,6 @@ public class ClientSearchMenu implements IWorkshopMenu
 
         if(selectedClientSuccessfully(selectedClient, clientViewModel))
         {
-            if(clientViewModel.getSelectedFoundClientIndex() >= 0)
-            {
-                ClientDTO client = clientViewModel.getClient();
-                System.out.println(client);
-            }
-
             return MenuResult.pop();
         }
 

@@ -70,7 +70,7 @@ public class ClientDTO
     {
         return String.format
         (
-            "Cliente selecionado:%n - ID: %s%n - Nome: %s%n - Email: %s%n - CPF: %s%n - Telefone: %s",
+            "%n - ID: %s%n - Nome: %s%n - Email: %s%n - CPF: %s%n - Telefone: %s",
             getID(),
             getName(),
             getEmail(),

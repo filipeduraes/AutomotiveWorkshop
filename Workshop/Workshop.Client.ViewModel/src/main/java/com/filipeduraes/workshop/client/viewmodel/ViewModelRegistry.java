@@ -27,7 +27,7 @@ public class ViewModelRegistry
         return maintenanceViewModel;
     }
 
-    public AuthViewModel getUserInfoViewModel()
+    public AuthViewModel getAuthViewModel()
     {
         return authViewModel;
     }
