@@ -16,8 +16,8 @@ public class ServiceOrder extends WorkshopEntity
     private List<Product> services = new ArrayList<>();
 
     private Purchase purchase;
-    private final UUID clientID;
-    private final UUID vehicleID;
+    private UUID clientID;
+    private UUID vehicleID;
     private boolean finished = false;
 
     public ServiceOrder(UUID clientID, UUID vehicleID)
@@ -69,13 +69,28 @@ public class ServiceOrder extends WorkshopEntity
         return clientID;
     }
 
+    public void setClientID(UUID clientID)
+    {
+        this.clientID = clientID;
+    }
+
     public UUID getVehicleID()
     {
         return vehicleID;
     }
 
+    public void setVehicleID(UUID vehicleID)
+    {
+        this.vehicleID = vehicleID;
+    }
+
     public boolean getCurrentStepWasFinished()
     {
         return getCurrentStep().getWasFinished();
+    }
+
+    public Deque<ServiceStep> getSteps()
+    {
+        return steps;
     }
 }

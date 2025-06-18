@@ -12,7 +12,7 @@ public abstract class EntityViewModel<TEntityDTO>
     public final Observer OnDeleteRequest = new Observer();
 
     private List<String> foundEntitiesDescriptions = new ArrayList<>();
-    private SearchByOption searchByOption;
+    private FieldType fieldType;
     private TEntityDTO selectedDTO;
     private int selectedIndex = -1;
 
@@ -26,14 +26,14 @@ public abstract class EntityViewModel<TEntityDTO>
         this.foundEntitiesDescriptions = foundEntitiesDescriptions;
     }
 
-    public SearchByOption getSearchByOption()
+    public FieldType getSearchByOption()
     {
-        return searchByOption;
+        return fieldType;
     }
 
-    public void setSearchByOption(SearchByOption searchByOption)
+    public void setSearchByOption(FieldType fieldType)
     {
-        this.searchByOption = searchByOption;
+        this.fieldType = fieldType;
     }
 
     public TEntityDTO getSelectedDTO()

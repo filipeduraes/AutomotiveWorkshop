@@ -4,8 +4,8 @@ import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.*;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceQueryType;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceQueryType;
 
 public class QueryOpenedServicesMenu implements IWorkshopMenu
 {

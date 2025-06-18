@@ -83,7 +83,9 @@ public class CrudModule<TEntity extends WorkshopEntity>
      */
     public TEntity deleteEntityWithID(UUID id)
     {
-        return loadedEntities.remove(id);
+        TEntity deletedEntity = loadedEntities.remove(id);
+        saveCurrentEntities();
+        return deletedEntity;
     }
 
     /**

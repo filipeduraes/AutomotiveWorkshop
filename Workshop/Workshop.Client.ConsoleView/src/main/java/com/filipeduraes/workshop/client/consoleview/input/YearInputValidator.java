@@ -1,17 +1,20 @@
 package com.filipeduraes.workshop.client.consoleview.input;
 
-public class EmailInputValidator implements IInputValidator
+public class YearInputValidator implements IInputValidator
 {
     @Override
     public boolean validate(String input)
     {
-        return input != null && input.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+        boolean hasFourDigits = input.length() == 4;
+        boolean isIntegerNumber = input.matches("\\d+");
+
+        return hasFourDigits && isIntegerNumber;
     }
 
     @Override
     public String getErrorMessage()
     {
-        return "Email inválido. Use o formato usuario@dominio.com";
+        return "Ano inserido invalido. Use o formato YYYY, com apenas numeros.";
     }
 
     @Override

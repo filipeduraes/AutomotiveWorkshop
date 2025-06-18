@@ -5,7 +5,7 @@ package com.filipeduraes.workshop.client.model;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.model.mappers.ClientMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.SearchByOption;
+import com.filipeduraes.workshop.client.viewmodel.FieldType;
 import com.filipeduraes.workshop.core.CrudModule;
 import com.filipeduraes.workshop.core.client.Client;
 
@@ -24,12 +24,12 @@ import java.util.function.Function;
  */
 public class ClientController
 {
-    private final Map<SearchByOption, Function<Client, String>> clientSearchOptions = Map.of
+    private final Map<FieldType, Function<Client, String>> clientSearchOptions = Map.of
     (
-        SearchByOption.NAME, Client::getName,
-        SearchByOption.CPF, Client::getMaskedCPF,
-        SearchByOption.EMAIL, Client::getEmail,
-        SearchByOption.PHONE, Client::getPhoneNumber
+        FieldType.NAME, Client::getName,
+        FieldType.CPF, Client::getMaskedCPF,
+        FieldType.EMAIL, Client::getEmail,
+        FieldType.PHONE, Client::getPhoneNumber
     );
 
     private final ClientViewModel clientViewModel;

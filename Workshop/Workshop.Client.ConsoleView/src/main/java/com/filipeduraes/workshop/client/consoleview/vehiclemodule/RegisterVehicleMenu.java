@@ -4,6 +4,8 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.consoleview.input.LicensePlateValidator;
+import com.filipeduraes.workshop.client.consoleview.input.YearInputValidator;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
@@ -64,10 +66,10 @@ public class RegisterVehicleMenu implements IWorkshopMenu
         String vehicleVinNumber = ConsoleInput.readLine();
 
         System.out.println("Insira a placa do veiculo:");
-        String vehicleLicensePlate = ConsoleInput.readLine();
+        String vehicleLicensePlate = ConsoleInput.readValidatedLine(new LicensePlateValidator());
 
         System.out.println("Insira o ano do veiculo:");
-        int vehicleYear = ConsoleInput.readLineInteger();
+        int vehicleYear = Integer.parseInt(ConsoleInput.readValidatedLine(new YearInputValidator()));
 
         VehicleDTO vehicleDTO = new VehicleDTO(vehicleModel, vehicleColor, vehicleVinNumber, vehicleLicensePlate, vehicleYear);
         return vehicleDTO;

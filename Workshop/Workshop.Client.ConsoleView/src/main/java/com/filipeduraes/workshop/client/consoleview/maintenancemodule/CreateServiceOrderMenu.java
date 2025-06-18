@@ -9,7 +9,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
 import com.filipeduraes.workshop.client.viewmodel.*;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSelectionMenu;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 
 /**
  *

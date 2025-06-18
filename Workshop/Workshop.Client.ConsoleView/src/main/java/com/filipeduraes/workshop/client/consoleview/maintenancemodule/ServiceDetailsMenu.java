@@ -4,11 +4,9 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.general.MenuOption;
-import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
-import com.filipeduraes.workshop.client.dtos.ServiceStepDTO;
-import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
+import com.filipeduraes.workshop.client.dtos.ServiceStepTypeDTO;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 import com.filipeduraes.workshop.utils.TextUtils;
 
 import java.util.ArrayList;
@@ -51,7 +49,6 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceViewModel, Serv
         }
 
         newOptions.add(new MenuOption("Editar ordem de servico", this::editService));
-        newOptions.add(new MenuOption("Editar etapa do servico", this::editServiceStep));
 
         options.addAll(0, newOptions);
         return options;
@@ -81,11 +78,11 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceViewModel, Serv
     {
         ServiceOrderDTO selectedDTO = getViewModel().getSelectedDTO();
 
-        if (selectedDTO.getServiceStep() == ServiceStepDTO.ASSESSMENT)
+        if (selectedDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
         {
             return MenuResult.push(new FinishAssessmentMenu());
         }
-        else if (selectedDTO.getServiceStep() == ServiceStepDTO.MAINTENANCE)
+        else if (selectedDTO.getServiceStep() == ServiceStepTypeDTO.MAINTENANCE)
         {
             return MenuResult.push(new FinishMaintenanceMenu());
         }
@@ -96,18 +93,15 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceViewModel, Serv
 
     private MenuResult editService(MenuManager menuManager)
     {
+        menuManager.getViewModelRegistry().getClientViewModel().resetSelectedDTO();
+        menuManager.getViewModelRegistry().getVehicleViewModel().resetSelectedDTO();
         return MenuResult.push(new EditServiceMenu());
-    }
-
-    private MenuResult editServiceStep(MenuManager menuManager)
-    {
-        return MenuResult.push(new EditServiceStepMenu());
     }
 
     private boolean canStartNextStep(ServiceOrderDTO service)
     {
-        ServiceStepDTO serviceStep = service.getServiceStep();
-        boolean serviceHasNotFinished = serviceStep != ServiceStepDTO.CREATED && serviceStep != ServiceStepDTO.MAINTENANCE;
+        ServiceStepTypeDTO serviceStep = service.getServiceStep();
+        boolean serviceHasNotFinished = serviceStep != ServiceStepTypeDTO.CREATED && serviceStep != ServiceStepTypeDTO.MAINTENANCE;
 
         return service.getCurrentStepWasFinished() && serviceHasNotFinished;
     }
@@ -116,9 +110,9 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceViewModel, Serv
     {
         if(canStartNextStep(service))
         {
-            return service.getServiceStep() == ServiceStepDTO.APPOINTMENT ? ASSESSMENT_TEXT : MAINTENANCE_TEXT;
+            return service.getServiceStep() == ServiceStepTypeDTO.APPOINTMENT ? ASSESSMENT_TEXT : MAINTENANCE_TEXT;
         }
 
-        return service.getServiceStep() == ServiceStepDTO.ASSESSMENT ? ASSESSMENT_TEXT : MAINTENANCE_TEXT;
+        return service.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT ? ASSESSMENT_TEXT : MAINTENANCE_TEXT;
     }
 }

@@ -8,8 +8,8 @@ public class ServiceStep
     private final UUID employeeID;
     private final LocalDateTime startDate;
     private LocalDateTime finishDate;
-    private String shortDescription;
-    private String detailedDescription;
+    private String shortDescription = "";
+    private String detailedDescription = "";
     private boolean wasFinished = false;
 
     public ServiceStep(UUID employeeID)

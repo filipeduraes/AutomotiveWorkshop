@@ -1,6 +1,6 @@
 package com.filipeduraes.workshop.client.viewmodel;
 
-public enum SearchByOption
+public enum FieldType
 {
     NAME("Nome"),
     EMAIL("Email"),
@@ -10,11 +10,15 @@ public enum SearchByOption
     COLOR("Cor"),
     VIN_NUMBER("Numero do chassi"),
     LICENSE_PLATE("Numero de placa"),
-    YEAR("Ano");
+    YEAR("Ano"),
+    CLIENT("Cliente"),
+    VEHICLE("Veiculo"),
+    SHORT_DESCRIPTION("Descricao Curta"),
+    DETAILED_DESCRIPTION("Descricao Detalhada");
 
     private final String displayName;
 
-    private SearchByOption(String displayName)
+    private FieldType(String displayName)
     {
         this.displayName = displayName;
     }

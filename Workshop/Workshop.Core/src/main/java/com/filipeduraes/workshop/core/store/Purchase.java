@@ -34,8 +34,7 @@ public class Purchase
         this.date = date;
         this.items = items;
     }
-
-
+    
     /**
      * Obtém o identificador único desta compra.
      *

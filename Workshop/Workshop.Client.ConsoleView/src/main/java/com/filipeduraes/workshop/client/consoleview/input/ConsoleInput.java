@@ -110,7 +110,7 @@ public class ConsoleInput
             input = readLine(message);
         }
 
-        return input;
+        return inputValidator.formatValidInput(input);
     }
 
     /**

@@ -1,7 +1,8 @@
-package com.filipeduraes.workshop.client.viewmodel.maintenance;
+package com.filipeduraes.workshop.client.viewmodel.service;
 
 import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
+import com.filipeduraes.workshop.client.viewmodel.FieldType;
 import com.filipeduraes.workshop.utils.Observer;
 
 public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
@@ -9,12 +10,13 @@ public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
     public final Observer OnRegisterAppointmentRequest = new Observer();
     public final Observer OnStartStepRequest = new Observer();
     public final Observer OnFinishStepRequest = new Observer();
+    public final Observer OnEditServiceRequest = new Observer();
 
     private ServiceQueryType queryType = ServiceQueryType.GENERAL;
     private ServiceFilterType filterType = ServiceFilterType.NONE;
+    private FieldType editFieldType = FieldType.CLIENT;
     private String descriptionQueryPattern;
 
-    private String[] servicesDescriptions;
     private String currentStepDetailedDescription;
     private String currentStepShortDescription;
     private boolean wasRequestSuccessful = false;
@@ -38,17 +40,6 @@ public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
     public void setFilterType(ServiceFilterType filterType)
     {
         this.filterType = filterType;
-    }
-
-
-    public String[] getServicesDescriptions()
-    {
-        return servicesDescriptions;
-    }
-
-    public void setServicesDescriptions(String[] servicesDescriptions)
-    {
-        this.servicesDescriptions = servicesDescriptions;
     }
 
 
@@ -100,5 +91,15 @@ public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
         queryType = ServiceQueryType.GENERAL;
         filterType = ServiceFilterType.NONE;
         descriptionQueryPattern = "";
+    }
+
+    public FieldType getEditFieldType()
+    {
+        return editFieldType;
+    }
+
+    public void setEditFieldType(FieldType editFieldType)
+    {
+        this.editFieldType = editFieldType;
     }
 }

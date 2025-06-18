@@ -29,6 +29,11 @@ public class WorkshopEntity
         return id;
     }
 
+    /**
+     * Verifica se um ID é igual ao ID da entidade.
+     * @param otherID ID a ser comparado
+     * @return {@code true} se forem iguais, {@code false} se forem diferentes
+     */
     public boolean matchID(UUID otherID)
     {
         return id.equals(otherID);

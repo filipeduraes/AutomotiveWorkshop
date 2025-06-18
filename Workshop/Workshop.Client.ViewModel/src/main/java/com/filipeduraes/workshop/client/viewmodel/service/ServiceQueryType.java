@@ -1,4 +1,4 @@
-package com.filipeduraes.workshop.client.viewmodel.maintenance;
+package com.filipeduraes.workshop.client.viewmodel.service;
 
 public enum ServiceQueryType
 {

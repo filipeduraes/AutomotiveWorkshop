@@ -26,21 +26,7 @@ public final class ClientMapper
             clientDTO.getEmail(),
             clientDTO.getPhoneNumber(),
             clientDTO.getAddress(),
-            maskCPF(clientDTO.getCPF())
+            clientDTO.getCPF()
         );
-    }
-
-    private static String maskCPF(String cpf)
-    {
-        String numberOnlyCPF = cpf.replaceAll("\\D", ""); // Substitui qualquer caractere não numérico por uma string vazia
-
-        if(numberOnlyCPF.length() != 11)
-        {
-            return "";
-        }
-
-        String thirdPart = numberOnlyCPF.substring(6, 9);
-        String fourthPart = numberOnlyCPF.substring(9);
-        return String.format("XXX.XXX.%s-%s", thirdPart, fourthPart);
     }
 }

@@ -4,4 +4,5 @@ public interface IInputValidator
 {
     boolean validate(String input);
     String getErrorMessage();
+    String formatValidInput(String validInput);
 }

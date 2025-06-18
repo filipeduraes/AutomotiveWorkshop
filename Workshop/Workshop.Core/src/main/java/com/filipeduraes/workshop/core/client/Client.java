@@ -109,6 +109,11 @@ public class Client extends WorkshopEntity
      */
     public List<UUID> getOwnedVehiclesIDs()
     {
+        if(ownedVehiclesIDs == null)
+        {
+            ownedVehiclesIDs = new ArrayList<>();
+        }
+
         return ownedVehiclesIDs;
     }
 
@@ -119,6 +124,11 @@ public class Client extends WorkshopEntity
      */
     public List<UUID> getServiceOrdersIDs()
     {
+        if(serviceOrdersIDs == null)
+        {
+            serviceOrdersIDs = new ArrayList<>();
+        }
+
         return serviceOrdersIDs;
     }
 
@@ -140,7 +150,7 @@ public class Client extends WorkshopEntity
      */
     public void addServiceOrder(UUID serviceOrderID)
     {
-        serviceOrdersIDs.add(serviceOrderID);
+        getServiceOrdersIDs().add(serviceOrderID);
     }
 
     /**
@@ -152,5 +162,16 @@ public class Client extends WorkshopEntity
     public String toString()
     {
         return String.format("Cliente{ID: %s, Nome: '%s', Email: '%s', Telefone: '%s', Endereco: '%s', CPF: '%s'}", getID(), name, email, phoneNumber, address, maskedCPF);
+    }
+
+    /**
+     * Verifica se o cliente é dono do veículo.
+     *
+     * @param vehicleID ID do veículo a ser verificado
+     * @return {@code true} se o cliente for dono, {@code false} caso contrário
+     */
+    public boolean hasVehicleWithID(UUID vehicleID)
+    {
+        return ownedVehiclesIDs.contains(vehicleID);
     }
 }

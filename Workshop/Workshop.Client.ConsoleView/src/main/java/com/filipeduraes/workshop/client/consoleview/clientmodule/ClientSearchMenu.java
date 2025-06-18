@@ -6,9 +6,8 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
-import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.SearchByOption;
+import com.filipeduraes.workshop.client.viewmodel.FieldType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,13 +21,13 @@ import java.util.List;
  */
 public class ClientSearchMenu implements IWorkshopMenu
 {
-    private final SearchByOption[] options = { SearchByOption.NAME, SearchByOption.CPF, SearchByOption.EMAIL, SearchByOption.PHONE };
+    private final FieldType[] options = { FieldType.NAME, FieldType.CPF, FieldType.EMAIL, FieldType.PHONE };
     private final String[] optionsDisplayNames;
 
     public ClientSearchMenu()
     {
         optionsDisplayNames = Arrays.stream(options)
-                                    .map(SearchByOption::toString)
+                                    .map(FieldType::toString)
                                     .toArray(String[]::new);
     }
 

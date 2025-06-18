@@ -4,33 +4,36 @@ package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
+import com.filipeduraes.workshop.client.dtos.ServiceStepTypeDTO;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.model.mappers.ServiceOrderMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceFilterType;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceQueryType;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceFilterType;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceQueryType;
 import com.filipeduraes.workshop.core.CrudModule;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
+import com.filipeduraes.workshop.core.maintenance.ServiceStep;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
+import com.filipeduraes.workshop.utils.TextUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author Filipe Durães
  */
-public class MaintenanceController 
+public class ServiceController
 {
-
     private final ServiceViewModel serviceViewModel;
     private final VehicleViewModel vehicleViewModel;
     private final ClientViewModel clientViewModel;
@@ -38,7 +41,7 @@ public class MaintenanceController
 
     private List<ServiceOrder> queriedEntities = new ArrayList<>();
 
-    public MaintenanceController(ViewModelRegistry viewModelRegistry, Workshop workshop)
+    public ServiceController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
         serviceViewModel = viewModelRegistry.getServiceViewModel();
         vehicleViewModel = viewModelRegistry.getVehicleViewModel();
@@ -46,16 +49,20 @@ public class MaintenanceController
         this.workshop = workshop;
 
         serviceViewModel.OnRegisterAppointmentRequest.addListener(this::registerNewService);
+        serviceViewModel.OnStartStepRequest.addListener(this::startNextStep);
         serviceViewModel.OnSearchRequest.addListener(this::requestServices);
         serviceViewModel.OnLoadDataRequest.addListener(this::requestDetailedServiceInfo);
+        serviceViewModel.OnEditServiceRequest.addListener(this::editSelectedService);
         serviceViewModel.OnDeleteRequest.addListener(this::deleteSelectedService);
     }
 
     public void dispose()
     {
         serviceViewModel.OnRegisterAppointmentRequest.removeListener(this::registerNewService);
+        serviceViewModel.OnStartStepRequest.removeListener(this::startNextStep);
         serviceViewModel.OnSearchRequest.removeListener(this::requestServices);
         serviceViewModel.OnLoadDataRequest.removeListener(this::requestDetailedServiceInfo);
+        serviceViewModel.OnEditServiceRequest.removeListener(this::editSelectedService);
         serviceViewModel.OnDeleteRequest.removeListener(this::deleteSelectedService);
     }
 
@@ -70,10 +77,39 @@ public class MaintenanceController
             String detailedDescription = serviceViewModel.getCurrentStepDetailedDescription();
             ClientDTO selectedClient = clientViewModel.getSelectedDTO();
 
-            maintenanceModule.registerNewAppointment(selectedClient.getID(), selectedVehicle.getId(), shortDescription, detailedDescription);
+            UUID serviceOrderID = maintenanceModule.registerNewAppointment(selectedClient.getID(), selectedVehicle.getID(), shortDescription, detailedDescription);
+            ServiceOrder serviceOrder = maintenanceModule.getServiceOrderModule().getEntityWithID(serviceOrderID);
 
+            serviceViewModel.setSelectedIndex(0);
+            serviceViewModel.setSelectedDTO(ServiceOrderMapper.toDTO(serviceOrder, workshop));
             serviceViewModel.setWasRequestSuccessful(true);
         }
+    }
+
+    private void startNextStep()
+    {
+        ServiceOrderDTO serviceOrderDTO = serviceViewModel.getSelectedDTO();
+        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        UUID selectedServiceOrderID = serviceOrderDTO.getID();
+
+        ServiceOrder serviceOrder = maintenanceModule.getServiceOrderModule().getEntityWithID(selectedServiceOrderID);
+        boolean canStartNextStep = serviceOrder.getCurrentStepWasFinished();
+
+        if(canStartNextStep)
+        {
+            if(serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.APPOINTMENT)
+            {
+                maintenanceModule.startInspection(selectedServiceOrderID);
+            }
+            else if(serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
+            {
+                maintenanceModule.startMaintenance(selectedServiceOrderID);
+            }
+
+            requestDetailedServiceInfo();
+        }
+
+        serviceViewModel.setWasRequestSuccessful(canStartNextStep);
     }
 
     private void requestServices()
@@ -95,11 +131,11 @@ public class MaintenanceController
             queriedEntities = getServicesFilteringByDescription(queryType, descriptionQueryPattern);
         }
 
-        String[] descriptions = queriedEntities.stream()
+        List<String> descriptions = queriedEntities.stream()
                                         .map(this::getServiceListingName)
-                                        .toArray(String[]::new);
+                                        .collect(Collectors.toList());
 
-        serviceViewModel.setServicesDescriptions(descriptions);
+        serviceViewModel.setFoundEntitiesDescriptions(descriptions);
         serviceViewModel.setWasRequestSuccessful(true);
     }
 
@@ -120,6 +156,54 @@ public class MaintenanceController
         serviceViewModel.setWasRequestSuccessful(true);
     }
 
+    private void editSelectedService()
+    {
+        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        CrudModule<ServiceOrder> serviceOrderModule = maintenanceModule.getServiceOrderModule();
+        UUID selectedServiceID = serviceViewModel.getSelectedDTO().getID();
+        ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(selectedServiceID);
+
+        switch (serviceViewModel.getEditFieldType())
+        {
+            case CLIENT ->
+            {
+                ClientDTO clientDTO = clientViewModel.getSelectedDTO();
+                CrudModule<Client> clientModule = workshop.getClientModule();
+                Client client = clientModule.getEntityWithID(clientDTO.getID());
+                UUID vehicleID = vehicleViewModel.getSelectedDTO().getID();
+
+                boolean clientHasVehicle = client.hasVehicleWithID(vehicleID);
+                serviceViewModel.setWasRequestSuccessful(clientHasVehicle);
+
+                if (!clientHasVehicle)
+                {
+                    return;
+                }
+
+                serviceOrder.setVehicleID(vehicleID);
+                serviceOrder.setClientID(clientDTO.getID());
+                serviceOrderModule.updateEntity(serviceOrder);
+            }
+            case VEHICLE ->
+            {
+                VehicleDTO vehicleDTO = vehicleViewModel.getSelectedDTO();
+
+                serviceOrder.setVehicleID(vehicleDTO.getID());
+                serviceOrderModule.updateEntity(serviceOrder);
+            }
+            case SHORT_DESCRIPTION ->
+            {
+
+            }
+            case DETAILED_DESCRIPTION ->
+            {
+
+            }
+        }
+
+        requestDetailedServiceInfo();
+    }
+
     private void deleteSelectedService()
     {
         UUID selectedServiceID = serviceViewModel.getSelectedDTO().getID();
@@ -129,7 +213,7 @@ public class MaintenanceController
 
     private String getServiceListingName(ServiceOrder service)
     {
-        String shortDescription = service.getCurrentStep().getShortDescription();
+        ServiceStep currentStep = service.getCurrentStep();
         UUID clientID = service.getClientID();
         UUID vehicleID = service.getVehicleID();
 
@@ -141,11 +225,19 @@ public class MaintenanceController
             return "INVALID_SERVICE";
         }
 
-        LocalDateTime startDate = service.getCurrentStep().getStartDate();
-        String monthName = startDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("pt-br"));
-        String formattedDate = String.format("%d %s %d:%d", startDate.getDayOfMonth(), monthName, startDate.getHour(), startDate.getMinute());
+        LocalDateTime startDate = currentStep.getStartDate();
+        String shortDescription;
 
-        return String.format("%s — %s — %s — %s", shortDescription, owner.getName(), vehicle, formattedDate);
+        if(!currentStep.getWasFinished())
+        {
+            shortDescription = new ArrayList<>(service.getSteps()).get(1).getShortDescription();
+        }
+        else
+        {
+            shortDescription = currentStep.getShortDescription();
+        }
+
+        return String.format("%s — %s — %s — %s", shortDescription, owner.getName(), vehicle, TextUtils.formatDate(startDate));
     }
 
     private List<ServiceOrder> getServicesWithoutFiltering(ServiceQueryType queryType)

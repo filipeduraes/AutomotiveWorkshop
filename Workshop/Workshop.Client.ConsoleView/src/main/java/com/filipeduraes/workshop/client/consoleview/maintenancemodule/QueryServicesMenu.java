@@ -5,9 +5,9 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSearchMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceFilterType;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceFilterType;
 
 import java.util.Arrays;
 
@@ -52,7 +52,7 @@ public class QueryServicesMenu implements IWorkshopMenu
             return MenuResult.pop();
         }
 
-        String[] servicesDescriptions = serviceViewModel.getServicesDescriptions();
+        String[] servicesDescriptions = serviceViewModel.getFoundEntitiesDescriptions().toArray(String[]::new);
 
         if(servicesDescriptions.length == 0)
         {

@@ -1,12 +1,11 @@
 // Copyright Filipe Durães. All rights reserved.
 
 package com.filipeduraes.workshop.client.consoleview;
+import com.filipeduraes.workshop.client.consoleview.general.MenuOption;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.viewmodel.*;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -125,6 +124,29 @@ public class MenuManager
         }
 
         return options[selectedOptionIndex];
+    }
+
+    public MenuOption showMenuOptions(String message, List<MenuOption> options)
+    {
+        return showMenuOptions(message, options, false);
+    }
+
+    public MenuOption showMenuOptions(String message, List<MenuOption> options, boolean showExitOption)
+    {
+        if(!message.isBlank())
+        {
+            System.out.println(message);
+        }
+
+        String[] optionList = options.stream().map(MenuOption::getOptionDisplayName).toArray(String[]::new);
+        int selectedOption = ConsoleInput.readOptionFromList(message, optionList, showExitOption);
+
+        if(selectedOption < 0 || selectedOption >= options.size())
+        {
+            return new MenuOption("Sair", m -> MenuResult.pop());
+        }
+
+        return options.get(selectedOption);
     }
 
     private void showMenuTitle()

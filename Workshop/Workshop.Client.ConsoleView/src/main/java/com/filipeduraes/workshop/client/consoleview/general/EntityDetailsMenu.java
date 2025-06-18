@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class EntityDetailsMenu<TViewModel extends EntityViewModel<TEntityDTO>, TEntityDTO> implements IWorkshopMenu
@@ -29,32 +30,20 @@ public abstract class EntityDetailsMenu<TViewModel extends EntityViewModel<TEnti
             return MenuResult.pop();
         }
 
-        if(!viewModel.hasLoadedDTO())
-        {
-            viewModel.OnLoadDataRequest.broadcast();
-        }
+        viewModel.OnLoadDataRequest.broadcast();
 
-        System.out.printf("%s%n%n", viewModel.getSelectedDTO());
+        System.out.printf("%s%n", viewModel.getSelectedDTO());
+        MenuOption menuOption = menuManager.showMenuOptions("O que deseja fazer?", buildOptions(), true);
 
-        List<MenuOption> options = buildOptions();
-        String[] optionsDisplay = options.stream().map(MenuOption::getOptionDisplayName).toArray(String[]::new);
-
-        int selectedOption = ConsoleInput.readOptionFromList("O que deseja fazer?", optionsDisplay, true);
-
-        if(selectedOption >= optionsDisplay.length || selectedOption < 0)
-        {
-            return MenuResult.pop();
-        }
-
-        return options.get(selectedOption).getOptionAction().apply(menuManager);
+        return menuOption.execute(menuManager);
     }
 
     protected List<MenuOption> buildOptions()
     {
-        return List.of
-        (
-            new MenuOption("Excluir", this::deleteEntity)
-        );
+        ArrayList<MenuOption> optionsList = new ArrayList<>();
+        optionsList.add(new MenuOption("Excluir", this::deleteEntity));
+
+        return optionsList;
     }
 
     protected TViewModel getViewModel()

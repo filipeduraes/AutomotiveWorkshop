@@ -1,6 +1,5 @@
 package com.filipeduraes.workshop.client.consoleview.clientmodule;
 
-import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
@@ -9,6 +8,7 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientDetailsMenu extends EntityDetailsMenu<ClientViewModel, ClientDTO>
@@ -17,6 +17,24 @@ public class ClientDetailsMenu extends EntityDetailsMenu<ClientViewModel, Client
     public String getMenuDisplayName()
     {
         return "Buscar cliente";
+    }
+
+    @Override
+    public MenuResult showMenu(MenuManager menuManager)
+    {
+        if(!menuManager.getViewModelRegistry().getClientViewModel().hasLoadedDTO())
+        {
+            boolean shouldSearch = ConsoleInput.readConfirmation("Deseja procurar um cliente?");
+
+            if(shouldSearch)
+            {
+                return MenuResult.push(new ClientSearchMenu());
+            }
+
+            return MenuResult.pop();
+        }
+
+        return super.showMenu(menuManager);
     }
 
     @Override

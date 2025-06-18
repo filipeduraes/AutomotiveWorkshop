@@ -31,7 +31,7 @@ public class VehicleDTO
         this.year = year;
     }
 
-    public UUID getId()
+    public UUID getID()
     {
         return id;
     }
@@ -72,7 +72,7 @@ public class VehicleDTO
         return String.format
         (
             " - ID: %s%n - Modelo: %s%n - Cor: %s%n - Chassi: %s%n - Placa: %s%n - Ano: %d",
-            getId(),
+            getID(),
             getModel(),
             getColor(),
             getVinNumber(),

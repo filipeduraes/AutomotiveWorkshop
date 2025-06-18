@@ -25,4 +25,9 @@ public class MenuOption
     {
         return optionAction;
     }
+
+    public MenuResult execute(MenuManager menuManager)
+    {
+        return getOptionAction().apply(menuManager);
+    }
 }
