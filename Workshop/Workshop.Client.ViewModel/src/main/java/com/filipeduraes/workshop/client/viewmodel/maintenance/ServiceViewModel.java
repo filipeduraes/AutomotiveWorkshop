@@ -1,30 +1,23 @@
 package com.filipeduraes.workshop.client.viewmodel.maintenance;
 
 import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
+import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.utils.Observer;
-import java.util.UUID;
 
-public class MaintenanceViewModel
+public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
 {
-    public final Observer OnServicesRequest = new Observer();
-    public final Observer OnDetailedServiceInfoRequest = new Observer();
     public final Observer OnRegisterAppointmentRequest = new Observer();
     public final Observer OnStartStepRequest = new Observer();
     public final Observer OnFinishStepRequest = new Observer();
-    public final Observer OnDeleteRequest = new Observer();
 
     private ServiceQueryType queryType = ServiceQueryType.GENERAL;
     private ServiceFilterType filterType = ServiceFilterType.NONE;
     private String descriptionQueryPattern;
 
-    private ServiceOrderDTO selectedService;
     private String[] servicesDescriptions;
     private String currentStepDetailedDescription;
     private String currentStepShortDescription;
-    private UUID currentMaintenanceID;
-    private int selectedMaintenanceIndex = -1;
     private boolean wasRequestSuccessful = false;
-
 
     public ServiceQueryType getQueryType()
     {
@@ -48,17 +41,6 @@ public class MaintenanceViewModel
     }
 
 
-    public ServiceOrderDTO getSelectedService()
-    {
-        return selectedService;
-    }
-
-    public void setSelectedService(ServiceOrderDTO selectedService)
-    {
-        this.selectedService = selectedService;
-    }
-
-    
     public String[] getServicesDescriptions()
     {
         return servicesDescriptions;
@@ -92,12 +74,6 @@ public class MaintenanceViewModel
     }
 
 
-    public UUID getCurrentMaintenanceID()
-    {
-        return currentMaintenanceID;
-    }
-
-
     public void setDescriptionQueryPattern(String pattern)
     {
         descriptionQueryPattern = pattern;
@@ -108,21 +84,6 @@ public class MaintenanceViewModel
         return descriptionQueryPattern;
     }
 
-
-    public void setCurrentMaintenanceID(UUID currentMaintenanceID)
-    {
-        this.currentMaintenanceID = currentMaintenanceID;
-    }
-
-    public int getSelectedMaintenanceIndex()
-    {
-        return selectedMaintenanceIndex;
-    }
-
-    public void setSelectedMaintenanceIndex(int selectedMaintenanceIndex)
-    {
-        this.selectedMaintenanceIndex = selectedMaintenanceIndex;
-    }
 
     public boolean getWasRequestSuccessful()
     {

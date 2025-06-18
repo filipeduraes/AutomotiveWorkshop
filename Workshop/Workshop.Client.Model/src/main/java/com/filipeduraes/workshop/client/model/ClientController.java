@@ -49,8 +49,8 @@ public class ClientController
         this.clientModule = clientModule;
 
         clientViewModel.OnClientRegisterRequest.addListener(this::registerClient);
-        clientViewModel.OnClientLoadDataRequest.addListener(this::loadClientData);
-        clientViewModel.OnClientsSearchRequest.addListener(this::searchClients);
+        clientViewModel.OnLoadDataRequest.addListener(this::loadClientData);
+        clientViewModel.OnSearchRequest.addListener(this::searchClients);
     }
 
     /**
@@ -60,13 +60,13 @@ public class ClientController
     public void dispose()
     {
         clientViewModel.OnClientRegisterRequest.removeListener(this::registerClient);
-        clientViewModel.OnClientLoadDataRequest.removeListener(this::loadClientData);
-        clientViewModel.OnClientsSearchRequest.removeListener(this::searchClients);
+        clientViewModel.OnLoadDataRequest.removeListener(this::loadClientData);
+        clientViewModel.OnSearchRequest.removeListener(this::searchClients);
     }
 
     private void registerClient()
     {
-        ClientDTO client = clientViewModel.getClient();
+        ClientDTO client = clientViewModel.getSelectedDTO();
         Client newClient = ClientMapper.fromDTO(client);
         UUID clientID = clientModule.registerEntity(newClient);
         client.setID(clientID);
@@ -79,17 +79,17 @@ public class ClientController
         foundClients = clientModule.searchEntitiesWithPattern(searchPattern, clientStringExtractor);
 
         List<String> clientDescriptions = convertClientsToClientDescriptions(foundClients);
-        clientViewModel.setFoundClientDescriptions(clientDescriptions);
+        clientViewModel.setFoundEntitiesDescriptions(clientDescriptions);
     }
 
     private void loadClientData()
     {
-        final int selectedFoundClientIndex = clientViewModel.getSelectedFoundClientIndex();
+        final int selectedFoundClientIndex = clientViewModel.getSelectedIndex();
 
         if (selectedFoundClientIndex >= 0 && selectedFoundClientIndex < foundClients.size())
         {
             Client selectedFoundClient = foundClients.get(selectedFoundClientIndex);
-            clientViewModel.setClient(ClientMapper.toDTO(selectedFoundClient));
+            clientViewModel.setSelectedDTO(ClientMapper.toDTO(selectedFoundClient));
         }
     }
 

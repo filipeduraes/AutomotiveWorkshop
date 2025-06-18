@@ -47,7 +47,7 @@ public class ClientSearchMenu implements IWorkshopMenu
 
         if(searchOptionIndex >= optionsDisplayNames.length)
         {
-            clientViewModel.resetSelectedClient();
+            clientViewModel.resetSelectedDTO();
             System.out.println("Busca cancelada.");
             return MenuResult.pop();
         }
@@ -59,7 +59,7 @@ public class ClientSearchMenu implements IWorkshopMenu
         clientViewModel.setSearchByOption(options[searchOptionIndex]);
         clientViewModel.setSearchPattern(searchPattern);
 
-        clientViewModel.OnClientsSearchRequest.broadcast();
+        clientViewModel.OnSearchRequest.broadcast();
         
         showFoundClients(clientViewModel);
 
@@ -75,7 +75,7 @@ public class ClientSearchMenu implements IWorkshopMenu
 
     private void showFoundClients(final ClientViewModel clientViewModel) 
     {
-        final List<String> foundClientNames = clientViewModel.getFoundClientDescriptions();
+        final List<String> foundClientNames = clientViewModel.getFoundEntitiesDescriptions();
         
         for(int i = 0; i < foundClientNames.size(); i++)
         {
@@ -88,18 +88,18 @@ public class ClientSearchMenu implements IWorkshopMenu
 
     private boolean selectedClientSuccessfully(int selectedClient, final ClientViewModel clientViewModel)
     {
-        final List<String> foundClientNames = clientViewModel.getFoundClientDescriptions();
+        final List<String> foundClientNames = clientViewModel.getFoundEntitiesDescriptions();
         
         if (selectedClient >= 0 && selectedClient < foundClientNames.size()) 
         {
-            clientViewModel.setSelectedFoundClientIndex(selectedClient);
-            clientViewModel.OnClientLoadDataRequest.broadcast();
+            clientViewModel.setSelectedIndex(selectedClient);
+            clientViewModel.OnLoadDataRequest.broadcast();
             return true;
         }
         
         if (selectedClient == foundClientNames.size() + 1) 
         {
-            clientViewModel.resetSelectedClient();
+            clientViewModel.resetSelectedDTO();
             return true;
         }
         

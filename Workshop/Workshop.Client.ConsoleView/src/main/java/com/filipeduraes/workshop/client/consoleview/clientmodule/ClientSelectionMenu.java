@@ -31,9 +31,10 @@ public class ClientSelectionMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
-        if(clientViewModel.hasSelectedClient())
+
+        if(clientViewModel.hasLoadedDTO())
         {
-            System.out.printf("Cliente selecionado:%n%s%n%n", clientViewModel.getClient());
+            System.out.printf("Cliente selecionado:%n%s%n%n", clientViewModel.getSelectedDTO());
             return MenuResult.pop();
         }
 

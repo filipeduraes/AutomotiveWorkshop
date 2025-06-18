@@ -9,7 +9,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
 import com.filipeduraes.workshop.client.viewmodel.*;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSelectionMenu;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
+import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
 
 /**
  *
@@ -30,7 +30,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        final MaintenanceViewModel maintenanceViewModel = viewModelRegistry.getMaintenanceViewModel();
+        final ServiceViewModel serviceViewModel = viewModelRegistry.getServiceViewModel();
 
         MenuResult clientSelectionMenuResult = selectClient(viewModelRegistry.getClientViewModel());
 
@@ -49,15 +49,15 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
         String shortDescription = ConsoleInput.readLine("Digite uma descricao curta do problema:");
         String detailedDescription = ConsoleInput.readLine("Digite uma descricao detalhada do problema:");
 
-        maintenanceViewModel.setCurrentStepShortDescription(shortDescription);
-        maintenanceViewModel.setCurrentStepDetailedDescription(detailedDescription);
+        serviceViewModel.setCurrentStepShortDescription(shortDescription);
+        serviceViewModel.setCurrentStepDetailedDescription(detailedDescription);
 
-        maintenanceViewModel.OnRegisterAppointmentRequest.broadcast();
+        serviceViewModel.OnRegisterAppointmentRequest.broadcast();
 
-        if(maintenanceViewModel.getWasRequestSuccessful())
+        if(serviceViewModel.getWasRequestSuccessful())
         {
-            System.out.printf("Agendamento registrado com sucesso! ID: %s%n", maintenanceViewModel.getCurrentMaintenanceID());
-            viewModelRegistry.getClientViewModel().resetSelectedClient();
+            System.out.printf("Agendamento registrado com sucesso! ID: %s%n", serviceViewModel.getSelectedDTO().getID());
+            viewModelRegistry.getClientViewModel().resetSelectedDTO();
             return MenuResult.pop();
         }
 
@@ -67,7 +67,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
     private MenuResult selectClient(ClientViewModel clientViewModel)
     {
-        if(!clientViewModel.hasSelectedClient())
+        if(!clientViewModel.hasLoadedDTO())
         {
             System.out.println("- CLIENTE");
             int selectedOption = ConsoleInput.readOptionFromList("Selecione o cliente", new String[] { selectClientMessage }, true);
@@ -85,7 +85,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
     private MenuResult selectVehicle(VehicleViewModel vehicleViewModel)
     {
-        if(!vehicleViewModel.hasSelectedVehicle())
+        if(!vehicleViewModel.hasLoadedDTO())
         {
             int selectedOption = ConsoleInput.readOptionFromList("Selecione o veiculo", new String[] { selectVehicleMessage }, true);
 

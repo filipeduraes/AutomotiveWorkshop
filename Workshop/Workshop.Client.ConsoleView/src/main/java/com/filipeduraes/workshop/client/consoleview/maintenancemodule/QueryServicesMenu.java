@@ -5,7 +5,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSearchMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
+import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceFilterType;
 
@@ -25,13 +25,13 @@ public class QueryServicesMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        MaintenanceViewModel maintenanceViewModel = viewModelRegistry.getMaintenanceViewModel();
+        ServiceViewModel serviceViewModel = viewModelRegistry.getServiceViewModel();
 
         if(lastSelectedFilter == ServiceFilterType.NONE)
         {
             ServiceFilterType filterType = selectFilterOption();
             lastSelectedFilter = filterType;
-            maintenanceViewModel.setFilterType(filterType);
+            serviceViewModel.setFilterType(filterType);
 
             if (filterType == ServiceFilterType.CLIENT)
             {
@@ -40,19 +40,19 @@ public class QueryServicesMenu implements IWorkshopMenu
             else if (filterType == ServiceFilterType.DESCRIPTION_PATTERN)
             {
                 String pattern = ConsoleInput.readLine("Insira o padrao procurado na descricao:");
-                maintenanceViewModel.setDescriptionQueryPattern(pattern);
+                serviceViewModel.setDescriptionQueryPattern(pattern);
             }
         }
 
-        maintenanceViewModel.OnServicesRequest.broadcast();
+        serviceViewModel.OnSearchRequest.broadcast();
 
-        if(!maintenanceViewModel.getWasRequestSuccessful())
+        if(!serviceViewModel.getWasRequestSuccessful())
         {
             System.out.println("Nao foi possivel recuperar os servicos. Tente novamente.");
             return MenuResult.pop();
         }
 
-        String[] servicesDescriptions = maintenanceViewModel.getServicesDescriptions();
+        String[] servicesDescriptions = serviceViewModel.getServicesDescriptions();
 
         if(servicesDescriptions.length == 0)
         {
@@ -67,13 +67,13 @@ public class QueryServicesMenu implements IWorkshopMenu
 
         if (selectedAppointment < servicesDescriptions.length)
         {
-            maintenanceViewModel.setSelectedMaintenanceIndex(selectedAppointment);
+            serviceViewModel.setSelectedIndex(selectedAppointment);
 
             return MenuResult.push(new ServiceDetailsMenu());
         }
 
-        viewModelRegistry.getClientViewModel().resetSelectedClient();
-        maintenanceViewModel.resetQuery();
+        viewModelRegistry.getClientViewModel().resetSelectedDTO();
+        serviceViewModel.resetQuery();
 
         System.out.println("Operacao cancelada, nenhum agendamento selecionado.");
         return MenuResult.pop();

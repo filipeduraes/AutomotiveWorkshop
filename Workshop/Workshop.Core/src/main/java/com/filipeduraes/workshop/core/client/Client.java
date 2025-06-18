@@ -21,6 +21,7 @@ public class Client extends WorkshopEntity
     private String maskedCPF;
 
     private List<UUID> ownedVehiclesIDs = new ArrayList<>();
+    private List<UUID> serviceOrdersIDs = new ArrayList<>();
 
     /**
      * Construtor para criar um novo cliente com suas informações básicas.
@@ -112,6 +113,16 @@ public class Client extends WorkshopEntity
     }
 
     /**
+     * Obtém os identificadores das ordens de serviço relacionadas ao cliente.
+     *
+     * @return Os identificadores das ordens de serviço
+     */
+    public List<UUID> getServiceOrdersIDs()
+    {
+        return serviceOrdersIDs;
+    }
+
+    /**
      * Adiciona um veículo à lista de veículos possuídos pelo cliente.
      *
      * @param vehicleID O identificador único do veículo a ser adicionado
@@ -119,6 +130,17 @@ public class Client extends WorkshopEntity
     public void addOwnedVehicle(UUID vehicleID)
     {
         ownedVehiclesIDs.add(vehicleID);
+    }
+
+
+    /**
+     * Adiciona uma ordem de serviço à lista de ordens de serviço associadas ao cliente.
+     *
+     * @param serviceOrderID O identificador único da ordem de serviço a ser adicionada
+     */
+    public void addServiceOrder(UUID serviceOrderID)
+    {
+        serviceOrdersIDs.add(serviceOrderID);
     }
 
     /**

@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.core.auth.AuthModule;
 import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
+import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.SerializationAdapterGroup;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
@@ -55,6 +56,11 @@ public class Workshop
     {
         authModule.OnUserLogged.removeListener(this::initializeUserData);
         vehicleModule.OnEntityRegistered.removeListener(this::registerVehicleToOwner);
+
+        if(maintenanceModule != null)
+        {
+            maintenanceModule.getServiceOrderModule().OnEntityRegistered.removeListener(this::registerServiceOrderToOwner);
+        }
     }
 
     /**
@@ -102,6 +108,7 @@ public class Workshop
         Employee loggedUser = authModule.getLoggedUser();
         WorkshopPaths.setCurrentLoggedUserID(loggedUser.getID());
         maintenanceModule = new MaintenanceModule(loggedUser.getID());
+        maintenanceModule.getServiceOrderModule().OnEntityRegistered.addListener(this::registerServiceOrderToOwner);
     }
 
     private void registerVehicleToOwner(Vehicle vehicle)
@@ -109,6 +116,14 @@ public class Workshop
         UUID ownerID = vehicle.getOwnerID();
         Client owner = clientModule.getEntityWithID(ownerID);
         owner.addOwnedVehicle(vehicle.getID());
+        clientModule.updateEntity(owner);
+    }
+
+    private void registerServiceOrderToOwner(ServiceOrder serviceOrder)
+    {
+        UUID ownerID = serviceOrder.getClientID();
+        Client owner = clientModule.getEntityWithID(ownerID);
+        owner.addServiceOrder(serviceOrder.getID());
         clientModule.updateEntity(owner);
     }
 }

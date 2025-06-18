@@ -21,11 +21,11 @@ public class VehicleSelectionMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         VehicleViewModel vehicleViewModel = menuManager.getViewModelRegistry().getVehicleViewModel();
-        vehicleViewModel.OnClientVehiclesRequest.broadcast();
+        vehicleViewModel.OnSearchRequest.broadcast();
 
-        if(vehicleViewModel.getWasRequestSuccessful() && vehicleViewModel.clientHasVehicles())
+        if(vehicleViewModel.getWasRequestSuccessful() && vehicleViewModel.hasAnyFoundEntities())
         {
-            List<String> vehicleNamesList = vehicleViewModel.getSelectedClientVehicles();
+            List<String> vehicleNamesList = vehicleViewModel.getFoundEntitiesDescriptions();
             String[] vehicleNames = new String[vehicleNamesList.size()];
             vehicleNamesList.toArray(vehicleNames);
 
@@ -33,12 +33,12 @@ public class VehicleSelectionMenu implements IWorkshopMenu
 
             if (selectedVehicleIndex < vehicleNames.length)
             {
-                vehicleViewModel.setSelectedVehicleIndex(selectedVehicleIndex);
-                vehicleViewModel.OnVehicleDetailsRequest.broadcast();
+                vehicleViewModel.setSelectedIndex(selectedVehicleIndex);
+                vehicleViewModel.OnLoadDataRequest.broadcast();
 
                 if(vehicleViewModel.getWasRequestSuccessful())
                 {
-                    VehicleDTO selectedVehicle = vehicleViewModel.getSelectedVehicle();
+                    VehicleDTO selectedVehicle = vehicleViewModel.getSelectedDTO();
                     String selectedMessage = String.format("Veiculo selecionado:%n%s", selectedVehicle);
                     System.out.println(selectedMessage);
 
@@ -49,12 +49,12 @@ public class VehicleSelectionMenu implements IWorkshopMenu
             }
         }
 
-        if(!vehicleViewModel.clientHasVehicles())
+        if(!vehicleViewModel.hasAnyFoundEntities())
         {
             System.out.println("Nenhum veiculo cadastrado para o cliente selecionado.");
         }
 
-        vehicleViewModel.cleanCurrentSelectedVehicle();
+        vehicleViewModel.resetSelectedDTO();
         return MenuResult.pop();
     }
 }

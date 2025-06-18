@@ -23,7 +23,7 @@ public class ClientMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
-        clientViewModel.resetSelectedClient();
+        clientViewModel.resetSelectedDTO();
 
         IWorkshopMenu selectedMenu = menuManager.showSubmenuOptions("O que deseja fazer?", submenus);
 

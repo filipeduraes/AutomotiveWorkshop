@@ -3,10 +3,15 @@ package com.filipeduraes.workshop.client.consoleview.clientmodule;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
+import com.filipeduraes.workshop.client.consoleview.general.MenuOption;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
+import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 
-public class ClientDetailsMenu implements IWorkshopMenu
+import java.util.List;
+
+public class ClientDetailsMenu extends EntityDetailsMenu<ClientViewModel, ClientDTO>
 {
     @Override
     public String getMenuDisplayName()
@@ -15,24 +20,27 @@ public class ClientDetailsMenu implements IWorkshopMenu
     }
 
     @Override
-    public MenuResult showMenu(MenuManager menuManager)
+    protected ClientViewModel findViewModel(MenuManager menuManager)
     {
-        ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
+        return menuManager.getViewModelRegistry().getClientViewModel();
+    }
 
-        if(!clientViewModel.hasSelectedClient())
-        {
-            boolean confirmation = ConsoleInput.readConfirmation("Deseja pesquisar um cliente existente?");
+    @Override
+    protected List<MenuOption> buildOptions()
+    {
+        List<MenuOption> options = super.buildOptions();
 
-            if(confirmation)
-            {
-                return MenuResult.push(new ClientSearchMenu());
-            }
+        List<MenuOption> newOptions = List.of
+        (
+            new MenuOption("Editar cliente", this::showEditClientScreen)
+        );
 
-            System.out.println("Busca cancelada. Voltando...");
-            return MenuResult.pop();
-        }
+        options.addAll(0, newOptions);
+        return options;
+    }
 
-        System.out.printf("Cliente selecionado:%n%s%n%n", clientViewModel.getClient());
-        return MenuResult.pop();
+    private MenuResult showEditClientScreen(MenuManager menuManager)
+    {
+        return MenuResult.push(new EditClientMenu());
     }
 }

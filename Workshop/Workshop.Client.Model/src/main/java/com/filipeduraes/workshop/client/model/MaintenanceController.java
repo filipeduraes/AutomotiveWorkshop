@@ -7,7 +7,7 @@ import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.model.mappers.ServiceOrderMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
+import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceFilterType;
@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 public class MaintenanceController 
 {
 
-    private final MaintenanceViewModel maintenanceViewModel;
+    private final ServiceViewModel serviceViewModel;
     private final VehicleViewModel vehicleViewModel;
     private final ClientViewModel clientViewModel;
     private final Workshop workshop;
@@ -40,47 +40,46 @@ public class MaintenanceController
 
     public MaintenanceController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
-        maintenanceViewModel = viewModelRegistry.getMaintenanceViewModel();
+        serviceViewModel = viewModelRegistry.getServiceViewModel();
         vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         clientViewModel = viewModelRegistry.getClientViewModel();
         this.workshop = workshop;
 
-        maintenanceViewModel.OnRegisterAppointmentRequest.addListener(this::registerNewService);
-        maintenanceViewModel.OnServicesRequest.addListener(this::requestServices);
-        maintenanceViewModel.OnDetailedServiceInfoRequest.addListener(this::requestDetailedServiceInfo);
-        maintenanceViewModel.OnDeleteRequest.addListener(this::deleteSelectedService);
+        serviceViewModel.OnRegisterAppointmentRequest.addListener(this::registerNewService);
+        serviceViewModel.OnSearchRequest.addListener(this::requestServices);
+        serviceViewModel.OnLoadDataRequest.addListener(this::requestDetailedServiceInfo);
+        serviceViewModel.OnDeleteRequest.addListener(this::deleteSelectedService);
     }
 
     public void dispose()
     {
-        maintenanceViewModel.OnRegisterAppointmentRequest.removeListener(this::registerNewService);
-        maintenanceViewModel.OnServicesRequest.removeListener(this::requestServices);
-        maintenanceViewModel.OnDetailedServiceInfoRequest.removeListener(this::requestDetailedServiceInfo);
-        maintenanceViewModel.OnDeleteRequest.removeListener(this::deleteSelectedService);
+        serviceViewModel.OnRegisterAppointmentRequest.removeListener(this::registerNewService);
+        serviceViewModel.OnSearchRequest.removeListener(this::requestServices);
+        serviceViewModel.OnLoadDataRequest.removeListener(this::requestDetailedServiceInfo);
+        serviceViewModel.OnDeleteRequest.removeListener(this::deleteSelectedService);
     }
 
     private void registerNewService()
     {
         MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
 
-        if(vehicleViewModel.hasSelectedVehicle())
+        if(vehicleViewModel.hasLoadedDTO())
         {
-            VehicleDTO selectedVehicle = vehicleViewModel.getSelectedVehicle();
-            String shortDescription = maintenanceViewModel.getCurrentStepShortDescription();
-            String detailedDescription = maintenanceViewModel.getCurrentStepDetailedDescription();
-            ClientDTO selectedClient = clientViewModel.getClient();
+            VehicleDTO selectedVehicle = vehicleViewModel.getSelectedDTO();
+            String shortDescription = serviceViewModel.getCurrentStepShortDescription();
+            String detailedDescription = serviceViewModel.getCurrentStepDetailedDescription();
+            ClientDTO selectedClient = clientViewModel.getSelectedDTO();
 
-            UUID appointmentID = maintenanceModule.registerNewAppointment(selectedClient.getID(), selectedVehicle.getId(), shortDescription, detailedDescription);
+            maintenanceModule.registerNewAppointment(selectedClient.getID(), selectedVehicle.getId(), shortDescription, detailedDescription);
 
-            maintenanceViewModel.setCurrentMaintenanceID(appointmentID);
-            maintenanceViewModel.setWasRequestSuccessful(true);
+            serviceViewModel.setWasRequestSuccessful(true);
         }
     }
 
     private void requestServices()
     {
-        ServiceQueryType queryType = maintenanceViewModel.getQueryType();
-        ServiceFilterType filterType = maintenanceViewModel.getFilterType();
+        ServiceQueryType queryType = serviceViewModel.getQueryType();
+        ServiceFilterType filterType = serviceViewModel.getFilterType();
 
         if(filterType == ServiceFilterType.NONE)
         {
@@ -88,11 +87,11 @@ public class MaintenanceController
         }
         else if(filterType == ServiceFilterType.CLIENT)
         {
-            queriedEntities = getServicesFilteringByClient(queryType, clientViewModel.getClient().getID());
+            queriedEntities = getServicesFilteringByClient(queryType, clientViewModel.getSelectedDTO().getID());
         }
         else if(filterType == ServiceFilterType.DESCRIPTION_PATTERN)
         {
-            String descriptionQueryPattern = maintenanceViewModel.getDescriptionQueryPattern();
+            String descriptionQueryPattern = serviceViewModel.getDescriptionQueryPattern();
             queriedEntities = getServicesFilteringByDescription(queryType, descriptionQueryPattern);
         }
 
@@ -100,30 +99,30 @@ public class MaintenanceController
                                         .map(this::getServiceListingName)
                                         .toArray(String[]::new);
 
-        maintenanceViewModel.setServicesDescriptions(descriptions);
-        maintenanceViewModel.setWasRequestSuccessful(true);
+        serviceViewModel.setServicesDescriptions(descriptions);
+        serviceViewModel.setWasRequestSuccessful(true);
     }
 
     private void requestDetailedServiceInfo()
     {
-        int selectedMaintenanceIndex = maintenanceViewModel.getSelectedMaintenanceIndex();
+        int selectedMaintenanceIndex = serviceViewModel.getSelectedIndex();
 
         if(selectedMaintenanceIndex < 0 || selectedMaintenanceIndex >= queriedEntities.size())
         {
-            maintenanceViewModel.setWasRequestSuccessful(false);
+            serviceViewModel.setWasRequestSuccessful(false);
             return;
         }
 
         ServiceOrder serviceOrder = queriedEntities.get(selectedMaintenanceIndex);
         ServiceOrderDTO serviceOrderDTO = ServiceOrderMapper.toDTO(serviceOrder, workshop);
 
-        maintenanceViewModel.setSelectedService(serviceOrderDTO);
-        maintenanceViewModel.setWasRequestSuccessful(true);
+        serviceViewModel.setSelectedDTO(serviceOrderDTO);
+        serviceViewModel.setWasRequestSuccessful(true);
     }
 
     private void deleteSelectedService()
     {
-        UUID selectedServiceID = maintenanceViewModel.getSelectedService().getID();
+        UUID selectedServiceID = serviceViewModel.getSelectedDTO().getID();
         MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
         maintenanceModule.deleteServiceOrder(selectedServiceID);
     }

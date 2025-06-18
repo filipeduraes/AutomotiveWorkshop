@@ -28,15 +28,15 @@ public class VehicleController
         this.vehicleModule = workshop.getVehicleModule();
         this.clientModule = workshop.getClientModule();
 
-        vehicleViewModel.OnVehicleDetailsRequest.addListener(this::processVehicleDetailsRequest);
-        vehicleViewModel.OnClientVehiclesRequest.addListener(this::processClientVehiclesRequest);
+        vehicleViewModel.OnLoadDataRequest.addListener(this::processVehicleDetailsRequest);
+        vehicleViewModel.OnSearchRequest.addListener(this::processClientVehiclesRequest);
         vehicleViewModel.OnVehicleRegistrationRequest.addListener(this::processVehicleRegistrationRequest);
     }
 
     public void dispose()
     {
-        vehicleViewModel.OnVehicleDetailsRequest.removeListener(this::processVehicleDetailsRequest);
-        vehicleViewModel.OnClientVehiclesRequest.removeListener(this::processClientVehiclesRequest);
+        vehicleViewModel.OnLoadDataRequest.removeListener(this::processVehicleDetailsRequest);
+        vehicleViewModel.OnSearchRequest.removeListener(this::processClientVehiclesRequest);
         vehicleViewModel.OnVehicleRegistrationRequest.removeListener(this::processVehicleRegistrationRequest);
     }
 
@@ -54,7 +54,7 @@ public class VehicleController
                 vehicleNames.add(String.format("%s %d - %s", vehicle.getModel(), vehicle.getYear(), vehicle.getLicensePlate()));
             }
 
-            vehicleViewModel.setSelectedClientVehicles(vehicleNames);
+            vehicleViewModel.setFoundEntitiesDescriptions(vehicleNames);
             vehicleViewModel.setWasRequestSuccessful(true);
         }
     }
@@ -65,7 +65,7 @@ public class VehicleController
 
         if(selectedClient != null)
         {
-            VehicleDTO registerRequestedVehicleDTO = vehicleViewModel.getSelectedVehicle();
+            VehicleDTO registerRequestedVehicleDTO = vehicleViewModel.getSelectedDTO();
 
             Vehicle vehicle = VehicleMapper.fromDTO(selectedClient.getID(), registerRequestedVehicleDTO);
             UUID vehicleID = vehicleModule.registerEntity(vehicle);
@@ -81,7 +81,7 @@ public class VehicleController
 
         if(selectedClient != null)
         {
-            int selectedVehicleIndex = vehicleViewModel.getSelectedVehicleIndex();
+            int selectedVehicleIndex = vehicleViewModel.getSelectedIndex();
             List<UUID> ownedVehiclesIDs = selectedClient.getOwnedVehiclesIDs();
 
             boolean wasRequestSuccessful = selectedVehicleIndex >= 0 && selectedVehicleIndex < ownedVehiclesIDs.size();
@@ -93,7 +93,7 @@ public class VehicleController
 
                 VehicleDTO selectedVehicle = VehicleMapper.toDTO(vehicle);
 
-                vehicleViewModel.setSelectedVehicle(selectedVehicle);
+                vehicleViewModel.setSelectedDTO(selectedVehicle);
             }
 
             vehicleViewModel.setWasRequestSuccessful(wasRequestSuccessful);
@@ -102,14 +102,14 @@ public class VehicleController
 
     private Client getSelectedClient()
     {
-        if(!clientViewModel.hasSelectedClient())
+        if(!clientViewModel.hasLoadedDTO())
         {
             System.out.println("Nenhum cliente selecionado, por favor selecione um cliente antes de prosseguir.");
             vehicleViewModel.setWasRequestSuccessful(false);
             return null;
         }
 
-        UUID selectedClientID = clientViewModel.getClient().getID();
+        UUID selectedClientID = clientViewModel.getSelectedDTO().getID();
         Client client = clientModule.getEntityWithID(selectedClientID);
         return client;
     }

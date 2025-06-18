@@ -30,7 +30,7 @@ public class VehicleMenu implements IWorkshopMenu
     {
         VehicleViewModel vehicleViewModel = menuManager.getViewModelRegistry().getVehicleViewModel();
 
-        if(!vehicleViewModel.hasSelectedVehicle())
+        if(!vehicleViewModel.hasLoadedDTO())
         {
             IWorkshopMenu submenu = menuManager.showSubmenuOptions("Selecione um veiculo. O que deseja fazer?", menuOptions);
 

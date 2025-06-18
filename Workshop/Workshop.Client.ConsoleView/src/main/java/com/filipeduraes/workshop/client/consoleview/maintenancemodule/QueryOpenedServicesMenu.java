@@ -4,7 +4,7 @@ import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.*;
-import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
+import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceQueryType;
 
 public class QueryOpenedServicesMenu implements IWorkshopMenu
@@ -19,8 +19,8 @@ public class QueryOpenedServicesMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        MaintenanceViewModel maintenanceViewModel = viewModelRegistry.getMaintenanceViewModel();
-        maintenanceViewModel.setQueryType(ServiceQueryType.OPENED);
+        ServiceViewModel serviceViewModel = viewModelRegistry.getServiceViewModel();
+        serviceViewModel.setQueryType(ServiceQueryType.OPENED);
         System.out.println("Servicos abertos selecionados");
 
         return MenuResult.replace(new QueryServicesMenu());

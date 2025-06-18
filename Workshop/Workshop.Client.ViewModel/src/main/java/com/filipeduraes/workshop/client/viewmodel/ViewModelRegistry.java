@@ -1,18 +1,18 @@
 package com.filipeduraes.workshop.client.viewmodel;
 
-import com.filipeduraes.workshop.client.viewmodel.maintenance.MaintenanceViewModel;
+import com.filipeduraes.workshop.client.viewmodel.maintenance.ServiceViewModel;
 
 public class ViewModelRegistry
 {
     private final ClientViewModel clientViewModel;
-    private final MaintenanceViewModel maintenanceViewModel;
+    private final ServiceViewModel serviceViewModel;
     private final AuthViewModel authViewModel;
     private final VehicleViewModel vehicleViewModel;
 
     public ViewModelRegistry()
     {
         clientViewModel = new ClientViewModel();
-        maintenanceViewModel = new MaintenanceViewModel();
+        serviceViewModel = new ServiceViewModel();
         authViewModel = new AuthViewModel();
         vehicleViewModel = new VehicleViewModel();
     }
@@ -22,9 +22,9 @@ public class ViewModelRegistry
         return clientViewModel;
     }
 
-    public MaintenanceViewModel getMaintenanceViewModel()
+    public ServiceViewModel getServiceViewModel()
     {
-        return maintenanceViewModel;
+        return serviceViewModel;
     }
 
     public AuthViewModel getAuthViewModel()

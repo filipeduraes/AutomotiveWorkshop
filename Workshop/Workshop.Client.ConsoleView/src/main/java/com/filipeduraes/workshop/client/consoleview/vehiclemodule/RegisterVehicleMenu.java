@@ -22,7 +22,7 @@ public class RegisterVehicleMenu implements IWorkshopMenu
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
 
-        if(!viewModelRegistry.getClientViewModel().hasSelectedClient())
+        if(!viewModelRegistry.getClientViewModel().hasLoadedDTO())
         {
             System.out.println("Nenhum cliente selecionado para o qual o veiculo sera registrado.");
             System.out.println("Por favor selecione um cliente antes de prosseguir.");
@@ -31,7 +31,7 @@ public class RegisterVehicleMenu implements IWorkshopMenu
 
         VehicleDTO vehicleDTO = requestVehicleData();
         VehicleViewModel vehicleViewModel = viewModelRegistry.getVehicleViewModel();
-        vehicleViewModel.setSelectedVehicle(vehicleDTO);
+        vehicleViewModel.setSelectedDTO(vehicleDTO);
 
         vehicleViewModel.OnVehicleRegistrationRequest.broadcast();
 

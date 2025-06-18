@@ -37,7 +37,7 @@ public class ClientRegistrationMenu implements IWorkshopMenu
         
         final ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
         ClientDTO clientDTO = new ClientDTO(userName, userPhoneNumber, userEmail, userAddress, userCPF);
-        clientViewModel.setClient(clientDTO);
+        clientViewModel.setSelectedDTO(clientDTO);
 
         clientViewModel.OnClientRegisterRequest.broadcast();
         return MenuResult.pop();
