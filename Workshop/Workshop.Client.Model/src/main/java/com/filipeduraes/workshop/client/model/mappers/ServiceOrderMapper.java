@@ -14,7 +14,6 @@ import com.filipeduraes.workshop.utils.TextUtils;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public final class ServiceOrderMapper
@@ -25,8 +24,8 @@ public final class ServiceOrderMapper
         String shortDescription = serviceOrder.getCurrentStep().getShortDescription();
         String detailedDescription = serviceOrder.getCurrentStep().getDetailedDescription();
 
-        Client owner = workshop.getClientModule().getEntityWithID(serviceOrder.getClientID());
-        Vehicle vehicle = workshop.getVehicleModule().getEntityWithID(serviceOrder.getVehicleID());
+        Client owner = workshop.getClientRepository().getEntityWithID(serviceOrder.getClientID());
+        Vehicle vehicle = workshop.getVehicleRepository().getEntityWithID(serviceOrder.getVehicleID());
 
         return new ServiceOrderDTO
         (

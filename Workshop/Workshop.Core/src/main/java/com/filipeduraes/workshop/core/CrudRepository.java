@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  *
  * @param <TEntity> O tipo da entidade que este módulo irá gerenciar.
  */
-public class CrudModule<TEntity extends WorkshopEntity>
+public class CrudRepository<TEntity extends WorkshopEntity>
 {
     /**
      * Evento acionado sempre que uma nova entidade é registrada.
@@ -35,7 +35,7 @@ public class CrudModule<TEntity extends WorkshopEntity>
      * @param path Caminho do arquivo onde os dados serão persistidos.
      * @param entityType Classe da entidade que será gerenciada.
      */
-    public CrudModule(String path, Class<TEntity> entityType)
+    public CrudRepository(String path, Class<TEntity> entityType)
     {
         this.path = path;
         ParameterizedType parameterizedType = Persistence.createParameterizedType(HashMap.class, UUID.class, entityType);

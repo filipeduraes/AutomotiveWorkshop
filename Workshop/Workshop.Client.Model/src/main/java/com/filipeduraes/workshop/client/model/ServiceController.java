@@ -13,7 +13,7 @@ import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceFilterType;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceQueryType;
-import com.filipeduraes.workshop.core.CrudModule;
+import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
@@ -23,7 +23,6 @@ import com.filipeduraes.workshop.core.vehicle.Vehicle;
 import com.filipeduraes.workshop.utils.TextUtils;
 
 import java.time.LocalDateTime;
-import java.time.format.TextStyle;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -78,7 +77,7 @@ public class ServiceController
             ClientDTO selectedClient = clientViewModel.getSelectedDTO();
 
             UUID serviceOrderID = maintenanceModule.registerNewAppointment(selectedClient.getID(), selectedVehicle.getID(), shortDescription, detailedDescription);
-            ServiceOrder serviceOrder = maintenanceModule.getServiceOrderModule().getEntityWithID(serviceOrderID);
+            ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(serviceOrderID);
 
             serviceViewModel.setSelectedIndex(0);
             serviceViewModel.setSelectedDTO(ServiceOrderMapper.toDTO(serviceOrder, workshop));
@@ -92,7 +91,7 @@ public class ServiceController
         MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
         UUID selectedServiceOrderID = serviceOrderDTO.getID();
 
-        ServiceOrder serviceOrder = maintenanceModule.getServiceOrderModule().getEntityWithID(selectedServiceOrderID);
+        ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(selectedServiceOrderID);
         boolean canStartNextStep = serviceOrder.getCurrentStepWasFinished();
 
         if(canStartNextStep)
@@ -159,7 +158,7 @@ public class ServiceController
     private void editSelectedService()
     {
         MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
-        CrudModule<ServiceOrder> serviceOrderModule = maintenanceModule.getServiceOrderModule();
+        CrudRepository<ServiceOrder> serviceOrderModule = maintenanceModule.getServiceOrderRepository();
         UUID selectedServiceID = serviceViewModel.getSelectedDTO().getID();
         ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(selectedServiceID);
 
@@ -168,7 +167,7 @@ public class ServiceController
             case CLIENT ->
             {
                 ClientDTO clientDTO = clientViewModel.getSelectedDTO();
-                CrudModule<Client> clientModule = workshop.getClientModule();
+                CrudRepository<Client> clientModule = workshop.getClientRepository();
                 Client client = clientModule.getEntityWithID(clientDTO.getID());
                 UUID vehicleID = vehicleViewModel.getSelectedDTO().getID();
 
@@ -217,8 +216,8 @@ public class ServiceController
         UUID clientID = service.getClientID();
         UUID vehicleID = service.getVehicleID();
 
-        Client owner = workshop.getClientModule().getEntityWithID(clientID);
-        Vehicle vehicle = workshop.getVehicleModule().getEntityWithID(vehicleID);
+        Client owner = workshop.getClientRepository().getEntityWithID(clientID);
+        Vehicle vehicle = workshop.getVehicleRepository().getEntityWithID(vehicleID);
 
         if(owner == null || vehicle == null)
         {
@@ -266,7 +265,7 @@ public class ServiceController
     private List<ServiceOrder> getServicesFiltering(ServiceQueryType queryType, Predicate<ServiceOrder> filter)
     {
         MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
-        final CrudModule<ServiceOrder> serviceOrderModule = maintenanceModule.getServiceOrderModule();
+        final CrudRepository<ServiceOrder> serviceOrderModule = maintenanceModule.getServiceOrderRepository();
 
         Predicate<ServiceOrder> typePredicate = switch (queryType)
         {

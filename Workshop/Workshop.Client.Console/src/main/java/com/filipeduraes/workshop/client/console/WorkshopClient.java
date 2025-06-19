@@ -49,7 +49,7 @@ public class WorkshopClient
         ViewModelRegistry viewModelRegistry = new ViewModelRegistry();
 
         AuthController authController = new AuthController(viewModelRegistry.getAuthViewModel(), workshop.getAuthModule());
-        ClientController clientController = new ClientController(viewModelRegistry.getClientViewModel(), workshop.getClientModule());
+        ClientController clientController = new ClientController(viewModelRegistry.getClientViewModel(), workshop.getClientRepository());
         VehicleController vehicleController = new VehicleController(viewModelRegistry, workshop);
         ServiceController serviceController = new ServiceController(viewModelRegistry, workshop);
 

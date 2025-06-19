@@ -5,7 +5,7 @@ import com.filipeduraes.workshop.client.model.mappers.VehicleMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
-import com.filipeduraes.workshop.core.CrudModule;
+import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
@@ -18,15 +18,15 @@ public class VehicleController
 {
     private final VehicleViewModel vehicleViewModel;
     private final ClientViewModel clientViewModel;
-    private final CrudModule<Vehicle> vehicleModule;
-    private final CrudModule<Client> clientModule;
+    private final CrudRepository<Vehicle> vehicleModule;
+    private final CrudRepository<Client> clientModule;
 
     public VehicleController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
         this.vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         this.clientViewModel = viewModelRegistry.getClientViewModel();
-        this.vehicleModule = workshop.getVehicleModule();
-        this.clientModule = workshop.getClientModule();
+        this.vehicleModule = workshop.getVehicleRepository();
+        this.clientModule = workshop.getClientRepository();
 
         vehicleViewModel.OnLoadDataRequest.addListener(this::processVehicleDetailsRequest);
         vehicleViewModel.OnSearchRequest.addListener(this::processClientVehiclesRequest);

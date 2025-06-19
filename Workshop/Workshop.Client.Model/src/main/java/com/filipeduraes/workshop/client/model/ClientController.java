@@ -6,7 +6,7 @@ import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.model.mappers.ClientMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
-import com.filipeduraes.workshop.core.CrudModule;
+import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.client.Client;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class ClientController
     );
 
     private final ClientViewModel clientViewModel;
-    private final CrudModule<Client> clientModule;
+    private final CrudRepository<Client> clientModule;
 
     private List<Client> foundClients;
 
@@ -43,7 +43,7 @@ public class ClientController
      * @param clientViewModel Camada intermediária que gerencia o estado e os dados entre a view e o modelo
      * @param clientModule    Módulo de negócios que implementa as operações com clientes
      */
-    public ClientController(ClientViewModel clientViewModel, CrudModule<Client> clientModule)
+    public ClientController(ClientViewModel clientViewModel, CrudRepository<Client> clientModule)
     {
         this.clientViewModel = clientViewModel;
         this.clientModule = clientModule;

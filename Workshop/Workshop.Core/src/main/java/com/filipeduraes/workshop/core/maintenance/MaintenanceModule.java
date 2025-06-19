@@ -1,7 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.core.maintenance;
 
-import com.filipeduraes.workshop.core.CrudModule;
+import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.catalog.Product;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class MaintenanceModule
 {
-    private final CrudModule<ServiceOrder> serviceOrderModule;
+    private final CrudRepository<ServiceOrder> serviceOrderRepository;
     private final Set<UUID> userServices;
     private final Set<UUID> openedServices;
     private final UUID loggedEmployeeID;
@@ -27,14 +27,14 @@ public class MaintenanceModule
 
         ParameterizedType serviceIDListType = Persistence.createParameterizedType(HashSet.class, UUID.class);
 
-        serviceOrderModule = new CrudModule<>(WorkshopPaths.SERVICES_PATH, ServiceOrder.class);
+        serviceOrderRepository = new CrudRepository<>(WorkshopPaths.SERVICES_PATH, ServiceOrder.class);
         openedServices = Persistence.loadFile(WorkshopPaths.OPENED_SERVICES_PATH, serviceIDListType, new HashSet<>());
         userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDListType, new HashSet<>());
     }
 
-    public CrudModule<ServiceOrder> getServiceOrderModule()
+    public CrudRepository<ServiceOrder> getServiceOrderRepository()
     {
-        return serviceOrderModule;
+        return serviceOrderRepository;
     }
 
     public Set<UUID> getUserServices()
@@ -56,7 +56,7 @@ public class MaintenanceModule
         serviceOrder.getCurrentStep().setDetailedDescription(detailedDescription);
         serviceOrder.getCurrentStep().finishStep();
 
-        UUID serviceID = serviceOrderModule.registerEntity(serviceOrder);
+        UUID serviceID = serviceOrderRepository.registerEntity(serviceOrder);
         openedServices.add(serviceID);
 
         Persistence.saveFile(openedServices, WorkshopPaths.OPENED_SERVICES_PATH);
@@ -65,9 +65,9 @@ public class MaintenanceModule
 
     public void startInspection(UUID serviceID)
     {
-        if(serviceOrderModule.hasEntityWithID(serviceID))
+        if(serviceOrderRepository.hasEntityWithID(serviceID))
         {
-            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(serviceID);
+            ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
 
             if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.APPOINTMENT)
             {
@@ -77,7 +77,7 @@ public class MaintenanceModule
 
                 Persistence.saveFile(openedServices, WorkshopPaths.OPENED_SERVICES_PATH);
                 Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
-                serviceOrderModule.updateEntity(serviceOrder);
+                serviceOrderRepository.updateEntity(serviceOrder);
             }
         }
     }
@@ -86,7 +86,7 @@ public class MaintenanceModule
     {
         if(loggedUserHasService(serviceID))
         {
-            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(serviceID);
+            ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
 
             if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
             {
@@ -103,7 +103,7 @@ public class MaintenanceModule
                 Persistence.saveFile(newEmployeeUserServices, newEmployeeUserPath);
 
                 serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
-                serviceOrderModule.updateEntity(serviceOrder);
+                serviceOrderRepository.updateEntity(serviceOrder);
             }
         }
     }
@@ -112,14 +112,14 @@ public class MaintenanceModule
     {
         if(loggedUserHasService(serviceID))
         {
-            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(serviceID);
+            ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
 
             if(serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
             {
                 ServiceStep serviceStep = new ServiceStep(loggedEmployeeID);
                 serviceOrder.registerStep(serviceStep);
 
-                serviceOrderModule.updateEntity(serviceOrder);
+                serviceOrderRepository.updateEntity(serviceOrder);
             }
         }
     }
@@ -128,7 +128,7 @@ public class MaintenanceModule
     {
         if(loggedUserHasService(serviceID))
         {
-            ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(serviceID);
+            ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
             ServiceStep currentStep = serviceOrder.getCurrentStep();
             currentStep.setDetailedDescription(description);
             serviceOrder.finish(services, purchase);
@@ -141,17 +141,17 @@ public class MaintenanceModule
 
             Persistence.saveFile(finishedServices, WorkshopPaths.FINISHED_SERVICES_PATH);
             Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
-            serviceOrderModule.updateEntity(serviceOrder);
+            serviceOrderRepository.updateEntity(serviceOrder);
         }
     }
 
     public void deleteServiceOrder(UUID selectedServiceID)
     {
-        serviceOrderModule.deleteEntityWithID(selectedServiceID);
+        serviceOrderRepository.deleteEntityWithID(selectedServiceID);
     }
 
     private boolean loggedUserHasService(UUID serviceID)
     {
-        return userServices.contains(serviceID) && serviceOrderModule.hasEntityWithID(serviceID);
+        return userServices.contains(serviceID) && serviceOrderRepository.hasEntityWithID(serviceID);
     }
 }

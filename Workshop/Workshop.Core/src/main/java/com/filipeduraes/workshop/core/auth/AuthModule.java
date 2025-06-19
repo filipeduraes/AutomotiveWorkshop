@@ -1,7 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.core.auth;
 
-import com.filipeduraes.workshop.core.CrudModule;
+import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 import com.filipeduraes.workshop.utils.Observer;
 
@@ -19,14 +19,14 @@ public class AuthModule
     public final Observer OnUserLogged = new Observer();
     private Employee loggedUser = null;
 
-    private final CrudModule<LocalEmployee> employeeCrudModule;
+    private final CrudRepository<LocalEmployee> employeeRepository;
 
     /**
      * Cria uma instância do módulo de autenticação.
      */
     public AuthModule()
     {
-        employeeCrudModule = new CrudModule<>(WorkshopPaths.REGISTERED_EMPLOYEES_PATH, LocalEmployee.class);
+        employeeRepository = new CrudRepository<>(WorkshopPaths.REGISTERED_EMPLOYEES_PATH, LocalEmployee.class);
     }
 
     /**
@@ -57,12 +57,12 @@ public class AuthModule
      */
     public boolean registerUser(LocalEmployee user)
     {
-        List<LocalEmployee> usersWithSameEmail = employeeCrudModule.findEntitiesWithPredicate(localEmployee -> localEmployee.getEmail().equals(user.getEmail()));
+        List<LocalEmployee> usersWithSameEmail = employeeRepository.findEntitiesWithPredicate(localEmployee -> localEmployee.getEmail().equals(user.getEmail()));
         boolean canRegisterUser = usersWithSameEmail.isEmpty();
 
         if(canRegisterUser)
         {
-            employeeCrudModule.registerEntity(user);
+            employeeRepository.registerEntity(user);
         }
 
         return canRegisterUser;
@@ -77,7 +77,7 @@ public class AuthModule
      */
     public boolean tryLogIn(String email, int passwordHash)
     {
-        LocalEmployee foundUser = employeeCrudModule.findFirstEntityWithPredicate(localEmployee -> localEmployee.getEmail().equals(email));
+        LocalEmployee foundUser = employeeRepository.findFirstEntityWithPredicate(localEmployee -> localEmployee.getEmail().equals(email));
 
         if (foundUser == null)
         {
@@ -97,7 +97,7 @@ public class AuthModule
 
     public boolean isFirstAccess()
     {
-        return !employeeCrudModule.hasLoadedEntities();
+        return !employeeRepository.hasLoadedEntities();
     }
 
     /**
@@ -108,6 +108,6 @@ public class AuthModule
      */
     public Employee getUserFromID(UUID userID)
     {
-        return employeeCrudModule.getEntityWithID(userID);
+        return employeeRepository.getEntityWithID(userID);
     }
 }

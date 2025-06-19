@@ -25,8 +25,8 @@ import java.util.UUID;
 public class Workshop
 {
     private final AuthModule authModule = new AuthModule();
-    private final CrudModule<Client> clientModule;
-    private final CrudModule<Vehicle> vehicleModule;
+    private final CrudRepository<Client> clientRepository;
+    private final CrudRepository<Vehicle> vehicleRepository;
     private MaintenanceModule maintenanceModule;
 
     /**
@@ -45,21 +45,21 @@ public class Workshop
         Persistence.setUseObfuscation(useObfuscation);
         Persistence.registerCustomSerializationAdapters(adapters);
 
-        vehicleModule = new CrudModule<>(WorkshopPaths.REGISTERED_VEHICLES_PATH, Vehicle.class);
-        clientModule = new CrudModule<>(WorkshopPaths.REGISTERED_CLIENTS_PATH, Client.class);
+        vehicleRepository = new CrudRepository<>(WorkshopPaths.REGISTERED_VEHICLES_PATH, Vehicle.class);
+        clientRepository = new CrudRepository<>(WorkshopPaths.REGISTERED_CLIENTS_PATH, Client.class);
 
         authModule.OnUserLogged.addListener(this::initializeUserData);
-        vehicleModule.OnEntityRegistered.addListener(this::registerVehicleToOwner);
+        vehicleRepository.OnEntityRegistered.addListener(this::registerVehicleToOwner);
     }
 
     public void dispose()
     {
         authModule.OnUserLogged.removeListener(this::initializeUserData);
-        vehicleModule.OnEntityRegistered.removeListener(this::registerVehicleToOwner);
+        vehicleRepository.OnEntityRegistered.removeListener(this::registerVehicleToOwner);
 
         if(maintenanceModule != null)
         {
-            maintenanceModule.getServiceOrderModule().OnEntityRegistered.removeListener(this::registerServiceOrderToOwner);
+            maintenanceModule.getServiceOrderRepository().OnEntityRegistered.removeListener(this::registerServiceOrderToOwner);
         }
     }
 
@@ -78,9 +78,9 @@ public class Workshop
      *
      * @return módulo de clientes
      */
-    public CrudModule<Client> getClientModule()
+    public CrudRepository<Client> getClientRepository()
     {
-        return clientModule;
+        return clientRepository;
     }
 
     /**
@@ -88,9 +88,9 @@ public class Workshop
      *
      * @return módulo de veículos
      */
-    public CrudModule<Vehicle> getVehicleModule()
+    public CrudRepository<Vehicle> getVehicleRepository()
     {
-        return vehicleModule;
+        return vehicleRepository;
     }
 
     /**
@@ -108,22 +108,22 @@ public class Workshop
         Employee loggedUser = authModule.getLoggedUser();
         WorkshopPaths.setCurrentLoggedUserID(loggedUser.getID());
         maintenanceModule = new MaintenanceModule(loggedUser.getID());
-        maintenanceModule.getServiceOrderModule().OnEntityRegistered.addListener(this::registerServiceOrderToOwner);
+        maintenanceModule.getServiceOrderRepository().OnEntityRegistered.addListener(this::registerServiceOrderToOwner);
     }
 
     private void registerVehicleToOwner(Vehicle vehicle)
     {
         UUID ownerID = vehicle.getOwnerID();
-        Client owner = clientModule.getEntityWithID(ownerID);
+        Client owner = clientRepository.getEntityWithID(ownerID);
         owner.addOwnedVehicle(vehicle.getID());
-        clientModule.updateEntity(owner);
+        clientRepository.updateEntity(owner);
     }
 
     private void registerServiceOrderToOwner(ServiceOrder serviceOrder)
     {
         UUID ownerID = serviceOrder.getClientID();
-        Client owner = clientModule.getEntityWithID(ownerID);
+        Client owner = clientRepository.getEntityWithID(ownerID);
         owner.addServiceOrder(serviceOrder.getID());
-        clientModule.updateEntity(owner);
+        clientRepository.updateEntity(owner);
     }
 }
