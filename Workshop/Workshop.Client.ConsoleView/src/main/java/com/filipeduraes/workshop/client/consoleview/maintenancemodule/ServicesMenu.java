@@ -6,12 +6,15 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 
 /**
+ * Fornece um menu de interação com serviços da oficina.
+ * Este menu permite criar ordens de serviço e realizar diferentes tipos de consultas
+ * sobre os serviços existentes no sistema.
  *
  * @author Filipe Durães
  */
 public class ServicesMenu implements IWorkshopMenu
 {
-    private IWorkshopMenu[] submenus =
+    private final IWorkshopMenu[] submenus =
     {
         new CreateServiceOrderMenu(),
         new QueryOpenedServicesMenu(),
@@ -19,12 +22,23 @@ public class ServicesMenu implements IWorkshopMenu
         new QueryGeneralServicesMenu()
     };
 
+    /**
+     * Obtém o nome de exibição do menu de serviços.
+     *
+     * @return nome do menu para exibição
+     */
     @Override
-    public String getMenuDisplayName() 
+    public String getMenuDisplayName()
     {
         return "Servico";
     }
 
+    /**
+     * Exibe as opções do menu de serviços e processa a seleção do usuário.
+     *
+     * @param menuManager gerenciador de menus que controla a navegação
+     * @return resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {

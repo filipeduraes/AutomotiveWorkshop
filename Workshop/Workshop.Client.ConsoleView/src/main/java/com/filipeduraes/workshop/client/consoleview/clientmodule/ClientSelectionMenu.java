@@ -15,32 +15,43 @@ import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
  */
 public class ClientSelectionMenu implements IWorkshopMenu
 {
-    private final IWorkshopMenu[] menus = 
+    private final IWorkshopMenu[] menus =
     {
         new ClientRegistrationMenu(),
         new ClientSearchMenu()
     };
-    
+
+    /**
+     * Obtém o nome de exibição do menu.
+     *
+     * @return nome do menu para exibição
+     */
     @Override
-    public String getMenuDisplayName() 
+    public String getMenuDisplayName()
     {
         return "Selecionar Cliente";
     }
 
+    /**
+     * Exibe o menu de seleção de cliente e processa a seleção atual.
+     *
+     * @param menuManager gerenciador de menus da aplicação
+     * @return resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
         ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
 
-        if(clientViewModel.hasLoadedDTO())
+        if (clientViewModel.hasLoadedDTO())
         {
             System.out.printf("Cliente selecionado:%n%s%n%n", clientViewModel.getSelectedDTO());
             return MenuResult.pop();
         }
 
         IWorkshopMenu submenu = menuManager.showSubmenuOptions("Como deseja selecionar o cliente?", menus);
-        
-        if(submenu == null)
+
+        if (submenu == null)
         {
             return MenuResult.pop();
         }

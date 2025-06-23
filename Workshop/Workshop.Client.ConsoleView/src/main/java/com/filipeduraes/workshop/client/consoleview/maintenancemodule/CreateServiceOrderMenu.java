@@ -12,17 +12,31 @@ import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSelection
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 
 /**
+ * Menu para criação de ordens de serviço.
+ * Permite selecionar cliente, veículo e registrar descrições do problema
+ * para criar uma nova ordem de serviço.
  *
  * @author Filipe Durães
  */
-public class CreateServiceOrderMenu implements IWorkshopMenu 
+public class CreateServiceOrderMenu implements IWorkshopMenu
 {
+    /**
+     * Obtém o nome de exibição do menu.
+     *
+     * @return nome do menu para exibição
+     */
     @Override
-    public String getMenuDisplayName() 
+    public String getMenuDisplayName()
     {
         return "Criar ordem de servico";
     }
 
+    /**
+     * Exibe o menu de criação de ordem de serviço e processa as entradas do usuário.
+     *
+     * @param menuManager gerenciador de menus da aplicação
+     * @return resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
@@ -51,7 +65,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
         serviceViewModel.OnRegisterAppointmentRequest.broadcast();
 
-        if(serviceViewModel.getWasRequestSuccessful())
+        if (serviceViewModel.getWasRequestSuccessful())
         {
             System.out.printf("Agendamento registrado com sucesso! ID: %s%n", serviceViewModel.getSelectedDTO().getID());
             viewModelRegistry.getClientViewModel().resetSelectedDTO();
@@ -64,12 +78,12 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
     private MenuResult selectClient(ClientViewModel clientViewModel)
     {
-        if(!clientViewModel.hasLoadedDTO())
+        if (!clientViewModel.hasLoadedDTO())
         {
             System.out.println("- CLIENTE");
             boolean selectClient = ConsoleInput.readConfirmation("Deseja selecionar o cliente para continuar?");
 
-            if(selectClient)
+            if (selectClient)
             {
                 return MenuResult.push(new ClientSelectionMenu());
             }
@@ -82,11 +96,11 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
     private MenuResult selectVehicle(VehicleViewModel vehicleViewModel)
     {
-        if(!vehicleViewModel.hasLoadedDTO())
+        if (!vehicleViewModel.hasLoadedDTO())
         {
             boolean selectVehicle = ConsoleInput.readConfirmation("Deseja selecionar o veiculo para continuar?");
 
-            if(selectVehicle)
+            if (selectVehicle)
             {
                 return MenuResult.push(new VehicleMenu());
             }

@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.administrator;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
@@ -11,14 +13,32 @@ import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 
+/**
+ * Menu para cadastro de um novo administrador no sistema.
+ * Permite a criação de uma nova conta de administrador com nome, email e senha.
+ *
+ * @author Filipe Durães
+ */
 public class RegisterAdministrator implements IWorkshopMenu
 {
+    /**
+     * Obtém o nome de exibição do menu.
+     *
+     * @return nome do menu para exibição
+     */
     @Override
     public String getMenuDisplayName()
     {
         return "Cadastrar Administrador";
     }
 
+    /**
+     * Exibe o menu de cadastro de administrador e processa as entradas do usuário.
+     * Solicita nome, email e senha, e tenta registrar um novo administrador no sistema.
+     *
+     * @param menuManager gerenciador de menus que controla a navegação
+     * @return resultado da operação do menu, indicando sucesso ou falha no cadastro
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
@@ -33,7 +53,7 @@ public class RegisterAdministrator implements IWorkshopMenu
         employeeViewModel.setSelectedDTO(administrator);
         employeeViewModel.OnRegisterUserRequested.broadcast();
 
-        if(employeeViewModel.getRequestWasSuccessful())
+        if (employeeViewModel.getRequestWasSuccessful())
         {
             System.out.println("Cadastro criado com sucesso!");
 

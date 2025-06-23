@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.vehiclemodule;
 
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
@@ -10,21 +12,39 @@ import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 
+/**
+ * Menu responsável pelo registro de novos veículos no sistema.
+ * Gerencia a interface de usuário para coletar e validar dados do veículo.
+ *
+ * @author Filipe Durães
+ */
 public class RegisterVehicleMenu implements IWorkshopMenu
 {
 
+    /**
+     * Obtém o nome de exibição do menu.
+     *
+     * @return O nome do menu que será exibido para o usuário
+     */
     @Override
     public String getMenuDisplayName()
     {
         return "Registrar Veiculo";
     }
 
+    /**
+     * Exibe o menu de registro de veículo e processa as entradas do usuário.
+     * Verifica se há um cliente selecionado antes de prosseguir com o registro.
+     *
+     * @param menuManager O gerenciador de menus que controla a navegação
+     * @return O resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
 
-        if(!viewModelRegistry.getClientViewModel().hasLoadedDTO())
+        if (!viewModelRegistry.getClientViewModel().hasLoadedDTO())
         {
             System.out.println("Nenhum cliente selecionado para o qual o veiculo sera registrado.");
             System.out.println("Por favor selecione um cliente antes de prosseguir.");
@@ -37,7 +57,7 @@ public class RegisterVehicleMenu implements IWorkshopMenu
 
         vehicleViewModel.OnVehicleRegistrationRequest.broadcast();
 
-        if(vehicleViewModel.getWasRequestSuccessful())
+        if (vehicleViewModel.getWasRequestSuccessful())
         {
             return MenuResult.pop();
         }
@@ -45,7 +65,7 @@ public class RegisterVehicleMenu implements IWorkshopMenu
         {
             boolean tryRegisteringAgain = ConsoleInput.readConfirmation("Nao foi possivel registrar o veiculo, deseja tentar novamente?");
 
-            if(!tryRegisteringAgain)
+            if (!tryRegisteringAgain)
             {
                 return MenuResult.pop();
             }

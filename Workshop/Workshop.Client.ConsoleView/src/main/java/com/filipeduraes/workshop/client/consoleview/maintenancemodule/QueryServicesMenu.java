@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
@@ -12,23 +14,41 @@ import com.filipeduraes.workshop.utils.TextUtils;
 
 import java.util.Arrays;
 
+/**
+ * Menu de consulta de serviços da oficina.
+ * Permite buscar e visualizar serviços utilizando diferentes tipos de filtros.
+ *
+ * @author Filipe Durães
+ */
 public class QueryServicesMenu implements IWorkshopMenu
 {
     private ServiceFilterType lastSelectedFilter = ServiceFilterType.NONE;
 
+    /**
+     * Obtém o nome de exibição do menu.
+     *
+     * @return nome do menu para exibição
+     */
     @Override
     public String getMenuDisplayName()
     {
         return "Consultar";
     }
 
+    /**
+     * Exibe o menu de consulta de serviços e processa a interação do usuário.
+     * Permite selecionar filtros de busca e visualizar os serviços encontrados.
+     *
+     * @param menuManager gerenciador de menus da aplicação
+     * @return resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
         ServiceViewModel serviceViewModel = viewModelRegistry.getServiceViewModel();
 
-        if(lastSelectedFilter == ServiceFilterType.NONE)
+        if (lastSelectedFilter == ServiceFilterType.NONE)
         {
             ServiceFilterType filterType = selectFilterOption();
             lastSelectedFilter = filterType;
@@ -47,7 +67,7 @@ public class QueryServicesMenu implements IWorkshopMenu
 
         serviceViewModel.OnSearchRequest.broadcast();
 
-        if(!serviceViewModel.getWasRequestSuccessful())
+        if (!serviceViewModel.getWasRequestSuccessful())
         {
             System.out.println("Nao foi possivel recuperar os servicos. Tente novamente.");
             return MenuResult.pop();
@@ -55,7 +75,7 @@ public class QueryServicesMenu implements IWorkshopMenu
 
         String[] servicesDescriptions = serviceViewModel.getFoundEntitiesDescriptions().toArray(String[]::new);
 
-        if(servicesDescriptions.length == 0)
+        if (servicesDescriptions.length == 0)
         {
             lastSelectedFilter = ServiceFilterType.NONE;
             boolean tryAgain = ConsoleInput.readConfirmation("Nenhum servico encontrado, deseja tentar novamente?");
@@ -88,11 +108,11 @@ public class QueryServicesMenu implements IWorkshopMenu
         ServiceFilterType[] filterTypes = ServiceFilterType.values();
         String[] filterTypesDisplayNames = TextUtils.convertToStringArray(filterTypes, 1);
 
-        if(filterService)
+        if (filterService)
         {
             selectedFilterOption = ConsoleInput.readOptionFromList("Qual filtro deseja usar?", filterTypesDisplayNames, true);
 
-            if(selectedFilterOption >= filterTypesDisplayNames.length)
+            if (selectedFilterOption >= filterTypesDisplayNames.length)
             {
                 selectedFilterOption = -1;
             }

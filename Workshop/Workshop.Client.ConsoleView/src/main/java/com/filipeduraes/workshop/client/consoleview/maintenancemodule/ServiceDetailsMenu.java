@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
@@ -12,23 +14,46 @@ import com.filipeduraes.workshop.utils.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Menu para visualização e manipulação dos detalhes de uma ordem de serviço.
+ * Permite iniciar e finalizar etapas do serviço, além de editar informações da ordem.
+ *
+ * @author Filipe Durães
+ */
 public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceViewModel, ServiceOrderDTO>
 {
-    public static final String ASSESSMENT_TEXT = "inspecao";
-    public static final String MAINTENANCE_TEXT = "manutencao";
+    private static final String ASSESSMENT_TEXT = "inspecao";
+    private static final String MAINTENANCE_TEXT = "manutencao";
 
+    /**
+     * Obtém o nome de exibição do menu.
+     *
+     * @return nome de exibição do menu
+     */
     @Override
     public String getMenuDisplayName()
     {
         return "Detalhes";
     }
 
+    /**
+     * Localiza o ViewModel de serviço no registro de ViewModels.
+     *
+     * @param menuManager gerenciador de menus contendo o registro de ViewModels
+     * @return ViewModel de serviço
+     */
     @Override
     protected ServiceViewModel findViewModel(MenuManager menuManager)
     {
         return menuManager.getViewModelRegistry().getServiceViewModel();
     }
 
+    /**
+     * Constrói a lista de opções disponíveis no menu.
+     * Inclui opções para iniciar/finalizar etapas e editar a ordem de serviço.
+     *
+     * @return lista de opções do menu
+     */
     @Override
     protected List<MenuOption> buildOptions()
     {
@@ -37,7 +62,7 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceViewModel, Serv
         List<MenuOption> options = super.buildOptions();
         List<MenuOption> newOptions = new ArrayList<>();
 
-        if(canStartNextStep(viewModel.getSelectedDTO()))
+        if (canStartNextStep(viewModel.getSelectedDTO()))
         {
             String optionDisplayName = String.format("Iniciar %s", getDesiredStepName(viewModel.getSelectedDTO()));
             newOptions.add(new MenuOption(optionDisplayName, this::startStep));
@@ -108,7 +133,7 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceViewModel, Serv
 
     private String getDesiredStepName(ServiceOrderDTO service)
     {
-        if(canStartNextStep(service))
+        if (canStartNextStep(service))
         {
             return service.getServiceStep() == ServiceStepTypeDTO.APPOINTMENT ? ASSESSMENT_TEXT : MAINTENANCE_TEXT;
         }

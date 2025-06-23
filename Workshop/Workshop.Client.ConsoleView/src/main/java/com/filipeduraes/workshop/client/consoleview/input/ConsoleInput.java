@@ -10,7 +10,9 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 /**
- * Utiliza um buffered reader para ler as entradas do System.in
+ * Utiliza um buffered reader para ler as entradas do System.in.
+ * Oferece métodos para leitura e validação de diferentes tipos de entrada do usuário,
+ * incluindo texto, números, confirmações e seleções de lista.
  *
  * @author Filipe Durães
  */
@@ -37,7 +39,7 @@ public class ConsoleInput
      */
     public static String readLine(String message)
     {
-        if(!message.isBlank())
+        if (!message.isBlank())
         {
             System.out.println(message);
         }
@@ -97,11 +99,24 @@ public class ConsoleInput
         }
     }
 
+    /**
+     * Lê e valida uma linha de texto da entrada do console.
+     *
+     * @param inputValidator validador para verificar a entrada
+     * @return texto validado e formatado
+     */
     public static String readValidatedLine(IInputValidator inputValidator)
     {
         return readValidatedLine("", inputValidator);
     }
 
+    /**
+     * Lê e valida uma linha de texto da entrada do console.
+     *
+     * @param message mensagem a ser exibida antes da leitura
+     * @param inputValidator validador para verificar a entrada
+     * @return texto validado e formatado
+     */
     public static String readValidatedLine(String message, IInputValidator inputValidator)
     {
         String input = readLine(message);
@@ -168,7 +183,7 @@ public class ConsoleInput
             joiner.add(String.format("> [%d] %s", i, options[i]));
         }
 
-        if(showCancelOption)
+        if (showCancelOption)
         {
             joiner.add(String.format("> [%d] %s", options.length, CANCEL_OPTION_MESSAGE));
         }
@@ -191,6 +206,12 @@ public class ConsoleInput
         return input;
     }
 
+    /**
+     * Exibe uma mensagem e lê uma confirmação (sim/não) do usuário.
+     *
+     * @param message mensagem a ser exibida antes da confirmação
+     * @return true se confirmado, false caso contrário
+     */
     public static boolean readConfirmation(String message)
     {
         message += " (s/n)";
@@ -198,6 +219,11 @@ public class ConsoleInput
         return readConfirmation();
     }
 
+    /**
+     * Lê uma confirmação (sim/não) do usuário.
+     *
+     * @return true se confirmado, false caso contrário
+     */
     public static boolean readConfirmation()
     {
         String answer = readLine();
@@ -211,7 +237,7 @@ public class ConsoleInput
             hasConfirmationAnswer = possibleConfirmationMessages.contains(answer);
             isValidAnswer = hasConfirmationAnswer || possibleDenyMessages.contains(answer);
 
-            if(!isValidAnswer)
+            if (!isValidAnswer)
             {
                 System.out.println("Resposta invalida, insira apenas [s]im ou [n]ao");
             }

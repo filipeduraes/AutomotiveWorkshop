@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
@@ -19,20 +21,37 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 
 import java.util.List;
 
+/**
+ * Menu para edição de serviços.
+ * Permite modificar o cliente, veículo e etapa de um serviço existente.
+ *
+ * @author Filipe Durães
+ */
 public class EditServiceMenu implements IWorkshopMenu
 {
     private MenuOption selectedOption;
 
+    /**
+     * Obtém o nome de exibição do menu.
+     *
+     * @return o nome do menu para exibição
+     */
     @Override
     public String getMenuDisplayName()
     {
         return "Editar servico";
     }
 
+    /**
+     * Exibe o menu de edição de serviço e processa a opção selecionada.
+     *
+     * @param menuManager o gerenciador de menus
+     * @return o resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        if(selectedOption != null)
+        if (selectedOption != null)
         {
             return selectedOption.execute(menuManager);
         }
@@ -55,9 +74,9 @@ public class EditServiceMenu implements IWorkshopMenu
         ServiceViewModel serviceViewModel = viewModelRegistry.getServiceViewModel();
         VehicleViewModel vehicleViewModel = viewModelRegistry.getVehicleViewModel();
 
-        if(!clientViewModel.hasLoadedDTO())
+        if (!clientViewModel.hasLoadedDTO())
         {
-            if(ConsoleInput.readConfirmation("Deseja selecionar um novo cliente?"))
+            if (ConsoleInput.readConfirmation("Deseja selecionar um novo cliente?"))
             {
                 return MenuResult.push(new ClientSelectionMenu());
             }
@@ -65,9 +84,9 @@ public class EditServiceMenu implements IWorkshopMenu
             return MenuResult.pop();
         }
 
-        if(!vehicleViewModel.hasLoadedDTO())
+        if (!vehicleViewModel.hasLoadedDTO())
         {
-            if(ConsoleInput.readConfirmation("Deseja selecionar um novo veiculo?"))
+            if (ConsoleInput.readConfirmation("Deseja selecionar um novo veiculo?"))
             {
                 return MenuResult.push(new VehicleMenu());
             }
@@ -103,7 +122,7 @@ public class EditServiceMenu implements IWorkshopMenu
         VehicleViewModel vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         ServiceViewModel serviceViewModel = viewModelRegistry.getServiceViewModel();
 
-        if(!vehicleViewModel.hasLoadedDTO())
+        if (!vehicleViewModel.hasLoadedDTO())
         {
             return MenuResult.push(new VehicleSelectionMenu());
         }
@@ -132,7 +151,6 @@ public class EditServiceMenu implements IWorkshopMenu
 
     private MenuResult editStep(MenuManager menuManager)
     {
-
         return null;
     }
 }

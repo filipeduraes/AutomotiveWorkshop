@@ -1,13 +1,27 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.input;
 
+/**
+ * Validador de entrada para CPF (Cadastro de Pessoas Físicas).
+ * Verifica se um CPF é válido e fornece formatação adequada para exibição.
+ *
+ * @author Filipe Durães
+ */
 public class CPFInputValidator implements IInputValidator
 {
+    /**
+     * Valida se uma string representa um CPF válido.
+     *
+     * @param input String contendo o CPF a ser validado
+     * @return true se o CPF for válido, false caso contrário
+     */
     @Override
     public boolean validate(String input)
     {
         String numberOnlyCPF = input.replaceAll("\\D", "");
 
-        if(numberOnlyCPF.length() != 11 || numberOnlyCPF.chars().distinct().count() == 1)
+        if (numberOnlyCPF.length() != 11 || numberOnlyCPF.chars().distinct().count() == 1)
         {
             return false;
         }
@@ -15,12 +29,23 @@ public class CPFInputValidator implements IInputValidator
         return isFirstDigitValid(numberOnlyCPF) && isSecondDigitValid(numberOnlyCPF);
     }
 
+    /**
+     * Obtém a mensagem de erro para CPF inválido.
+     *
+     * @return mensagem de erro para CPF inválido
+     */
     @Override
     public String getErrorMessage()
     {
         return "CPF inválido. Insira um número válido com 11 dígitos.";
     }
 
+    /**
+     * Formata um CPF válido para exibição, mascarando os primeiros dígitos.
+     *
+     * @param validInput CPF válido a ser formatado
+     * @return CPF formatado com máscara
+     */
     @Override
     public String formatValidInput(String validInput)
     {
@@ -31,7 +56,7 @@ public class CPFInputValidator implements IInputValidator
     {
         String numberOnlyCPF = cpf.replaceAll("\\D", ""); // Substitui qualquer caractere não numérico por uma string vazia
 
-        if(numberOnlyCPF.length() != 11)
+        if (numberOnlyCPF.length() != 11)
         {
             return "";
         }
@@ -57,7 +82,7 @@ public class CPFInputValidator implements IInputValidator
     {
         int sum = 0;
 
-        for(int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             char currentDigit = numberOnlyCPF.charAt(i);
             int numericDigit = Character.getNumericValue(currentDigit);
@@ -72,7 +97,7 @@ public class CPFInputValidator implements IInputValidator
     {
         int remainder = (sum * 10) % 11;
 
-        if(remainder == 10)
+        if (remainder == 10)
         {
             remainder = 0;
         }

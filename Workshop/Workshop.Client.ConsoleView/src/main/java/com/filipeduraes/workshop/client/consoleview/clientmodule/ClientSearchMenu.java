@@ -19,14 +19,27 @@ import java.util.List;
  */
 public class ClientSearchMenu implements IWorkshopMenu
 {
-    private final FieldType[] options = { FieldType.NAME, FieldType.CPF, FieldType.EMAIL, FieldType.PHONE };
+    private final FieldType[] options = {FieldType.NAME, FieldType.CPF, FieldType.EMAIL, FieldType.PHONE};
 
+    /**
+     * Obtém o nome de exibição do menu.
+     *
+     * @return o nome do menu para exibição
+     */
     @Override
     public String getMenuDisplayName()
     {
         return "Pesquisar Cliente";
     }
 
+    /**
+     * Exibe o menu de pesquisa de clientes e processa a interação do usuário.
+     * Permite selecionar o campo de busca, inserir o padrão de pesquisa e
+     * escolher um cliente dos resultados encontrados.
+     *
+     * @param menuManager o gerenciador de menus da aplicação
+     * @return o resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
@@ -34,7 +47,7 @@ public class ClientSearchMenu implements IWorkshopMenu
 
         int searchOptionIndex = ConsoleInput.readOptionFromList("Escolha o campo para pesquisar:", options, true);
 
-        if(searchOptionIndex >= options.length)
+        if (searchOptionIndex >= options.length)
         {
             clientViewModel.resetSelectedDTO();
             System.out.println("Busca cancelada.");
@@ -49,12 +62,12 @@ public class ClientSearchMenu implements IWorkshopMenu
         clientViewModel.setSearchPattern(searchPattern);
 
         clientViewModel.OnSearchRequest.broadcast();
-        
+
         showFoundClients(clientViewModel);
 
         int selectedClient = ConsoleInput.readLineInteger("Escolha o usuario: ");
 
-        if(selectedClientSuccessfully(selectedClient, clientViewModel))
+        if (selectedClientSuccessfully(selectedClient, clientViewModel))
         {
             return MenuResult.pop();
         }
@@ -62,15 +75,15 @@ public class ClientSearchMenu implements IWorkshopMenu
         return MenuResult.none();
     }
 
-    private void showFoundClients(final ClientViewModel clientViewModel) 
+    private void showFoundClients(final ClientViewModel clientViewModel)
     {
         final List<String> foundClientNames = clientViewModel.getFoundEntitiesDescriptions();
-        
-        for(int i = 0; i < foundClientNames.size(); i++)
+
+        for (int i = 0; i < foundClientNames.size(); i++)
         {
             System.out.printf(" [%d] %s%n", i, foundClientNames.get(i));
         }
-        
+
         System.out.printf(" [%d] Pesquisar novamente%n", foundClientNames.size());
         System.out.printf(" [%d] Cancelar busca%n", foundClientNames.size() + 1);
     }
@@ -78,20 +91,20 @@ public class ClientSearchMenu implements IWorkshopMenu
     private boolean selectedClientSuccessfully(int selectedClient, final ClientViewModel clientViewModel)
     {
         final List<String> foundClientNames = clientViewModel.getFoundEntitiesDescriptions();
-        
-        if (selectedClient >= 0 && selectedClient < foundClientNames.size()) 
+
+        if (selectedClient >= 0 && selectedClient < foundClientNames.size())
         {
             clientViewModel.setSelectedIndex(selectedClient);
             clientViewModel.OnLoadDataRequest.broadcast();
             return true;
         }
-        
-        if (selectedClient == foundClientNames.size() + 1) 
+
+        if (selectedClient == foundClientNames.size() + 1)
         {
             clientViewModel.resetSelectedDTO();
             return true;
         }
-        
+
         return false;
     }
 }

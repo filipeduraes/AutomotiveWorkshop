@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.auth;
 
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
@@ -7,22 +9,42 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 
+/**
+ * Menu para exibição e gerenciamento de detalhes de funcionários.
+ * Fornece funcionalidades para visualizar informações detalhadas de um funcionário
+ * e realizar operações relacionadas.
+ *
+ * @author Filipe Durães
+ */
 public class EmployeeDetailsMenu extends EntityDetailsMenu<EmployeeViewModel, EmployeeDTO>
 {
+    /**
+     * Obtém o ViewModel de funcionários do registro de ViewModels.
+     *
+     * @param menuManager gerenciador de menus que contém o registro de ViewModels
+     * @return ViewModel de funcionários
+     */
     @Override
     protected EmployeeViewModel findViewModel(MenuManager menuManager)
     {
         return menuManager.getViewModelRegistry().getEmployeeViewModel();
     }
 
+    /**
+     * Exibe o menu de detalhes do funcionário.
+     * Se não houver funcionário selecionado, oferece a opção de pesquisa.
+     *
+     * @param menuManager gerenciador de menus da aplicação
+     * @return resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        if(!findViewModel(menuManager).hasValidSelectedIndex())
+        if (!findViewModel(menuManager).hasValidSelectedIndex())
         {
             boolean searchEmployee = ConsoleInput.readConfirmation("Deseja pesquisar um funcionario?");
 
-            if(!searchEmployee)
+            if (!searchEmployee)
             {
                 System.out.println("Operacao cancelada. Voltando...");
                 return MenuResult.pop();

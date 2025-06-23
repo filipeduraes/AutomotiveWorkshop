@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.clientmodule;
 
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
@@ -11,14 +13,31 @@ import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Menu para exibição e gerenciamento dos detalhes de um cliente.
+ * Permite visualizar informações detalhadas e editar dados do cliente selecionado.
+ *
+ * @author Filipe Durães
+ */
 public class ClientDetailsMenu extends EntityDetailsMenu<ClientViewModel, ClientDTO>
 {
+    /**
+     * Obtém o nome de exibição deste menu.
+     *
+     * @return o nome de exibição do menu
+     */
     @Override
     public String getMenuDisplayName()
     {
         return "Buscar cliente";
     }
 
+    /**
+     * Exibe o menu de detalhes do cliente e processa a interação do usuário.
+     *
+     * @param menuManager o gerenciador de menus da aplicação
+     * @return o resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {

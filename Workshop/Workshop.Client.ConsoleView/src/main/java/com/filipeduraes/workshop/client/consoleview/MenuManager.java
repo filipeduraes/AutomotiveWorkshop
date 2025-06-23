@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 /**
  * Gerencia a navegação entre menus da aplicação, controlando uma pilha de menus e coordenando a transição entre eles.
+ * Permite exibir menus, processar opções do usuário e controlar o fluxo de navegação.
  *
  * @author Filipe Durães
  */
@@ -126,11 +127,27 @@ public class MenuManager
         return options[selectedOptionIndex];
     }
 
+    /**
+     * Exibe uma lista de opções de menu para o usuário escolher.
+     *
+     * @param message mensagem de cabeçalho a ser exibida
+     * @param options lista com as opções de menu disponíveis
+     * @return opção selecionada pelo usuário
+     */
     public MenuOption showMenuOptions(String message, List<MenuOption> options)
     {
         return showMenuOptions(message, options, false);
     }
 
+    /**
+     * Exibe uma lista de opções de menu para o usuário escolher,
+     * com controle sobre a exibição da opção de saída.
+     *
+     * @param message mensagem de cabeçalho a ser exibida
+     * @param options lista com as opções de menu disponíveis
+     * @param showExitOption indica se deve mostrar a opção de saída
+     * @return opção selecionada pelo usuário
+     */
     public MenuOption showMenuOptions(String message, List<MenuOption> options, boolean showExitOption)
     {
         if(!message.isBlank())
@@ -152,8 +169,8 @@ public class MenuManager
     private void showMenuTitle()
     {
         String path = menuStack.stream()
-                .map(IWorkshopMenu::getMenuDisplayName)
-                .collect(Collectors.joining(" > "));
+                               .map(IWorkshopMenu::getMenuDisplayName)
+                               .collect(Collectors.joining(" > "));
 
         System.out.printf("%n%s%n", path);
         System.out.println("-".repeat(path.length()));

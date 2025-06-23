@@ -14,28 +14,38 @@ import com.filipeduraes.workshop.utils.TextUtils;
 import java.util.Arrays;
 
 /**
- * Menu responsável pelo cadastro de novos usuários no sistema.
- * Coleta informações como nome completo, cargo, email e senha.
- * Gerencia a interface de registro e comunica com o ViewModel para processar o cadastro.
+ * Menu responsável pelo cadastro de novos colaboradores no sistema.
+ * Coleta e valida informações pessoais e profissionais para registro.
  *
  * @author Filipe Durães
  */
 public class RegisterEmployeeMenu implements IWorkshopMenu
 {
+    /**
+     * Obtém o nome de exibição deste menu.
+     *
+     * @return o nome de exibição do menu
+     */
     @Override
-    public String getMenuDisplayName() 
+    public String getMenuDisplayName()
     {
         return "Cadastrar";
     }
-    
+
+    /**
+     * Exibe o formulário de cadastro de colaborador e processa o registro.
+     *
+     * @param menuManager o gerenciador de menus da aplicação
+     * @return o resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
         EmployeeViewModel viewModel = menuManager.getViewModelRegistry().getEmployeeViewModel();
-        
+
         System.out.println(" - Insira o nome completo: ");
         String userName = ConsoleInput.readLine();
-        
+
         System.out.println();
 
         EmployeeRoleDTO[] employeeRoleDTOS = EmployeeRoleDTO.values();
@@ -44,7 +54,7 @@ public class RegisterEmployeeMenu implements IWorkshopMenu
 
         System.out.println(" - Insira o email: ");
         String email = ConsoleInput.readLine();
-        
+
         System.out.println(" - Insira a senha: ");
         String password = ConsoleInput.readLine();
 
@@ -52,7 +62,7 @@ public class RegisterEmployeeMenu implements IWorkshopMenu
         viewModel.setSelectedDTO(newEmployee);
         viewModel.OnRegisterUserRequested.broadcast();
 
-        if(!viewModel.getRequestWasSuccessful())
+        if (!viewModel.getRequestWasSuccessful())
         {
             System.out.println("Nao foi possivel cadastrar o colaborador. Tente novamente!");
             return MenuResult.none();
@@ -60,5 +70,5 @@ public class RegisterEmployeeMenu implements IWorkshopMenu
 
         System.out.println("Colaborador cadastrado com sucesso!");
         return MenuResult.pop();
-    }    
+    }
 }

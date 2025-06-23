@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.auth;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
@@ -11,6 +13,12 @@ import com.filipeduraes.workshop.client.viewmodel.FieldType;
 
 import java.util.List;
 
+/**
+ * Menu para realizar pesquisa e seleção de colaboradores no sistema.
+ * Permite buscar colaboradores por nome, email ou cargo.
+ *
+ * @author Filipe Durães
+ */
 public class EmployeeSearchMenu implements IWorkshopMenu
 {
     private final FieldType[] searchableFieldTypes =
@@ -20,12 +28,24 @@ public class EmployeeSearchMenu implements IWorkshopMenu
         FieldType.ROLE
     };
 
+    /**
+     * Obtém o nome de exibição deste menu.
+     *
+     * @return nome do menu para exibição
+     */
     @Override
     public String getMenuDisplayName()
     {
         return "Pesquisar Colaborador";
     }
 
+    /**
+     * Exibe o menu de pesquisa de colaboradores e processa a interação do usuário.
+     * Permite selecionar o campo de busca, inserir critérios e escolher um colaborador dos resultados.
+     *
+     * @param menuManager gerenciador de menus da aplicação
+     * @return resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
@@ -34,7 +54,7 @@ public class EmployeeSearchMenu implements IWorkshopMenu
 
         int selectedField = ConsoleInput.readOptionFromList("Qual campo deseja usar para pesquisar?", searchableFieldTypes, true);
 
-        if(selectedField >= searchableFieldTypes.length)
+        if (selectedField >= searchableFieldTypes.length)
         {
             System.out.println("Pesquisa cancelada. Voltando...");
             return MenuResult.pop();
@@ -46,7 +66,7 @@ public class EmployeeSearchMenu implements IWorkshopMenu
         employeeViewModel.OnSearchRequest.broadcast();
         List<String> foundEmployees = employeeViewModel.getFoundEntitiesDescriptions();
 
-        if(!employeeViewModel.getRequestWasSuccessful() || foundEmployees.isEmpty())
+        if (!employeeViewModel.getRequestWasSuccessful() || foundEmployees.isEmpty())
         {
             boolean tryAgain = ConsoleInput.readConfirmation("Nao foi possivel encontrar nenhum colaborador.\nDeseja tentar novamente?");
             employeeViewModel.resetSelectedDTO();
@@ -56,7 +76,7 @@ public class EmployeeSearchMenu implements IWorkshopMenu
         String[] foundEmployeesDescriptions = foundEmployees.toArray(String[]::new);
         int selectedEmployeeIndex = ConsoleInput.readOptionFromList("Qual colaborador deseja selecionar?", foundEmployeesDescriptions, true);
 
-        if(selectedEmployeeIndex >= foundEmployeesDescriptions.length)
+        if (selectedEmployeeIndex >= foundEmployeesDescriptions.length)
         {
             System.out.println("Nenhum colaborador selecionado. Voltando...");
             employeeViewModel.resetSelectedDTO();
