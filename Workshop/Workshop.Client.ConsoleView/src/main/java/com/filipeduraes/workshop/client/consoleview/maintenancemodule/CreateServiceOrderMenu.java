@@ -7,6 +7,7 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.consoleview.input.MaxCharactersValidator;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.RegisterVehicleMenu;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleSelectionFromClientMenu;
 import com.filipeduraes.workshop.client.viewmodel.*;
@@ -59,7 +60,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
             return vehicleSelectionMenuResult;
         }
 
-        String shortDescription = ConsoleInput.readLine("Digite uma descricao curta do problema:");
+        String shortDescription = ConsoleInput.readValidatedLine("Digite uma descricao curta do problema:", new MaxCharactersValidator(30));
         String detailedDescription = ConsoleInput.readLine("Digite uma descricao detalhada do problema:");
 
         serviceViewModel.setCurrentStepShortDescription(shortDescription);

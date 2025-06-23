@@ -123,9 +123,10 @@ public class MaintenanceModule
      *
      * @param serviceID ID do serviço inspecionado
      * @param newEmployee ID do funcionário que receberá o serviço
-     * @param description descrição dos resultados da inspeção
+     * @param shortDescription descrição curta dos resultados da inspeção
+     * @param detailedDescription descrição dos resultados da inspeção
      */
-    public void finishInspection(UUID serviceID, UUID newEmployee, String description)
+    public boolean finishInspection(UUID serviceID, UUID newEmployee, String shortDescription, String detailedDescription)
     {
         if (loggedUserHasService(serviceID))
         {
@@ -133,7 +134,8 @@ public class MaintenanceModule
 
             if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
             {
-                serviceOrder.getCurrentStep().setDetailedDescription(description);
+                serviceOrder.getCurrentStep().setShortDescription(shortDescription);
+                serviceOrder.getCurrentStep().setDetailedDescription(detailedDescription);
                 userServices.remove(serviceID);
 
                 Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
@@ -146,9 +148,11 @@ public class MaintenanceModule
                 Persistence.saveFile(newEmployeeUserServices, newEmployeeUserPath);
 
                 serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
-                serviceOrderRepository.updateEntity(serviceOrder);
+                return serviceOrderRepository.updateEntity(serviceOrder);
             }
         }
+
+        return false;
     }
 
     /**

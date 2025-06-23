@@ -2,12 +2,10 @@
 
 package com.filipeduraes.workshop.client.model;
 
-import com.filipeduraes.workshop.client.dtos.ClientDTO;
-import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
-import com.filipeduraes.workshop.client.dtos.ServiceStepTypeDTO;
-import com.filipeduraes.workshop.client.dtos.VehicleDTO;
+import com.filipeduraes.workshop.client.dtos.*;
 import com.filipeduraes.workshop.client.model.mappers.ServiceOrderMapper;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
+import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
@@ -39,6 +37,7 @@ public class ServiceController
     private final ServiceViewModel serviceViewModel;
     private final VehicleViewModel vehicleViewModel;
     private final ClientViewModel clientViewModel;
+    private final EmployeeViewModel employeeViewModel;
     private final Workshop workshop;
 
     private List<ServiceOrder> queriedEntities = new ArrayList<>();
@@ -56,10 +55,13 @@ public class ServiceController
         serviceViewModel = viewModelRegistry.getServiceViewModel();
         vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         clientViewModel = viewModelRegistry.getClientViewModel();
+        employeeViewModel = viewModelRegistry.getEmployeeViewModel();
+
         this.workshop = workshop;
 
         serviceViewModel.OnRegisterAppointmentRequest.addListener(this::registerNewService);
         serviceViewModel.OnStartStepRequest.addListener(this::startNextStep);
+        serviceViewModel.OnFinishStepRequest.addListener(this::finishCurrentStep);
         serviceViewModel.OnSearchRequest.addListener(this::requestServices);
         serviceViewModel.OnLoadDataRequest.addListener(this::requestDetailedServiceInfo);
         serviceViewModel.OnEditServiceRequest.addListener(this::editSelectedService);
@@ -74,6 +76,7 @@ public class ServiceController
     {
         serviceViewModel.OnRegisterAppointmentRequest.removeListener(this::registerNewService);
         serviceViewModel.OnStartStepRequest.removeListener(this::startNextStep);
+        serviceViewModel.OnFinishStepRequest.removeListener(this::finishCurrentStep);
         serviceViewModel.OnSearchRequest.removeListener(this::requestServices);
         serviceViewModel.OnLoadDataRequest.removeListener(this::requestDetailedServiceInfo);
         serviceViewModel.OnEditServiceRequest.removeListener(this::editSelectedService);
@@ -126,6 +129,48 @@ public class ServiceController
         serviceViewModel.setRequestWasSuccessful(canStartNextStep);
     }
 
+    private void finishCurrentStep()
+    {
+        String shortDescription = serviceViewModel.getCurrentStepShortDescription();
+        String detailedDescription = serviceViewModel.getCurrentStepDetailedDescription();
+
+        ServiceOrderDTO selectedDTO = serviceViewModel.getSelectedDTO();
+
+        if(!serviceViewModel.hasLoadedDTO())
+        {
+            serviceViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        boolean wasSuccessful = false;
+
+        if(selectedDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
+        {
+            if(!employeeViewModel.hasLoadedDTO())
+            {
+                serviceViewModel.setRequestWasSuccessful(false);
+                return;
+            }
+
+            EmployeeDTO newEmployee = employeeViewModel.getSelectedDTO();
+            MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+            UUID serviceID = selectedDTO.getID();
+
+            wasSuccessful = maintenanceModule.finishInspection(serviceID, newEmployee.getID(), shortDescription, detailedDescription);
+
+            if(wasSuccessful)
+            {
+                ServiceOrder updatedServiceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(serviceID);
+                ServiceOrderDTO updatedServiceOrderDTO = ServiceOrderMapper.toDTO(updatedServiceOrder, workshop);
+
+                queriedEntities.set(serviceViewModel.getSelectedIndex(), updatedServiceOrder);
+                serviceViewModel.setSelectedDTO(updatedServiceOrderDTO);
+            }
+        }
+
+        serviceViewModel.setRequestWasSuccessful(wasSuccessful);
+    }
+
     private void requestServices()
     {
         ServiceQueryType queryType = serviceViewModel.getQueryType();
@@ -137,7 +182,16 @@ public class ServiceController
         }
         else if (filterType == ServiceFilterType.CLIENT)
         {
-            queriedEntities = getServicesFilteringByClient(queryType, clientViewModel.getSelectedDTO().getID());
+            ClientDTO selectedDTO = clientViewModel.getSelectedDTO();
+
+            if (selectedDTO != null)
+            {
+                queriedEntities = getServicesFilteringByClient(queryType, selectedDTO.getID());
+            }
+            else
+            {
+                queriedEntities = getServicesWithoutFiltering(queryType);
+            }
         }
         else if (filterType == ServiceFilterType.DESCRIPTION_PATTERN)
         {
