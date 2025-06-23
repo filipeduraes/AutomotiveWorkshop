@@ -21,6 +21,12 @@ import java.util.List;
  */
 public class EmployeeDetailsMenu extends EntityDetailsMenu<EmployeeViewModel, EmployeeDTO>
 {
+    @Override
+    public String getMenuDisplayName()
+    {
+        return "Buscar colaborador";
+    }
+
     /**
      * Obtém o ViewModel de funcionários do registro de ViewModels.
      *

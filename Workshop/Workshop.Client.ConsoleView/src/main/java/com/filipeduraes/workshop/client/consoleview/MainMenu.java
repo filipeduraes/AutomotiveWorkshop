@@ -80,7 +80,7 @@ public class MainMenu extends RedirectMenu
         if (loggedUser.getRole() == EmployeeRoleDTO.ADMINISTRATOR)
         {
             selectableMenus = Stream.concat(Arrays.stream(regularMenus), Arrays.stream(administratorMenus))
-                    .toArray(IWorkshopMenu[]::new);
+                                    .toArray(IWorkshopMenu[]::new);
         }
 
         return selectableMenus;
