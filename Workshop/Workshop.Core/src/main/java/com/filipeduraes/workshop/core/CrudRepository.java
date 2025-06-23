@@ -95,10 +95,16 @@ public class CrudRepository<TEntity extends WorkshopEntity>
      *
      * @param updatedEntity A entidade atualizada.
      */
-    public void updateEntity(TEntity updatedEntity)
+    public boolean updateEntity(TEntity updatedEntity)
     {
+        if(!loadedEntities.containsKey(updatedEntity.getID()) || updatedEntity.getID() == null)
+        {
+            return false;
+        }
+
         loadedEntities.put(updatedEntity.getID(), updatedEntity);
         saveCurrentEntities();
+        return true;
     }
 
     /**

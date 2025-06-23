@@ -9,7 +9,7 @@ package com.filipeduraes.workshop.core.auth;
  */
 public class LocalEmployee extends Employee
 {
-    private final int hashPassword;
+    private int hashPassword;
 
     /**
      * Cria um funcionário com suas informações e senha de acesso.
@@ -22,6 +22,31 @@ public class LocalEmployee extends Employee
     public LocalEmployee(String name, String email, EmployeeRole role, int hashPassword)
     {
         super(name, email, role);
+        this.hashPassword = hashPassword;
+    }
+
+    /**
+     * Cria uma nova instância de LocalEmployee copiando as informações
+     * de um objeto LocalEmployee existente, incluindo as credenciais
+     * de acesso.
+     *
+     * @param localEmployee o funcionário local existente cujas informações
+     *                       serão copiadas para a nova instância
+     */
+    public LocalEmployee(LocalEmployee localEmployee)
+    {
+        super(localEmployee.getName(), localEmployee.getEmail(), localEmployee.getRole());
+        assignID(localEmployee.getID());
+        hashPassword = localEmployee.hashPassword;
+    }
+
+    /**
+     * Define o hash da senha do funcionário.
+     *
+     * @param hashPassword o novo hash da senha do funcionário
+     */
+    public void setHashPassword(int hashPassword)
+    {
         this.hashPassword = hashPassword;
     }
 

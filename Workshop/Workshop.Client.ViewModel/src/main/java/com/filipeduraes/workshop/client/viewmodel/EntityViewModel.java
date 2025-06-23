@@ -58,21 +58,21 @@ public abstract class EntityViewModel<TEntityDTO>
     }
 
     /**
-     * Obtém o tipo de campo usado para busca.
+     * Obtém o tipo de campo usado para as operações.
      *
-     * @return tipo do campo de busca
+     * @return tipo do campo
      */
-    public FieldType getSearchByOption()
+    public FieldType getFieldType()
     {
         return fieldType;
     }
 
     /**
-     * Define o tipo de campo usado para busca.
+     * Define o tipo de campo usado para as operações.
      *
      * @param fieldType novo tipo de campo
      */
-    public void setSearchFieldType(FieldType fieldType)
+    public void setFieldType(FieldType fieldType)
     {
         this.fieldType = fieldType;
     }

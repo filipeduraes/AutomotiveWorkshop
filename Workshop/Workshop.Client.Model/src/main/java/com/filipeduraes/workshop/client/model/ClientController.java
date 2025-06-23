@@ -75,7 +75,7 @@ public class ClientController
     private void searchClients()
     {
         final String searchPattern = clientViewModel.getSearchPattern();
-        Function<Client, String> clientStringExtractor = clientSearchOptions.get(clientViewModel.getSearchByOption());
+        Function<Client, String> clientStringExtractor = clientSearchOptions.get(clientViewModel.getFieldType());
         foundClients = clientModule.searchEntitiesWithPattern(searchPattern, clientStringExtractor);
 
         List<String> clientDescriptions = convertClientsToClientDescriptions(foundClients);

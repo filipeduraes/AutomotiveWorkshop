@@ -62,7 +62,7 @@ public class EmployeeSearchMenu implements IWorkshopMenu
 
         requestSelectedFieldSearchData(selectedField, employeeViewModel);
 
-        employeeViewModel.setSearchFieldType(searchableFieldTypes[selectedField]);
+        employeeViewModel.setFieldType(searchableFieldTypes[selectedField]);
         employeeViewModel.OnSearchRequest.broadcast();
         List<String> foundEmployees = employeeViewModel.getFoundEntitiesDescriptions();
 

@@ -26,6 +26,11 @@ public class EmployeeViewModel extends EntityViewModel<EmployeeDTO>
      */
     public final Observer OnRegisterUserRequested = new Observer();
 
+    /**
+     * Evento disparado quando uma solicitação de edição de usuário é feita.
+     */
+    public final Observer OnEditUserRequested = new Observer();
+
     private EmployeeDTO loggedUser;
     private boolean requestWasSuccessful = false;
 

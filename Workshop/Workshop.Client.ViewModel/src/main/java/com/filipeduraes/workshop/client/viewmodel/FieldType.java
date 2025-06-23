@@ -41,6 +41,11 @@ public enum FieldType
     MODEL("Modelo"),
 
     /**
+     * Senha do usuário
+     */
+    PASSWORD("Senha"),
+
+    /**
      * Cor do veículo
      */
     COLOR("Cor"),

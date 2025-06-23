@@ -58,7 +58,7 @@ public class ClientSearchMenu implements IWorkshopMenu
 
         final String searchPattern = ConsoleInput.readLine();
 
-        clientViewModel.setSearchFieldType(options[searchOptionIndex]);
+        clientViewModel.setFieldType(options[searchOptionIndex]);
         clientViewModel.setSearchPattern(searchPattern);
 
         clientViewModel.OnSearchRequest.broadcast();

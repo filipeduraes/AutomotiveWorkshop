@@ -5,9 +5,12 @@ package com.filipeduraes.workshop.client.consoleview.auth;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
+import com.filipeduraes.workshop.client.consoleview.general.MenuOption;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
+
+import java.util.List;
 
 /**
  * Menu para exibição e gerenciamento de detalhes de funcionários.
@@ -54,5 +57,24 @@ public class EmployeeDetailsMenu extends EntityDetailsMenu<EmployeeViewModel, Em
         }
 
         return super.showMenu(menuManager);
+    }
+
+    @Override
+    protected List<MenuOption> buildOptions()
+    {
+        List<MenuOption> options = super.buildOptions();
+
+        List<MenuOption> newOptions = List.of
+        (
+            new MenuOption("Editar colaborador", this::showEditEmployeeScreen)
+        );
+
+        options.addAll(0, newOptions);
+        return options;
+    }
+
+    private MenuResult showEditEmployeeScreen(MenuManager menuManager)
+    {
+        return MenuResult.push(new EditEmployeeMenu());
     }
 }

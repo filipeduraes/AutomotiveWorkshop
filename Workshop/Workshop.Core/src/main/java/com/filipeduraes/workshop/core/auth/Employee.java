@@ -15,7 +15,7 @@ public class Employee extends WorkshopEntity
 {
     private String name;
     private String email;
-    private final EmployeeRole role;
+    private EmployeeRole role;
 
     /**
      * Cria uma instância de Employee com o nome, email e cargo especificados.
@@ -53,6 +53,16 @@ public class Employee extends WorkshopEntity
     }
 
     /**
+     * Define o cargo do funcionário.
+     *
+     * @param role o cargo a ser atribuído ao funcionário
+     */
+    public void setRole(EmployeeRole role)
+    {
+        this.role = role;
+    }
+
+    /**
      * Obtém o nome do funcionário.
      *
      * @return o nome do funcionário
@@ -63,6 +73,17 @@ public class Employee extends WorkshopEntity
     }
 
     /**
+     * Define o nome do funcionário.
+     *
+     * @param name o nome a ser atribuído ao funcionário
+     */
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+
+    /**
      * Obtém o endereço de email do funcionário.
      *
      * @return o endereço de email do funcionário
@@ -70,5 +91,15 @@ public class Employee extends WorkshopEntity
     public String getEmail()
     {
         return email;
+    }
+
+    /**
+     * Define o endereço de email do funcionário.
+     *
+     * @param email o novo endereço de email do funcionário
+     */
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 }

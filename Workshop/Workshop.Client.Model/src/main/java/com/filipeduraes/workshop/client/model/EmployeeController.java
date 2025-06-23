@@ -40,6 +40,7 @@ public class EmployeeController
         this.viewModel.OnRegisterUserRequested.addListener(this::registerUser);
         this.viewModel.OnSearchRequest.addListener(this::searchUsers);
         this.viewModel.OnLoadDataRequest.addListener(this::loadUserData);
+        this.viewModel.OnEditUserRequested.addListener(this::editUserData);
         this.viewModel.OnDeleteRequest.addListener(this::deleteUser);
     }
 
@@ -52,7 +53,8 @@ public class EmployeeController
         this.viewModel.OnRegisterUserRequested.removeListener(this::registerUser);
         this.viewModel.OnSearchRequest.removeListener(this::searchUsers);
         this.viewModel.OnLoadDataRequest.removeListener(this::loadUserData);
-        this.viewModel.OnDeleteRequest.addListener(this::deleteUser);
+        this.viewModel.OnEditUserRequested.removeListener(this::editUserData);
+        this.viewModel.OnDeleteRequest.removeListener(this::deleteUser);
     }
 
     private void login()
@@ -84,7 +86,7 @@ public class EmployeeController
         final EmployeeDTO employeeDTO = viewModel.getSelectedDTO();
         queriedEmployees = null;
 
-        switch (viewModel.getSearchByOption())
+        switch (viewModel.getFieldType())
         {
             case NAME ->
             {
@@ -119,7 +121,7 @@ public class EmployeeController
 
     private void loadUserData()
     {
-        if(queriedEmployees == null || viewModel.getSelectedIndex() < 0 || viewModel.getSelectedIndex() >= queriedEmployees.size())
+        if(queriedEmployees == null || !viewModel.hasValidSelectedIndex())
         {
             viewModel.setRequestWasSuccessful(false);
             return;
@@ -130,6 +132,37 @@ public class EmployeeController
 
         viewModel.setSelectedDTO(employeeDTO);
         viewModel.setRequestWasSuccessful(true);
+    }
+
+    private void editUserData()
+    {
+        if(!viewModel.hasLoadedDTO() || !viewModel.hasValidSelectedIndex())
+        {
+            viewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        EmployeeDTO newDataDTO = viewModel.getSelectedDTO();
+        LocalEmployee selectedEmployee = new LocalEmployee(queriedEmployees.get(viewModel.getSelectedIndex()));
+
+        switch (viewModel.getFieldType())
+        {
+            case NAME -> selectedEmployee.setName(newDataDTO.getName());
+            case EMAIL -> selectedEmployee.setEmail(newDataDTO.getEmail());
+            case ROLE -> selectedEmployee.setRole(EmployeeMapper.fromEmployeeRoleDTO(newDataDTO.getRole()));
+            case PASSWORD -> selectedEmployee.setHashPassword(newDataDTO.getPasswordHash());
+            default -> viewModel.setRequestWasSuccessful(false);
+        }
+
+        boolean updateWasSuccessful = authModule.getEmployeeRepository().updateEntity(selectedEmployee);
+
+        if(updateWasSuccessful)
+        {
+            viewModel.setSelectedDTO(EmployeeMapper.toDTO(selectedEmployee));
+            queriedEmployees.set(viewModel.getSelectedIndex(), selectedEmployee);
+        }
+
+        viewModel.setRequestWasSuccessful(updateWasSuccessful);
     }
 
     private void deleteUser()
