@@ -13,6 +13,9 @@ import com.filipeduraes.workshop.utils.Observer;
  */
 public class ClientViewModel extends EntityViewModel<ClientDTO>
 {
+    /**
+     * Evento chamado quando o registro do cliente selecionado é requisitado.
+     */
     public final Observer OnClientRegisterRequest = new Observer();
 
     private String searchPattern;

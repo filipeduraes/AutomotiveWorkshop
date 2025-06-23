@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
@@ -14,6 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Controlador responsável por gerenciar as operações relacionadas a veículos no sistema.
+ * Coordena a comunicação entre a interface do usuário e os dados dos veículos,
+ * processando requisições de busca, registro e detalhamento de veículos.
+ *
+ * @author Filipe Durães
+ */
 public class VehicleController
 {
     private final VehicleViewModel vehicleViewModel;
@@ -21,6 +30,13 @@ public class VehicleController
     private final CrudRepository<Vehicle> vehicleModule;
     private final CrudRepository<Client> clientModule;
 
+    /**
+     * Cria uma nova instância do controlador de veículos.
+     * Inicializa os listeners para processar as requisições relacionadas a veículos.
+     *
+     * @param viewModelRegistry registro contendo as referências dos ViewModels
+     * @param workshop instância principal da oficina contendo os repositórios
+     */
     public VehicleController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
         this.vehicleViewModel = viewModelRegistry.getVehicleViewModel();
@@ -33,6 +49,10 @@ public class VehicleController
         vehicleViewModel.OnVehicleRegistrationRequest.addListener(this::processVehicleRegistrationRequest);
     }
 
+    /**
+     * Remove os listeners registrados pelo controlador.
+     * Deve ser chamado quando o controlador não for mais necessário.
+     */
     public void dispose()
     {
         vehicleViewModel.OnLoadDataRequest.removeListener(this::processVehicleDetailsRequest);
@@ -63,7 +83,7 @@ public class VehicleController
     {
         Client selectedClient = getSelectedClient();
 
-        if(selectedClient != null)
+        if (selectedClient != null)
         {
             VehicleDTO registerRequestedVehicleDTO = vehicleViewModel.getSelectedDTO();
 
@@ -79,14 +99,14 @@ public class VehicleController
     {
         Client selectedClient = getSelectedClient();
 
-        if(selectedClient != null)
+        if (selectedClient != null)
         {
             int selectedVehicleIndex = vehicleViewModel.getSelectedIndex();
             List<UUID> ownedVehiclesIDs = selectedClient.getOwnedVehiclesIDs();
 
             boolean wasRequestSuccessful = selectedVehicleIndex >= 0 && selectedVehicleIndex < ownedVehiclesIDs.size();
 
-            if(wasRequestSuccessful)
+            if (wasRequestSuccessful)
             {
                 UUID selectedVehicleID = ownedVehiclesIDs.get(selectedVehicleIndex);
                 Vehicle vehicle = vehicleModule.getEntityWithID(selectedVehicleID);
@@ -102,7 +122,7 @@ public class VehicleController
 
     private Client getSelectedClient()
     {
-        if(!clientViewModel.hasLoadedDTO())
+        if (!clientViewModel.hasLoadedDTO())
         {
             System.out.println("Nenhum cliente selecionado, por favor selecione um cliente antes de prosseguir.");
             vehicleViewModel.setWasRequestSuccessful(false);

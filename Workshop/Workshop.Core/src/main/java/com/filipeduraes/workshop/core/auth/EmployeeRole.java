@@ -29,12 +29,8 @@ public enum EmployeeRole
         this.displayName = displayName;
     }
 
-    /**
-     * Retorna o nome de exibição do cargo.
-     *
-     * @return O nome de exibição do cargo
-     */
-    public String getDisplayName()
+    @Override
+    public String toString()
     {
         return displayName;
     }

@@ -28,6 +28,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
+ * Controlador responsável por gerenciar as operações relacionadas aos serviços da oficina.
+ * Esta classe atua como intermediária entre a camada de visualização (ViewModel) e a camada de domínio,
+ * coordenando ações como registro de novos serviços, início de etapas, busca e edição de ordens de serviço.
  *
  * @author Filipe Durães
  */
@@ -40,6 +43,14 @@ public class ServiceController
 
     private List<ServiceOrder> queriedEntities = new ArrayList<>();
 
+    /**
+     * Constrói um novo controlador de serviços.
+     * Inicializa as referências para os ViewModels necessários e registra os listeners
+     * para responder aos eventos da interface do usuário.
+     *
+     * @param viewModelRegistry registro contendo as referências para os ViewModels
+     * @param workshop instância principal da oficina contendo os módulos do sistema
+     */
     public ServiceController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
         serviceViewModel = viewModelRegistry.getServiceViewModel();
@@ -55,6 +66,10 @@ public class ServiceController
         serviceViewModel.OnDeleteRequest.addListener(this::deleteSelectedService);
     }
 
+    /**
+     * Remove todos os listeners registrados nos eventos dos ViewModels.
+     * Deve ser chamado quando o controlador não for mais necessário para evitar vazamento de memória.
+     */
     public void dispose()
     {
         serviceViewModel.OnRegisterAppointmentRequest.removeListener(this::registerNewService);
@@ -69,7 +84,7 @@ public class ServiceController
     {
         MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
 
-        if(vehicleViewModel.hasLoadedDTO())
+        if (vehicleViewModel.hasLoadedDTO())
         {
             VehicleDTO selectedVehicle = vehicleViewModel.getSelectedDTO();
             String shortDescription = serviceViewModel.getCurrentStepShortDescription();
@@ -94,13 +109,13 @@ public class ServiceController
         ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(selectedServiceOrderID);
         boolean canStartNextStep = serviceOrder.getCurrentStepWasFinished();
 
-        if(canStartNextStep)
+        if (canStartNextStep)
         {
-            if(serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.APPOINTMENT)
+            if (serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.APPOINTMENT)
             {
                 maintenanceModule.startInspection(selectedServiceOrderID);
             }
-            else if(serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
+            else if (serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
             {
                 maintenanceModule.startMaintenance(selectedServiceOrderID);
             }
@@ -116,23 +131,23 @@ public class ServiceController
         ServiceQueryType queryType = serviceViewModel.getQueryType();
         ServiceFilterType filterType = serviceViewModel.getFilterType();
 
-        if(filterType == ServiceFilterType.NONE)
+        if (filterType == ServiceFilterType.NONE)
         {
             queriedEntities = getServicesWithoutFiltering(queryType);
         }
-        else if(filterType == ServiceFilterType.CLIENT)
+        else if (filterType == ServiceFilterType.CLIENT)
         {
             queriedEntities = getServicesFilteringByClient(queryType, clientViewModel.getSelectedDTO().getID());
         }
-        else if(filterType == ServiceFilterType.DESCRIPTION_PATTERN)
+        else if (filterType == ServiceFilterType.DESCRIPTION_PATTERN)
         {
             String descriptionQueryPattern = serviceViewModel.getDescriptionQueryPattern();
             queriedEntities = getServicesFilteringByDescription(queryType, descriptionQueryPattern);
         }
 
         List<String> descriptions = queriedEntities.stream()
-                                        .map(this::getServiceListingName)
-                                        .collect(Collectors.toList());
+                                                   .map(this::getServiceListingName)
+                                                   .collect(Collectors.toList());
 
         serviceViewModel.setFoundEntitiesDescriptions(descriptions);
         serviceViewModel.setWasRequestSuccessful(true);
@@ -142,7 +157,7 @@ public class ServiceController
     {
         int selectedMaintenanceIndex = serviceViewModel.getSelectedIndex();
 
-        if(selectedMaintenanceIndex < 0 || selectedMaintenanceIndex >= queriedEntities.size())
+        if (selectedMaintenanceIndex < 0 || selectedMaintenanceIndex >= queriedEntities.size())
         {
             serviceViewModel.setWasRequestSuccessful(false);
             return;
@@ -219,7 +234,7 @@ public class ServiceController
         Client owner = workshop.getClientRepository().getEntityWithID(clientID);
         Vehicle vehicle = workshop.getVehicleRepository().getEntityWithID(vehicleID);
 
-        if(owner == null || vehicle == null)
+        if (owner == null || vehicle == null)
         {
             return "INVALID_SERVICE";
         }
@@ -227,7 +242,7 @@ public class ServiceController
         LocalDateTime startDate = currentStep.getStartDate();
         String shortDescription;
 
-        if(!currentStep.getWasFinished())
+        if (!currentStep.getWasFinished())
         {
             shortDescription = new ArrayList<>(service.getSteps()).get(1).getShortDescription();
         }
@@ -253,13 +268,16 @@ public class ServiceController
     {
         String lowerCasePattern = pattern.toLowerCase();
 
-        return getServicesFiltering(queryType, s ->
-        {
-            String shortDescription = s.getCurrentStep().getShortDescription().toLowerCase();
-            String detailedDescription = s.getCurrentStep().getDetailedDescription().toLowerCase();
+        return getServicesFiltering
+        (
+            queryType, s ->
+            {
+                String shortDescription = s.getCurrentStep().getShortDescription().toLowerCase();
+                String detailedDescription = s.getCurrentStep().getDetailedDescription().toLowerCase();
 
-            return shortDescription.contains(lowerCasePattern) || detailedDescription.contains(lowerCasePattern);
-        });
+                return shortDescription.contains(lowerCasePattern) || detailedDescription.contains(lowerCasePattern);
+            }
+        );
     }
 
     private List<ServiceOrder> getServicesFiltering(ServiceQueryType queryType, Predicate<ServiceOrder> filter)

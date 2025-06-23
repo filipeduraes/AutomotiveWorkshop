@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.model.mappers;
 
 import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
@@ -16,8 +18,21 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.stream.Collectors;
 
+/**
+ * Realiza o mapeamento entre as ordens de serviço do domínio e seus DTOs correspondentes.
+ * Esta classe fornece métodos para converter objetos entre as camadas de domínio e apresentação.
+ *
+ * @author Filipe Durães
+ */
 public final class ServiceOrderMapper
 {
+    /**
+     * Converte uma ordem de serviço do domínio para seu DTO correspondente.
+     *
+     * @param serviceOrder a ordem de serviço a ser convertida
+     * @param workshop a oficina que contém os repositórios necessários
+     * @return o DTO correspondente à ordem de serviço
+     */
     public static ServiceOrderDTO toDTO(ServiceOrder serviceOrder, Workshop workshop)
     {
         MaintenanceStep maintenanceStep = serviceOrder.getCurrentMaintenanceStep();
@@ -42,6 +57,12 @@ public final class ServiceOrderMapper
         );
     }
 
+    /**
+     * Converte um tipo de etapa de manutenção do domínio para seu DTO correspondente.
+     *
+     * @param maintenanceStep a etapa de manutenção a ser convertida
+     * @return o DTO correspondente à etapa de manutenção
+     */
     public static ServiceStepTypeDTO toServiceStepDTO(MaintenanceStep maintenanceStep)
     {
         return switch (maintenanceStep)
@@ -53,6 +74,12 @@ public final class ServiceOrderMapper
         };
     }
 
+    /**
+     * Converte um DTO de tipo de etapa de serviço para sua entidade de domínio correspondente.
+     *
+     * @param serviceStepTypeDTO o DTO a ser convertido
+     * @return a etapa de manutenção correspondente
+     */
     public static MaintenanceStep fromServiceStepDTO(ServiceStepTypeDTO serviceStepTypeDTO)
     {
         return switch (serviceStepTypeDTO)
@@ -67,8 +94,8 @@ public final class ServiceOrderMapper
     private static Deque<ServiceStepDTO> toServiceStepsDTO(AuthModule authModule, Deque<ServiceStep> serviceSteps)
     {
         return serviceSteps.stream()
-                           .map(s -> toServiceStepDTO(authModule, s))
-                           .collect(Collectors.toCollection(ArrayDeque::new));
+                .map(s -> toServiceStepDTO(authModule, s))
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     private static ServiceStepDTO toServiceStepDTO(AuthModule authModule, ServiceStep serviceStep)

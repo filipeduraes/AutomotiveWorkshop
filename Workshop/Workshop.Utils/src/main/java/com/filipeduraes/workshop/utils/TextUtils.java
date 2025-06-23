@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.utils;
 
 import java.time.LocalDateTime;
@@ -5,18 +7,26 @@ import java.time.format.TextStyle;
 import java.util.Arrays;
 import java.util.Locale;
 
+/**
+ * Fornece utilidades para manipulação e formatação de texto.
+ *
+ * @author Filipe Durães
+ */
 public final class TextUtils
 {
-    private TextUtils(){}
+    private TextUtils()
+    {
+    }
 
     /**
      * Torna maiúscula a primeira letra de uma string.
+     *
      * @param input String que será modificada
      * @return String com a primeira letra capitalizada
      */
     public static String capitalizeFirstLetter(String input)
     {
-        if(input.isEmpty())
+        if (input.isEmpty())
         {
             return "";
         }
@@ -26,9 +36,15 @@ public final class TextUtils
         return upperCaseFirstLetter + input.substring(1);
     }
 
+    /**
+     * Formata uma data para exibição no formato "dia mês HH:mm" em português.
+     *
+     * @param date Data a ser formatada
+     * @return String formatada com a data, ou string vazia se a data for nula
+     */
     public static String formatDate(LocalDateTime date)
     {
-        if(date == null)
+        if (date == null)
         {
             return "";
         }
@@ -39,16 +55,31 @@ public final class TextUtils
         return formattedDate;
     }
 
+    /**
+     * Converte um array de qualquer tipo para um array de strings.
+     *
+     * @param <T> Tipo dos elementos do array de entrada
+     * @param array Array a ser convertido
+     * @return Array de strings com a representação textual dos elementos
+     */
     public static <T> String[] convertToStringArray(T[] array)
     {
         return convertToStringArray(array, 0);
     }
 
+    /**
+     * Converte um array de qualquer tipo para um array de strings, pulando elementos iniciais.
+     *
+     * @param <T> Tipo dos elementos do array de entrada
+     * @param array Array a ser convertido
+     * @param skip Quantidade de elementos a serem pulados do início
+     * @return Array de strings com a representação textual dos elementos
+     */
     public static <T> String[] convertToStringArray(T[] array, int skip)
     {
         return Arrays.stream(array)
-                     .skip(skip)
-                     .map(Object::toString)
-                     .toArray(String[]::new);
+                .skip(skip)
+                .map(Object::toString)
+                .toArray(String[]::new);
     }
 }

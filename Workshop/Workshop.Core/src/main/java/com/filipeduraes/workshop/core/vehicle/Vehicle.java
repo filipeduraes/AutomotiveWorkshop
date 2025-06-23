@@ -6,6 +6,9 @@ import com.filipeduraes.workshop.core.WorkshopEntity;
 import java.util.UUID;
 
 /**
+ * Representa um veículo no sistema da oficina.
+ * Esta classe mantém todas as informações relevantes sobre um veículo, incluindo
+ * suas características físicas e seu status atual na oficina.
  *
  * @author Filipe Durães
  */
@@ -19,6 +22,17 @@ public class Vehicle extends WorkshopEntity
     private int year;
     private VehicleStatus status = VehicleStatus.RECEIVED;
 
+    /**
+     * Cria uma nova instância de veículo com as informações fornecidas.
+     * O status inicial do veículo é definido como RECEIVED.
+     *
+     * @param ownerID ID do proprietário do veículo
+     * @param model Modelo do veículo (ex: Gol, Civic, etc)
+     * @param color Cor do veículo
+     * @param vinNumber Número do chassi do veículo
+     * @param licensePlate Placa do veículo
+     * @param year Ano de fabricação do veículo
+     */
     public Vehicle(UUID ownerID, String model, String color, String vinNumber, String licensePlate, int year)
     {
         this.ownerID = ownerID;
@@ -29,46 +43,93 @@ public class Vehicle extends WorkshopEntity
         this.year = year;
     }
 
-    public String getModel() 
+    /**
+     * Obtém o modelo do veículo.
+     *
+     * @return modelo do veículo
+     */
+    public String getModel()
     {
         return model;
     }
 
-    public String getColor() 
+    /**
+     * Obtém a cor do veículo.
+     *
+     * @return cor do veículo
+     */
+    public String getColor()
     {
         return color;
     }
 
+    /**
+     * Obtém a placa do veículo.
+     *
+     * @return placa do veículo
+     */
     public String getLicensePlate()
     {
         return licensePlate;
     }
-    
+
+    /**
+     * Obtém o status atual do veículo na oficina.
+     *
+     * @return status atual do veículo
+     */
     public VehicleStatus getStatus()
     {
         return status;
     }
-    
+
+    /**
+     * Atualiza o status do veículo na oficina.
+     *
+     * @param status novo status do veículo
+     */
     public void setStatus(VehicleStatus status)
     {
         this.status = status;
     }
 
+    /**
+     * Obtém o número do chassi do veículo.
+     *
+     * @return número do chassi
+     */
     public String getVinNumber()
     {
         return vinNumber;
     }
 
+    /**
+     * Obtém o ano de fabricação do veículo.
+     *
+     * @return ano do veículo
+     */
     public int getYear()
     {
         return year;
     }
 
+    /**
+     * Obtém o ID do proprietário do veículo.
+     *
+     * @return ID do proprietário
+     */
     public UUID getOwnerID()
     {
         return ownerID;
     }
 
+
+    /**
+     * Retorna uma representação em string do veículo.
+     * A string contém o modelo, cor e ano do veículo no formato "modelo cor (ano)".
+     *
+     * @return string representando o veículo
+     */
     @Override
     public String toString()
     {

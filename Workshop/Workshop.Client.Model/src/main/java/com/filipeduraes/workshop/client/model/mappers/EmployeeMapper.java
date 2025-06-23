@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.model.mappers;
 
 import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
@@ -6,18 +8,37 @@ import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.auth.EmployeeRole;
 import com.filipeduraes.workshop.core.auth.LocalEmployee;
 
+/**
+ * Classe responsável por mapear objetos entre as classes de domínio Employee e seus DTOs correspondentes.
+ * Fornece métodos para converter entre diferentes representações de funcionários no sistema.
+ *
+ * @author Filipe Durães
+ */
 public class EmployeeMapper
 {
+    /**
+     * Converte um objeto Employee do domínio para sua representação DTO.
+     *
+     * @param employee o funcionário a ser convertido
+     * @return o DTO correspondente ao funcionário
+     */
     public static EmployeeDTO toDTO(Employee employee)
     {
         return new EmployeeDTO
         (
+            employee.getID(),
             employee.getName(),
             employee.getEmail(),
             toEmployeeRoleDTO(employee.getRole())
         );
     }
 
+    /**
+     * Converte um DTO de funcionário para um objeto Employee do domínio.
+     *
+     * @param employee o DTO a ser convertido
+     * @return o objeto Employee correspondente
+     */
     public static Employee fromDTO(EmployeeDTO employee)
     {
         return new Employee
@@ -28,6 +49,12 @@ public class EmployeeMapper
         );
     }
 
+    /**
+     * Converte um DTO de funcionário para um objeto LocalEmployee do domínio.
+     *
+     * @param employee o DTO a ser convertido
+     * @return o objeto LocalEmployee correspondente
+     */
     public static LocalEmployee fromLocalDTO(EmployeeDTO employee)
     {
         return new LocalEmployee
@@ -39,6 +66,12 @@ public class EmployeeMapper
         );
     }
 
+    /**
+     * Converte um cargo de funcionário do domínio para sua representação DTO.
+     *
+     * @param role o cargo a ser convertido
+     * @return o DTO correspondente ao cargo
+     */
     public static EmployeeRoleDTO toEmployeeRoleDTO(EmployeeRole role)
     {
         return switch (role)
@@ -50,6 +83,12 @@ public class EmployeeMapper
         };
     }
 
+    /**
+     * Converte um DTO de cargo para um objeto EmployeeRole do domínio.
+     *
+     * @param selectedRole o DTO do cargo a ser convertido
+     * @return o objeto EmployeeRole correspondente
+     */
     public static EmployeeRole fromEmployeeRoleDTO(EmployeeRoleDTO selectedRole)
     {
         return switch (selectedRole)

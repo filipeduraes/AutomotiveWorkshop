@@ -11,6 +11,7 @@ import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.auth.EmployeeRole;
 import com.filipeduraes.workshop.core.auth.LocalEmployee;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Controlador responsável por gerenciar a autenticação e registro de usuários no sistema.
@@ -39,6 +40,7 @@ public class EmployeeController
         this.viewModel.OnRegisterUserRequested.addListener(this::registerUser);
         this.viewModel.OnSearchRequest.addListener(this::searchUsers);
         this.viewModel.OnLoadDataRequest.addListener(this::loadUserData);
+        this.viewModel.OnDeleteRequest.addListener(this::deleteUser);
     }
 
     /**
@@ -50,6 +52,7 @@ public class EmployeeController
         this.viewModel.OnRegisterUserRequested.removeListener(this::registerUser);
         this.viewModel.OnSearchRequest.removeListener(this::searchUsers);
         this.viewModel.OnLoadDataRequest.removeListener(this::loadUserData);
+        this.viewModel.OnDeleteRequest.addListener(this::deleteUser);
     }
 
     private void login()
@@ -127,6 +130,20 @@ public class EmployeeController
 
         viewModel.setSelectedDTO(employeeDTO);
         viewModel.setRequestWasSuccessful(true);
+    }
+
+    private void deleteUser()
+    {
+        if(viewModel.isSelectedUserSameAsLoggedUser())
+        {
+            viewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        UUID selectedUserID = viewModel.getSelectedDTO().getID();
+        LocalEmployee deletedUser = authModule.getEmployeeRepository().deleteEntityWithID(selectedUserID);
+
+        viewModel.setRequestWasSuccessful(deletedUser != null);
     }
 
     private static String getEmployeeDescription(Employee employee)

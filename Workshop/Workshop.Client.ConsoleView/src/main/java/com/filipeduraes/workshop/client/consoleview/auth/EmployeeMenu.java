@@ -6,9 +6,10 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 
 public class EmployeeMenu implements IWorkshopMenu
 {
-    private IWorkshopMenu[] menus =
+    private final IWorkshopMenu[] menus =
     {
         new RegisterEmployeeMenu(),
+        new EmployeeDetailsMenu()
     };
 
     @Override
@@ -20,6 +21,8 @@ public class EmployeeMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
+        menuManager.getViewModelRegistry().getEmployeeViewModel().resetSelectedDTO();
+
         IWorkshopMenu selectedMenu = menuManager.showSubmenuOptions("Qual menu deseja acessar?", menus, true);
 
         if(selectedMenu == null)

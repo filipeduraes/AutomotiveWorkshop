@@ -4,6 +4,7 @@ import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
+import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
@@ -71,24 +72,28 @@ public class EmployeeSearchMenu implements IWorkshopMenu
 
     private void requestSelectedFieldSearchData(int selectedField, EmployeeViewModel employeeViewModel)
     {
+        EmployeeDTO searchedEmployee = new EmployeeDTO();
+
         switch (searchableFieldTypes[selectedField])
         {
             case NAME ->
             {
                 String name = ConsoleInput.readLine("Insira o nome que deseja buscar");
-                employeeViewModel.getSelectedDTO().setName(name);
+                searchedEmployee.setName(name);
             }
             case EMAIL ->
             {
                 String email = ConsoleInput.readLine("Insira o email que deseja buscar");
-                employeeViewModel.getSelectedDTO().setEmail(email);
+                searchedEmployee.setEmail(email);
             }
             case ROLE ->
             {
                 int selectedRoleIndex = ConsoleInput.readOptionFromList("Qual cargo deseja filtrar?", EmployeeRoleDTO.values());
                 EmployeeRoleDTO selectedRole = EmployeeRoleDTO.values()[selectedRoleIndex];
-                employeeViewModel.getSelectedDTO().setRole(selectedRole);
+                searchedEmployee.setRole(selectedRole);
             }
         }
+
+        employeeViewModel.setSelectedDTO(searchedEmployee);
     }
 }

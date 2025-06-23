@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Observer 
 {
-    private List<Runnable> listeners = new ArrayList<>();
+    private final List<Runnable> listeners = new ArrayList<>();
     
     /**
      * Adiciona um novo observador ao evento.

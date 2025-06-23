@@ -11,6 +11,8 @@ import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 /**
+ * Módulo responsável pelo gerenciamento de ordens de serviço e manutenções na oficina.
+ * Controla o fluxo de trabalho desde o agendamento inicial até a conclusão do serviço.
  *
  * @author Filipe Durães
  */
@@ -20,7 +22,12 @@ public class MaintenanceModule
     private final Set<UUID> userServices;
     private final Set<UUID> openedServices;
     private final UUID loggedEmployeeID;
-    
+
+    /**
+     * Cria uma nova instância do módulo de manutenção.
+     *
+     * @param loggedEmployeeID ID do funcionário que está logado no sistema
+     */
     public MaintenanceModule(UUID loggedEmployeeID)
     {
         this.loggedEmployeeID = loggedEmployeeID;
@@ -32,21 +39,45 @@ public class MaintenanceModule
         userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDListType, new HashSet<>());
     }
 
+    /**
+     * Obtém o repositório de ordens de serviço.
+     *
+     * @return repositório que gerencia as ordens de serviço
+     */
     public CrudRepository<ServiceOrder> getServiceOrderRepository()
     {
         return serviceOrderRepository;
     }
 
+    /**
+     * Obtém o conjunto de IDs dos serviços atribuídos ao funcionário atual.
+     *
+     * @return conjunto de IDs dos serviços do funcionário
+     */
     public Set<UUID> getUserServices()
     {
         return userServices;
     }
 
+    /**
+     * Obtém o conjunto de IDs dos serviços que estão em aberto na oficina.
+     *
+     * @return conjunto de IDs dos serviços em aberto
+     */
     public Set<UUID> getOpenedServices()
     {
         return openedServices;
     }
 
+    /**
+     * Registra um novo agendamento de serviço na oficina.
+     *
+     * @param clientID ID do cliente solicitante do serviço
+     * @param vehicleID ID do veículo que receberá o serviço
+     * @param shortDescription descrição curta do problema ou serviço
+     * @param detailedDescription descrição detalhada do problema ou serviço
+     * @return ID do serviço criado
+     */
     public UUID registerNewAppointment(UUID clientID, UUID vehicleID, String shortDescription, String detailedDescription)
     {
         ServiceOrder serviceOrder = new ServiceOrder(clientID, vehicleID);
@@ -63,9 +94,14 @@ public class MaintenanceModule
         return serviceID;
     }
 
+    /**
+     * Inicia o processo de inspeção de um serviço agendado.
+     *
+     * @param serviceID ID do serviço a ser inspecionado
+     */
     public void startInspection(UUID serviceID)
     {
-        if(serviceOrderRepository.hasEntityWithID(serviceID))
+        if (serviceOrderRepository.hasEntityWithID(serviceID))
         {
             ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
 
@@ -82,9 +118,16 @@ public class MaintenanceModule
         }
     }
 
+    /**
+     * Finaliza a inspeção de um serviço e o encaminha para outro funcionário.
+     *
+     * @param serviceID ID do serviço inspecionado
+     * @param newEmployee ID do funcionário que receberá o serviço
+     * @param description descrição dos resultados da inspeção
+     */
     public void finishInspection(UUID serviceID, UUID newEmployee, String description)
     {
-        if(loggedUserHasService(serviceID))
+        if (loggedUserHasService(serviceID))
         {
             ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
 
@@ -108,13 +151,18 @@ public class MaintenanceModule
         }
     }
 
+    /**
+     * Inicia o processo de manutenção de um serviço após a inspeção.
+     *
+     * @param serviceID ID do serviço a ser iniciado
+     */
     public void startMaintenance(UUID serviceID)
     {
-        if(loggedUserHasService(serviceID))
+        if (loggedUserHasService(serviceID))
         {
             ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
 
-            if(serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
+            if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
             {
                 ServiceStep serviceStep = new ServiceStep(loggedEmployeeID);
                 serviceOrder.registerStep(serviceStep);
@@ -124,9 +172,17 @@ public class MaintenanceModule
         }
     }
 
+    /**
+     * Finaliza o processo de manutenção de um serviço.
+     *
+     * @param serviceID ID do serviço a ser finalizado
+     * @param description descrição do trabalho realizado
+     * @param services lista de produtos utilizados no serviço
+     * @param purchase informações da compra associada ao serviço
+     */
     public void finishMaintenance(UUID serviceID, String description, ArrayList<Product> services, Purchase purchase)
     {
-        if(loggedUserHasService(serviceID))
+        if (loggedUserHasService(serviceID))
         {
             ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
             ServiceStep currentStep = serviceOrder.getCurrentStep();
@@ -145,6 +201,11 @@ public class MaintenanceModule
         }
     }
 
+    /**
+     * Remove uma ordem de serviço do sistema.
+     *
+     * @param selectedServiceID ID do serviço a ser removido
+     */
     public void deleteServiceOrder(UUID selectedServiceID)
     {
         serviceOrderRepository.deleteEntityWithID(selectedServiceID);
