@@ -8,6 +8,7 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceFilterType;
+import com.filipeduraes.workshop.utils.TextUtils;
 
 import java.util.Arrays;
 
@@ -85,10 +86,7 @@ public class QueryServicesMenu implements IWorkshopMenu
         int selectedFilterOption = -1;
 
         ServiceFilterType[] filterTypes = ServiceFilterType.values();
-        String[] filterTypesDisplayNames = Arrays.stream(filterTypes)
-                                                 .skip(1)
-                                                 .map(ServiceFilterType::toString)
-                                                 .toArray(String[]::new);
+        String[] filterTypesDisplayNames = TextUtils.convertToStringArray(filterTypes, 1);
 
         if(filterService)
         {

@@ -5,7 +5,7 @@ package com.filipeduraes.workshop.client.console;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.administrator.FirstAccessMenu;
 import com.filipeduraes.workshop.client.consoleview.auth.LogInMenu;
-import com.filipeduraes.workshop.client.model.AuthController;
+import com.filipeduraes.workshop.client.model.EmployeeController;
 import com.filipeduraes.workshop.client.model.ClientController;
 
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
@@ -48,7 +48,7 @@ public class WorkshopClient
 
         ViewModelRegistry viewModelRegistry = new ViewModelRegistry();
 
-        AuthController authController = new AuthController(viewModelRegistry.getAuthViewModel(), workshop.getAuthModule());
+        EmployeeController employeeController = new EmployeeController(viewModelRegistry.getEmployeeViewModel(), workshop.getAuthModule());
         ClientController clientController = new ClientController(viewModelRegistry.getClientViewModel(), workshop.getClientRepository());
         VehicleController vehicleController = new VehicleController(viewModelRegistry, workshop);
         ServiceController serviceController = new ServiceController(viewModelRegistry, workshop);
@@ -59,7 +59,7 @@ public class WorkshopClient
         MenuManager menuManager = new MenuManager(initialMenu, viewModelRegistry);
         menuManager.run();
 
-        authController.dispose();
+        employeeController.dispose();
         clientController.dispose();
         vehicleController.dispose();
         serviceController.dispose();

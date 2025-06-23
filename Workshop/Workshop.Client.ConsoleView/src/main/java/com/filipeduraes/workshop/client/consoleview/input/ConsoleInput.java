@@ -1,6 +1,8 @@
 // Copyright Filipe Durães. All rights reserved.
 package com.filipeduraes.workshop.client.consoleview.input;
 
+import com.filipeduraes.workshop.utils.TextUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -111,6 +113,30 @@ public class ConsoleInput
         }
 
         return inputValidator.formatValidInput(input);
+    }
+
+    /**
+     * Exibe uma lista numerada de opções e lê a escolha do usuário.
+     *
+     * @param message mensagem a ser exibida antes das opções
+     * @param options array com as opções disponíveis
+     * @return índice da opção escolhida pelo usuário
+     */
+    public static <T> int readOptionFromList(String message, T[] options)
+    {
+        return readOptionFromList(message, options, false);
+    }
+
+    /**
+     * Exibe uma lista numerada de opções e lê a escolha do usuário.
+     *
+     * @param message mensagem a ser exibida antes das opções
+     * @param options array com as opções disponíveis
+     * @return índice da opção escolhida pelo usuário
+     */
+    public static <T> int readOptionFromList(String message, T[] options, boolean showCancelOption)
+    {
+        return readOptionFromList(message, TextUtils.convertToStringArray(options), showCancelOption);
     }
 
     /**

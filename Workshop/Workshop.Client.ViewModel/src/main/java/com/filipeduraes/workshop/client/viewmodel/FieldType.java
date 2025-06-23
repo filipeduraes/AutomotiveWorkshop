@@ -6,6 +6,7 @@ public enum FieldType
     EMAIL("Email"),
     CPF("CPF"),
     PHONE("Telefone"),
+    ROLE("Cargo"),
     MODEL("Modelo"),
     COLOR("Cor"),
     VIN_NUMBER("Numero do chassi"),

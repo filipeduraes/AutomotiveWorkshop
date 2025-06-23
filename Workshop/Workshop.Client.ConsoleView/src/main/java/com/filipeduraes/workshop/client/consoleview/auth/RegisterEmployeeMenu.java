@@ -6,8 +6,12 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
-import com.filipeduraes.workshop.client.viewmodel.AuthViewModel;
+import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
+import com.filipeduraes.workshop.utils.TextUtils;
+
+import java.util.Arrays;
 
 /**
  * Menu responsável pelo cadastro de novos usuários no sistema.
@@ -16,7 +20,7 @@ import com.filipeduraes.workshop.client.viewmodel.AuthViewModel;
  *
  * @author Filipe Durães
  */
-public class SignInMenu implements IWorkshopMenu 
+public class RegisterEmployeeMenu implements IWorkshopMenu
 {
     @Override
     public String getMenuDisplayName() 
@@ -27,7 +31,7 @@ public class SignInMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        AuthViewModel viewModel = menuManager.getViewModelRegistry().getAuthViewModel();
+        EmployeeViewModel viewModel = menuManager.getViewModelRegistry().getEmployeeViewModel();
         
         System.out.println(" - Insira o nome completo: ");
         String userName = ConsoleInput.readLine();
@@ -35,31 +39,26 @@ public class SignInMenu implements IWorkshopMenu
         System.out.println();
 
         EmployeeRoleDTO[] employeeRoleDTOS = EmployeeRoleDTO.values();
-        String[] options = new String[employeeRoleDTOS.length];
 
-        for(int i = 0; i < employeeRoleDTOS.length; i++)
-        {
-            String roleDisplayName = employeeRoleDTOS[i].toString();
-            String option = String.format(" [%d]: %s", i, roleDisplayName);
-            System.out.println(option);
-
-            options[i] = roleDisplayName;
-        }
-
-        int selectedRoleIndex = ConsoleInput.readOptionFromList(" - Insira o cargo do colaborador:", options);
+        int selectedRoleIndex = ConsoleInput.readOptionFromList(" - Insira o cargo do colaborador:", employeeRoleDTOS);
 
         System.out.println(" - Insira o email: ");
         String email = ConsoleInput.readLine();
         
         System.out.println(" - Insira a senha: ");
         String password = ConsoleInput.readLine();
-        
-        viewModel.setName(userName);
-        viewModel.setEmail(email);
-        viewModel.setSelectedRole(employeeRoleDTOS[selectedRoleIndex]);
-        viewModel.setPasswordHash(password.hashCode());
-        viewModel.OnSignInRequested.broadcast();
 
+        EmployeeDTO newEmployee = new EmployeeDTO(userName, email, employeeRoleDTOS[selectedRoleIndex], password.hashCode());
+        viewModel.setSelectedDTO(newEmployee);
+        viewModel.OnRegisterUserRequested.broadcast();
+
+        if(!viewModel.getRequestWasSuccessful())
+        {
+            System.out.println("Nao foi possivel cadastrar o colaborador. Tente novamente!");
+            return MenuResult.none();
+        }
+
+        System.out.println("Colaborador cadastrado com sucesso!");
         return MenuResult.pop();
     }    
 }

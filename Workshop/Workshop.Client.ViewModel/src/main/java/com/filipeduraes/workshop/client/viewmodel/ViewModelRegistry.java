@@ -6,14 +6,14 @@ public class ViewModelRegistry
 {
     private final ClientViewModel clientViewModel;
     private final ServiceViewModel serviceViewModel;
-    private final AuthViewModel authViewModel;
+    private final EmployeeViewModel employeeViewModel;
     private final VehicleViewModel vehicleViewModel;
 
     public ViewModelRegistry()
     {
         clientViewModel = new ClientViewModel();
         serviceViewModel = new ServiceViewModel();
-        authViewModel = new AuthViewModel();
+        employeeViewModel = new EmployeeViewModel();
         vehicleViewModel = new VehicleViewModel();
     }
 
@@ -27,9 +27,9 @@ public class ViewModelRegistry
         return serviceViewModel;
     }
 
-    public AuthViewModel getAuthViewModel()
+    public EmployeeViewModel getEmployeeViewModel()
     {
-        return authViewModel;
+        return employeeViewModel;
     }
 
     public VehicleViewModel getVehicleViewModel()

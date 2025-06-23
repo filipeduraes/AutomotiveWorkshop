@@ -2,9 +2,15 @@
 
 package com.filipeduraes.workshop.client.consoleview;
 
+import com.filipeduraes.workshop.client.consoleview.auth.EmployeeMenu;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientMenu;
 import com.filipeduraes.workshop.client.consoleview.maintenancemodule.ServicesMenu;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
+import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
+import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Menu principal do sistema que permite a navegação entre os diferentes módulos.
@@ -22,6 +28,11 @@ public class MainMenu implements IWorkshopMenu
         new VehicleMenu()
     };
 
+    private final IWorkshopMenu[] administratorMenus =
+    {
+        new EmployeeMenu()
+    };
+
     @Override
     public String getMenuDisplayName() 
     {
@@ -31,7 +42,16 @@ public class MainMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        IWorkshopMenu selectedOption = menuManager.showSubmenuOptions("Qual menu deseja acessar?", menus);
+        IWorkshopMenu[] selectableMenus = menus;
+        EmployeeDTO loggedUser = menuManager.getViewModelRegistry().getEmployeeViewModel().getLoggedUser();
+
+        if(loggedUser.getRole() == EmployeeRoleDTO.ADMINISTRATOR)
+        {
+            selectableMenus = Stream.concat(Arrays.stream(menus), Arrays.stream(administratorMenus))
+                                    .toArray(IWorkshopMenu[]::new);
+        }
+
+        IWorkshopMenu selectedOption = menuManager.showSubmenuOptions("Qual menu deseja acessar?", selectableMenus);
         
         if(selectedOption != null)
         {

@@ -2,6 +2,7 @@ package com.filipeduraes.workshop.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
+import java.util.Arrays;
 import java.util.Locale;
 
 public final class TextUtils
@@ -36,5 +37,18 @@ public final class TextUtils
         String formattedDate = String.format("%d %s %02d:%02d", date.getDayOfMonth(), monthName, date.getHour(), date.getMinute());
 
         return formattedDate;
+    }
+
+    public static <T> String[] convertToStringArray(T[] array)
+    {
+        return convertToStringArray(array, 0);
+    }
+
+    public static <T> String[] convertToStringArray(T[] array, int skip)
+    {
+        return Arrays.stream(array)
+                     .skip(skip)
+                     .map(Object::toString)
+                     .toArray(String[]::new);
     }
 }

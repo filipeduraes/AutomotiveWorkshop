@@ -26,8 +26,7 @@ public class VehicleSelectionMenu implements IWorkshopMenu
         if(vehicleViewModel.getWasRequestSuccessful() && vehicleViewModel.hasAnyFoundEntities())
         {
             List<String> vehicleNamesList = vehicleViewModel.getFoundEntitiesDescriptions();
-            String[] vehicleNames = new String[vehicleNamesList.size()];
-            vehicleNamesList.toArray(vehicleNames);
+            String[] vehicleNames = vehicleNamesList.toArray(String[]::new);
 
             int selectedVehicleIndex = ConsoleInput.readOptionFromList("Selecione um dos veiculos do cliente", vehicleNames);
 

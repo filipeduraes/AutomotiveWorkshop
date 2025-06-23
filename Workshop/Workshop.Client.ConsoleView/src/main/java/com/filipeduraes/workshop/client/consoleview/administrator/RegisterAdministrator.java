@@ -6,8 +6,9 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.input.EmailInputValidator;
+import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
-import com.filipeduraes.workshop.client.viewmodel.AuthViewModel;
+import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 
 public class RegisterAdministrator implements IWorkshopMenu
@@ -26,18 +27,22 @@ public class RegisterAdministrator implements IWorkshopMenu
         String password = ConsoleInput.readLine("Crie uma senha:");
 
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        AuthViewModel authViewModel = viewModelRegistry.getAuthViewModel();
+        EmployeeViewModel employeeViewModel = viewModelRegistry.getEmployeeViewModel();
 
-        authViewModel.setName(name);
-        authViewModel.setEmail(email);
-        authViewModel.setPasswordHash(password.hashCode());
-        authViewModel.setSelectedRole(EmployeeRoleDTO.ADMINISTRATOR);
-        authViewModel.OnSignInRequested.broadcast();
+        EmployeeDTO administrator = new EmployeeDTO(name, email, EmployeeRoleDTO.ADMINISTRATOR, password.hashCode());
+        employeeViewModel.setSelectedDTO(administrator);
+        employeeViewModel.OnRegisterUserRequested.broadcast();
 
-        System.out.println("Cadastro criado com sucesso!");
+        if(employeeViewModel.getRequestWasSuccessful())
+        {
+            System.out.println("Cadastro criado com sucesso!");
 
-        authViewModel.OnLoginRequested.broadcast();
+            employeeViewModel.OnLoginRequested.broadcast();
 
-        return MenuResult.replace(new MainMenu());
+            return MenuResult.replace(new MainMenu());
+        }
+
+        System.out.println("Nao foi possivel cadastrar o administrador, tente novamente!");
+        return MenuResult.none();
     }
 }

@@ -30,6 +30,15 @@ public class AuthModule
     }
 
     /**
+     * Obtém o repositório de colaboradores.
+     * @return Repositório de colaboradores.
+     */
+    public CrudRepository<LocalEmployee> getEmployeeRepository()
+    {
+        return employeeRepository;
+    }
+
+    /**
      * Obtém o usuário atual logado.
      * Retorna null se nenhum usuário estiver logado.
      *
@@ -43,7 +52,7 @@ public class AuthModule
     /**
      * Verifica se há algum usuário logado.
      *
-     * @return true se um usuário estiver logado, false caso contrário
+     * @return {@code true} se um usuário estiver logado, {@code false} caso contrário
      */
     public boolean isLoggedIn()
     {

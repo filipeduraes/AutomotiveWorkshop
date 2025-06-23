@@ -6,7 +6,8 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
-import com.filipeduraes.workshop.client.viewmodel.AuthViewModel;
+import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
+import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 
 /**
  * Implementa o menu de login do sistema da oficina.
@@ -17,12 +18,6 @@ import com.filipeduraes.workshop.client.viewmodel.AuthViewModel;
  */
 public class LogInMenu implements IWorkshopMenu
 {
-    private String[] loginFailOptions = new String[]
-    {
-        "Tentar Novamente",
-        "X Voltar"
-    };
-
     @Override
     public String getMenuDisplayName() 
     {
@@ -38,24 +33,27 @@ public class LogInMenu implements IWorkshopMenu
         System.out.println(" - Insira a senha:");
         String password = ConsoleInput.readLine();
        
-        AuthViewModel viewModel = menuManager.getViewModelRegistry().getAuthViewModel();
-        viewModel.setEmail(email);
-        viewModel.setPasswordHash(password.hashCode());
+        EmployeeViewModel viewModel = menuManager.getViewModelRegistry().getEmployeeViewModel();
+        EmployeeDTO employee = new EmployeeDTO(email, password.hashCode());
+        viewModel.setSelectedDTO(employee);
+
         viewModel.OnLoginRequested.broadcast();
         
         if(!viewModel.getRequestWasSuccessful())
         {
             System.out.println("Usuario não encontrado ou senha invalida, confira os dados e tente novamente.");
-            int userInput = ConsoleInput.readOptionFromList("Escolha como prosseguir: ", loginFailOptions);
+            boolean tryAgain = ConsoleInput.readConfirmation("Deseja tentar novamente?");
 
-            if(userInput == 0)
+            if(tryAgain)
             {
                 return MenuResult.none();
             }
+
+            return MenuResult.exit();
         }
 
         System.out.println("\nUsuario logado com sucesso!");
-        System.out.printf(" - Nome: %s%n - Cargo: %s%n - Email: %s%n", viewModel.getName(), viewModel.getSelectedRole(), viewModel.getEmail());
+        System.out.println(viewModel.getLoggedUser());
 
         return MenuResult.replace(new MainMenu());
     }

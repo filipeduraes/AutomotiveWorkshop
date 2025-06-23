@@ -17,9 +17,6 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
  */
 public class CreateServiceOrderMenu implements IWorkshopMenu 
 {
-    private final String selectClientMessage = "Selecionar Cliente";
-    private final String selectVehicleMessage = "Selecionar Veiculo";
-
     @Override
     public String getMenuDisplayName() 
     {
@@ -70,9 +67,9 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
         if(!clientViewModel.hasLoadedDTO())
         {
             System.out.println("- CLIENTE");
-            int selectedOption = ConsoleInput.readOptionFromList("Selecione o cliente", new String[] { selectClientMessage }, true);
+            boolean selectClient = ConsoleInput.readConfirmation("Deseja selecionar o cliente para continuar?");
 
-            if(selectedOption == 0)
+            if(selectClient)
             {
                 return MenuResult.push(new ClientSelectionMenu());
             }
@@ -87,9 +84,9 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
     {
         if(!vehicleViewModel.hasLoadedDTO())
         {
-            int selectedOption = ConsoleInput.readOptionFromList("Selecione o veiculo", new String[] { selectVehicleMessage }, true);
+            boolean selectVehicle = ConsoleInput.readConfirmation("Deseja selecionar o veiculo para continuar?");
 
-            if(selectedOption == 0)
+            if(selectVehicle)
             {
                 return MenuResult.push(new VehicleMenu());
             }

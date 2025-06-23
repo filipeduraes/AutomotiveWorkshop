@@ -31,7 +31,7 @@ public abstract class EntityViewModel<TEntityDTO>
         return fieldType;
     }
 
-    public void setSearchByOption(FieldType fieldType)
+    public void setSearchFieldType(FieldType fieldType)
     {
         this.fieldType = fieldType;
     }

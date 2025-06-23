@@ -8,8 +8,6 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
-
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,14 +20,6 @@ import java.util.List;
 public class ClientSearchMenu implements IWorkshopMenu
 {
     private final FieldType[] options = { FieldType.NAME, FieldType.CPF, FieldType.EMAIL, FieldType.PHONE };
-    private final String[] optionsDisplayNames;
-
-    public ClientSearchMenu()
-    {
-        optionsDisplayNames = Arrays.stream(options)
-                                    .map(FieldType::toString)
-                                    .toArray(String[]::new);
-    }
 
     @Override
     public String getMenuDisplayName()
@@ -42,20 +32,20 @@ public class ClientSearchMenu implements IWorkshopMenu
     {
         final ClientViewModel clientViewModel = menuManager.getViewModelRegistry().getClientViewModel();
 
-        int searchOptionIndex = ConsoleInput.readOptionFromList("Escolha o campo para pesquisar:", optionsDisplayNames, true);
+        int searchOptionIndex = ConsoleInput.readOptionFromList("Escolha o campo para pesquisar:", options, true);
 
-        if(searchOptionIndex >= optionsDisplayNames.length)
+        if(searchOptionIndex >= options.length)
         {
             clientViewModel.resetSelectedDTO();
             System.out.println("Busca cancelada.");
             return MenuResult.pop();
         }
 
-        System.out.printf("Digite o %s do cliente: %n", optionsDisplayNames[searchOptionIndex]);
+        System.out.printf("Digite o %s do cliente: %n", options[searchOptionIndex]);
 
         final String searchPattern = ConsoleInput.readLine();
 
-        clientViewModel.setSearchByOption(options[searchOptionIndex]);
+        clientViewModel.setSearchFieldType(options[searchOptionIndex]);
         clientViewModel.setSearchPattern(searchPattern);
 
         clientViewModel.OnSearchRequest.broadcast();
