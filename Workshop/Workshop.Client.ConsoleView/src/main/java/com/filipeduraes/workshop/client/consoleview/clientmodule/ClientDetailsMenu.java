@@ -41,7 +41,7 @@ public class ClientDetailsMenu extends EntityDetailsMenu<ClientViewModel, Client
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        if(!menuManager.getViewModelRegistry().getClientViewModel().hasLoadedDTO())
+        if(!menuManager.getViewModelRegistry().getClientViewModel().hasValidSelectedIndex())
         {
             boolean shouldSearch = ConsoleInput.readConfirmation("Deseja procurar um cliente?");
 

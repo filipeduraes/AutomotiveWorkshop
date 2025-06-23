@@ -41,6 +41,20 @@ public class Client extends WorkshopEntity
         this.maskedCPF = maskedCPF;
     }
 
+    public Client(Client client)
+    {
+        name = client.name;
+        email = client.email;
+        phoneNumber = client.phoneNumber;
+        address = client.address;
+        maskedCPF = client.maskedCPF;
+
+        ownedVehiclesIDs = client.ownedVehiclesIDs;
+        serviceOrdersIDs = client.serviceOrdersIDs;
+
+        assignID(client.getID());
+    }
+
     /**
      * Checa se o nome do cliente possui o padrão passado, ignorando a capitalização.
      *
@@ -63,6 +77,16 @@ public class Client extends WorkshopEntity
     }
 
     /**
+     * Define o nome do cliente.
+     *
+     * @param name O nome completo do cliente
+     */
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    /**
      * Obtém o email do cliente.
      *
      * @return O endereço de email do cliente
@@ -70,6 +94,16 @@ public class Client extends WorkshopEntity
     public String getEmail()
     {
         return email;
+    }
+
+    /**
+     * Define o email do cliente.
+     *
+     * @param email O endereço de email do cliente
+     */
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 
     /**
@@ -83,6 +117,16 @@ public class Client extends WorkshopEntity
     }
 
     /**
+     * Define o número de telefone do cliente.
+     *
+     * @param phoneNumber O número de telefone do cliente
+     */
+    public void setPhoneNumber(String phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
+    }
+
+    /**
      * Obtém o endereço do cliente.
      *
      * @return O endereço completo do cliente
@@ -90,6 +134,16 @@ public class Client extends WorkshopEntity
     public String getAddress()
     {
         return address;
+    }
+
+    /**
+     * Define o endereço do cliente.
+     *
+     * @param address O endereço completo do cliente
+     */
+    public void setAddress(String address)
+    {
+        this.address = address;
     }
 
     /**
@@ -103,13 +157,23 @@ public class Client extends WorkshopEntity
     }
 
     /**
+     * Define o CPF mascarado do cliente.
+     *
+     * @param maskedCPF O CPF do cliente em formato mascarado
+     */
+    public void setMaskedCPF(String maskedCPF)
+    {
+        this.maskedCPF = maskedCPF;
+    }
+
+    /**
      * Obtém os identificadores dos veículos que o cliente possui.
      *
      * @return Os identificadores dos veículos
      */
     public List<UUID> getOwnedVehiclesIDs()
     {
-        if(ownedVehiclesIDs == null)
+        if (ownedVehiclesIDs == null)
         {
             ownedVehiclesIDs = new ArrayList<>();
         }
@@ -124,7 +188,7 @@ public class Client extends WorkshopEntity
      */
     public List<UUID> getServiceOrdersIDs()
     {
-        if(serviceOrdersIDs == null)
+        if (serviceOrdersIDs == null)
         {
             serviceOrdersIDs = new ArrayList<>();
         }

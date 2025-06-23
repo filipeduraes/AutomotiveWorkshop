@@ -67,7 +67,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
         serviceViewModel.OnRegisterAppointmentRequest.broadcast();
 
-        if (serviceViewModel.getWasRequestSuccessful())
+        if (serviceViewModel.getRequestWasSuccessful())
         {
             System.out.printf("Agendamento registrado com sucesso! ID: %s%n", serviceViewModel.getSelectedDTO().getID());
             viewModelRegistry.getClientViewModel().resetSelectedDTO();

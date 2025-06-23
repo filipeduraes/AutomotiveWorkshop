@@ -57,7 +57,7 @@ public class RegisterVehicleMenu implements IWorkshopMenu
 
         vehicleViewModel.OnVehicleRegistrationRequest.broadcast();
 
-        if (vehicleViewModel.getWasRequestSuccessful())
+        if (vehicleViewModel.getRequestWasSuccessful())
         {
             return MenuResult.pop();
         }

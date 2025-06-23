@@ -25,8 +25,8 @@ public final class ClientMapper
         (
             client.getID(),
             client.getName(),
-            client.getEmail(),
             client.getPhoneNumber(),
+            client.getEmail(),
             client.getAddress(),
             client.getMaskedCPF()
         );

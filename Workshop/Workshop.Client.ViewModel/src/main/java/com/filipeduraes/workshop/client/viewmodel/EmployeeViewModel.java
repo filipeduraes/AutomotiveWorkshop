@@ -32,27 +32,6 @@ public class EmployeeViewModel extends EntityViewModel<EmployeeDTO>
     public final Observer OnEditUserRequested = new Observer();
 
     private EmployeeDTO loggedUser;
-    private boolean requestWasSuccessful = false;
-
-    /**
-     * Verifica se a última requisição foi bem-sucedida.
-     *
-     * @return true se a última requisição foi bem-sucedida, false caso contrário
-     */
-    public boolean getRequestWasSuccessful()
-    {
-        return requestWasSuccessful;
-    }
-
-    /**
-     * Define o status da última requisição.
-     *
-     * @param requestWasSuccessful true se a requisição foi bem-sucedida, false caso contrário
-     */
-    public void setRequestWasSuccessful(boolean requestWasSuccessful)
-    {
-        this.requestWasSuccessful = requestWasSuccessful;
-    }
 
     /**
      * Obtém o usuário atualmente logado no sistema.

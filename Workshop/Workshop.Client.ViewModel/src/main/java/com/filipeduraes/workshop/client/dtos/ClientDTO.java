@@ -14,12 +14,14 @@ import java.util.UUID;
 
 public class ClientDTO
 {
-    private UUID id;
-    private final String name;
-    private final String phoneNumber;
-    private final String email;
-    private final String address;
-    private final String cpf;
+    private UUID id = null;
+    private String name = "";
+    private String phoneNumber = "";
+    private String email = "";
+    private String address = "";
+    private String cpf = "";
+
+    public ClientDTO() { }
 
     /**
      * Cria uma nova instância de ClientDTO com as informações fornecidas.
@@ -80,6 +82,16 @@ public class ClientDTO
     }
 
     /**
+     * Define o nome do cliente.
+     *
+     * @param name o nome do cliente a ser definido
+     */
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    /**
      * Obtém o número de telefone do cliente.
      *
      * @return número de telefone do cliente
@@ -87,6 +99,16 @@ public class ClientDTO
     public String getPhoneNumber()
     {
         return phoneNumber;
+    }
+
+    /**
+     * Define o número de telefone do cliente.
+     *
+     * @param phoneNumber o número de telefone do cliente a ser definido
+     */
+    public void setPhoneNumber(String phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
     }
 
     /**
@@ -100,6 +122,16 @@ public class ClientDTO
     }
 
     /**
+     * Define o endereço de email do cliente.
+     *
+     * @param email o endereço de email a ser definido
+     */
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    /**
      * Obtém o endereço físico do cliente.
      *
      * @return endereço do cliente
@@ -110,6 +142,16 @@ public class ClientDTO
     }
 
     /**
+     * Define o endereço físico do cliente.
+     *
+     * @param address o endereço do cliente a ser definido
+     */
+    public void setAddress(String address)
+    {
+        this.address = address;
+    }
+
+    /**
      * Obtém o CPF do cliente.
      *
      * @return CPF do cliente
@@ -117,6 +159,16 @@ public class ClientDTO
     public String getCPF()
     {
         return cpf;
+    }
+
+    /**
+     * Define o CPF do cliente.
+     *
+     * @param cpf o CPF a ser definido
+     */
+    public void setCpf(String cpf)
+    {
+        this.cpf = cpf;
     }
 
     public void setID(UUID id)
@@ -135,11 +187,12 @@ public class ClientDTO
     {
         return String.format
         (
-            "%n - ID: %s%n - Nome: %s%n - Email: %s%n - CPF: %s%n - Telefone: %s",
+            "%n - ID: %s%n - Nome: %s%n - Email: %s%n - CPF: %s%n - Endereco: %s%n - Telefone: %s",
             getID(),
             getName(),
             getEmail(),
             getCPF(),
+            getAddress(),
             getPhoneNumber()
         );
     }

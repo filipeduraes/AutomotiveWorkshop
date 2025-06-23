@@ -96,7 +96,7 @@ public class ServiceController
 
             serviceViewModel.setSelectedIndex(0);
             serviceViewModel.setSelectedDTO(ServiceOrderMapper.toDTO(serviceOrder, workshop));
-            serviceViewModel.setWasRequestSuccessful(true);
+            serviceViewModel.setRequestWasSuccessful(true);
         }
     }
 
@@ -123,7 +123,7 @@ public class ServiceController
             requestDetailedServiceInfo();
         }
 
-        serviceViewModel.setWasRequestSuccessful(canStartNextStep);
+        serviceViewModel.setRequestWasSuccessful(canStartNextStep);
     }
 
     private void requestServices()
@@ -150,7 +150,7 @@ public class ServiceController
                                                    .collect(Collectors.toList());
 
         serviceViewModel.setFoundEntitiesDescriptions(descriptions);
-        serviceViewModel.setWasRequestSuccessful(true);
+        serviceViewModel.setRequestWasSuccessful(true);
     }
 
     private void requestDetailedServiceInfo()
@@ -159,7 +159,7 @@ public class ServiceController
 
         if (selectedMaintenanceIndex < 0 || selectedMaintenanceIndex >= queriedEntities.size())
         {
-            serviceViewModel.setWasRequestSuccessful(false);
+            serviceViewModel.setRequestWasSuccessful(false);
             return;
         }
 
@@ -167,7 +167,7 @@ public class ServiceController
         ServiceOrderDTO serviceOrderDTO = ServiceOrderMapper.toDTO(serviceOrder, workshop);
 
         serviceViewModel.setSelectedDTO(serviceOrderDTO);
-        serviceViewModel.setWasRequestSuccessful(true);
+        serviceViewModel.setRequestWasSuccessful(true);
     }
 
     private void editSelectedService()
@@ -187,7 +187,7 @@ public class ServiceController
                 UUID vehicleID = vehicleViewModel.getSelectedDTO().getID();
 
                 boolean clientHasVehicle = client.hasVehicleWithID(vehicleID);
-                serviceViewModel.setWasRequestSuccessful(clientHasVehicle);
+                serviceViewModel.setRequestWasSuccessful(clientHasVehicle);
 
                 if (!clientHasVehicle)
                 {

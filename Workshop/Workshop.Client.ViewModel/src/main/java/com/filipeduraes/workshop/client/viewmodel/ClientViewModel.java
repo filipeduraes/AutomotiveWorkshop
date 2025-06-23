@@ -18,6 +18,11 @@ public class ClientViewModel extends EntityViewModel<ClientDTO>
      */
     public final Observer OnClientRegisterRequest = new Observer();
 
+    /**
+     * Evento chamado quando a edição do cliente selecionado é requisitado.
+     */
+    public final Observer OnClientEditRequest = new Observer();
+
     private String searchPattern;
 
     /**

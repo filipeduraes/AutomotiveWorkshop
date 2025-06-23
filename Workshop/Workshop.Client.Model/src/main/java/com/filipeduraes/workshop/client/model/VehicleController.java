@@ -75,7 +75,7 @@ public class VehicleController
             }
 
             vehicleViewModel.setFoundEntitiesDescriptions(vehicleNames);
-            vehicleViewModel.setWasRequestSuccessful(true);
+            vehicleViewModel.setRequestWasSuccessful(true);
         }
     }
 
@@ -91,7 +91,7 @@ public class VehicleController
             UUID vehicleID = vehicleModule.registerEntity(vehicle);
             registerRequestedVehicleDTO.setID(vehicleID);
 
-            vehicleViewModel.setWasRequestSuccessful(true);
+            vehicleViewModel.setRequestWasSuccessful(true);
         }
     }
 
@@ -116,7 +116,7 @@ public class VehicleController
                 vehicleViewModel.setSelectedDTO(selectedVehicle);
             }
 
-            vehicleViewModel.setWasRequestSuccessful(wasRequestSuccessful);
+            vehicleViewModel.setRequestWasSuccessful(wasRequestSuccessful);
         }
     }
 
@@ -125,7 +125,7 @@ public class VehicleController
         if (!clientViewModel.hasLoadedDTO())
         {
             System.out.println("Nenhum cliente selecionado, por favor selecione um cliente antes de prosseguir.");
-            vehicleViewModel.setWasRequestSuccessful(false);
+            vehicleViewModel.setRequestWasSuccessful(false);
             return null;
         }
 

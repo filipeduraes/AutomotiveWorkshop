@@ -41,6 +41,25 @@ public class EditEmployeeMenu implements IWorkshopMenu
         FieldType selectedField = editableFields[selectedFieldIndex];
 
         employeeViewModel.setFieldType(selectedField);
+        EmployeeDTO editedEmployee = createEditedEmployeeFromField(selectedField);
+
+        employeeViewModel.setSelectedDTO(editedEmployee);
+        employeeViewModel.OnEditUserRequested.broadcast();
+
+        if (employeeViewModel.getRequestWasSuccessful())
+        {
+            System.out.printf("%nColaborador editado com sucesso. Novos dados:%n%s%n", employeeViewModel.getSelectedDTO());
+        }
+        else
+        {
+            System.out.println("Nao foi possivel editar o colaborador. Tente novamente!");
+        }
+
+        return MenuResult.pop();
+    }
+
+    private static EmployeeDTO createEditedEmployeeFromField(FieldType selectedField)
+    {
         EmployeeDTO editedEmployee = new EmployeeDTO();
 
         switch (selectedField)
@@ -65,20 +84,7 @@ public class EditEmployeeMenu implements IWorkshopMenu
                 String newPassword = ConsoleInput.readLine("Insira a nova senha do colaborador");
                 editedEmployee.setPasswordHash(newPassword.hashCode());
             }
-        };
-
-        employeeViewModel.setSelectedDTO(editedEmployee);
-        employeeViewModel.OnEditUserRequested.broadcast();
-
-        if (employeeViewModel.getRequestWasSuccessful())
-        {
-            System.out.printf("%nColaborador editado com sucesso. Novos dados:%n%s%n", employeeViewModel.getSelectedDTO());
         }
-        else
-        {
-            System.out.println("Nao foi possivel editar o colaborador. Tente novamente!");
-        }
-
-        return MenuResult.pop();
+        return editedEmployee;
     }
 }

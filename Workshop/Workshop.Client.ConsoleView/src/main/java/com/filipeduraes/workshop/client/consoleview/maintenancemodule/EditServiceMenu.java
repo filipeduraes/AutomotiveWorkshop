@@ -111,7 +111,7 @@ public class EditServiceMenu implements IWorkshopMenu
             serviceViewModel.setEditFieldType(FieldType.CLIENT);
             serviceViewModel.OnEditServiceRequest.broadcast();
 
-            resultMessage = serviceViewModel.getWasRequestSuccessful()
+            resultMessage = serviceViewModel.getRequestWasSuccessful()
                             ? "Cliente alterado com sucesso!"
                             : "Nao foi possivel alterar o cliente. Tente novamente.";
         }
@@ -144,7 +144,7 @@ public class EditServiceMenu implements IWorkshopMenu
             serviceViewModel.setEditFieldType(FieldType.VEHICLE);
             serviceViewModel.OnEditServiceRequest.broadcast();
 
-            resultMessage = serviceViewModel.getWasRequestSuccessful()
+            resultMessage = serviceViewModel.getRequestWasSuccessful()
                             ? "Veiculo alterado com sucesso!"
                             : "Nao foi possivel alterar o veiculo. Tente novamente.";
         }

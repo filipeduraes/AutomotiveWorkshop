@@ -88,7 +88,7 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceViewModel, Serv
         {
             viewModel.OnStartStepRequest.broadcast();
 
-            if (viewModel.getWasRequestSuccessful())
+            if (viewModel.getRequestWasSuccessful())
             {
                 System.out.printf("%n%s iniciada com sucesso%n", TextUtils.capitalizeFirstLetter(getDesiredStepName(selectedService)));
                 return MenuResult.none();

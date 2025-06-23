@@ -67,7 +67,7 @@ public class QueryServicesMenu implements IWorkshopMenu
 
         serviceViewModel.OnSearchRequest.broadcast();
 
-        if (!serviceViewModel.getWasRequestSuccessful())
+        if (!serviceViewModel.getRequestWasSuccessful())
         {
             System.out.println("Nao foi possivel recuperar os servicos. Tente novamente.");
             return MenuResult.pop();

@@ -104,6 +104,16 @@ public abstract class EntityDetailsMenu<TViewModel extends EntityViewModel<TEnti
         if (canDelete)
         {
             getViewModel().OnDeleteRequest.broadcast();
+
+            if(getViewModel().getRequestWasSuccessful())
+            {
+                System.out.println("Cliente excluido com sucesso!");
+            }
+            else
+            {
+                System.out.println("Erro ao excluir cliente, tente novamente!");
+            }
+
             return MenuResult.pop();
         }
 

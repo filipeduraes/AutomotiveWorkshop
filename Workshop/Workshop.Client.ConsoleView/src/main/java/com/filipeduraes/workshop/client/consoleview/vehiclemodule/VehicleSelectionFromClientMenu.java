@@ -57,7 +57,7 @@ public class VehicleSelectionFromClientMenu implements IWorkshopMenu
         VehicleViewModel vehicleViewModel = menuManager.getViewModelRegistry().getVehicleViewModel();
         vehicleViewModel.OnSearchRequest.broadcast();
 
-        if (vehicleViewModel.getWasRequestSuccessful() && vehicleViewModel.hasAnyFoundEntities())
+        if (vehicleViewModel.getRequestWasSuccessful() && vehicleViewModel.hasAnyFoundEntities())
         {
             List<String> vehicleNamesList = vehicleViewModel.getFoundEntitiesDescriptions();
             String[] vehicleNames = vehicleNamesList.toArray(String[]::new);
@@ -69,7 +69,7 @@ public class VehicleSelectionFromClientMenu implements IWorkshopMenu
                 vehicleViewModel.setSelectedIndex(selectedVehicleIndex);
                 vehicleViewModel.OnLoadDataRequest.broadcast();
 
-                if (vehicleViewModel.getWasRequestSuccessful())
+                if (vehicleViewModel.getRequestWasSuccessful())
                 {
                     VehicleDTO selectedVehicle = vehicleViewModel.getSelectedDTO();
                     String selectedMessage = String.format("Veiculo selecionado:%n%s", selectedVehicle);

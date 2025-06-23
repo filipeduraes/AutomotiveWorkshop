@@ -51,6 +51,8 @@ public class ClientController
         clientViewModel.OnClientRegisterRequest.addListener(this::registerClient);
         clientViewModel.OnLoadDataRequest.addListener(this::loadClientData);
         clientViewModel.OnSearchRequest.addListener(this::searchClients);
+        clientViewModel.OnClientEditRequest.addListener(this::editClient);
+        clientViewModel.OnDeleteRequest.addListener(this::deleteClient);
     }
 
     /**
@@ -62,6 +64,8 @@ public class ClientController
         clientViewModel.OnClientRegisterRequest.removeListener(this::registerClient);
         clientViewModel.OnLoadDataRequest.removeListener(this::loadClientData);
         clientViewModel.OnSearchRequest.removeListener(this::searchClients);
+        clientViewModel.OnClientEditRequest.removeListener(this::editClient);
+        clientViewModel.OnDeleteRequest.removeListener(this::deleteClient);
     }
 
     private void registerClient()
@@ -82,6 +86,46 @@ public class ClientController
         clientViewModel.setFoundEntitiesDescriptions(clientDescriptions);
     }
 
+    private void editClient()
+    {
+        if(!clientViewModel.hasValidSelectedIndex() || !clientViewModel.hasLoadedDTO())
+        {
+            clientViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        ClientDTO clientWithEditing = clientViewModel.getSelectedDTO();
+        Client clientWithChanges = applyChangesToClient(clientWithEditing);
+
+        boolean updateWasSuccessful = clientModule.updateEntity(clientWithChanges);
+        clientViewModel.setRequestWasSuccessful(updateWasSuccessful);
+
+        if(!updateWasSuccessful)
+        {
+            clientWithChanges = foundClients.get(clientViewModel.getSelectedIndex());
+        }
+
+        ClientDTO newSelectedDTO = ClientMapper.toDTO(clientWithChanges);
+        foundClients.set(clientViewModel.getSelectedIndex(), clientWithChanges);
+        clientViewModel.setSelectedDTO(newSelectedDTO);
+    }
+
+    private Client applyChangesToClient(ClientDTO clientWithEditing)
+    {
+        Client selectedOriginalClient = foundClients.get(clientViewModel.getSelectedIndex());
+        Client coppiedClient = new Client(selectedOriginalClient);
+
+        switch (clientViewModel.getFieldType())
+        {
+            case NAME -> coppiedClient.setName(clientWithEditing.getName());
+            case EMAIL -> coppiedClient.setEmail(clientWithEditing.getEmail());
+            case CPF -> coppiedClient.setMaskedCPF(clientWithEditing.getCPF());
+            case ADDRESS -> coppiedClient.setAddress(clientWithEditing.getAddress());
+            case PHONE -> coppiedClient.setPhoneNumber(clientWithEditing.getPhoneNumber());
+        }
+        return coppiedClient;
+    }
+
     private void loadClientData()
     {
         final int selectedFoundClientIndex = clientViewModel.getSelectedIndex();
@@ -91,6 +135,20 @@ public class ClientController
             Client selectedFoundClient = foundClients.get(selectedFoundClientIndex);
             clientViewModel.setSelectedDTO(ClientMapper.toDTO(selectedFoundClient));
         }
+    }
+
+    private void deleteClient()
+    {
+        boolean canDeleteClient = clientViewModel.hasValidSelectedIndex();
+
+        if(canDeleteClient)
+        {
+            Client client = foundClients.get(clientViewModel.getSelectedIndex());
+            Client deletedClient = clientModule.deleteEntityWithID(client.getID());
+            canDeleteClient = deletedClient != null;
+        }
+
+        clientViewModel.setRequestWasSuccessful(canDeleteClient);
     }
 
     private List<String> convertClientsToClientDescriptions(List<Client> clients)

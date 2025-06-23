@@ -43,7 +43,6 @@ public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
 
     private String currentStepDetailedDescription;
     private String currentStepShortDescription;
-    private boolean wasRequestSuccessful = false;
 
     /**
      * Obtém o tipo de consulta atual do serviço.
@@ -143,26 +142,6 @@ public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
     public String getDescriptionQueryPattern()
     {
         return descriptionQueryPattern;
-    }
-
-    /**
-     * Verifica se a última requisição foi bem-sucedida.
-     *
-     * @return true se a última requisição foi bem-sucedida, false caso contrário
-     */
-    public boolean getWasRequestSuccessful()
-    {
-        return wasRequestSuccessful;
-    }
-
-    /**
-     * Define o status de sucesso da última requisição.
-     *
-     * @param wasRequestSuccessful status de sucesso
-     */
-    public void setWasRequestSuccessful(boolean wasRequestSuccessful)
-    {
-        this.wasRequestSuccessful = wasRequestSuccessful;
     }
 
     /**

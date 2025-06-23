@@ -26,6 +26,11 @@ public enum FieldType
     CPF("CPF"),
 
     /**
+     * Endereço do cliente
+     */
+    ADDRESS("Endereco"),
+
+    /**
      * Número de telefone
      */
     PHONE("Telefone"),
