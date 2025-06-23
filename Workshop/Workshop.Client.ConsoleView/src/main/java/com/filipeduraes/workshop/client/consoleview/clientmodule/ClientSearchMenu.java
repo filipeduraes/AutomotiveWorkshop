@@ -54,7 +54,7 @@ public class ClientSearchMenu implements IWorkshopMenu
             return MenuResult.pop();
         }
 
-        System.out.printf("Digite o %s do cliente: %n", options[searchOptionIndex]);
+        System.out.printf("Digite o %s do cliente: %n", options[searchOptionIndex].toString().toLowerCase());
 
         final String searchPattern = ConsoleInput.readLine();
 

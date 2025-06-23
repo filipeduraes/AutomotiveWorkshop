@@ -5,38 +5,31 @@ package com.filipeduraes.workshop.client.consoleview.clientmodule;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 
 /**
- * Menu principal do módulo de clientes que gerencia as operações relacionadas aos clientes.
- * Fornece acesso aos submenus de registro e pesquisa de clientes.
+ * Menu de seleção de clientes que gerencia as operações de escolha de cliente.
+ * Fornece acesso aos submenus de registro e pesquisa para seleção de clientes.
  *
  * @author Filipe Durães
  */
-public class ClientSelectionMenu implements IWorkshopMenu
+public class ClientSelectionMenu extends RedirectMenu
 {
-    private final IWorkshopMenu[] menus =
+    public ClientSelectionMenu()
     {
-        new ClientRegistrationMenu(),
-        new ClientSearchMenu()
-    };
-
-    /**
-     * Obtém o nome de exibição do menu.
-     *
-     * @return nome do menu para exibição
-     */
-    @Override
-    public String getMenuDisplayName()
-    {
-        return "Selecionar Cliente";
+        super("Selecionar Cliente", new IWorkshopMenu[]
+        {
+            new ClientRegistrationMenu(),
+            new ClientSearchMenu()
+        });
     }
 
     /**
-     * Exibe o menu de seleção de cliente e processa a seleção atual.
+     * Apresenta o menu de seleção de cliente e processa a escolha realizada.
      *
      * @param menuManager gerenciador de menus da aplicação
-     * @return resultado da operação do menu
+     * @return resultado da operação realizada no menu
      */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
@@ -49,13 +42,6 @@ public class ClientSelectionMenu implements IWorkshopMenu
             return MenuResult.pop();
         }
 
-        IWorkshopMenu submenu = menuManager.showSubmenuOptions("Como deseja selecionar o cliente?", menus);
-
-        if (submenu == null)
-        {
-            return MenuResult.pop();
-        }
-
-        return MenuResult.push(submenu);
+        return super.showMenu(menuManager);
     }
 }

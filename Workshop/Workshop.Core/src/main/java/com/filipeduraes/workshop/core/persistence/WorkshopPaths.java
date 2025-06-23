@@ -38,6 +38,14 @@ public final class WorkshopPaths
      * Caminho para o arquivo de veículos registrados
      */
     public static final String REGISTERED_VEHICLES_PATH = DATA_DIRECTORY_PATH + "Vehicles" + FILE_EXTENSION;
+    /**
+     * Caminho para o arquivo do catálogo de serviços
+     */
+    public static final String SERVICE_CATALOG_PATH = DATA_DIRECTORY_PATH + "ServiceCatalog" + FILE_EXTENSION;
+    /**
+     * Caminho para o arquivo do catálogo de produtos da loja
+     */
+    public static final String STORE_ITEMS_CATALOG_PATH = DATA_DIRECTORY_PATH + "StoreItems" + FILE_EXTENSION;
 
     private static UUID loggedUserID;
 

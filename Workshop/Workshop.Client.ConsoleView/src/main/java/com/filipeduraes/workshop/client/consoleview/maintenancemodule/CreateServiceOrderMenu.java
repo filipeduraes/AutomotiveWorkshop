@@ -2,11 +2,13 @@
 
 package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 
+import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
-import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
+import com.filipeduraes.workshop.client.consoleview.vehiclemodule.RegisterVehicleMenu;
+import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleSelectionFromClientMenu;
 import com.filipeduraes.workshop.client.viewmodel.*;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSelectionMenu;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
@@ -102,7 +104,14 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
 
             if (selectVehicle)
             {
-                return MenuResult.push(new VehicleMenu());
+                return MenuResult.push(new RedirectMenu
+                (
+                    "Selecionar veiculo", new IWorkshopMenu[]
+                    {
+                        new RegisterVehicleMenu(),
+                        new VehicleSelectionFromClientMenu()
+                    }
+                ));
             }
 
             return MenuResult.pop();

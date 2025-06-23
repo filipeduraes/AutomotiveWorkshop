@@ -2,6 +2,7 @@
 
 package com.filipeduraes.workshop.client.consoleview.vehiclemodule;
 
+import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSearchMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author Filipe Durães
  */
-public class VehicleSelectionMenu implements IWorkshopMenu
+public class VehicleSelectionFromClientMenu implements IWorkshopMenu
 {
     /**
      * Obtém o nome de exibição do menu.
@@ -39,6 +40,20 @@ public class VehicleSelectionMenu implements IWorkshopMenu
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
+        if(!menuManager.getViewModelRegistry().getClientViewModel().hasLoadedDTO())
+        {
+            System.out.println("Nenhum cliente selecionado para buscar veiculo.");
+
+            boolean shouldSearchClient = ConsoleInput.readConfirmation("Deseja procurar um cliente?");
+
+            if(shouldSearchClient)
+            {
+                return MenuResult.push(new ClientSearchMenu());
+            }
+
+            return MenuResult.pop();
+        }
+
         VehicleViewModel vehicleViewModel = menuManager.getViewModelRegistry().getVehicleViewModel();
         vehicleViewModel.OnSearchRequest.broadcast();
 

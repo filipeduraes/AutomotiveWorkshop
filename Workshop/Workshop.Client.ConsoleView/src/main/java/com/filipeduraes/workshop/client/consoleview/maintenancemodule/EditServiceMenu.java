@@ -7,9 +7,10 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSelectionMenu;
 import com.filipeduraes.workshop.client.consoleview.general.MenuOption;
+import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
-import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
-import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleSelectionMenu;
+import com.filipeduraes.workshop.client.consoleview.vehiclemodule.RegisterVehicleMenu;
+import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleSelectionFromClientMenu;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
@@ -88,7 +89,14 @@ public class EditServiceMenu implements IWorkshopMenu
         {
             if (ConsoleInput.readConfirmation("Deseja selecionar um novo veiculo?"))
             {
-                return MenuResult.push(new VehicleMenu());
+                return MenuResult.push(new RedirectMenu
+                (
+                    "Selecionar veiculo", new IWorkshopMenu[]
+                    {
+                        new RegisterVehicleMenu(),
+                        new VehicleSelectionFromClientMenu()
+                    }
+                ));
             }
 
             return MenuResult.pop();
@@ -124,7 +132,7 @@ public class EditServiceMenu implements IWorkshopMenu
 
         if (!vehicleViewModel.hasLoadedDTO())
         {
-            return MenuResult.push(new VehicleSelectionMenu());
+            return MenuResult.push(new VehicleSelectionFromClientMenu());
         }
 
         ServiceOrderDTO serviceOrderDTO = serviceViewModel.getSelectedDTO();

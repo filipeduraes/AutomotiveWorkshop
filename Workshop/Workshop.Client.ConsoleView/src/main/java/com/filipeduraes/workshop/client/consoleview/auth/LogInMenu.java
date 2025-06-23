@@ -65,6 +65,6 @@ public class LogInMenu implements IWorkshopMenu
         System.out.println("\nUsuario logado com sucesso!");
         System.out.println(viewModel.getLoggedUser());
 
-        return MenuResult.replace(new MainMenu());
+        return MenuResult.replace(new MainMenu(menuManager));
     }
 }

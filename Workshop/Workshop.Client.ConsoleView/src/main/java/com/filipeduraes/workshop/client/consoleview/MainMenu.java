@@ -2,10 +2,14 @@
 
 package com.filipeduraes.workshop.client.consoleview;
 
-import com.filipeduraes.workshop.client.consoleview.auth.EmployeeMenu;
-import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientMenu;
-import com.filipeduraes.workshop.client.consoleview.maintenancemodule.ServicesMenu;
-import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleMenu;
+import com.filipeduraes.workshop.client.consoleview.auth.EmployeeDetailsMenu;
+import com.filipeduraes.workshop.client.consoleview.auth.RegisterEmployeeMenu;
+import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientDetailsMenu;
+import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientRegistrationMenu;
+import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
+import com.filipeduraes.workshop.client.consoleview.maintenancemodule.*;
+import com.filipeduraes.workshop.client.consoleview.vehiclemodule.RegisterVehicleMenu;
+import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleDetailsMenu;
 import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
 
@@ -14,50 +18,71 @@ import java.util.stream.Stream;
 
 /**
  * Menu principal do sistema que permite a navegação entre os diferentes módulos.
- * Responsável por apresentar e gerenciar as opções de acesso aos módulos de 
+ * Responsável por apresentar e gerenciar as opções de acesso aos módulos de
  * manutenção e cliente.
  *
  * @author Filipe Durães
  */
-public class MainMenu implements IWorkshopMenu
+public class MainMenu extends RedirectMenu
 {
-    private final IWorkshopMenu[] menus = 
+    public MainMenu(MenuManager menuManager)
     {
-        new ServicesMenu(),
-        new ClientMenu(),
-        new VehicleMenu()
-    };
-
-    private final IWorkshopMenu[] administratorMenus =
-    {
-        new EmployeeMenu()
-    };
-
-    @Override
-    public String getMenuDisplayName() 
-    {
-        return "Menu Principal";
+        super("Menu Principal", getMenuOptions(menuManager));
     }
 
-    @Override
-    public MenuResult showMenu(MenuManager menuManager)
+    private static IWorkshopMenu[] getMenuOptions(MenuManager menuManager)
     {
-        IWorkshopMenu[] selectableMenus = menus;
+        final IWorkshopMenu[] regularMenus =
+        {
+            new RedirectMenu
+            (
+                "Servico", new IWorkshopMenu[]
+                {
+                    new CreateServiceOrderMenu(),
+                    new QueryOpenedServicesMenu(),
+                    new QueryUserServicesMenu(),
+                    new QueryGeneralServicesMenu()
+                }
+            ),
+            new RedirectMenu
+            (
+                "Cliente", new IWorkshopMenu[]
+                {
+                    new ClientRegistrationMenu(),
+                    new ClientDetailsMenu()
+                }
+            ),
+            new RedirectMenu
+            (
+                "Veiculo", new IWorkshopMenu[]
+                {
+                    new RegisterVehicleMenu(),
+                    new VehicleDetailsMenu()
+                }
+            ),
+        };
+
+        final IWorkshopMenu[] administratorMenus =
+        {
+            new RedirectMenu
+            (
+                "Colaborador", new IWorkshopMenu[]
+                {
+                    new RegisterEmployeeMenu(),
+                    new EmployeeDetailsMenu()
+                }
+            )
+        };
+
+        IWorkshopMenu[] selectableMenus = regularMenus;
         EmployeeDTO loggedUser = menuManager.getViewModelRegistry().getEmployeeViewModel().getLoggedUser();
 
-        if(loggedUser.getRole() == EmployeeRoleDTO.ADMINISTRATOR)
+        if (loggedUser.getRole() == EmployeeRoleDTO.ADMINISTRATOR)
         {
-            selectableMenus = Stream.concat(Arrays.stream(menus), Arrays.stream(administratorMenus))
-                                    .toArray(IWorkshopMenu[]::new);
+            selectableMenus = Stream.concat(Arrays.stream(regularMenus), Arrays.stream(administratorMenus))
+                    .toArray(IWorkshopMenu[]::new);
         }
 
-        IWorkshopMenu selectedOption = menuManager.showSubmenuOptions("Qual menu deseja acessar?", selectableMenus);
-        
-        if(selectedOption != null)
-        {
-            return MenuResult.push(selectedOption);
-        }
-        
-        return MenuResult.exit();
-    }    
+        return selectableMenus;
+    }
 }

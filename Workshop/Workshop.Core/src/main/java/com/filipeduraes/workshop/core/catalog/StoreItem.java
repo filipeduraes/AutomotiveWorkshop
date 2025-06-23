@@ -12,7 +12,7 @@ import java.util.UUID;
  */
 public class StoreItem extends Product
 {
-    private int stockAmount;
+    private final int stockAmount;
 
     /**
      * Cria uma nova instância de StoreItem.

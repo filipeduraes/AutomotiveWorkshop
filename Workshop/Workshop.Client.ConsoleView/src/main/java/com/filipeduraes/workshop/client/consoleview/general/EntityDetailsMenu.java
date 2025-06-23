@@ -3,6 +3,7 @@
 package com.filipeduraes.workshop.client.consoleview.general;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
+import com.filipeduraes.workshop.client.consoleview.MenuAction;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
@@ -55,8 +56,14 @@ public abstract class EntityDetailsMenu<TViewModel extends EntityViewModel<TEnti
 
         System.out.printf("%s%n", viewModel.getSelectedDTO());
         MenuOption menuOption = menuManager.showMenuOptions("O que deseja fazer?", buildOptions(), true);
+        MenuResult menuResult = menuOption.execute(menuManager);
 
-        return menuOption.execute(menuManager);
+        if(menuResult.getAction() == MenuAction.POP_MENU)
+        {
+            viewModel.resetSelectedDTO();
+        }
+
+        return menuResult;
     }
 
     /**

@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.core;
 
 import com.filipeduraes.workshop.core.auth.AuthModule;
 import com.filipeduraes.workshop.core.auth.Employee;
+import com.filipeduraes.workshop.core.catalog.ProductCatalog;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
@@ -25,6 +26,7 @@ import java.util.UUID;
 public class Workshop
 {
     private final AuthModule authModule = new AuthModule();
+    private final ProductCatalog catalog = new ProductCatalog();
     private final CrudRepository<Client> clientRepository;
     private final CrudRepository<Vehicle> vehicleRepository;
     private MaintenanceModule maintenanceModule;
@@ -32,7 +34,7 @@ public class Workshop
     /**
      * Cria uma nova instância de oficina
      * Pode usar ofuscação para tornar dados persistentes mais difíceis de ler por humanos.
-     * 
+     *
      * @param useObfuscation Determina se irá usar ou não ofuscação
      */
     public Workshop(boolean useObfuscation)
@@ -59,7 +61,7 @@ public class Workshop
         authModule.OnUserLogged.removeListener(this::initializeUserData);
         vehicleRepository.OnEntityRegistered.removeListener(this::registerVehicleToOwner);
 
-        if(maintenanceModule != null)
+        if (maintenanceModule != null)
         {
             maintenanceModule.getServiceOrderRepository().OnEntityRegistered.removeListener(this::registerServiceOrderToOwner);
         }
@@ -73,6 +75,16 @@ public class Workshop
     public AuthModule getAuthModule()
     {
         return authModule;
+    }
+
+    /**
+     * Obtém o catálogo de produtos
+     *
+     * @return catálogo de produtos
+     */
+    public ProductCatalog getCatalog()
+    {
+        return catalog;
     }
 
     /**

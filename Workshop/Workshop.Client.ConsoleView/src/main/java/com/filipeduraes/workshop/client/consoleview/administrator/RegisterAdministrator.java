@@ -59,7 +59,7 @@ public class RegisterAdministrator implements IWorkshopMenu
 
             employeeViewModel.OnLoginRequested.broadcast();
 
-            return MenuResult.replace(new MainMenu());
+            return MenuResult.replace(new MainMenu(menuManager));
         }
 
         System.out.println("Nao foi possivel cadastrar o administrador, tente novamente!");
