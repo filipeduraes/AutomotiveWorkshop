@@ -117,20 +117,18 @@ public class VehicleController
             }
 
             vehicleViewModel.setRequestWasSuccessful(wasRequestSuccessful);
+            return;
         }
+
+        vehicleViewModel.setRequestWasSuccessful(false);
     }
 
     private Client getSelectedClient()
     {
-        if (!clientViewModel.hasLoadedDTO())
-        {
-            System.out.println("Nenhum cliente selecionado, por favor selecione um cliente antes de prosseguir.");
-            vehicleViewModel.setRequestWasSuccessful(false);
-            return null;
-        }
+        String clientIDAsString = vehicleViewModel.getSearchPattern();
+        UUID clientID = UUID.fromString(clientIDAsString);
+        Client client = clientModule.getEntityWithID(clientID);
 
-        UUID selectedClientID = clientViewModel.getSelectedDTO().getID();
-        Client client = clientModule.getEntityWithID(selectedClientID);
         return client;
     }
 }

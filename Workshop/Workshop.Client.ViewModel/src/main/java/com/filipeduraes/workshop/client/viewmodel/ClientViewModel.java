@@ -22,26 +22,4 @@ public class ClientViewModel extends EntityViewModel<ClientDTO>
      * Evento chamado quando a edição do cliente selecionado é requisitado.
      */
     public final Observer OnClientEditRequest = new Observer();
-
-    private String searchPattern;
-
-    /**
-     * Obtém o padrão de busca atual.
-     *
-     * @return padrão de busca atual
-     */
-    public String getSearchPattern()
-    {
-        return searchPattern;
-    }
-
-    /**
-     * Define o padrão de busca.
-     *
-     * @param searchPattern novo padrão de busca
-     */
-    public void setSearchPattern(String searchPattern)
-    {
-        this.searchPattern = searchPattern;
-    }
 }

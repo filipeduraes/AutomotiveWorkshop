@@ -151,6 +151,11 @@ public class ConsoleInput
      */
     public static <T> int readOptionFromList(String message, T[] options, boolean showCancelOption)
     {
+        if(options == null || options.length == 0)
+        {
+            return 0;
+        }
+
         return readOptionFromList(message, TextUtils.convertToStringArray(options), showCancelOption);
     }
 

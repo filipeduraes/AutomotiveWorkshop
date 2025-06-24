@@ -83,25 +83,24 @@ public class EmployeeController
     private void searchUsers()
     {
         final CrudRepository<LocalEmployee> employeeRepository = authModule.getEmployeeRepository();
-        final EmployeeDTO employeeDTO = viewModel.getSelectedDTO();
+        String searchPattern = viewModel.getSearchPattern();
         queriedEmployees = null;
 
         switch (viewModel.getFieldType())
         {
             case NAME ->
             {
-                String namePattern = employeeDTO.getName();
-                queriedEmployees = employeeRepository.searchEntitiesWithPattern(namePattern, Employee::getName);
+                queriedEmployees = employeeRepository.searchEntitiesWithPattern(searchPattern, Employee::getName);
             }
             case EMAIL ->
             {
-                String emailPattern = employeeDTO.getEmail();
-                queriedEmployees = employeeRepository.searchEntitiesWithPattern(emailPattern, Employee::getEmail);
+                queriedEmployees = employeeRepository.searchEntitiesWithPattern(searchPattern, Employee::getEmail);
             }
             case ROLE ->
             {
-                EmployeeRole searchedRole = EmployeeMapper.fromEmployeeRoleDTO(employeeDTO.getRole());
-                queriedEmployees = employeeRepository.findEntitiesWithPredicate(employee -> employee.getRole() == searchedRole);
+                int selectedRoleIndex = Integer.parseInt(searchPattern);
+                EmployeeRole selectedRole = EmployeeRole.values()[selectedRoleIndex];
+                queriedEmployees = employeeRepository.findEntitiesWithPredicate(employee -> employee.getRole() == selectedRole);
             }
         }
 

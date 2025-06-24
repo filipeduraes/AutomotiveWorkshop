@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class EmployeeDetailsMenu extends EntityDetailsMenu<EmployeeViewModel, EmployeeDTO>
 {
+    private boolean alreadyRedirected = false;
+
     @Override
     public String getMenuDisplayName()
     {
@@ -49,17 +51,22 @@ public class EmployeeDetailsMenu extends EntityDetailsMenu<EmployeeViewModel, Em
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        if (!findViewModel(menuManager).hasValidSelectedIndex())
-        {
-            boolean searchEmployee = ConsoleInput.readConfirmation("Deseja pesquisar um funcionario?");
+        boolean hasNoSelectedEmployee = !findViewModel(menuManager).hasValidSelectedIndex();
 
-            if (!searchEmployee)
+        if (hasNoSelectedEmployee)
+        {
+            if(!alreadyRedirected)
             {
-                System.out.println("Operacao cancelada. Voltando...");
+                alreadyRedirected = true;
+                System.out.println("Redirecionando para a pesquisa do colaborador...");
+                return MenuResult.push(new EmployeeSearchMenu());
+            }
+            else
+            {
+                alreadyRedirected = false;
+                System.out.println("Nenhum funcionario selecionado. Voltando...");
                 return MenuResult.pop();
             }
-
-            return MenuResult.push(new EmployeeSearchMenu());
         }
 
         return super.showMenu(menuManager);

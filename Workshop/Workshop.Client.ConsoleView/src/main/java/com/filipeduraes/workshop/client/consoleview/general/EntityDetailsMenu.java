@@ -55,7 +55,7 @@ public abstract class EntityDetailsMenu<TViewModel extends EntityViewModel<TEnti
         viewModel.OnLoadDataRequest.broadcast();
 
         System.out.printf("%s%n", viewModel.getSelectedDTO());
-        MenuOption menuOption = menuManager.showMenuOptions("O que deseja fazer?", buildOptions(), true);
+        MenuOption menuOption = menuManager.showMenuOptions("\nO que deseja fazer?", buildOptions(), true);
         MenuResult menuResult = menuOption.execute(menuManager);
 
         if(menuResult.getAction() == MenuAction.POP_MENU)

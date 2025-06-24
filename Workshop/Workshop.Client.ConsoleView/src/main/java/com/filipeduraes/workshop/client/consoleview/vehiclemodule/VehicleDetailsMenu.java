@@ -5,12 +5,13 @@ package com.filipeduraes.workshop.client.consoleview.vehiclemodule;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
-import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 
 public class VehicleDetailsMenu extends EntityDetailsMenu<VehicleViewModel, VehicleDTO>
 {
+    private boolean alreadyRedirected = false;
+
     @Override
     public String toString()
     {
@@ -26,16 +27,22 @@ public class VehicleDetailsMenu extends EntityDetailsMenu<VehicleViewModel, Vehi
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        if(!menuManager.getViewModelRegistry().getVehicleViewModel().hasLoadedDTO())
-        {
-            boolean shouldSearchVehicle = ConsoleInput.readConfirmation("Deseja selecionar um veiculo para buscar detalhes?");
+        boolean noVehicleWasSelected = !menuManager.getViewModelRegistry().getVehicleViewModel().hasLoadedDTO();
 
-            if(shouldSearchVehicle)
+        if(noVehicleWasSelected)
+        {
+            if(!alreadyRedirected)
             {
+                alreadyRedirected = true;
+                System.out.println("Redirecionando para a pesquisa do veiculo...");
                 return MenuResult.push(new VehicleSelectionFromClientMenu());
             }
-
-            return MenuResult.pop();
+            else
+            {
+                alreadyRedirected = false;
+                System.out.println("Nenhum veiculo selecionado. Voltando...");
+                return MenuResult.pop();
+            }
         }
 
         return super.showMenu(menuManager);

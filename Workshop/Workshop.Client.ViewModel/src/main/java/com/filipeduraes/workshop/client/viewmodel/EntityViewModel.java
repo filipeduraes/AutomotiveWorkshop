@@ -34,6 +34,7 @@ public abstract class EntityViewModel<TEntityDTO>
 
     private List<String> foundEntitiesDescriptions = new ArrayList<>();
     private FieldType fieldType;
+    private String searchPattern;
     private TEntityDTO selectedDTO;
     private int selectedIndex = -1;
     private boolean requestWasSuccessful = false;
@@ -96,6 +97,16 @@ public abstract class EntityViewModel<TEntityDTO>
     public void setFieldType(FieldType fieldType)
     {
         this.fieldType = fieldType;
+    }
+
+    public String getSearchPattern()
+    {
+        return searchPattern;
+    }
+
+    public void setSearchPattern(String searchPattern)
+    {
+        this.searchPattern = searchPattern;
     }
 
     /**

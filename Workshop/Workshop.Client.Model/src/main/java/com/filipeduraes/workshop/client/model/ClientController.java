@@ -84,6 +84,7 @@ public class ClientController
 
         List<String> clientDescriptions = convertClientsToClientDescriptions(foundClients);
         clientViewModel.setFoundEntitiesDescriptions(clientDescriptions);
+        clientViewModel.setRequestWasSuccessful(!clientDescriptions.isEmpty());
     }
 
     private void editClient()
