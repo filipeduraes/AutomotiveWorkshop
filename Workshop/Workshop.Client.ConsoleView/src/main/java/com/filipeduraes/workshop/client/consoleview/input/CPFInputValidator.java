@@ -37,7 +37,7 @@ public class CPFInputValidator implements IInputValidator
     @Override
     public String getErrorMessage()
     {
-        return "CPF inválido. Insira um número válido com 11 dígitos.";
+        return "CPF invalido. Insira um numero válido com 11 digitos.";
     }
 
     /**

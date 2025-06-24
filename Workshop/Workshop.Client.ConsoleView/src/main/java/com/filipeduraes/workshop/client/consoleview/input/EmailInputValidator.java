@@ -30,7 +30,7 @@ public class EmailInputValidator implements IInputValidator
     @Override
     public String getErrorMessage()
     {
-        return "Email inválido. Use o formato usuario@dominio.com";
+        return "Email invalido. Use o formato usuario@dominio.com";
     }
 
     /**

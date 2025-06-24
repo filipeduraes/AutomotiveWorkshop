@@ -32,7 +32,7 @@ public class PhoneInputValidator implements IInputValidator
     @Override
     public String getErrorMessage()
     {
-        return "Telefone inválido. Insira DDD + número com 10 ou 11 dígitos.";
+        return "Telefone invalido. Insira DDD + numero com 10 ou 11 digitos.";
     }
 
     /**
