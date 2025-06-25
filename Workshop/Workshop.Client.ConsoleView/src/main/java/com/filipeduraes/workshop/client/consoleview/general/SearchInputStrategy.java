@@ -18,6 +18,15 @@ public class SearchInputStrategy
     private final Function<MenuManager, Boolean> validateInput;
     private final Consumer<MenuManager> cleanup;
 
+    public SearchInputStrategy()
+    {
+        strategyType = SearchInputStrategyType.PREDEFINED;
+        menuToRedirect = null;
+        resolveInput = (menuManager) -> "";
+        validateInput = (menuManager) -> true;
+        cleanup = (menuManager) -> {};
+    }
+
     public SearchInputStrategy(String inputMessage)
     {
         strategyType = SearchInputStrategyType.DIRECT_INPUT;

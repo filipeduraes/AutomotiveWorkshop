@@ -88,7 +88,9 @@ public enum FieldType
     /**
      * Descrição detalhada
      */
-    DETAILED_DESCRIPTION("Descricao Detalhada");
+    DETAILED_DESCRIPTION("Descricao Detalhada"),
+
+    LOCAL_USER("Usuario Local");
 
     /**
      * O nome de exibição do campo

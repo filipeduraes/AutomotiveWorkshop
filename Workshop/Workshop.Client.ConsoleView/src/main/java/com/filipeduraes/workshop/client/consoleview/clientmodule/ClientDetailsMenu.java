@@ -10,7 +10,6 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

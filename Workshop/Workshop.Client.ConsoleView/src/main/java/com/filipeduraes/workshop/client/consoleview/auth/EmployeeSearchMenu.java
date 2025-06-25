@@ -40,6 +40,7 @@ public class EmployeeSearchMenu extends EntitySearchMenu<EmployeeViewModel, Empl
         strategies.put(FieldType.NAME, new SearchInputStrategy("Digite o nome do colaborador"));
         strategies.put(FieldType.EMAIL, new SearchInputStrategy("Digite o email do colaborador"));
         strategies.put(FieldType.ROLE, new SearchInputStrategy("Insira o cargo do colaborador", EmployeeRoleDTO.values()));
+        strategies.put(FieldType.LOCAL_USER, new SearchInputStrategy());
 
         return strategies;
     }

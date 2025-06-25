@@ -6,7 +6,6 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.general.MenuOption;
-import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 

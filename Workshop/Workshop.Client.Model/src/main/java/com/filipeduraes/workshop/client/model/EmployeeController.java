@@ -10,6 +10,8 @@ import com.filipeduraes.workshop.core.auth.AuthModule;
 import com.filipeduraes.workshop.core.auth.Employee;
 import com.filipeduraes.workshop.core.auth.EmployeeRole;
 import com.filipeduraes.workshop.core.auth.LocalEmployee;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -101,6 +103,12 @@ public class EmployeeController
                 int selectedRoleIndex = Integer.parseInt(searchPattern);
                 EmployeeRole selectedRole = EmployeeRole.values()[selectedRoleIndex];
                 queriedEmployees = employeeRepository.findEntitiesWithPredicate(employee -> employee.getRole() == selectedRole);
+            }
+            case LOCAL_USER ->
+            {
+                queriedEmployees = new ArrayList<>();
+                Employee loggedUser = authModule.getLoggedUser();
+                queriedEmployees.add(employeeRepository.getEntityWithID(loggedUser.getID()));
             }
         }
 

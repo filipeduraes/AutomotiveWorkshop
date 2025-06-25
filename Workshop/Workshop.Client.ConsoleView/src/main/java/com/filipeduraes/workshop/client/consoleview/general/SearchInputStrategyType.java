@@ -5,5 +5,6 @@ package com.filipeduraes.workshop.client.consoleview.general;
 public enum SearchInputStrategyType
 {
     DIRECT_INPUT,
-    REDIRECT_MENU
+    REDIRECT_MENU,
+    PREDEFINED
 }
