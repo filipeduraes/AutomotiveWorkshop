@@ -22,6 +22,7 @@ public class MaintenanceModule
     private final Set<UUID> userServices;
     private final Set<UUID> openedServices;
     private final UUID loggedEmployeeID;
+    private final ParameterizedType serviceIDSetType;
 
     /**
      * Cria uma nova instância do módulo de manutenção.
@@ -32,11 +33,11 @@ public class MaintenanceModule
     {
         this.loggedEmployeeID = loggedEmployeeID;
 
-        ParameterizedType serviceIDListType = Persistence.createParameterizedType(HashSet.class, UUID.class);
+        serviceIDSetType = Persistence.createParameterizedType(HashSet.class, UUID.class);
 
         serviceOrderRepository = new CrudRepository<>(WorkshopPaths.SERVICES_PATH, ServiceOrder.class);
-        openedServices = Persistence.loadFile(WorkshopPaths.OPENED_SERVICES_PATH, serviceIDListType, new HashSet<>());
-        userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDListType, new HashSet<>());
+        openedServices = Persistence.loadFile(WorkshopPaths.OPENED_SERVICES_PATH, serviceIDSetType, new HashSet<>());
+        userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDSetType, new HashSet<>());
     }
 
     /**
@@ -99,23 +100,22 @@ public class MaintenanceModule
      *
      * @param serviceID ID do serviço a ser inspecionado
      */
-    public void startInspection(UUID serviceID)
+    public boolean startInspection(UUID serviceID)
     {
-        if (serviceOrderRepository.hasEntityWithID(serviceID))
+        ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
+
+        if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.APPOINTMENT)
         {
-            ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
+            serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
+            openedServices.remove(serviceID);
+            userServices.add(serviceID);
 
-            if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.APPOINTMENT)
-            {
-                serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
-                openedServices.remove(serviceID);
-                userServices.add(serviceID);
-
-                Persistence.saveFile(openedServices, WorkshopPaths.OPENED_SERVICES_PATH);
-                Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
-                serviceOrderRepository.updateEntity(serviceOrder);
-            }
+            Persistence.saveFile(openedServices, WorkshopPaths.OPENED_SERVICES_PATH);
+            Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
+            return serviceOrderRepository.updateEntity(serviceOrder);
         }
+
+        return false;
     }
 
     /**
@@ -134,20 +134,15 @@ public class MaintenanceModule
 
             if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
             {
-                serviceOrder.getCurrentStep().setShortDescription(shortDescription);
-                serviceOrder.getCurrentStep().setDetailedDescription(detailedDescription);
-                userServices.remove(serviceID);
+                ServiceStep currentStep = serviceOrder.getCurrentStep();
 
-                Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
+                currentStep.setShortDescription(shortDescription);
+                currentStep.setDetailedDescription(detailedDescription);
+                currentStep.finishStep();
 
-                ParameterizedType serviceIDListType = Persistence.createParameterizedType(HashSet.class, UUID.class);
-                String newEmployeeUserPath = WorkshopPaths.getUserServicesPath(newEmployee);
+                removeServiceOrderFromEmployeeServices(serviceID);
+                addServiceOrderToEmployeeServices(serviceID, newEmployee);
 
-                Set<UUID> newEmployeeUserServices = Persistence.loadFile(newEmployeeUserPath, serviceIDListType, new HashSet<>());
-                newEmployeeUserServices.add(serviceID);
-                Persistence.saveFile(newEmployeeUserServices, newEmployeeUserPath);
-
-                serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
                 return serviceOrderRepository.updateEntity(serviceOrder);
             }
         }
@@ -160,59 +155,92 @@ public class MaintenanceModule
      *
      * @param serviceID ID do serviço a ser iniciado
      */
-    public void startMaintenance(UUID serviceID)
+    public boolean startMaintenance(UUID serviceID)
     {
-        if (loggedUserHasService(serviceID))
+        ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
+
+        if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
         {
-            ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
+            ServiceStep serviceStep = new ServiceStep(loggedEmployeeID);
+            serviceOrder.registerStep(serviceStep);
 
-            if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
-            {
-                ServiceStep serviceStep = new ServiceStep(loggedEmployeeID);
-                serviceOrder.registerStep(serviceStep);
-
-                serviceOrderRepository.updateEntity(serviceOrder);
-            }
+            return serviceOrderRepository.updateEntity(serviceOrder);
         }
+
+        return false;
     }
 
     /**
      * Finaliza o processo de manutenção de um serviço.
      *
      * @param serviceID ID do serviço a ser finalizado
-     * @param description descrição do trabalho realizado
+     * @param detailedDescription descrição do trabalho realizado
      * @param services lista de produtos utilizados no serviço
      * @param purchase informações da compra associada ao serviço
      */
-    public void finishMaintenance(UUID serviceID, String description, ArrayList<Product> services, Purchase purchase)
+    public boolean finishMaintenance(UUID serviceID, String shortDescription, String detailedDescription, ArrayList<Product> services, Purchase purchase)
     {
-        if (loggedUserHasService(serviceID))
-        {
-            ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
-            ServiceStep currentStep = serviceOrder.getCurrentStep();
-            currentStep.setDetailedDescription(description);
-            serviceOrder.finish(services, purchase);
+        ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
+        ServiceStep currentStep = serviceOrder.getCurrentStep();
+        currentStep.setShortDescription(shortDescription);
+        currentStep.setDetailedDescription(detailedDescription);
+        currentStep.finishStep();
 
-            ParameterizedType type = Persistence.createParameterizedType(HashSet.class, UUID.class);
-            Set<UUID> finishedServices = Persistence.loadFile(WorkshopPaths.FINISHED_SERVICES_PATH, type, new HashSet<>());
+        serviceOrder.finish(services, purchase);
 
-            finishedServices.add(serviceID);
-            userServices.remove(serviceID);
+        Set<UUID> finishedServices = Persistence.loadFile(WorkshopPaths.FINISHED_SERVICES_PATH, serviceIDSetType, new HashSet<>());
+        finishedServices.add(serviceID);
 
-            Persistence.saveFile(finishedServices, WorkshopPaths.FINISHED_SERVICES_PATH);
-            Persistence.saveFile(userServices, WorkshopPaths.getUserServicesPath());
-            serviceOrderRepository.updateEntity(serviceOrder);
-        }
+        removeServiceOrderFromEmployeeServices(serviceID);
+        Persistence.saveFile(finishedServices, WorkshopPaths.FINISHED_SERVICES_PATH);
+        return serviceOrderRepository.updateEntity(serviceOrder);
     }
 
     /**
      * Remove uma ordem de serviço do sistema.
      *
-     * @param selectedServiceID ID do serviço a ser removido
+     * @param serviceOrderID ID do serviço a ser removido
      */
-    public void deleteServiceOrder(UUID selectedServiceID)
+    public void deleteServiceOrder(UUID serviceOrderID)
     {
-        serviceOrderRepository.deleteEntityWithID(selectedServiceID);
+        removeServiceOrderFromEmployeeServices(serviceOrderID);
+
+        serviceOrderRepository.deleteEntityWithID(serviceOrderID);
+    }
+
+    private void addServiceOrderToEmployeeServices(UUID serviceOrderID, UUID employeeID)
+    {
+        Set<UUID> employeeUserServices = loadEmployeeUserServices(employeeID);
+        employeeUserServices.add(serviceOrderID);
+        saveEmployeeUserServices(employeeID, employeeUserServices);
+    }
+
+    private void removeServiceOrderFromEmployeeServices(UUID serviceOrderID)
+    {
+        ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceOrderID);
+        UUID employeeID = serviceOrder.getCurrentStep().getEmployeeID();
+
+        Set<UUID> employeeUserServices = loadEmployeeUserServices(employeeID);
+        employeeUserServices.remove(serviceOrderID);
+
+        saveEmployeeUserServices(employeeID, employeeUserServices);
+    }
+
+    private Set<UUID> loadEmployeeUserServices(UUID employeeID)
+    {
+        if(!employeeID.equals(loggedEmployeeID))
+        {
+            String employeeUserPath = WorkshopPaths.getUserServicesPath(employeeID);
+            return Persistence.loadFile(employeeUserPath, serviceIDSetType, new HashSet<>());
+        }
+
+        return userServices;
+    }
+
+    private void saveEmployeeUserServices(UUID employeeID, Set<UUID> services)
+    {
+        String employeeUserPath = WorkshopPaths.getUserServicesPath(employeeID);
+        Persistence.saveFile(services, employeeUserPath);
     }
 
     private boolean loggedUserHasService(UUID serviceID)

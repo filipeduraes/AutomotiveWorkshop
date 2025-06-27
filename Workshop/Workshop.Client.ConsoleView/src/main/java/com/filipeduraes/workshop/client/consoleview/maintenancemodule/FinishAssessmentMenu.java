@@ -12,6 +12,8 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 
 public class FinishAssessmentMenu implements IWorkshopMenu
 {
+    boolean hasRedirected = false;
+
     @Override
     public String getMenuDisplayName()
     {
@@ -27,15 +29,17 @@ public class FinishAssessmentMenu implements IWorkshopMenu
 
         if(!employeeViewModel.hasValidSelectedIndex())
         {
-            boolean canSelectEmployee = ConsoleInput.readConfirmation("E preciso selecionar um colaborador para transferir a ordem de servico.\nDeseja selecionar?");
-
-            if(canSelectEmployee)
+            if(!hasRedirected)
             {
+                hasRedirected = true;
                 return MenuResult.push(new EmployeeSearchMenu());
             }
-
-            System.out.println("Operacao cancelada. Voltando...");
-            return MenuResult.pop();
+            else
+            {
+                hasRedirected = false;
+                System.out.println("Nenhum colaborador selecionado. Voltando...");
+                return MenuResult.pop();
+            }
         }
 
         employeeViewModel.OnLoadDataRequest.broadcast();

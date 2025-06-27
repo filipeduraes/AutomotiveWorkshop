@@ -5,21 +5,20 @@ package com.filipeduraes.workshop.client.consoleview.maintenancemodule;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
+import com.filipeduraes.workshop.client.consoleview.auth.EmployeeSearchMenu;
 import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSelectionMenu;
 import com.filipeduraes.workshop.client.consoleview.general.MenuOption;
 import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
+import com.filipeduraes.workshop.client.consoleview.input.MaxCharactersValidator;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.RegisterVehicleMenu;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleSelectionFromClientMenu;
-import com.filipeduraes.workshop.client.dtos.ClientDTO;
-import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
-import com.filipeduraes.workshop.client.dtos.VehicleDTO;
-import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.FieldType;
-import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
-import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
+import com.filipeduraes.workshop.client.dtos.*;
+import com.filipeduraes.workshop.client.viewmodel.*;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 
+import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -31,6 +30,8 @@ import java.util.List;
 public class EditServiceMenu implements IWorkshopMenu
 {
     private MenuOption selectedOption;
+    private FieldType lastSelectedStepEditField = FieldType.NONE;
+    private int lastSelectedStepIndex = -1;
 
     /**
      * Obtém o nome de exibição do menu.
@@ -64,12 +65,15 @@ public class EditServiceMenu implements IWorkshopMenu
             new MenuOption("Etapa", this::editStep)
         );
 
-        selectedOption = menuManager.showMenuOptions("O que deseja editar?", options);
+        selectedOption = menuManager.showMenuOptions("O que deseja editar?", options, true);
+
         return selectedOption.execute(menuManager);
     }
 
     private MenuResult editClient(MenuManager menuManager)
     {
+        lastSelectedStepEditField = FieldType.NONE;
+
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
         ClientViewModel clientViewModel = viewModelRegistry.getClientViewModel();
         ServiceViewModel serviceViewModel = viewModelRegistry.getServiceViewModel();
@@ -108,7 +112,7 @@ public class EditServiceMenu implements IWorkshopMenu
 
         if (!serviceOrderDTO.getClientID().equals(clientDTO.getID()))
         {
-            serviceViewModel.setEditFieldType(FieldType.CLIENT);
+            serviceViewModel.setFieldType(FieldType.CLIENT);
             serviceViewModel.OnEditServiceRequest.broadcast();
 
             resultMessage = serviceViewModel.getRequestWasSuccessful()
@@ -126,6 +130,8 @@ public class EditServiceMenu implements IWorkshopMenu
 
     private MenuResult editVehicle(MenuManager menuManager)
     {
+        lastSelectedStepEditField = FieldType.NONE;
+
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
         VehicleViewModel vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         ServiceViewModel serviceViewModel = viewModelRegistry.getServiceViewModel();
@@ -141,7 +147,7 @@ public class EditServiceMenu implements IWorkshopMenu
 
         if (!serviceOrderDTO.getVehicleID().equals(vehicleDTO.getID()))
         {
-            serviceViewModel.setEditFieldType(FieldType.VEHICLE);
+            serviceViewModel.setFieldType(FieldType.VEHICLE);
             serviceViewModel.OnEditServiceRequest.broadcast();
 
             resultMessage = serviceViewModel.getRequestWasSuccessful()
@@ -159,6 +165,79 @@ public class EditServiceMenu implements IWorkshopMenu
 
     private MenuResult editStep(MenuManager menuManager)
     {
-        return null;
+        ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
+        ServiceViewModel serviceViewModel = viewModelRegistry.getServiceViewModel();
+        List<ServiceStepDTO> steps = serviceViewModel.getSelectedDTO().getSteps();
+
+        EmployeeViewModel employeeViewModel = viewModelRegistry.getEmployeeViewModel();
+
+        if(lastSelectedStepEditField != FieldType.EMPLOYEE)
+        {
+            ServiceStepTypeDTO[] possibleTypes = Arrays.copyOfRange(ServiceStepTypeDTO.values(), 1, steps.size() + 1);
+
+            lastSelectedStepIndex = ConsoleInput.readOptionFromList("Escolha a etapa a ser alterada", possibleTypes, true);
+
+            if(lastSelectedStepIndex >= steps.size() + 1)
+            {
+                System.out.println("Edicao cancelada. Voltando...");
+                return MenuResult.pop();
+            }
+
+            FieldType[] possibleFields = { FieldType.SHORT_DESCRIPTION, FieldType.DETAILED_DESCRIPTION, FieldType.EMPLOYEE };
+
+            int selectedEditOptionIndex = ConsoleInput.readOptionFromList("Qual campo deseja alterar?", possibleFields, true);
+            lastSelectedStepEditField = possibleFields[selectedEditOptionIndex];
+
+            if(lastSelectedStepEditField == FieldType.EMPLOYEE)
+            {
+                employeeViewModel.resetSelectedDTO();
+            }
+        }
+        else if(!employeeViewModel.hasLoadedDTO())
+        {
+            lastSelectedStepEditField = FieldType.NONE;
+            System.out.println("Nenhum colaborador selecionado. Voltando...");
+            return MenuResult.pop();
+        }
+
+        if(lastSelectedStepEditField == FieldType.EMPLOYEE && !employeeViewModel.hasLoadedDTO())
+        {
+            System.out.println("Selecione um novo colaborador. Redirecionando...");
+            return MenuResult.push(new EmployeeSearchMenu());
+        }
+
+        readNewDescriptions(serviceViewModel);
+
+        serviceViewModel.setFieldType(lastSelectedStepEditField);
+        serviceViewModel.setSelectedStepIndex(lastSelectedStepIndex);
+        serviceViewModel.OnEditServiceStepRequest.broadcast();
+
+        if(serviceViewModel.getRequestWasSuccessful())
+        {
+            System.out.println("Etapa alterada com sucesso!");
+        }
+        else
+        {
+            System.out.println("Nao foi possivel alterar a etapa, tente novamente.");
+        }
+
+        return MenuResult.pop();
+    }
+
+    private void readNewDescriptions(ServiceViewModel serviceViewModel)
+    {
+        switch (lastSelectedStepEditField)
+        {
+            case SHORT_DESCRIPTION ->
+            {
+                String newShortDescription = ConsoleInput.readValidatedLine("Digite uma nova descricao curta do problema", new MaxCharactersValidator(30));
+                serviceViewModel.setCurrentStepShortDescription(newShortDescription);
+            }
+            case DETAILED_DESCRIPTION ->
+            {
+                String newDetailedDescription = ConsoleInput.readLine("Digite uma nova descricao detalhada do problema");
+                serviceViewModel.setCurrentStepDetailedDescription(newDetailedDescription);
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class ServiceOrder extends WorkshopEntity
 {
-    private final Deque<ServiceStep> steps = new ArrayDeque<>();
+    private final List<ServiceStep> steps = new ArrayList<>();
     private List<Product> services = new ArrayList<>();
 
     private Purchase purchase;
@@ -34,6 +34,33 @@ public class ServiceOrder extends WorkshopEntity
     {
         this.vehicleID = vehicleID;
         this.clientID = clientID;
+    }
+
+    /**
+     * Cria uma cópia profunda de uma ordem de serviço existente.
+     * Todos os atributos são copiados, incluindo as etapas de serviço e produtos.
+     *
+     * @param serviceOrder ordem de serviço a ser copiada
+     */
+    public ServiceOrder(ServiceOrder serviceOrder)
+    {
+        vehicleID = serviceOrder.vehicleID;
+        clientID = serviceOrder.clientID;
+        purchase = serviceOrder.purchase;
+        finished = serviceOrder.finished;
+        services = serviceOrder.services;
+
+        for (ServiceStep step : serviceOrder.steps)
+        {
+            steps.add(new ServiceStep(step));
+        }
+
+        for (Product service : serviceOrder.services)
+        {
+            services.add(new Product(service));
+        }
+
+        assignID(serviceOrder.getID());
     }
 
     /**
@@ -55,7 +82,7 @@ public class ServiceOrder extends WorkshopEntity
     public void registerStep(ServiceStep step)
     {
         finishCurrentStep();
-        steps.push(step);
+        steps.add(step);
     }
 
     /**
@@ -65,7 +92,24 @@ public class ServiceOrder extends WorkshopEntity
      */
     public ServiceStep getCurrentStep()
     {
-        return steps.peek();
+        return steps.get(steps.size() - 1);
+    }
+
+    /**
+     * Obtém a etapa anterior do serviço.
+     *
+     * @return etapa anterior ou a atual se for a primeira
+     */
+    public ServiceStep getPreviousStep()
+    {
+        int previousStepIndex = steps.size() - 2;
+
+        if(previousStepIndex < 0)
+        {
+            return getCurrentStep();
+        }
+
+        return steps.get(previousStepIndex);
     }
 
     /**
@@ -148,7 +192,7 @@ public class ServiceOrder extends WorkshopEntity
      *
      * @return coleção de etapas do serviço
      */
-    public Deque<ServiceStep> getSteps()
+    public List<ServiceStep> getSteps()
     {
         return steps;
     }

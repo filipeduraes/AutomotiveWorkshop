@@ -150,11 +150,6 @@ public class MenuManager
      */
     public MenuOption showMenuOptions(String message, List<MenuOption> options, boolean showExitOption)
     {
-        if(!message.isBlank())
-        {
-            System.out.println(message);
-        }
-
         String[] optionList = options.stream().map(MenuOption::getOptionDisplayName).toArray(String[]::new);
         int selectedOption = ConsoleInput.readOptionFromList(message, optionList, showExitOption);
 

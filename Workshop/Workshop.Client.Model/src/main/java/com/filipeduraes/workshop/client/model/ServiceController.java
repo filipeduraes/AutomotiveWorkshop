@@ -65,6 +65,7 @@ public class ServiceController
         serviceViewModel.OnSearchRequest.addListener(this::requestServices);
         serviceViewModel.OnLoadDataRequest.addListener(this::requestDetailedServiceInfo);
         serviceViewModel.OnEditServiceRequest.addListener(this::editSelectedService);
+        serviceViewModel.OnEditServiceStepRequest.addListener(this::editSelectedServiceStep);
         serviceViewModel.OnDeleteRequest.addListener(this::deleteSelectedService);
     }
 
@@ -80,6 +81,7 @@ public class ServiceController
         serviceViewModel.OnSearchRequest.removeListener(this::requestServices);
         serviceViewModel.OnLoadDataRequest.removeListener(this::requestDetailedServiceInfo);
         serviceViewModel.OnEditServiceRequest.removeListener(this::editSelectedService);
+        serviceViewModel.OnEditServiceStepRequest.removeListener(this::editSelectedServiceStep);
         serviceViewModel.OnDeleteRequest.removeListener(this::deleteSelectedService);
     }
 
@@ -116,11 +118,11 @@ public class ServiceController
         {
             if (serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.APPOINTMENT)
             {
-                maintenanceModule.startInspection(selectedServiceOrderID);
+                canStartNextStep = maintenanceModule.startInspection(selectedServiceOrderID);
             }
             else if (serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
             {
-                maintenanceModule.startMaintenance(selectedServiceOrderID);
+                canStartNextStep = maintenanceModule.startMaintenance(selectedServiceOrderID);
             }
 
             requestDetailedServiceInfo();
@@ -231,7 +233,7 @@ public class ServiceController
         UUID selectedServiceID = serviceViewModel.getSelectedDTO().getID();
         ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(selectedServiceID);
 
-        switch (serviceViewModel.getEditFieldType())
+        switch (serviceViewModel.getFieldType())
         {
             case CLIENT ->
             {
@@ -259,17 +261,49 @@ public class ServiceController
                 serviceOrder.setVehicleID(vehicleDTO.getID());
                 serviceOrderModule.updateEntity(serviceOrder);
             }
-            case SHORT_DESCRIPTION ->
-            {
-
-            }
-            case DETAILED_DESCRIPTION ->
-            {
-
-            }
         }
 
         requestDetailedServiceInfo();
+    }
+
+    private void editSelectedServiceStep()
+    {
+        int selectedStepIndex = serviceViewModel.getSelectedStepIndex();
+        ServiceOrderDTO serviceOrderDTO = serviceViewModel.getSelectedDTO();
+
+        if(serviceOrderDTO == null || selectedStepIndex < 0 || selectedStepIndex >= serviceOrderDTO.getSteps().size())
+        {
+            serviceViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        UUID id = serviceOrderDTO.getID();
+        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrder originalServiceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(id);
+
+        if(originalServiceOrder == null)
+        {
+            serviceViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        ServiceOrder editedServiceOrder = applyEditingsToServiceOrderStep(originalServiceOrder, selectedStepIndex);
+
+        if(editedServiceOrder == null)
+        {
+            serviceViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        boolean couldUpdate = maintenanceModule.getServiceOrderRepository().updateEntity(editedServiceOrder);
+
+        if(couldUpdate)
+        {
+            queriedEntities.set(serviceViewModel.getSelectedIndex(), editedServiceOrder);
+            requestDetailedServiceInfo();
+        }
+
+        serviceViewModel.setRequestWasSuccessful(couldUpdate);
     }
 
     private void deleteSelectedService()
@@ -277,6 +311,37 @@ public class ServiceController
         UUID selectedServiceID = serviceViewModel.getSelectedDTO().getID();
         MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
         maintenanceModule.deleteServiceOrder(selectedServiceID);
+    }
+
+    private ServiceOrder applyEditingsToServiceOrderStep(ServiceOrder originalServiceOrder, int selectedStepIndex)
+    {
+        ServiceOrder editedServiceOrder = new ServiceOrder(originalServiceOrder);
+        ServiceStep editedServiceStep = editedServiceOrder.getSteps().get(selectedStepIndex);
+
+        switch (serviceViewModel.getFieldType())
+        {
+            case EMPLOYEE ->
+            {
+                if(!employeeViewModel.hasLoadedDTO())
+                {
+                    serviceViewModel.setRequestWasSuccessful(false);
+                    return null;
+                }
+
+                UUID newEmployeeID = employeeViewModel.getSelectedDTO().getID();
+                editedServiceStep.setEmployeeID(newEmployeeID);
+            }
+            case SHORT_DESCRIPTION ->
+            {
+                editedServiceStep.setShortDescription(serviceViewModel.getCurrentStepShortDescription());
+            }
+            case DETAILED_DESCRIPTION ->
+            {
+                editedServiceStep.setDetailedDescription(serviceViewModel.getCurrentStepDetailedDescription());
+            }
+        }
+
+        return editedServiceOrder;
     }
 
     private String getServiceListingName(ServiceOrder service)
@@ -298,7 +363,7 @@ public class ServiceController
 
         if (!currentStep.getWasFinished())
         {
-            shortDescription = new ArrayList<>(service.getSteps()).get(1).getShortDescription();
+            shortDescription = service.getPreviousStep().getShortDescription();
         }
         else
         {

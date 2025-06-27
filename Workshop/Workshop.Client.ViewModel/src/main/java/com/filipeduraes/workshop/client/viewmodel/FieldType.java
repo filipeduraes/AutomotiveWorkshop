@@ -11,6 +11,11 @@ package com.filipeduraes.workshop.client.viewmodel;
 public enum FieldType
 {
     /**
+     * Campo invalido
+     */
+    NONE("Nenhum"),
+
+    /**
      * Nome do campo
      */
     NAME("Nome"),
@@ -74,6 +79,11 @@ public enum FieldType
      * Cliente
      */
     CLIENT("Cliente"),
+
+    /**
+     * Cliente
+     */
+    EMPLOYEE("Colaborador"),
 
     /**
      * Veículo

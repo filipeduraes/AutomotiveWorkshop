@@ -1,6 +1,8 @@
 package com.filipeduraes.workshop.client.dtos;
 
-import java.util.Deque;
+import com.filipeduraes.workshop.client.viewmodel.FieldType;
+
+import java.util.List;
 import java.util.UUID;
 
 
@@ -16,12 +18,9 @@ public class ServiceOrderDTO
     private final UUID id;
     private final UUID clientID;
     private final UUID vehicleID;
-    private final String shortDescription;
-    private final String detailedDescription;
     private final String clientName;
     private final String vehicleDescription;
-    private final ServiceStepTypeDTO serviceStep;
-    private final Deque<ServiceStepDTO> steps;
+    private final List<ServiceStepDTO> steps;
     private final boolean currentStepWasFinished;
 
     /**
@@ -30,22 +29,16 @@ public class ServiceOrderDTO
      * @param id identificador único da ordem de serviço
      * @param clientID identificador do cliente
      * @param vehicleID identificador do veículo
-     * @param serviceStep tipo da etapa atual do serviço
-     * @param shortDescription descrição curta do serviço
-     * @param detailedDescription descrição detalhada do serviço
      * @param clientName nome do cliente
      * @param vehicleDescription descrição do veículo
      * @param currentStepWasFinished indica se a etapa atual foi finalizada
      * @param steps coleção de etapas do serviço
      */
-    public ServiceOrderDTO(UUID id, UUID clientID, UUID vehicleID, ServiceStepTypeDTO serviceStep, String shortDescription, String detailedDescription, String clientName, String vehicleDescription, boolean currentStepWasFinished, Deque<ServiceStepDTO> steps)
+    public ServiceOrderDTO(UUID id, UUID clientID, UUID vehicleID, String clientName, String vehicleDescription, boolean currentStepWasFinished, List<ServiceStepDTO> steps)
     {
         this.id = id;
         this.clientID = clientID;
         this.vehicleID = vehicleID;
-        this.serviceStep = serviceStep;
-        this.shortDescription = shortDescription;
-        this.detailedDescription = detailedDescription;
         this.clientName = clientName;
         this.vehicleDescription = vehicleDescription;
         this.currentStepWasFinished = currentStepWasFinished;
@@ -79,27 +72,7 @@ public class ServiceOrderDTO
      */
     public ServiceStepTypeDTO getServiceStep()
     {
-        return serviceStep;
-    }
-
-    /**
-     * Obtém a descrição curta do serviço.
-     *
-     * @return descrição curta do serviço ou "Nao atribuida" se não houver descrição
-     */
-    public String getShortDescription()
-    {
-        return shortDescription == null ? "Nao atribuida" : shortDescription;
-    }
-
-    /**
-     * Obtém a descrição detalhada do serviço.
-     *
-     * @return descrição detalhada do serviço ou "Nao atribuida" se não houver descrição
-     */
-    public String getDetailedDescription()
-    {
-        return detailedDescription == null ? "Nao atribuida" : detailedDescription;
+        return ServiceStepTypeDTO.values()[steps.size()];
     }
 
     /**
@@ -137,7 +110,7 @@ public class ServiceOrderDTO
      *
      * @return coleção de etapas do serviço
      */
-    public Deque<ServiceStepDTO> getSteps()
+    public List<ServiceStepDTO> getSteps()
     {
         return steps;
     }
@@ -153,14 +126,14 @@ public class ServiceOrderDTO
     public String toString()
     {
         return String.format
-                (
-                        " - ID: %s%n - Estado: %s%n - Cliente: %s%n - Veiculo: %s%n - Etapas:%n%s",
-                        getID(),
-                        getServiceStep(),
-                        getClientName(),
-                        getVehicleDescription(),
-                        getStepsDisplay()
-                );
+        (
+            " - ID: %s%n - Estado: %s%n - Cliente: %s%n - Veiculo: %s%n - Etapas:%n%s",
+            getID(),
+            getServiceStep(),
+            getClientName(),
+            getVehicleDescription(),
+            getStepsDisplay()
+        );
     }
 
     /**
@@ -176,13 +149,12 @@ public class ServiceOrderDTO
     private String getStepsDisplay()
     {
         StringBuilder builder = new StringBuilder();
-        int stepIndex = steps.size();
 
-        for (ServiceStepDTO serviceStepDTO : steps)
+        for (int i = steps.size() - 1; i >= 0; i--)
         {
-            ServiceStepTypeDTO serviceStepTypeDTO = ServiceStepTypeDTO.values()[stepIndex];
-            builder.append(String.format(" ==> %s%n%s%n", serviceStepTypeDTO, serviceStepDTO));
-            stepIndex--;
+            ServiceStepDTO serviceStepDTO = steps.get(i);
+            ServiceStepTypeDTO serviceStepTypeDTO = ServiceStepTypeDTO.values()[i + 1];
+            builder.append(String.format(" ==> %s%n%s", serviceStepTypeDTO, serviceStepDTO));
         }
 
         return builder.toString();

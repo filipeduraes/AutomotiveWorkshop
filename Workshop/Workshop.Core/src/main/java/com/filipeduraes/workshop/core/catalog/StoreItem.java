@@ -25,7 +25,7 @@ public class StoreItem extends Product
      */
     public StoreItem(UUID id, String name, String description, String price, int stockAmount)
     {
-        super(id, name, description, price);
+        super(name, description, price);
 
         this.stockAmount = stockAmount;
     }

@@ -14,12 +14,12 @@ import java.util.UUID;
  */
 public class ServiceStep
 {
-    private final UUID employeeID;
-    private final LocalDateTime startDate;
+    private UUID employeeID;
     private LocalDateTime finishDate;
     private String shortDescription = "";
     private String detailedDescription = "";
     private boolean wasFinished = false;
+    private final LocalDateTime startDate;
 
     /**
      * Cria uma nova etapa de serviço associada a um funcionário.
@@ -32,6 +32,22 @@ public class ServiceStep
         this.employeeID = employeeID;
 
         startDate = LocalDateTime.now();
+    }
+
+    /**
+     * Construtor de cópia que cria uma nova etapa de serviço a partir de uma existente.
+     * Todos os atributos da etapa original são copiados para a nova instância.
+     *
+     * @param serviceStep A etapa de serviço a ser copiada
+     */
+    public ServiceStep(ServiceStep serviceStep)
+    {
+        employeeID = serviceStep.employeeID;
+        startDate = serviceStep.startDate;
+        finishDate = serviceStep.finishDate;
+        shortDescription = serviceStep.shortDescription;
+        detailedDescription = serviceStep.detailedDescription;
+        wasFinished = serviceStep.wasFinished;
     }
 
     /**
@@ -81,6 +97,16 @@ public class ServiceStep
     public String getDetailedDescription()
     {
         return detailedDescription;
+    }
+
+    /**
+     * Sets the employee ID associated with the service step.
+     *
+     * @param employeeID the unique identifier of the employee responsible for the step
+     */
+    public void setEmployeeID(UUID employeeID)
+    {
+        this.employeeID = employeeID;
     }
 
     /**

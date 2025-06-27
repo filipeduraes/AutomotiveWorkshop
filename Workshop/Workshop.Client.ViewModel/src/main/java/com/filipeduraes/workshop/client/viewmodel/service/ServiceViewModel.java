@@ -36,10 +36,15 @@ public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
      */
     public final Observer OnEditServiceRequest = new Observer();
 
+    /**
+     * Evento disparado quando há uma solicitação para editar uma etapa do serviço.
+     */
+    public final Observer OnEditServiceStepRequest = new Observer();
+
     private ServiceQueryType queryType = ServiceQueryType.GENERAL;
     private ServiceFilterType filterType = ServiceFilterType.NONE;
-    private FieldType editFieldType = FieldType.CLIENT;
     private String descriptionQueryPattern;
+    private int selectedStepIndex = -1;
 
     private String currentStepDetailedDescription;
     private String currentStepShortDescription;
@@ -145,6 +150,26 @@ public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
     }
 
     /**
+     * Obtém o índice da etapa atualmente selecionada na ordem de serviço.
+     *
+     * @return o índice da etapa selecionada
+     */
+    public int getSelectedStepIndex()
+    {
+        return selectedStepIndex;
+    }
+
+    /**
+     * Define o índice da etapa selecionada na ordem de serviço.
+     *
+     * @param selectedStepIndex o novo índice da etapa a ser selecionada
+     */
+    public void setSelectedStepIndex(int selectedStepIndex)
+    {
+        this.selectedStepIndex = selectedStepIndex;
+    }
+
+    /**
      * Reinicia os parâmetros de consulta para seus valores padrão.
      */
     public void resetQuery()
@@ -152,25 +177,5 @@ public class ServiceViewModel extends EntityViewModel<ServiceOrderDTO>
         queryType = ServiceQueryType.GENERAL;
         filterType = ServiceFilterType.NONE;
         descriptionQueryPattern = "";
-    }
-
-    /**
-     * Obtém o tipo de campo em edição.
-     *
-     * @return tipo do campo em edição
-     */
-    public FieldType getEditFieldType()
-    {
-        return editFieldType;
-    }
-
-    /**
-     * Define o tipo de campo em edição.
-     *
-     * @param editFieldType novo tipo de campo
-     */
-    public void setEditFieldType(FieldType editFieldType)
-    {
-        this.editFieldType = editFieldType;
     }
 }

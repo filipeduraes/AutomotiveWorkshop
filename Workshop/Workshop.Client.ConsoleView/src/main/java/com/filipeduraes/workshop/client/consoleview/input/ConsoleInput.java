@@ -48,6 +48,37 @@ public class ConsoleInput
     }
 
     /**
+     * Lê um número inteiro da entrada do console.
+     *
+     * @return número inteiro inserido pelo usuário
+     */
+    public static int readLineInteger()
+    {
+        return readLineInteger("");
+    }
+
+    /**
+     * Lê um número inteiro da entrada do console em uma faixa de valores.
+     *
+     * @param message mensagem a ser exibida antes da leitura
+     * @param minValue valor mínimo que o input pode receber
+     * @param maxValue valor máximo que o input pode receber
+     * @return número inteiro inserido pelo usuário
+     */
+    public static int readLineInteger(String message, int minValue, int maxValue)
+    {
+        int input = readLineInteger(message);
+
+        while (input < minValue || input > maxValue)
+        {
+            System.out.printf("O valor inserido deve estar entre %d e %d%n", minValue, maxValue);
+            input = readLineInteger(message);
+        }
+
+        return input;
+    }
+
+    /**
      * Exibe uma mensagem e lê um número inteiro da entrada do console.
      *
      * @param message mensagem a ser exibida antes da leitura
@@ -55,29 +86,25 @@ public class ConsoleInput
      */
     public static int readLineInteger(String message)
     {
-        System.out.println(message);
-        return readLineInteger();
-    }
+        int readInteger;
 
-    /**
-     * Lê um número inteiro da entrada do console.
-     *
-     * @return número inteiro inserido pelo usuário
-     */
-    public static int readLineInteger()
-    {
-        String input = ConsoleInput.readLine();
-        input = input.trim();
+        while (true)
+        {
+            try
+            {
+                String input = readLine(message);
+                input = input.trim();
 
-        try
-        {
-            int readInteger = Integer.parseInt(input);
-            return readInteger;
+                readInteger = Integer.parseInt(input);
+                break;
+            }
+            catch (Exception e)
+            {
+                System.out.println("Insira apenas numeros inteiros. Tente novamente.");
+            }
         }
-        catch (Exception e)
-        {
-            return -1;
-        }
+
+        return readInteger;
     }
 
     /**

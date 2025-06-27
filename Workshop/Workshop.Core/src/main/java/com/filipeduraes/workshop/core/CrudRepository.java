@@ -97,7 +97,7 @@ public class CrudRepository<TEntity extends WorkshopEntity>
      */
     public boolean updateEntity(TEntity updatedEntity)
     {
-        if(!loadedEntities.containsKey(updatedEntity.getID()) || updatedEntity.getID() == null)
+        if(updatedEntity == null || !loadedEntities.containsKey(updatedEntity.getID()) || updatedEntity.getID() == null)
         {
             return false;
         }

@@ -5,7 +5,6 @@ package com.filipeduraes.workshop.core.catalog;
 import com.filipeduraes.workshop.core.WorkshopEntity;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 /**
  * Representa um produto ou serviço que pode ser vendido na oficina.
@@ -23,16 +22,29 @@ public class Product extends WorkshopEntity
     /**
      * Cria uma nova instância de produto ou serviço.
      *
-     * @param id Identificador único do produto
      * @param name Nome do produto ou serviço
      * @param description Descrição detalhada do produto ou serviço
      * @param price Preço do produto ou serviço em formato string
      */
-    public Product(UUID id, String name, String description, String price)
+    public Product(String name, String description, String price)
     {
         this.name = name;
         this.description = description;
         this.price = new BigDecimal(price);
+    }
+
+    /**
+     * Cria uma nova instância de Product com base em outro objeto Product.
+     *
+     * @param product Objeto Product a partir do qual as propriedades serão copiadas
+     */
+    public Product(Product product)
+    {
+        name = product.name;
+        description = product.description;
+        price = product.price;
+
+        assignID(getID());
     }
 
     /**
