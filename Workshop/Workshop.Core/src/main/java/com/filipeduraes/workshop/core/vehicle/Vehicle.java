@@ -14,6 +14,8 @@ import java.util.UUID;
  */
 public class Vehicle extends WorkshopEntity
 {
+    private static int totalInstanceCount = 0;
+
     private UUID ownerID;
     private String model;
     private String color;
@@ -21,6 +23,11 @@ public class Vehicle extends WorkshopEntity
     private String licensePlate;
     private int year;
     private VehicleStatus status = VehicleStatus.RECEIVED;
+
+    public Vehicle()
+    {
+        totalInstanceCount++;
+    }
 
     /**
      * Cria uma nova instância de veículo com as informações fornecidas.
@@ -35,6 +42,8 @@ public class Vehicle extends WorkshopEntity
      */
     public Vehicle(UUID ownerID, String model, String color, String vinNumber, String licensePlate, int year)
     {
+        totalInstanceCount++;
+
         this.ownerID = ownerID;
         this.model = model;
         this.color = color;
@@ -121,6 +130,17 @@ public class Vehicle extends WorkshopEntity
     public UUID getOwnerID()
     {
         return ownerID;
+    }
+
+    /**
+     * Obtém o número total de instâncias de Vehicle que foram criadas.
+     * Questão 02 - Item 11
+     *
+     * @return o número total de instâncias de Vehicle criadas
+     */
+    public static int getTotalInstanceCount()
+    {
+        return totalInstanceCount;
     }
 
 

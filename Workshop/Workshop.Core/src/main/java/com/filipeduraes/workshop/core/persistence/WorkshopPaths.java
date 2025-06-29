@@ -28,6 +28,10 @@ public final class WorkshopPaths
      */
     public static final String SERVICES_PATH = DATA_DIRECTORY_PATH + "OngoingServices" + FILE_EXTENSION;
     /**
+     * Caminho para o arquivo com os dados dos elevadores automotivos
+     */
+    public static final String ELEVATORS_PATH = DATA_DIRECTORY_PATH + "Elevators" + FILE_EXTENSION;
+    /**
      * Caminho para o arquivo de serviços finalizados
      */
     public static final String FINISHED_SERVICES_PATH = DATA_DIRECTORY_PATH + "FinishedServices" + FILE_EXTENSION;

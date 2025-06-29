@@ -9,6 +9,7 @@ import com.filipeduraes.workshop.core.store.Sale;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Módulo responsável pelo gerenciamento de ordens de serviço e manutenções na oficina.
@@ -23,6 +24,7 @@ public class MaintenanceModule
     private final Set<UUID> openedServices;
     private final UUID loggedEmployeeID;
     private final ParameterizedType serviceIDSetType;
+    private final Elevator[] elevators;
 
     /**
      * Cria uma nova instância do módulo de manutenção.
@@ -38,6 +40,15 @@ public class MaintenanceModule
         serviceOrderRepository = new CrudRepository<>(WorkshopPaths.SERVICES_PATH, ServiceOrder.class);
         openedServices = Persistence.loadFile(WorkshopPaths.OPENED_SERVICES_PATH, serviceIDSetType, new HashSet<>());
         userServices = Persistence.loadFile(WorkshopPaths.getUserServicesPath(), serviceIDSetType, new HashSet<>());
+
+        Elevator[] defaultElevators =
+        {
+            new Elevator(ElevatorType.ALIGNMENT_AND_BALANCING),
+            new Elevator(ElevatorType.GENERAL_USE),
+            new Elevator(ElevatorType.GENERAL_USE)
+        };
+
+        elevators = Persistence.loadFile(WorkshopPaths.ELEVATORS_PATH, Elevator[].class, defaultElevators);
     }
 
     /**
@@ -102,11 +113,29 @@ public class MaintenanceModule
      */
     public boolean startInspection(UUID serviceID)
     {
+        return startInspection(serviceID, null);
+    }
+
+    /**
+     * Inicia o processo de inspeção de um serviço agendado, usando um elevador.
+     *
+     * @param serviceID ID do serviço a ser inspecionado
+     * @param usedElevatorType Tipo do elevador a ser utilizado
+     */
+    public boolean startInspection(UUID serviceID, ElevatorType usedElevatorType)
+    {
         ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
 
         if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.APPOINTMENT)
         {
-            serviceOrder.registerStep(new ServiceStep(loggedEmployeeID));
+            ServiceStep step = generateStepFromElevatorType(usedElevatorType);
+
+            if (step == null)
+            {
+                return false;
+            }
+
+            serviceOrder.registerStep(step);
             openedServices.remove(serviceID);
             userServices.add(serviceID);
 
@@ -136,6 +165,8 @@ public class MaintenanceModule
             {
                 ServiceStep currentStep = serviceOrder.getCurrentStep();
 
+                stopUsingElevatorFromStep(currentStep);
+
                 currentStep.setShortDescription(shortDescription);
                 currentStep.setDetailedDescription(detailedDescription);
                 currentStep.finishStep();
@@ -150,18 +181,23 @@ public class MaintenanceModule
         return false;
     }
 
+    public boolean startMaintenance(UUID serviceID)
+    {
+        return startMaintenance(serviceID, null);
+    }
+
     /**
      * Inicia o processo de manutenção de um serviço após a inspeção.
      *
      * @param serviceID ID do serviço a ser iniciado
      */
-    public boolean startMaintenance(UUID serviceID)
+    public boolean startMaintenance(UUID serviceID, ElevatorType usedElevatorType)
     {
         ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
 
         if (serviceOrder.getCurrentMaintenanceStep() == MaintenanceStep.ASSESSMENT)
         {
-            ServiceStep serviceStep = new ServiceStep(loggedEmployeeID);
+            ServiceStep serviceStep = generateStepFromElevatorType(usedElevatorType);
             serviceOrder.registerStep(serviceStep);
 
             return serviceOrderRepository.updateEntity(serviceOrder);
@@ -175,18 +211,18 @@ public class MaintenanceModule
      *
      * @param serviceID ID do serviço a ser finalizado
      * @param detailedDescription descrição do trabalho realizado
-     * @param services lista de produtos utilizados no serviço
-     * @param sale informações da compra associada ao serviço
      */
-    public boolean finishMaintenance(UUID serviceID, String shortDescription, String detailedDescription, ArrayList<PricedItem> services, Sale sale)
+    public boolean finishMaintenance(UUID serviceID, String shortDescription, String detailedDescription)
     {
         ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
         ServiceStep currentStep = serviceOrder.getCurrentStep();
+
+        stopUsingElevatorFromStep(currentStep);
+
         currentStep.setShortDescription(shortDescription);
         currentStep.setDetailedDescription(detailedDescription);
         currentStep.finishStep();
-
-        serviceOrder.finish(services, sale);
+        serviceOrder.finish();
 
         Set<UUID> finishedServices = Persistence.loadFile(WorkshopPaths.FINISHED_SERVICES_PATH, serviceIDSetType, new HashSet<>());
         finishedServices.add(serviceID);
@@ -206,6 +242,56 @@ public class MaintenanceModule
         removeServiceOrderFromEmployeeServices(serviceOrderID);
 
         serviceOrderRepository.deleteEntityWithID(serviceOrderID);
+    }
+
+    public boolean hasAvailableElevatorOfType(ElevatorType type)
+    {
+        Predicate<Elevator> isAvailableAndIsOfType = elevator -> elevator.isAvailableAndIsOfType(type);
+
+        return Arrays.stream(elevators).anyMatch(isAvailableAndIsOfType);
+    }
+
+    private ServiceStep generateStepFromElevatorType(ElevatorType usedElevatorType)
+    {
+        if (usedElevatorType != null)
+        {
+            int elevatorIndex = startUsingElevatorOfType(usedElevatorType);
+
+            if (elevatorIndex >= 0)
+            {
+                return new ServiceStep(loggedEmployeeID, elevatorIndex);
+            }
+
+            return null;
+        }
+
+        return new ServiceStep(loggedEmployeeID);
+    }
+
+    private int startUsingElevatorOfType(ElevatorType type)
+    {
+        for (int elevatorIndex = 0; elevatorIndex < elevators.length; elevatorIndex++)
+        {
+            Elevator elevator = elevators[elevatorIndex];
+            if (elevator.isAvailableAndIsOfType(type))
+            {
+                elevator.startUsing(loggedEmployeeID);
+                Persistence.saveFile(elevators, WorkshopPaths.ELEVATORS_PATH);
+                return elevatorIndex;
+            }
+        }
+
+        return -1;
+    }
+
+    private void stopUsingElevatorFromStep(ServiceStep currentStep)
+    {
+        if(currentStep.getIsUsingElevator())
+        {
+            int elevatorIndex = currentStep.getUsedElevatorIndex();
+            elevators[elevatorIndex].stopUsing();
+            Persistence.saveFile(elevators, WorkshopPaths.ELEVATORS_PATH);
+        }
     }
 
     private void addServiceOrderToEmployeeServices(UUID serviceOrderID, UUID employeeID)

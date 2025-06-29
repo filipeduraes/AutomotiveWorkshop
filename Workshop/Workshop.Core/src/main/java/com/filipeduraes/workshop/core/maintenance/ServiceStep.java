@@ -18,6 +18,7 @@ public class ServiceStep
     private LocalDateTime finishDate;
     private String shortDescription = "";
     private String detailedDescription = "";
+    private int usedElevatorIndex = -1;
     private boolean wasFinished = false;
     private final LocalDateTime startDate;
 
@@ -35,6 +36,21 @@ public class ServiceStep
     }
 
     /**
+     * Cria uma nova etapa de serviço associada a um funcionário e um elevador.
+     * A data de início é automaticamente definida como o momento atual.
+     *
+     * @param employeeID ID do funcionário responsável pela etapa
+     * @param usedElevatorIndex índice do elevador utilizado na etapa
+     */
+    public ServiceStep(UUID employeeID, int usedElevatorIndex)
+    {
+        this.employeeID = employeeID;
+
+        startDate = LocalDateTime.now();
+        this.usedElevatorIndex = usedElevatorIndex;
+    }
+
+    /**
      * Construtor de cópia que cria uma nova etapa de serviço a partir de uma existente.
      * Todos os atributos da etapa original são copiados para a nova instância.
      *
@@ -48,6 +64,7 @@ public class ServiceStep
         shortDescription = serviceStep.shortDescription;
         detailedDescription = serviceStep.detailedDescription;
         wasFinished = serviceStep.wasFinished;
+        usedElevatorIndex = serviceStep.usedElevatorIndex;
     }
 
     /**
@@ -147,5 +164,25 @@ public class ServiceStep
     public boolean getWasFinished()
     {
         return wasFinished;
+    }
+
+    /**
+     * Verifica se a etapa de serviço está utilizando um elevador.
+     *
+     * @return true se está usando elevador, false caso contrário
+     */
+    public boolean getIsUsingElevator()
+    {
+        return usedElevatorIndex >= 0;
+    }
+
+    /**
+     * Obtém o índice do elevador utilizado na etapa de serviço.
+     *
+     * @return índice do elevador ou −1 se nenhum elevador estiver em uso
+     */
+    public int getUsedElevatorIndex()
+    {
+        return usedElevatorIndex;
     }
 }

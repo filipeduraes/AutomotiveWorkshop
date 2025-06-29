@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
  */
 public class Sale extends WorkshopEntity
 {
-    private LocalDateTime date;
-    private StoreItem storeItemSnapshot;
-    private int quantity;
+    private final LocalDateTime date;
+    private final StoreItem storeItemSnapshot;
+    private final int quantity;
 
     /**
      * Cria uma nova venda com o item e quantidade especificados.

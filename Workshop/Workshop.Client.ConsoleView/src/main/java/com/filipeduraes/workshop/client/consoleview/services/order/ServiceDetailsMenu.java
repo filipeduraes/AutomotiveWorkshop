@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.general.MenuOption;
+import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.dtos.ServiceStepTypeDTO;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
@@ -24,6 +25,7 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceOrderViewModel,
 {
     private static final String ASSESSMENT_TEXT = "inspecao";
     private static final String MAINTENANCE_TEXT = "manutencao";
+    private final String[] elevatorOptions = {"Nao", "Servicos Gerais", "Alinhamento e Balanceamento"};
 
     /**
      * Obtém o nome de exibição do menu.
@@ -86,6 +88,21 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceOrderViewModel,
 
         if (canStartNextStep(selectedService))
         {
+            int choice = ConsoleInput.readOptionFromList("Precisa de um elevador?", elevatorOptions);
+            viewModel.setSelectedElevatorTypeIndex(-1);
+
+            if(choice > 0)
+            {
+                viewModel.setSelectedElevatorTypeIndex(choice - 1);
+                viewModel.OnElevatorTypeCheckRequest.broadcast();
+
+                if(!viewModel.getRequestWasSuccessful())
+                {
+                    System.out.println("Nao ha nenhum elevador disponivel desse tipo. Aguarde e tente novamente mais tarde.");
+                    return MenuResult.pop();
+                }
+            }
+
             viewModel.OnStartStepRequest.broadcast();
 
             if (viewModel.getRequestWasSuccessful())

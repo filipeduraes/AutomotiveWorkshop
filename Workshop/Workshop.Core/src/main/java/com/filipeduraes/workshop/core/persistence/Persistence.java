@@ -98,19 +98,21 @@ public final class Persistence
      * @param defaultValue valor padrão caso ocorra erro
      * @return dados carregados ou valor padrão em caso de erro
      */
-    public static <T> T loadFile(String path, ParameterizedType type, T defaultValue)
+    public static <T> T loadFile(String path, Type type, T defaultValue)
     {
         try
         {
             path = appendPathSuffix(path);
             Path filePath = Path.of(path);
+            boolean pathExistedBefore = Files.exists(filePath);
+
             ensureUsersDirectoriesAndFileExists(filePath);
             String obfuscatedUsers = Files.readString(filePath, StandardCharsets.UTF_8);
 
             String json = UseObfuscation ? deobfuscate(obfuscatedUsers) : obfuscatedUsers;
             T result = gson.fromJson(json, type);
 
-            return result == null ? defaultValue : result;
+            return (result == null || !pathExistedBefore) ? defaultValue : result;
         }
         catch (IOException exception)
         {

@@ -3,6 +3,7 @@ package com.filipeduraes.workshop.core.maintenance;
 
 import com.filipeduraes.workshop.core.WorkshopEntity;
 import com.filipeduraes.workshop.core.catalog.PricedItem;
+import com.filipeduraes.workshop.core.catalog.ServiceItem;
 import com.filipeduraes.workshop.core.store.Sale;
 
 import java.util.*;
@@ -17,9 +18,9 @@ import java.util.*;
 public class ServiceOrder extends WorkshopEntity
 {
     private final List<ServiceStep> steps = new ArrayList<>();
-    private List<PricedItem> services = new ArrayList<>();
+    private List<ServiceItem> services = new ArrayList<>();
+    private List<Sale> sales = new ArrayList<>();
 
-    private Sale sale;
     private UUID clientID;
     private UUID vehicleID;
     private boolean finished = false;
@@ -46,7 +47,7 @@ public class ServiceOrder extends WorkshopEntity
     {
         vehicleID = serviceOrder.vehicleID;
         clientID = serviceOrder.clientID;
-        sale = serviceOrder.sale;
+        sales = serviceOrder.sales;
         finished = serviceOrder.finished;
         services = serviceOrder.services;
 
@@ -55,9 +56,9 @@ public class ServiceOrder extends WorkshopEntity
             steps.add(new ServiceStep(step));
         }
 
-        for (PricedItem service : serviceOrder.services)
+        for (ServiceItem service : serviceOrder.services)
         {
-            services.add(new PricedItem(service));
+            services.add(new ServiceItem(service));
         }
 
         assignID(serviceOrder.getID());
@@ -124,14 +125,9 @@ public class ServiceOrder extends WorkshopEntity
 
     /**
      * Finaliza a ordem de serviço.
-     *
-     * @param services lista de produtos/serviços utilizados
-     * @param sale informações da compra associada
      */
-    public void finish(ArrayList<PricedItem> services, Sale sale)
+    public void finish()
     {
-        this.services = services;
-        this.sale = sale;
         finishCurrentStep();
 
         finished = true;
@@ -195,6 +191,16 @@ public class ServiceOrder extends WorkshopEntity
     public List<ServiceStep> getSteps()
     {
         return steps;
+    }
+
+    public void registerSale(Sale sale)
+    {
+        sales.add(sale);
+    }
+
+    public void registerService(ServiceItem service)
+    {
+
     }
 
     private void finishCurrentStep()

@@ -13,6 +13,7 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceQueryType;
 import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.client.Client;
+import com.filipeduraes.workshop.core.maintenance.ElevatorType;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.maintenance.ServiceStep;
@@ -66,6 +67,7 @@ public class ServiceController
         serviceOrderViewModel.OnEditServiceRequest.addListener(this::editSelectedService);
         serviceOrderViewModel.OnEditServiceStepRequest.addListener(this::editSelectedServiceStep);
         serviceOrderViewModel.OnDeleteRequest.addListener(this::deleteSelectedService);
+        serviceOrderViewModel.OnElevatorTypeCheckRequest.addListener(this::checkElevatorAvailability);
     }
 
     /**
@@ -82,6 +84,7 @@ public class ServiceController
         serviceOrderViewModel.OnEditServiceRequest.removeListener(this::editSelectedService);
         serviceOrderViewModel.OnEditServiceStepRequest.removeListener(this::editSelectedServiceStep);
         serviceOrderViewModel.OnDeleteRequest.removeListener(this::deleteSelectedService);
+        serviceOrderViewModel.OnElevatorTypeCheckRequest.removeListener(this::checkElevatorAvailability);
     }
 
     private void registerNewService()
@@ -113,15 +116,19 @@ public class ServiceController
         ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(selectedServiceOrderID);
         boolean canStartNextStep = serviceOrder.getCurrentStepWasFinished();
 
+        int selectedElevatorTypeIndex = serviceOrderViewModel.getSelectedElevatorTypeIndex();
+        boolean isValidElevatorType = selectedElevatorTypeIndex >= 0 && selectedElevatorTypeIndex < ElevatorType.values().length;
+        ElevatorType elevatorType = isValidElevatorType ? ElevatorType.values()[selectedElevatorTypeIndex] : null;
+
         if (canStartNextStep)
         {
             if (serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.APPOINTMENT)
             {
-                canStartNextStep = maintenanceModule.startInspection(selectedServiceOrderID);
+                canStartNextStep = maintenanceModule.startInspection(selectedServiceOrderID, elevatorType);
             }
             else if (serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
             {
-                canStartNextStep = maintenanceModule.startMaintenance(selectedServiceOrderID);
+                canStartNextStep = maintenanceModule.startMaintenance(selectedServiceOrderID, elevatorType);
             }
 
             requestDetailedServiceInfo();
@@ -310,6 +317,21 @@ public class ServiceController
         UUID selectedServiceID = serviceOrderViewModel.getSelectedDTO().getID();
         MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
         maintenanceModule.deleteServiceOrder(selectedServiceID);
+    }
+
+    private void checkElevatorAvailability()
+    {
+        int selectedElevatorTypeIndex = serviceOrderViewModel.getSelectedElevatorTypeIndex();
+
+        if(selectedElevatorTypeIndex < 0 || selectedElevatorTypeIndex >= ElevatorType.values().length)
+        {
+            serviceOrderViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        ElevatorType selectedElevatorType = ElevatorType.values()[selectedElevatorTypeIndex];
+        boolean hasElevator = workshop.getMaintenanceModule().hasAvailableElevatorOfType(selectedElevatorType);
+        serviceOrderViewModel.setRequestWasSuccessful(hasElevator);
     }
 
     private ServiceOrder applyEditingsToServiceOrderStep(ServiceOrder originalServiceOrder, int selectedStepIndex)

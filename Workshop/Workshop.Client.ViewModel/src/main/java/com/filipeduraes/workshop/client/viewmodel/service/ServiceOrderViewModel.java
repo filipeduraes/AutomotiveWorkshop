@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.client.viewmodel.service;
 
 import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
+import com.filipeduraes.workshop.utils.ConsumerObserver;
 import com.filipeduraes.workshop.utils.Observer;
 
 /**
@@ -40,10 +41,16 @@ public class ServiceOrderViewModel extends EntityViewModel<ServiceOrderDTO>
      */
     public final Observer OnEditServiceStepRequest = new Observer();
 
+    /**
+     * Evento disparado quando há uma solicitação para verificar se há um elevador disponível.
+     */
+    public final Observer OnElevatorTypeCheckRequest = new Observer();
+
     private ServiceQueryType queryType = ServiceQueryType.GENERAL;
     private ServiceFilterType filterType = ServiceFilterType.NONE;
     private String descriptionQueryPattern;
     private int selectedStepIndex = -1;
+    private int selectedElevatorTypeIndex = -1;
 
     private String currentStepDetailedDescription;
     private String currentStepShortDescription;
@@ -166,6 +173,27 @@ public class ServiceOrderViewModel extends EntityViewModel<ServiceOrderDTO>
     public void setSelectedStepIndex(int selectedStepIndex)
     {
         this.selectedStepIndex = selectedStepIndex;
+    }
+
+
+    /**
+     * Obtém o índice do tipo de elevador atualmente selecionado.
+     *
+     * @return o índice do tipo de elevador selecionado
+     */
+    public int getSelectedElevatorTypeIndex()
+    {
+        return selectedElevatorTypeIndex;
+    }
+
+    /**
+     * Define o índice do tipo de elevador selecionado.
+     *
+     * @param selectedElevatorTypeIndex o novo índice do tipo de elevador a ser selecionado
+     */
+    public void setSelectedElevatorTypeIndex(int selectedElevatorTypeIndex)
+    {
+        this.selectedElevatorTypeIndex = selectedElevatorTypeIndex;
     }
 
     /**
