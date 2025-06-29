@@ -48,8 +48,9 @@ public class WorkshopClient
         EmployeeController employeeController = new EmployeeController(viewModelRegistry.getEmployeeViewModel(), workshop.getAuthModule());
         ClientController clientController = new ClientController(viewModelRegistry.getClientViewModel(), workshop.getClientRepository());
         VehicleController vehicleController = new VehicleController(viewModelRegistry, workshop);
-        ServiceController serviceController = new ServiceController(viewModelRegistry, workshop);
+        ServiceOrderController serviceOrderController = new ServiceOrderController(viewModelRegistry, workshop);
         InventoryController inventoryController = new InventoryController(viewModelRegistry, workshop);
+        ServiceItemController serviceItemController = new ServiceItemController(viewModelRegistry, workshop);
 
         boolean isFirstAccess = workshop.getAuthModule().isFirstAccess();
         IWorkshopMenu initialMenu = isFirstAccess ? new FirstAccessMenu() : new LogInMenu();
@@ -60,8 +61,9 @@ public class WorkshopClient
         employeeController.dispose();
         clientController.dispose();
         vehicleController.dispose();
-        serviceController.dispose();
+        serviceOrderController.dispose();
         inventoryController.dispose();
+        serviceItemController.dispose();
 
         workshop.dispose();
     }

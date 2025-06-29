@@ -2,8 +2,11 @@
 
 package com.filipeduraes.workshop.client.model.mappers;
 
+import com.filipeduraes.workshop.client.dtos.SaleDTO;
 import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
 import com.filipeduraes.workshop.core.catalog.StoreItem;
+import com.filipeduraes.workshop.core.store.Sale;
+import com.filipeduraes.workshop.utils.TextUtils;
 
 public class InventoryMapper
 {
@@ -27,6 +30,15 @@ public class InventoryMapper
             storeItemDTO.getDescription(),
             storeItemDTO.getPrice(),
             storeItemDTO.getStockAmount()
+        );
+    }
+
+    public static SaleDTO toSaleDTO(Sale sale)
+    {
+        return new SaleDTO
+        (
+            toDTO(sale.getStoreItemSnapshot()),
+            sale.getTotalPrice()
         );
     }
 }

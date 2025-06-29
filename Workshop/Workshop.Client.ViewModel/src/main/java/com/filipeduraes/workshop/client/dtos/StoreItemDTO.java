@@ -2,91 +2,71 @@
 
 package com.filipeduraes.workshop.client.dtos;
 
-import com.filipeduraes.workshop.utils.TextUtils;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class StoreItemDTO
+/**
+ * Representa um item de estoque da loja, contendo informações como identificador,
+ * nome, descrição, preço e quantidade em estoque.
+ *
+ * @author Filipe Durães
+ */
+public class StoreItemDTO extends PricedItemDTO
 {
-    private UUID id;
-    private String name;
-    private String description;
-    private BigDecimal price;
     private final int stockAmount;
 
+    /**
+     * Cria um novo item de estoque com todas as informações especificadas.
+     *
+     * @param id identificador único do item
+     * @param name nome do item
+     * @param description descrição do item
+     * @param price preço do item
+     * @param stockAmount quantidade em estoque
+     */
     public StoreItemDTO(UUID id, String name, String description, BigDecimal price, int stockAmount)
     {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
+        super(id, name, description, price);
         this.stockAmount = stockAmount;
     }
 
+    /**
+     * Cria um novo item de estoque sem um identificador específico.
+     *
+     * @param name nome do item
+     * @param description descrição do item
+     * @param price preço do item
+     * @param stockAmount quantidade em estoque
+     */
     public StoreItemDTO(String name, String description, BigDecimal price, int stockAmount)
     {
-        this.name = name;
-        this.description = description;
-        this.price = price;
+        super(name, description, price);
         this.stockAmount = stockAmount;
     }
 
-    public UUID getId()
-    {
-        return id;
-    }
-
-    public void setId(UUID id)
-    {
-        this.id = id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    public BigDecimal getPrice()
-    {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price)
-    {
-        this.price = price;
-    }
-
+    /**
+     * Obtém a quantidade disponível em estoque.
+     *
+     * @return quantidade em estoque
+     */
     public int getStockAmount()
     {
         return stockAmount;
     }
 
+    /**
+     * Retorna uma representação textual do item de estoque, incluindo todas as suas informações.
+     *
+     * @return string formatada com as informações do item
+     */
     @Override
     public String toString()
     {
         return String.format
         (
-            "ID: %s%n > Nome: %s%n > Descricao: %s%n > Preco: %s%n > Quantidade no estoque: %s",
+            " > ID: %s%n%s%n > Quantidade no estoque: %s",
             getId(),
-            getName(),
-            getDescription(),
-            TextUtils.formatPrice(getPrice()),
+            super.toString(),
             getStockAmount()
         );
     }

@@ -44,7 +44,7 @@ public class QueryServicesMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceViewModel();
+        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
 
         if (lastSelectedFilter == ServiceFilterType.NONE)
         {

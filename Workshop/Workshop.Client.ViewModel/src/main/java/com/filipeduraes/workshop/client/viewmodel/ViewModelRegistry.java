@@ -3,14 +3,14 @@
 package com.filipeduraes.workshop.client.viewmodel;
 
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
-import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
+import com.filipeduraes.workshop.client.dtos.PricedItemDTO;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 
 /**
  * Registro central de todos os ViewModels disponíveis na aplicação.
  * Esta classe gerencia as instâncias únicas de cada ViewModel, fornecendo
- * acesso centralizado a eles através de getters.
+ * acesso centralizado a eles por getters.
  *
  * @author Filipe Durães
  */
@@ -21,6 +21,7 @@ public class ViewModelRegistry
     private final ServiceOrderViewModel serviceOrderViewModel;
     private final EmployeeViewModel employeeViewModel;
     private final EntityViewModel<VehicleDTO> vehicleViewModel;
+    private final EntityViewModel<PricedItemDTO> serviceItemsViewModel;
     private final InventoryViewModel inventoryViewModel;
 
     /**
@@ -33,6 +34,7 @@ public class ViewModelRegistry
         serviceOrderViewModel = new ServiceOrderViewModel();
         employeeViewModel = new EmployeeViewModel();
         vehicleViewModel = new EntityViewModel<>();
+        serviceItemsViewModel = new EntityViewModel<>();
         inventoryViewModel = new InventoryViewModel();
     }
 
@@ -51,7 +53,7 @@ public class ViewModelRegistry
      *
      * @return o ViewModel de serviços
      */
-    public ServiceOrderViewModel getServiceViewModel()
+    public ServiceOrderViewModel getServiceOrderViewModel()
     {
         return serviceOrderViewModel;
     }
@@ -74,6 +76,16 @@ public class ViewModelRegistry
     public EntityViewModel<VehicleDTO> getVehicleViewModel()
     {
         return vehicleViewModel;
+    }
+
+    /**
+     * Obtém o ViewModel para operações relacionadas aos itens de serviço.
+     *
+     * @return o ViewModel de itens de serviço
+     */
+    public EntityViewModel<PricedItemDTO> getServiceItemsViewModel()
+    {
+        return serviceItemsViewModel;
     }
 
     /**

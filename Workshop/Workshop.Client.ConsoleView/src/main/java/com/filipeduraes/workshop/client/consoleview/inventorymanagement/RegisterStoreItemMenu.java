@@ -11,7 +11,7 @@ import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 
 import java.math.BigDecimal;
 
-public class RegisterNewStoreItemMenu implements IWorkshopMenu
+public class RegisterStoreItemMenu implements IWorkshopMenu
 {
     @Override
     public String getMenuDisplayName()

@@ -3,6 +3,7 @@
 package com.filipeduraes.workshop.core.catalog;
 
 import com.filipeduraes.workshop.core.WorkshopEntity;
+import com.filipeduraes.workshop.utils.TextUtils;
 
 import java.math.BigDecimal;
 
@@ -105,5 +106,16 @@ public class PricedItem extends WorkshopEntity
     public void setPrice(BigDecimal price)
     {
         this.price = price;
+    }
+
+    /**
+     * Obtém uma descrição formatada do item para exibição em lista,
+     * combinando o seu preço.
+     *
+     * @return descrição formatada do item no formato "nome - preço"
+     */
+    public String getListDescription()
+    {
+        return String.format("%s - %s", getName(), TextUtils.formatPrice(getPrice()));
     }
 }

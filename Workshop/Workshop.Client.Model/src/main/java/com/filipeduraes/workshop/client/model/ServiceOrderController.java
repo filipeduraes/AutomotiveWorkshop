@@ -3,6 +3,7 @@
 package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.*;
+import com.filipeduraes.workshop.client.model.mappers.ServiceItemMapper;
 import com.filipeduraes.workshop.client.model.mappers.ServiceOrderMapper;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
@@ -12,6 +13,8 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceFilterType;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceQueryType;
 import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.Workshop;
+import com.filipeduraes.workshop.core.catalog.PricedItem;
+import com.filipeduraes.workshop.core.catalog.ServiceItem;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.ElevatorType;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
@@ -32,11 +35,12 @@ import java.util.stream.Collectors;
  *
  * @author Filipe Durães
  */
-public class ServiceController
+public class ServiceOrderController
 {
     private final ServiceOrderViewModel serviceOrderViewModel;
     private final EntityViewModel<VehicleDTO> vehicleViewModel;
     private final EntityViewModel<ClientDTO> clientViewModel;
+    private final EntityViewModel<PricedItemDTO> serviceItemViewModel;
     private final EmployeeViewModel employeeViewModel;
     private final Workshop workshop;
 
@@ -50,12 +54,13 @@ public class ServiceController
      * @param viewModelRegistry registro contendo as referências para os ViewModels
      * @param workshop instância principal da oficina contendo os módulos do sistema
      */
-    public ServiceController(ViewModelRegistry viewModelRegistry, Workshop workshop)
+    public ServiceOrderController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
-        serviceOrderViewModel = viewModelRegistry.getServiceViewModel();
+        serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
         vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         clientViewModel = viewModelRegistry.getClientViewModel();
         employeeViewModel = viewModelRegistry.getEmployeeViewModel();
+        serviceItemViewModel = viewModelRegistry.getServiceItemsViewModel();
 
         this.workshop = workshop;
 
@@ -68,6 +73,7 @@ public class ServiceController
         serviceOrderViewModel.OnEditServiceStepRequest.addListener(this::editSelectedServiceStep);
         serviceOrderViewModel.OnDeleteRequest.addListener(this::deleteSelectedService);
         serviceOrderViewModel.OnElevatorTypeCheckRequest.addListener(this::checkElevatorAvailability);
+        serviceOrderViewModel.OnAddServiceItemRequested.addListener(this::addServiceItem);
     }
 
     /**
@@ -85,6 +91,7 @@ public class ServiceController
         serviceOrderViewModel.OnEditServiceStepRequest.removeListener(this::editSelectedServiceStep);
         serviceOrderViewModel.OnDeleteRequest.removeListener(this::deleteSelectedService);
         serviceOrderViewModel.OnElevatorTypeCheckRequest.removeListener(this::checkElevatorAvailability);
+        serviceOrderViewModel.OnAddServiceItemRequested.removeListener(this::addServiceItem);
     }
 
     private void registerNewService()
@@ -332,6 +339,33 @@ public class ServiceController
         ElevatorType selectedElevatorType = ElevatorType.values()[selectedElevatorTypeIndex];
         boolean hasElevator = workshop.getMaintenanceModule().hasAvailableElevatorOfType(selectedElevatorType);
         serviceOrderViewModel.setRequestWasSuccessful(hasElevator);
+    }
+
+    private void addServiceItem()
+    {
+        if(!serviceOrderViewModel.hasLoadedDTO() || !serviceItemViewModel.hasLoadedDTO())
+        {
+            serviceOrderViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrderDTO serviceOrderDTO = serviceOrderViewModel.getSelectedDTO();
+        ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(serviceOrderDTO.getID());
+
+        if(serviceOrder == null)
+        {
+            serviceOrderViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        PricedItemDTO serviceItemDTO = serviceItemViewModel.getSelectedDTO();
+        PricedItem pricedItem = ServiceItemMapper.fromDTO(serviceItemDTO);
+
+        serviceOrder.registerService(pricedItem);
+        boolean couldUpdate = maintenanceModule.getServiceOrderRepository().updateEntity(serviceOrder);
+
+        serviceOrderViewModel.setRequestWasSuccessful(couldUpdate);
     }
 
     private ServiceOrder applyEditingsToServiceOrderStep(ServiceOrder originalServiceOrder, int selectedStepIndex)

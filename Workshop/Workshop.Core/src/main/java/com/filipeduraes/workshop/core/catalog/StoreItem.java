@@ -2,6 +2,8 @@
 
 package com.filipeduraes.workshop.core.catalog;
 
+import com.filipeduraes.workshop.utils.TextUtils;
+
 import java.math.BigDecimal;
 
 /**
@@ -63,12 +65,13 @@ public class StoreItem extends PricedItem
 
     /**
      * Obtém uma descrição formatada do item para exibição em lista,
-     * combinando o nome do item com sua quantidade em estoque.
+     * combinando o nome do item com sua quantidade em estoque e seu preço.
      *
-     * @return descrição formatada do item no formato "nome (quantidade)"
+     * @return descrição formatada do item no formato "nome (quantidade) - preço"
      */
+    @Override
     public String getListDescription()
     {
-        return String.format("%s (%d)", getName(), getStockAmount());
+        return String.format("%s (%d) - %s", getName(), getStockAmount(), TextUtils.formatPrice(getPrice()));
     }
 }

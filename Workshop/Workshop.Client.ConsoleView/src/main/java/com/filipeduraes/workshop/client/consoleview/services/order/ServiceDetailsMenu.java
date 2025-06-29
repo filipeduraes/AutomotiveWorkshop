@@ -47,7 +47,7 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceOrderViewModel,
     @Override
     protected ServiceOrderViewModel findViewModel(MenuManager menuManager)
     {
-        return menuManager.getViewModelRegistry().getServiceViewModel();
+        return menuManager.getViewModelRegistry().getServiceOrderViewModel();
     }
 
     /**
@@ -76,6 +76,7 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceOrderViewModel,
         }
 
         newOptions.add(new MenuOption("Editar ordem de servico", this::editService));
+        newOptions.add(new MenuOption("Adicionar servico Prestado", this::redirectToAddService));
 
         options.addAll(0, newOptions);
         return options;
@@ -138,6 +139,11 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceOrderViewModel,
         menuManager.getViewModelRegistry().getClientViewModel().resetSelectedDTO();
         menuManager.getViewModelRegistry().getVehicleViewModel().resetSelectedDTO();
         return MenuResult.push(new EditServiceMenu());
+    }
+
+    private MenuResult redirectToAddService(MenuManager menuManager)
+    {
+        return MenuResult.push(new AddServiceItemToServiceOrder());
     }
 
     private boolean canStartNextStep(ServiceOrderDTO service)

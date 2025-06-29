@@ -58,7 +58,7 @@ public class CreateServiceOrderMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        final ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceViewModel();
+        final ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
 
         if (!viewModelRegistry.getClientViewModel().hasLoadedDTO())
         {

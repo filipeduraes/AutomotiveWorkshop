@@ -1,7 +1,8 @@
 package com.filipeduraes.workshop.client.dtos;
 
-import com.filipeduraes.workshop.client.viewmodel.FieldType;
+import com.filipeduraes.workshop.utils.TextUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +22,12 @@ public class ServiceOrderDTO
     private final String clientName;
     private final String vehicleDescription;
     private final List<ServiceStepDTO> steps;
+    private final List<PricedItemDTO> serviceItems;
+    private final List<SaleDTO> sales;
     private final boolean currentStepWasFinished;
+
+    private static final String SUB_SEPARATOR = "--------------------------------------------------------";
+    private static final String SECTION_HEADER_SEPARATOR = "========================================================";
 
     /**
      * Constrói uma nova ordem de serviço com os parâmetros fornecidos.
@@ -34,7 +40,7 @@ public class ServiceOrderDTO
      * @param currentStepWasFinished indica se a etapa atual foi finalizada
      * @param steps coleção de etapas do serviço
      */
-    public ServiceOrderDTO(UUID id, UUID clientID, UUID vehicleID, String clientName, String vehicleDescription, boolean currentStepWasFinished, List<ServiceStepDTO> steps)
+    public ServiceOrderDTO(UUID id, UUID clientID, UUID vehicleID, String clientName, String vehicleDescription, boolean currentStepWasFinished, List<ServiceStepDTO> steps, List<PricedItemDTO> serviceItems, List<SaleDTO> sales)
     {
         this.id = id;
         this.clientID = clientID;
@@ -43,6 +49,8 @@ public class ServiceOrderDTO
         this.vehicleDescription = vehicleDescription;
         this.currentStepWasFinished = currentStepWasFinished;
         this.steps = steps;
+        this.serviceItems = serviceItems;
+        this.sales = sales;
     }
 
     /**
@@ -116,27 +124,6 @@ public class ServiceOrderDTO
     }
 
     /**
-     * Retorna uma representação em string da ordem de serviço.
-     * A string contém o ID, estado atual, cliente, veículo e todas as etapas
-     * do serviço em um formato estruturado.
-     *
-     * @return string formatada com os detalhes da ordem de serviço
-     */
-    @Override
-    public String toString()
-    {
-        return String.format
-        (
-            " - ID: %s%n - Estado: %s%n - Cliente: %s%n - Veiculo: %s%n - Etapas:%n%s",
-            getID(),
-            getServiceStep(),
-            getClientName(),
-            getVehicleDescription(),
-            getStepsDisplay()
-        );
-    }
-
-    /**
      * Obtém o identificador do veículo associado à ordem de serviço.
      *
      * @return identificador do veículo
@@ -146,17 +133,172 @@ public class ServiceOrderDTO
         return vehicleID;
     }
 
+    /**
+     * Retorna uma representação em string da ordem de serviço.
+     * A string contém o ID, estado atual, cliente, veículo e todas as etapas
+     * do serviço em um formato estruturado.
+     *
+     * @return string formatada com os detalhes da ordem de serviço
+     */
+    @Override
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(String.format("  ID:        %s%n", getID()));
+        builder.append(String.format("  Estado:    %s%n", getServiceStep()));
+        builder.append(String.format("  Cliente:   %s%n", getClientName()));
+        builder.append(String.format("  Veiculo:   %s%n", getVehicleDescription()));
+        builder.append(SUB_SEPARATOR).append("\n");
+
+        builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
+        builder.append("ETAPAS DO SERVICO\n");
+        builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+        builder.append(getStepsDisplay());
+        builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+
+        if(!serviceItems.isEmpty())
+        {
+            builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
+            builder.append("SERVICOS PRESTADOS\n");
+            builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+            builder.append(getServicesPerformedDisplay());
+            builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+        }
+
+        if(!sales.isEmpty())
+        {
+            builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
+            builder.append("PRODUTOS USADOS\n");
+            builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+            builder.append(getProductsUsedDisplay());
+            builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+        }
+
+        builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
+        builder.append("RESUMO FINANCEIRO\n");
+        builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+        builder.append(getFinancialSummaryDisplay());
+        builder.append(SECTION_HEADER_SEPARATOR);
+
+        return builder.toString();
+    }
+
+    /**
+     * Formata a exibição das etapas.
+     * @return string formatada das etapas
+     */
     private String getStepsDisplay()
     {
         StringBuilder builder = new StringBuilder();
 
-        for (int i = steps.size() - 1; i >= 0; i--)
+        if (getSteps() == null || getSteps().isEmpty())
         {
-            ServiceStepDTO serviceStepDTO = steps.get(i);
-            ServiceStepTypeDTO serviceStepTypeDTO = ServiceStepTypeDTO.values()[i + 1];
-            builder.append(String.format(" ==> %s%n%s", serviceStepTypeDTO, serviceStepDTO));
+            builder.append("Nenhuma etapa registrada para esta Ordem de Servico.\n");
+        }
+        else
+        {
+            for (int i = 0; i < getSteps().size(); i++)
+            {
+                ServiceStepDTO serviceStepDTO = getSteps().get(i);
+                ServiceStepTypeDTO serviceStepTypeDisplay = ServiceStepTypeDTO.values()[i + 1];
+
+                if (i > 0)
+                {
+                    builder.append(SUB_SEPARATOR).append("\n");
+                }
+
+                builder.append("### ").append(serviceStepTypeDisplay.toString()).append(" ###\n");
+
+                if (serviceStepDTO.getHasBeenFinished())
+                {
+                    builder.append(String.format("  > Descricao Curta:     %s%n", serviceStepDTO.getShortDescription()));
+                    builder.append(String.format("  > Descricao Detalhada: %s%n", serviceStepDTO.getDetailedDescription()));
+                    builder.append(String.format("  > Responsavel:         %s%n", serviceStepDTO.getOwner()));
+                    builder.append(String.format("  > Data de Inicio:      %s%n", serviceStepDTO.getStartDate()));
+                    builder.append(String.format("  > Data de Termino:     %s%n", serviceStepDTO.getEndDate()));
+                    builder.append(String.format("  > Estado:              Finalizada%n"));
+                }
+                else
+                {
+                    builder.append("  > Descricao:           Indisponivel\n");
+                    builder.append("  > Descricao Curta:     Indisponivel\n");
+                    builder.append(String.format("  > Responsavel:         %s%n", serviceStepDTO.getOwner()));
+                    builder.append(String.format("  > Data de Inicio:      %s%n", serviceStepDTO.getStartDate()));
+                    builder.append(String.format("  > Estado:              Em andamento%n"));
+                }
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Formata a exibição dos serviços prestados (PricedItemDTO).
+     *
+     * @return string formatada dos serviços prestados
+     */
+    private String getServicesPerformedDisplay()
+    {
+        StringBuilder builder = new StringBuilder();
+        BigDecimal totalServices = BigDecimal.ZERO;
+
+        for (PricedItemDTO service : serviceItems)
+        {
+            builder.append(String.format("- %-25s | %s%n", service.getName(), TextUtils.formatPrice(service.getPrice())));
+            totalServices = totalServices.add(service.getPrice());
         }
 
+        builder.append(SUB_SEPARATOR).append("\n");
+        builder.append(String.format("TOTAL SERVICOS:          | %s%n", TextUtils.formatPrice(totalServices)));
+
+        return builder.toString();
+    }
+
+    /**
+     * Formata a exibição dos produtos usados (SaleDTO).
+     * @return string formatada dos produtos usados
+     */
+    private String getProductsUsedDisplay()
+    {
+        StringBuilder builder = new StringBuilder();
+        BigDecimal totalProducts = BigDecimal.ZERO;
+
+        for (SaleDTO sale : sales)
+        {
+            String itemName = sale.getItem().getName();
+            builder.append(String.format("- %-25s | Subtotal: %s%n", itemName, TextUtils.formatPrice(sale.getSubtotal())));
+            totalProducts = totalProducts.add(sale.getSubtotal());
+        }
+
+        builder.append(SUB_SEPARATOR).append("\n");
+        builder.append(String.format("TOTAL PRODUTOS:          | %s%n", TextUtils.formatPrice(totalProducts)));
+
+        return builder.toString();
+    }
+
+    /**
+     * Formata o resumo financeiro.
+     *
+     * @return string formatada do resumo financeiro
+     */
+    private String getFinancialSummaryDisplay()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        BigDecimal totalServices = serviceItems.stream()
+                                        .map(PricedItemDTO::getPrice)
+                                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalProducts = sales.stream()
+                                        .map(SaleDTO::getSubtotal)
+                                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal grandTotal = totalServices.add(totalProducts);
+
+        builder.append(String.format("  Servicos: %s%n", TextUtils.formatPrice(totalServices)));
+        builder.append(String.format("  Produtos: %s%n", TextUtils.formatPrice(totalProducts)));
+        builder.append(SUB_SEPARATOR).append("\n");
+        builder.append(String.format("TOTAL GERAL OS: %s%n", TextUtils.formatPrice(grandTotal)));
         return builder.toString();
     }
 }

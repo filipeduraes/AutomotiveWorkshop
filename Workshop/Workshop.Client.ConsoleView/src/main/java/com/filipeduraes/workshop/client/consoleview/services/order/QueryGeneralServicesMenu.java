@@ -40,7 +40,7 @@ public class QueryGeneralServicesMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceViewModel();
+        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
         serviceOrderViewModel.setQueryType(ServiceQueryType.GENERAL);
         System.out.println("Servicos gerais selecionados");
 

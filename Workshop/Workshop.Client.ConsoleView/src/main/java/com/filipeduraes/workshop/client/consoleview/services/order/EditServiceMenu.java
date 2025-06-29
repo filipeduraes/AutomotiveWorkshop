@@ -89,7 +89,7 @@ public class EditServiceMenu implements IWorkshopMenu
 
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
         EntityViewModel<ClientDTO> clientViewModel = viewModelRegistry.getClientViewModel();
-        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceViewModel();
+        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
         EntityViewModel<VehicleDTO> vehicleViewModel = viewModelRegistry.getVehicleViewModel();
 
         if (!clientViewModel.hasLoadedDTO())
@@ -134,7 +134,7 @@ public class EditServiceMenu implements IWorkshopMenu
 
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
         EntityViewModel<VehicleDTO> vehicleViewModel = viewModelRegistry.getVehicleViewModel();
-        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceViewModel();
+        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
 
         if (!vehicleViewModel.hasLoadedDTO())
         {
@@ -166,7 +166,7 @@ public class EditServiceMenu implements IWorkshopMenu
     private MenuResult editStep(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceViewModel();
+        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
         List<ServiceStepDTO> steps = serviceOrderViewModel.getSelectedDTO().getSteps();
 
         EmployeeViewModel employeeViewModel = viewModelRegistry.getEmployeeViewModel();

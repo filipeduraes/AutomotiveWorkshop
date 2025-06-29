@@ -39,7 +39,7 @@ public class QueryUserServicesMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceViewModel();
+        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
         serviceOrderViewModel.setQueryType(ServiceQueryType.USER);
 
         System.out.println("Servicos do usuario selecionados");

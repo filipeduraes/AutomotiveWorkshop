@@ -25,7 +25,7 @@ public class FinishAssessmentMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
-        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceViewModel();
+        ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
         EmployeeViewModel employeeViewModel = viewModelRegistry.getEmployeeViewModel();
 
         if(!employeeViewModel.hasValidSelectedIndex())

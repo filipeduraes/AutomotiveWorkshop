@@ -193,14 +193,56 @@ public class ServiceOrder extends WorkshopEntity
         return steps;
     }
 
+    /**
+     * Registra uma nova venda realizada para a ordem de serviço
+     *
+     * @param sale venda realizada
+     */
     public void registerSale(Sale sale)
     {
         sales.add(sale);
     }
 
-    public void registerService(ServiceItem service)
+    /**
+     * Registra um novo serviço realizado e atribui o responsável atual a ele
+     *
+     * @param service serviço realizado
+     */
+    public void registerService(PricedItem service)
     {
+        UUID currentStepEmployeeID = getCurrentStep().getEmployeeID();
+        ServiceItem serviceItem = new ServiceItem(service, currentStepEmployeeID);
+        services.add(serviceItem);
+    }
 
+    /**
+     * Obtém todos os serviços prestados na ordem de serviço.
+     *
+     * @return os serviços prestados
+     */
+    public List<ServiceItem> getServices()
+    {
+        if(services == null)
+        {
+            services = new ArrayList<>();
+        }
+
+        return services;
+    }
+
+    /**
+     * Obtém todas as vendas realizadas na ordem de serviço.
+     *
+     * @return as vendas realizadas
+     */
+    public List<Sale> getSales()
+    {
+        if(sales == null)
+        {
+            sales = new ArrayList<>();
+        }
+
+        return sales;
     }
 
     private void finishCurrentStep()

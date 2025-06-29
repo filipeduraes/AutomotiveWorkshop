@@ -41,6 +41,18 @@ public class ServiceItem extends PricedItem
     }
 
     /**
+     * Cria uma cópia de um item existente e adiciona um responsável.
+     *
+     * @param pricedItem item a ser copiado
+     * @param employeeID ID do responsável pelo serviço
+     */
+    public ServiceItem(PricedItem pricedItem, UUID employeeID)
+    {
+        super(pricedItem);
+        this.employeeID = employeeID;
+    }
+
+    /**
      * Obtém o identificador único do colaborador responsável pelo serviço.
      *
      * @return identificador único do colaborador

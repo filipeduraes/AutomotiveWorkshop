@@ -1,29 +1,29 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.client.consoleview.inventorymanagement;
+package com.filipeduraes.workshop.client.consoleview.services.item;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
-import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
+import com.filipeduraes.workshop.client.dtos.PricedItemDTO;
+import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
-import com.filipeduraes.workshop.client.viewmodel.InventoryViewModel;
 
-public class EditStoreItemMenu implements IWorkshopMenu
+public class EditServiceItemMenu implements IWorkshopMenu
 {
     private final FieldType[] editableFields = { FieldType.NAME, FieldType.DESCRIPTION, FieldType.PRICE };
 
     @Override
     public String getMenuDisplayName()
     {
-        return "Editar Item do Inventario";
+        return "Editar item de servico";
     }
 
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
-        InventoryViewModel inventoryViewModel = menuManager.getViewModelRegistry().getInventoryViewModel();
+        EntityViewModel<PricedItemDTO> serviceItemsViewModel = menuManager.getViewModelRegistry().getServiceItemsViewModel();
 
         int selectedFieldIndex = ConsoleInput.readOptionFromList("Qual campo deseja editar?", editableFields, true);
 
@@ -33,7 +33,7 @@ public class EditStoreItemMenu implements IWorkshopMenu
             return MenuResult.pop();
         }
 
-        StoreItemDTO selectedDTO = inventoryViewModel.getSelectedDTO();
+        PricedItemDTO selectedDTO = serviceItemsViewModel.getSelectedDTO();
 
         switch (editableFields[selectedFieldIndex])
         {
@@ -42,12 +42,12 @@ public class EditStoreItemMenu implements IWorkshopMenu
             case PRICE -> selectedDTO.setPrice(ConsoleInput.readLinePositiveBigDecimal("Insira o novo preco do item"));
         }
 
-        inventoryViewModel.setFieldType(editableFields[selectedFieldIndex]);
-        inventoryViewModel.OnEditRequest.broadcast();
+        serviceItemsViewModel.setFieldType(editableFields[selectedFieldIndex]);
+        serviceItemsViewModel.OnEditRequest.broadcast();
 
-        if(inventoryViewModel.getRequestWasSuccessful())
+        if(serviceItemsViewModel.getRequestWasSuccessful())
         {
-            System.out.printf("Item editado com sucesso. Novos dados:%n%s%n", inventoryViewModel.getSelectedDTO());
+            System.out.printf("Item editado com sucesso. Novos dados:%n%s%n", serviceItemsViewModel.getSelectedDTO());
         }
         else
         {

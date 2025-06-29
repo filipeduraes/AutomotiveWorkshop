@@ -8,10 +8,10 @@ import com.filipeduraes.workshop.client.consoleview.client.ClientDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.client.ClientRegistrationMenu;
 import com.filipeduraes.workshop.client.consoleview.financial.ShowMonthSalesMenu;
 import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
-import com.filipeduraes.workshop.client.consoleview.inventorymanagement.RegisterNewStoreItemMenu;
-import com.filipeduraes.workshop.client.consoleview.inventorymanagement.RegisterPurchaseMenu;
-import com.filipeduraes.workshop.client.consoleview.inventorymanagement.RestockStoreItemMenu;
+import com.filipeduraes.workshop.client.consoleview.inventorymanagement.RegisterStoreItemMenu;
 import com.filipeduraes.workshop.client.consoleview.inventorymanagement.StoreItemDetailsMenu;
+import com.filipeduraes.workshop.client.consoleview.services.item.RegisterServiceItemMenu;
+import com.filipeduraes.workshop.client.consoleview.services.item.ServiceItemDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.services.order.CreateServiceOrderMenu;
 import com.filipeduraes.workshop.client.consoleview.services.order.QueryGeneralServicesMenu;
 import com.filipeduraes.workshop.client.consoleview.services.order.QueryOpenedServicesMenu;
@@ -68,13 +68,13 @@ public class MainMenu extends RedirectMenu
         {
             new RedirectMenu("Gerenciar itens do inventario", new IWorkshopMenu[]
             {
-                new RegisterNewStoreItemMenu(),
-                new RestockStoreItemMenu(),
-                new StoreItemDetailsMenu(),
-                new RegisterPurchaseMenu()
+                new RegisterStoreItemMenu(),
+                new StoreItemDetailsMenu()
             }),
             new RedirectMenu("Gerenciar servicos do catalogo", new IWorkshopMenu[]
             {
+                new RegisterServiceItemMenu(),
+                new ServiceItemDetailsMenu()
             })
         }
     );

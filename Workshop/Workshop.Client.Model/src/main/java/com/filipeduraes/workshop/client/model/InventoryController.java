@@ -56,6 +56,7 @@ public class InventoryController
         inventoryViewModel.OnEditRequest.addListener(this::editItem);
         inventoryViewModel.OnRegisterPurchaseRequest.addListener(this::registerPurchase);
         inventoryViewModel.OnMonthSalesReportRequest.addListener(this::generateMonthSalesReport);
+        inventoryViewModel.OnDeleteRequest.addListener(this::deleteItem);
     }
 
     /**
@@ -71,6 +72,7 @@ public class InventoryController
         inventoryViewModel.OnEditRequest.removeListener(this::editItem);
         inventoryViewModel.OnRegisterPurchaseRequest.removeListener(this::registerPurchase);
         inventoryViewModel.OnMonthSalesReportRequest.removeListener(this::generateMonthSalesReport);
+        inventoryViewModel.OnDeleteRequest.removeListener(this::deleteItem);
     }
 
     private void registerInventoryItem()
@@ -96,19 +98,11 @@ public class InventoryController
 
         switch (inventoryViewModel.getFieldType())
         {
-            case NAME ->
-            {
-                queriedStoreItems = storeItemsRepository.searchEntitiesWithPattern(inventoryViewModel.getSearchPattern(), PricedItem::getName);
-            }
-            case DESCRIPTION ->
-            {
-                queriedStoreItems = storeItemsRepository.searchEntitiesWithPattern(inventoryViewModel.getSearchPattern(), PricedItem::getName);
-            }
+            case NAME -> queriedStoreItems = storeItemsRepository.searchEntitiesWithPattern(inventoryViewModel.getSearchPattern(), PricedItem::getName);
+            case DESCRIPTION -> queriedStoreItems = storeItemsRepository.searchEntitiesWithPattern(inventoryViewModel.getSearchPattern(), PricedItem::getName);
         }
 
-        List<String> descriptions = queriedStoreItems.stream()
-                                                     .map(StoreItem::getListDescription)
-                                                     .toList();
+        List<String> descriptions = queriedStoreItems.stream().map(StoreItem::getListDescription).toList();
 
         inventoryViewModel.setFoundEntitiesDescriptions(descriptions);
         inventoryViewModel.setRequestWasSuccessful(true);
@@ -249,5 +243,14 @@ public class InventoryController
 
         inventoryViewModel.setMonthSaleReport(report);
         inventoryViewModel.setSaleTotalPrice(TextUtils.formatPrice(totalPrice));
+    }
+
+    private void deleteItem()
+    {
+        StoreItemDTO selectedDTO = inventoryViewModel.getSelectedDTO();
+        CrudRepository<StoreItem> itemsRepository = store.getCatalog().getStoreItemsRepository();
+        StoreItem deletedItem = itemsRepository.deleteEntityWithID(selectedDTO.getId());
+
+        inventoryViewModel.setRequestWasSuccessful(deletedItem != null);
     }
 }
