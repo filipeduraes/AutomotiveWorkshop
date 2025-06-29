@@ -46,6 +46,10 @@ public final class WorkshopPaths
      * Caminho para o arquivo do catálogo de produtos da loja
      */
     public static final String STORE_ITEMS_CATALOG_PATH = DATA_DIRECTORY_PATH + "StoreItems" + FILE_EXTENSION;
+    /**
+     * Caminho para o arquivo de todas as compras registradas
+     */
+    public static final String PURCHASES_PATH = DATA_DIRECTORY_PATH + "Purchases" + FILE_EXTENSION;
 
     private static UUID loggedUserID;
 

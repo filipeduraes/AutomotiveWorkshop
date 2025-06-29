@@ -6,9 +6,9 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
-import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
+import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 
-public class VehicleDetailsMenu extends EntityDetailsMenu<VehicleViewModel, VehicleDTO>
+public class VehicleDetailsMenu extends EntityDetailsMenu<EntityViewModel<VehicleDTO>, VehicleDTO>
 {
     private boolean alreadyRedirected = false;
 
@@ -19,7 +19,7 @@ public class VehicleDetailsMenu extends EntityDetailsMenu<VehicleViewModel, Vehi
     }
 
     @Override
-    protected VehicleViewModel findViewModel(MenuManager menuManager)
+    protected EntityViewModel<VehicleDTO> findViewModel(MenuManager menuManager)
     {
         return menuManager.getViewModelRegistry().getVehicleViewModel();
     }

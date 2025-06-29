@@ -2,7 +2,7 @@
 package com.filipeduraes.workshop.core.maintenance;
 
 import com.filipeduraes.workshop.core.WorkshopEntity;
-import com.filipeduraes.workshop.core.catalog.Product;
+import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.store.Purchase;
 
 import java.util.*;
@@ -17,7 +17,7 @@ import java.util.*;
 public class ServiceOrder extends WorkshopEntity
 {
     private final List<ServiceStep> steps = new ArrayList<>();
-    private List<Product> services = new ArrayList<>();
+    private List<PricedItem> services = new ArrayList<>();
 
     private Purchase purchase;
     private UUID clientID;
@@ -55,9 +55,9 @@ public class ServiceOrder extends WorkshopEntity
             steps.add(new ServiceStep(step));
         }
 
-        for (Product service : serviceOrder.services)
+        for (PricedItem service : serviceOrder.services)
         {
-            services.add(new Product(service));
+            services.add(new PricedItem(service));
         }
 
         assignID(serviceOrder.getID());
@@ -128,7 +128,7 @@ public class ServiceOrder extends WorkshopEntity
      * @param services lista de produtos/serviços utilizados
      * @param purchase informações da compra associada
      */
-    public void finish(ArrayList<Product> services, Purchase purchase)
+    public void finish(ArrayList<PricedItem> services, Purchase purchase)
     {
         this.services = services;
         this.purchase = purchase;

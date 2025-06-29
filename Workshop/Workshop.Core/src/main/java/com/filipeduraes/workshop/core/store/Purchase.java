@@ -2,47 +2,36 @@
 
 package com.filipeduraes.workshop.core.store;
 
+import com.filipeduraes.workshop.core.WorkshopEntity;
 import com.filipeduraes.workshop.core.catalog.StoreItem;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 /**
- * Representa uma transação de compra contendo itens da loja.
+ * Representa uma transação de compra.
+ * Esta classe mantém um registro das informações da compra, incluindo o item comprado,
+ * quantidade e data da transação.
  *
  * @author Filipe Durães
  */
-public class Purchase
+public class Purchase extends WorkshopEntity
 {
-    private UUID id;
-    private LocalDateTime date;
-    private List<StoreItem> items;
+    private final LocalDateTime date;
+    private final StoreItem storeItemSnapshot;
+    private final int quantity;
 
     /**
-     * Cria uma nova compra com o ID, data e itens especificados.
+     * Cria uma nova compra com o item e quantidade especificados.
      *
-     * @param id identificador único para esta compra
-     * @param date data em que a compra foi realizada
-     * @param items lista de itens incluídos nesta compra
+     * @param storeItemSnapshot o item da loja no momento da compra
+     * @param quantity a quantidade comprada do item
      */
-    public Purchase(UUID id, LocalDateTime date, ArrayList<StoreItem> items)
+    public Purchase(StoreItem storeItemSnapshot, int quantity)
     {
-        this.id = id;
-        this.date = date;
-        this.items = items;
-    }
-    
-    /**
-     * Obtém o identificador único desta compra.
-     *
-     * @return o ID da compra
-     */
-    public UUID getId()
-    {
-        return id;
+        this.storeItemSnapshot = new StoreItem(storeItemSnapshot);
+        this.quantity = quantity;
+        this.date = LocalDateTime.now();
     }
 
     /**
@@ -56,29 +45,33 @@ public class Purchase
     }
 
     /**
-     * Obtém a lista de itens incluídos nesta compra.
+     * Obtém uma cópia do item da loja no momento da compra.
      *
-     * @return lista de itens comprados
+     * @return o item da loja no momento da compra
      */
-    public List<StoreItem> getItems()
+    public StoreItem getStoreItemSnapshot()
     {
-        return items;
+        return storeItemSnapshot;
     }
 
     /**
-     * Calcula o valor total desta compra somando todos os preços dos itens.
+     * Obtém a quantidade comprada do item.
      *
-     * @return valor total da compra
+     * @return a quantidade comprada
      */
-    public BigDecimal calculateTotal()
+    public int getQuantity()
     {
-        BigDecimal total = BigDecimal.ZERO;
+        return quantity;
+    }
 
-        for (StoreItem item : items)
-        {
-            total = total.add(item.getPrice());
-        }
-
-        return total;
+    /**
+     * Calcula o preço total da compra multiplicando o preço unitário pela quantidade.
+     *
+     * @return o valor total da compra
+     */
+    public BigDecimal getTotalPrice()
+    {
+        BigDecimal unitPrice = storeItemSnapshot.getPrice();
+        return unitPrice.multiply(new BigDecimal(quantity));
     }
 }

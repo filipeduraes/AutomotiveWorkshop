@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.utils.TextUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -58,6 +59,18 @@ public class ConsoleInput
     }
 
     /**
+     * Lê um número inteiro da entrada do console acima de um valor mínimo.
+     *
+     * @param message mensagem a ser exibida antes da leitura
+     * @param minValue valor mínimo que o input pode receber
+     * @return número inteiro inserido pelo usuário
+     */
+    public static int readLineInteger(String message, int minValue)
+    {
+        return readLineInteger(message, minValue, Integer.MAX_VALUE);
+    }
+
+    /**
      * Lê um número inteiro da entrada do console em uma faixa de valores.
      *
      * @param message mensagem a ser exibida antes da leitura
@@ -105,6 +118,41 @@ public class ConsoleInput
         }
 
         return readInteger;
+    }
+
+    /**
+     * Exibe uma mensagem e lê um número decimal (BigDecimal) da entrada do console.
+     *
+     * @param message mensagem a ser exibida antes da leitura
+     * @return BigDecimal inserido pelo usuário
+     */
+    public static BigDecimal readLinePositiveBigDecimal(String message)
+    {
+        BigDecimal readBigDecimal;
+
+        while (true)
+        {
+            try
+            {
+                String input = readLine(message);
+                input = input.trim();
+                input = input.replace(',', '.');
+
+                if(input.contains("-") || input.isEmpty())
+                {
+                    continue;
+                }
+
+                readBigDecimal = new BigDecimal(input);
+                break;
+            }
+            catch (NumberFormatException e)
+            {
+                System.out.println("Entrada invalida. Por favor, insira um valor numerico (ex: 123.45 ou 123,45).");
+            }
+        }
+
+        return readBigDecimal;
     }
 
     /**

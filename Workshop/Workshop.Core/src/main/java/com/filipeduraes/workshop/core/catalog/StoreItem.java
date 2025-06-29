@@ -2,7 +2,7 @@
 
 package com.filipeduraes.workshop.core.catalog;
 
-import java.util.UUID;
+import java.math.BigDecimal;
 
 /**
  * Representa um item disponível para venda na loja, estendendo a classe Product.
@@ -10,24 +10,35 @@ import java.util.UUID;
  *
  * @author Filipe Durães
  */
-public class StoreItem extends Product
+public class StoreItem extends PricedItem
 {
-    private final int stockAmount;
+    private int stockAmount;
 
     /**
      * Cria uma nova instância de StoreItem.
      *
-     * @param id Identificador único do item
      * @param name Nome do item
      * @param description Descrição detalhada do item
      * @param price Preço do item
      * @param stockAmount Quantidade disponível em estoque
      */
-    public StoreItem(UUID id, String name, String description, String price, int stockAmount)
+    public StoreItem(String name, String description, BigDecimal price, int stockAmount)
     {
         super(name, description, price);
 
         this.stockAmount = stockAmount;
+    }
+
+    /**
+     * Cria uma nova instância de StoreItem como cópia de outro StoreItem.
+     *
+     * @param storeItem StoreItem a ser copiado
+     */
+    public StoreItem(StoreItem storeItem)
+    {
+        super(storeItem);
+
+        this.stockAmount = storeItem.stockAmount;
     }
 
     /**
@@ -38,5 +49,26 @@ public class StoreItem extends Product
     public int getStockAmount()
     {
         return stockAmount;
+    }
+
+    /**
+     * Define a quantidade disponível em estoque do item.
+     *
+     * @param stockAmount nova quantidade em estoque
+     */
+    public void setStockAmount(int stockAmount)
+    {
+        this.stockAmount = stockAmount;
+    }
+
+    /**
+     * Obtém uma descrição formatada do item para exibição em lista,
+     * combinando o nome do item com sua quantidade em estoque.
+     *
+     * @return descrição formatada do item no formato "nome (quantidade)"
+     */
+    public String getListDescription()
+    {
+        return String.format("%s (%d)", getName(), getStockAmount());
     }
 }

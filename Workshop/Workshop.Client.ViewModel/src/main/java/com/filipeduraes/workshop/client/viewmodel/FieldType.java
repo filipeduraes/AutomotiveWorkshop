@@ -91,6 +91,11 @@ public enum FieldType
     VEHICLE("Veiculo"),
 
     /**
+     * Descrição
+     */
+    DESCRIPTION("Descricao"),
+
+    /**
      * Descrição curta
      */
     SHORT_DESCRIPTION("Descricao Curta"),
@@ -100,6 +105,14 @@ public enum FieldType
      */
     DETAILED_DESCRIPTION("Descricao Detalhada"),
 
+    /**
+     * Preço
+     */
+    PRICE("Preco"),
+
+    /**
+     * Usuário Local
+     */
     LOCAL_USER("Usuario Local");
 
     /**

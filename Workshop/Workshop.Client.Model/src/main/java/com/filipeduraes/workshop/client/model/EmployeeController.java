@@ -39,10 +39,10 @@ public class EmployeeController
         this.authModule = authModule;
 
         this.viewModel.OnLoginRequested.addListener(this::login);
-        this.viewModel.OnRegisterUserRequested.addListener(this::registerUser);
+        this.viewModel.OnRegisterRequest.addListener(this::registerUser);
         this.viewModel.OnSearchRequest.addListener(this::searchUsers);
         this.viewModel.OnLoadDataRequest.addListener(this::loadUserData);
-        this.viewModel.OnEditUserRequested.addListener(this::editUserData);
+        this.viewModel.OnEditRequest.addListener(this::editUserData);
         this.viewModel.OnDeleteRequest.addListener(this::deleteUser);
     }
 
@@ -52,10 +52,10 @@ public class EmployeeController
     public void dispose()
     {
         this.viewModel.OnLoginRequested.removeListener(this::login);
-        this.viewModel.OnRegisterUserRequested.removeListener(this::registerUser);
+        this.viewModel.OnRegisterRequest.removeListener(this::registerUser);
         this.viewModel.OnSearchRequest.removeListener(this::searchUsers);
         this.viewModel.OnLoadDataRequest.removeListener(this::loadUserData);
-        this.viewModel.OnEditUserRequested.removeListener(this::editUserData);
+        this.viewModel.OnEditRequest.removeListener(this::editUserData);
         this.viewModel.OnDeleteRequest.removeListener(this::deleteUser);
     }
 

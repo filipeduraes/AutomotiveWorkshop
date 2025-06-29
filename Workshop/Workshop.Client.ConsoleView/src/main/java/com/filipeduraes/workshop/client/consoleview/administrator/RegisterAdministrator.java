@@ -51,7 +51,7 @@ public class RegisterAdministrator implements IWorkshopMenu
 
         EmployeeDTO administrator = new EmployeeDTO(name, email, EmployeeRoleDTO.ADMINISTRATOR, password.hashCode());
         employeeViewModel.setSelectedDTO(administrator);
-        employeeViewModel.OnRegisterUserRequested.broadcast();
+        employeeViewModel.OnRegisterRequest.broadcast();
 
         if (employeeViewModel.getRequestWasSuccessful())
         {

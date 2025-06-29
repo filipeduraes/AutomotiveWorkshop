@@ -2,6 +2,8 @@
 
 package com.filipeduraes.workshop.utils;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.Arrays;
@@ -56,6 +58,19 @@ public final class TextUtils
     }
 
     /**
+     * Formata um valor monetário para exibição no formato da moeda real (R$).
+     *
+     * @param price Valor monetário a ser formatado
+     * @return String formatada com o valor monetário em reais
+     */
+    public static String formatPrice(BigDecimal price)
+    {
+        Locale locale = Locale.forLanguageTag("pt-BR");
+        NumberFormat format = NumberFormat.getCurrencyInstance(locale);
+        return format.format(price);
+    }
+
+    /**
      * Converte um array de qualquer tipo para um array de strings.
      *
      * @param <T> Tipo dos elementos do array de entrada
@@ -78,8 +93,8 @@ public final class TextUtils
     public static <T> String[] convertToStringArray(T[] array, int skip)
     {
         return Arrays.stream(array)
-                .skip(skip)
-                .map(Object::toString)
-                .toArray(String[]::new);
+            .skip(skip)
+            .map(Object::toString)
+            .toArray(String[]::new);
     }
 }

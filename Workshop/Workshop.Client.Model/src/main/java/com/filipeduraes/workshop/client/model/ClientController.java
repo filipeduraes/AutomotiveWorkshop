@@ -4,7 +4,7 @@ package com.filipeduraes.workshop.client.model;
 
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.model.mappers.ClientMapper;
-import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
+import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
 import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.client.Client;
@@ -32,7 +32,7 @@ public class ClientController
         FieldType.PHONE, Client::getPhoneNumber
     );
 
-    private final ClientViewModel clientViewModel;
+    private final EntityViewModel<ClientDTO> clientViewModel;
     private final CrudRepository<Client> clientModule;
 
     private List<Client> foundClients;
@@ -43,15 +43,15 @@ public class ClientController
      * @param clientViewModel Camada intermediária que gerencia o estado e os dados entre a view e o modelo
      * @param clientModule    Módulo de negócios que implementa as operações com clientes
      */
-    public ClientController(ClientViewModel clientViewModel, CrudRepository<Client> clientModule)
+    public ClientController(EntityViewModel<ClientDTO> clientViewModel, CrudRepository<Client> clientModule)
     {
         this.clientViewModel = clientViewModel;
         this.clientModule = clientModule;
 
-        clientViewModel.OnClientRegisterRequest.addListener(this::registerClient);
+        clientViewModel.OnRegisterRequest.addListener(this::registerClient);
         clientViewModel.OnLoadDataRequest.addListener(this::loadClientData);
         clientViewModel.OnSearchRequest.addListener(this::searchClients);
-        clientViewModel.OnClientEditRequest.addListener(this::editClient);
+        clientViewModel.OnEditRequest.addListener(this::editClient);
         clientViewModel.OnDeleteRequest.addListener(this::deleteClient);
     }
 
@@ -61,10 +61,10 @@ public class ClientController
      */
     public void dispose()
     {
-        clientViewModel.OnClientRegisterRequest.removeListener(this::registerClient);
+        clientViewModel.OnRegisterRequest.removeListener(this::registerClient);
         clientViewModel.OnLoadDataRequest.removeListener(this::loadClientData);
         clientViewModel.OnSearchRequest.removeListener(this::searchClients);
-        clientViewModel.OnClientEditRequest.removeListener(this::editClient);
+        clientViewModel.OnEditRequest.removeListener(this::editClient);
         clientViewModel.OnDeleteRequest.removeListener(this::deleteClient);
     }
 

@@ -2,20 +2,15 @@
 
 package com.filipeduraes.workshop.client.consoleview.vehiclemodule;
 
-import com.filipeduraes.workshop.client.consoleview.clientmodule.ClientSearchMenu;
+import com.filipeduraes.workshop.client.consoleview.client.ClientSearchMenu;
 import com.filipeduraes.workshop.client.consoleview.general.EntitySearchMenu;
 import com.filipeduraes.workshop.client.consoleview.general.SearchInputStrategy;
-import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
-import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
-import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
-import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
+import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
-import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,7 +19,7 @@ import java.util.Map;
  *
  * @author Filipe Durães
  */
-public class VehicleSelectionFromClientMenu extends EntitySearchMenu<VehicleViewModel, VehicleDTO>
+public class VehicleSelectionFromClientMenu extends EntitySearchMenu<EntityViewModel<VehicleDTO>, VehicleDTO>
 {
     /**
      * Obtém o nome de exibição do menu.
@@ -53,12 +48,12 @@ public class VehicleSelectionFromClientMenu extends EntitySearchMenu<VehicleView
     }
 
     @Override
-    protected VehicleViewModel getViewModel(MenuManager menuManager)
+    protected EntityViewModel<VehicleDTO> getViewModel(MenuManager menuManager)
     {
         return menuManager.getViewModelRegistry().getVehicleViewModel();
     }
 
-    private static ClientViewModel getClientViewModel(MenuManager menuManager)
+    private static EntityViewModel<ClientDTO> getClientViewModel(MenuManager menuManager)
     {
         return menuManager.getViewModelRegistry().getClientViewModel();
     }

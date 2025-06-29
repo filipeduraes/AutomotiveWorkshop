@@ -4,7 +4,6 @@ package com.filipeduraes.workshop.core;
 
 import com.filipeduraes.workshop.core.auth.AuthModule;
 import com.filipeduraes.workshop.core.auth.Employee;
-import com.filipeduraes.workshop.core.catalog.ProductCatalog;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
@@ -12,6 +11,7 @@ import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.SerializationAdapterGroup;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 import com.filipeduraes.workshop.core.persistence.serializers.DateTimeSerializer;
+import com.filipeduraes.workshop.core.store.Store;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
 
 import java.time.LocalDateTime;
@@ -26,9 +26,9 @@ import java.util.UUID;
 public class Workshop
 {
     private final AuthModule authModule = new AuthModule();
-    private final ProductCatalog catalog = new ProductCatalog();
     private final CrudRepository<Client> clientRepository;
     private final CrudRepository<Vehicle> vehicleRepository;
+    private final Store store = new Store();
     private MaintenanceModule maintenanceModule;
 
     /**
@@ -78,16 +78,6 @@ public class Workshop
     }
 
     /**
-     * Obtém o catálogo de produtos
-     *
-     * @return catálogo de produtos
-     */
-    public ProductCatalog getCatalog()
-    {
-        return catalog;
-    }
-
-    /**
      * Obtém o módulo de clientes
      *
      * @return módulo de clientes
@@ -115,6 +105,16 @@ public class Workshop
     public MaintenanceModule getMaintenanceModule()
     {
         return maintenanceModule;
+    }
+
+    /**
+     * Obtém a loja de produtos
+     *
+     * @return loja de produtos
+     */
+    public Store getStore()
+    {
+        return store;
     }
 
     private void initializeUserData()

@@ -2,7 +2,7 @@
 package com.filipeduraes.workshop.core.maintenance;
 
 import com.filipeduraes.workshop.core.CrudRepository;
-import com.filipeduraes.workshop.core.catalog.Product;
+import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 import com.filipeduraes.workshop.core.store.Purchase;
@@ -178,7 +178,7 @@ public class MaintenanceModule
      * @param services lista de produtos utilizados no serviço
      * @param purchase informações da compra associada ao serviço
      */
-    public boolean finishMaintenance(UUID serviceID, String shortDescription, String detailedDescription, ArrayList<Product> services, Purchase purchase)
+    public boolean finishMaintenance(UUID serviceID, String shortDescription, String detailedDescription, ArrayList<PricedItem> services, Purchase purchase)
     {
         ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
         ServiceStep currentStep = serviceOrder.getCurrentStep();

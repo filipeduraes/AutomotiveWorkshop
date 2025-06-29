@@ -2,10 +2,10 @@
 
 package com.filipeduraes.workshop.client.model;
 
+import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.model.mappers.VehicleMapper;
-import com.filipeduraes.workshop.client.viewmodel.ClientViewModel;
-import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
+import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.Workshop;
@@ -25,8 +25,8 @@ import java.util.UUID;
  */
 public class VehicleController
 {
-    private final VehicleViewModel vehicleViewModel;
-    private final ClientViewModel clientViewModel;
+    private final EntityViewModel<VehicleDTO> vehicleViewModel;
+    private final EntityViewModel<ClientDTO> clientViewModel;
     private final CrudRepository<Vehicle> vehicleModule;
     private final CrudRepository<Client> clientModule;
 
@@ -46,7 +46,7 @@ public class VehicleController
 
         vehicleViewModel.OnLoadDataRequest.addListener(this::processVehicleDetailsRequest);
         vehicleViewModel.OnSearchRequest.addListener(this::processClientVehiclesRequest);
-        vehicleViewModel.OnVehicleRegistrationRequest.addListener(this::processVehicleRegistrationRequest);
+        vehicleViewModel.OnRegisterRequest.addListener(this::processVehicleRegistrationRequest);
     }
 
     /**
@@ -57,7 +57,7 @@ public class VehicleController
     {
         vehicleViewModel.OnLoadDataRequest.removeListener(this::processVehicleDetailsRequest);
         vehicleViewModel.OnSearchRequest.removeListener(this::processClientVehiclesRequest);
-        vehicleViewModel.OnVehicleRegistrationRequest.removeListener(this::processVehicleRegistrationRequest);
+        vehicleViewModel.OnRegisterRequest.removeListener(this::processVehicleRegistrationRequest);
     }
 
     private void processClientVehiclesRequest()

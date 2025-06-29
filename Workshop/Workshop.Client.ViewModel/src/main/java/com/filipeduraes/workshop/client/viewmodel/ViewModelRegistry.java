@@ -2,7 +2,10 @@
 
 package com.filipeduraes.workshop.client.viewmodel;
 
-import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
+import com.filipeduraes.workshop.client.dtos.ClientDTO;
+import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
+import com.filipeduraes.workshop.client.dtos.VehicleDTO;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 
 /**
  * Registro central de todos os ViewModels disponíveis na aplicação.
@@ -14,25 +17,11 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceViewModel;
 
 public class ViewModelRegistry
 {
-    /**
-     * ViewModel para operações relacionadas a clientes.
-     */
-    private final ClientViewModel clientViewModel;
-
-    /**
-     * ViewModel para operações relacionadas a serviços.
-     */
-    private final ServiceViewModel serviceViewModel;
-
-    /**
-     * ViewModel para operações relacionadas a funcionários.
-     */
+    private final EntityViewModel<ClientDTO> clientViewModel;
+    private final ServiceOrderViewModel serviceOrderViewModel;
     private final EmployeeViewModel employeeViewModel;
-
-    /**
-     * ViewModel para operações relacionadas a veículos.
-     */
-    private final VehicleViewModel vehicleViewModel;
+    private final EntityViewModel<VehicleDTO> vehicleViewModel;
+    private final InventoryViewModel inventoryViewModel;
 
     /**
      * Inicializa um novo registro de ViewModels.
@@ -40,10 +29,11 @@ public class ViewModelRegistry
      */
     public ViewModelRegistry()
     {
-        clientViewModel = new ClientViewModel();
-        serviceViewModel = new ServiceViewModel();
+        clientViewModel = new EntityViewModel<>();
+        serviceOrderViewModel = new ServiceOrderViewModel();
         employeeViewModel = new EmployeeViewModel();
-        vehicleViewModel = new VehicleViewModel();
+        vehicleViewModel = new EntityViewModel<>();
+        inventoryViewModel = new InventoryViewModel();
     }
 
     /**
@@ -51,7 +41,7 @@ public class ViewModelRegistry
      *
      * @return o ViewModel de clientes
      */
-    public ClientViewModel getClientViewModel()
+    public EntityViewModel<ClientDTO> getClientViewModel()
     {
         return clientViewModel;
     }
@@ -61,9 +51,9 @@ public class ViewModelRegistry
      *
      * @return o ViewModel de serviços
      */
-    public ServiceViewModel getServiceViewModel()
+    public ServiceOrderViewModel getServiceViewModel()
     {
-        return serviceViewModel;
+        return serviceOrderViewModel;
     }
 
     /**
@@ -81,8 +71,18 @@ public class ViewModelRegistry
      *
      * @return o ViewModel de veículos
      */
-    public VehicleViewModel getVehicleViewModel()
+    public EntityViewModel<VehicleDTO> getVehicleViewModel()
     {
         return vehicleViewModel;
+    }
+
+    /**
+     * Obtém o ViewModel para operações relacionadas ao inventário.
+     *
+     * @return o ViewModel de inventário
+     */
+    public InventoryViewModel getInventoryViewModel()
+    {
+        return inventoryViewModel;
     }
 }

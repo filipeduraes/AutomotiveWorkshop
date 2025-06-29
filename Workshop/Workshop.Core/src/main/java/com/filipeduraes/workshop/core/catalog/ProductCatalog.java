@@ -5,8 +5,6 @@ package com.filipeduraes.workshop.core.catalog;
 import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -16,7 +14,7 @@ import java.util.UUID;
  */
 public class ProductCatalog
 {
-    private final CrudRepository<Product> servicesRepository;
+    private final CrudRepository<PricedItem> servicesRepository;
     private final CrudRepository<StoreItem> storeItemsRepository;
 
     /**
@@ -26,7 +24,7 @@ public class ProductCatalog
      */
     public ProductCatalog()
     {
-        servicesRepository = new CrudRepository<>(WorkshopPaths.SERVICE_CATALOG_PATH, Product.class);
+        servicesRepository = new CrudRepository<>(WorkshopPaths.SERVICE_CATALOG_PATH, PricedItem.class);
         storeItemsRepository = new CrudRepository<>(WorkshopPaths.STORE_ITEMS_CATALOG_PATH, StoreItem.class);
     }
 
@@ -36,7 +34,7 @@ public class ProductCatalog
      *
      * @return um {@code CrudRepository<Product>} que gerencia os serviços.
      */
-    public CrudRepository<Product> getServicesRepository()
+    public CrudRepository<PricedItem> getServicesRepository()
     {
         return servicesRepository;
     }
@@ -50,5 +48,20 @@ public class ProductCatalog
     public CrudRepository<StoreItem> getStoreItemsRepository()
     {
         return storeItemsRepository;
+    }
+
+    public boolean restockStoreItem(UUID itemID, int addedStockAmount)
+    {
+        StoreItem originalStoreItem = storeItemsRepository.getEntityWithID(itemID);
+
+        if(originalStoreItem == null || addedStockAmount <= 0)
+        {
+            return false;
+        }
+
+        StoreItem coppiedStoreItem = new StoreItem(originalStoreItem);
+        int newStockAmount = coppiedStoreItem.getStockAmount() + addedStockAmount;
+        coppiedStoreItem.setStockAmount(newStockAmount);
+        return storeItemsRepository.updateEntity(coppiedStoreItem);
     }
 }

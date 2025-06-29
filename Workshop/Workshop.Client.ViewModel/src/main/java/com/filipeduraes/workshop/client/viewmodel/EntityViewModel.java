@@ -15,8 +15,13 @@ import java.util.List;
  * @param <TEntityDTO> Tipo do DTO da entidade gerenciada
  * @author Filipe Durães
  */
-public abstract class EntityViewModel<TEntityDTO>
+public class EntityViewModel<TEntityDTO>
 {
+    /**
+     * Evento disparado quando o registro é solicitado.
+     */
+    public final Observer OnRegisterRequest = new Observer();
+
     /**
      * Evento disparado quando uma busca é solicitada.
      */
@@ -26,6 +31,11 @@ public abstract class EntityViewModel<TEntityDTO>
      * Evento disparado quando o carregamento de dados é solicitado.
      */
     public final Observer OnLoadDataRequest = new Observer();
+
+    /**
+     * Evento disparado quando uma edição é solicitada.
+     */
+    public final Observer OnEditRequest = new Observer();
 
     /**
      * Evento disparado quando uma exclusão é solicitada.

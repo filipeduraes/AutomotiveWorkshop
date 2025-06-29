@@ -9,7 +9,7 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.LicensePlateValidator;
 import com.filipeduraes.workshop.client.consoleview.input.YearInputValidator;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
-import com.filipeduraes.workshop.client.viewmodel.VehicleViewModel;
+import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 
 /**
@@ -52,10 +52,10 @@ public class RegisterVehicleMenu implements IWorkshopMenu
         }
 
         VehicleDTO vehicleDTO = requestVehicleData();
-        VehicleViewModel vehicleViewModel = viewModelRegistry.getVehicleViewModel();
+        EntityViewModel<VehicleDTO> vehicleViewModel = viewModelRegistry.getVehicleViewModel();
         vehicleViewModel.setSelectedDTO(vehicleDTO);
 
-        vehicleViewModel.OnVehicleRegistrationRequest.broadcast();
+        vehicleViewModel.OnRegisterRequest.broadcast();
 
         if (vehicleViewModel.getRequestWasSuccessful())
         {
