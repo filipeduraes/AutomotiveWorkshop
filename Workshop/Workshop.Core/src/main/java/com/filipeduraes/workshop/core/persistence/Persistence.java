@@ -121,6 +121,17 @@ public final class Persistence
     }
 
     /**
+     * Verifica se existe um arquivo no caminho especificado.
+     *
+     * @param path caminho do arquivo a ser verificado
+     * @return true se o arquivo existe, false caso contrário
+     */
+    public static boolean hasFile(String path)
+    {
+        return Files.exists(Path.of(appendPathSuffix(path)));
+    }
+
+    /**
      * Gera um UUID único que não existe no mapa fornecido.
      *
      * @param <T> tipo dos valores no mapa
@@ -176,7 +187,7 @@ public final class Persistence
 
         final String pathWithoutExtension = path.substring(0, extensionIndex);
         final String pathSuffix = UseObfuscation ? "_Obfuscated" : "_Regular";
-        final String pathExtension = path.substring(extensionIndex, path.length());
+        final String pathExtension = path.substring(extensionIndex);
         return pathWithoutExtension + pathSuffix + pathExtension;
     }
 

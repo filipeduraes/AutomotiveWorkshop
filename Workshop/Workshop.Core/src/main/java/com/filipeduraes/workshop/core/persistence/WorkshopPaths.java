@@ -2,6 +2,7 @@
 
 package com.filipeduraes.workshop.core.persistence;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -46,10 +47,6 @@ public final class WorkshopPaths
      * Caminho para o arquivo do catálogo de produtos da loja
      */
     public static final String STORE_ITEMS_CATALOG_PATH = DATA_DIRECTORY_PATH + "StoreItems" + FILE_EXTENSION;
-    /**
-     * Caminho para o arquivo de todas as compras registradas
-     */
-    public static final String PURCHASES_PATH = DATA_DIRECTORY_PATH + "Purchases" + FILE_EXTENSION;
 
     private static UUID loggedUserID;
 
@@ -86,5 +83,22 @@ public final class WorkshopPaths
     public static String getUserServicesPath(UUID userID)
     {
         return String.format("%sServices/%s_Services%s", DATA_DIRECTORY_PATH, userID.toString(), FILE_EXTENSION);
+    }
+
+    public static String getPurchasesCurrentMonthPath()
+    {
+        LocalDateTime currentDate = LocalDateTime.now();
+        return getPurchasesMonthPath(currentDate);
+    }
+
+    public static String getPurchasesMonthPath(LocalDateTime time)
+    {
+        String monthDirectory = getMonthDirectory(time);
+        return String.format("%s/Purchases%s", monthDirectory, FILE_EXTENSION);
+    }
+
+    private static String getMonthDirectory(LocalDateTime time)
+    {
+        return String.format("%s/%04d/%02d", DATA_DIRECTORY_PATH, time.getYear(), time.getMonthValue());
     }
 }

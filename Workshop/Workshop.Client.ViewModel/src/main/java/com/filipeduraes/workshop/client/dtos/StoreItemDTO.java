@@ -13,7 +13,7 @@ public class StoreItemDTO
     private String name;
     private String description;
     private BigDecimal price;
-    private int stockAmount;
+    private final int stockAmount;
 
     public StoreItemDTO(UUID id, String name, String description, BigDecimal price, int stockAmount)
     {

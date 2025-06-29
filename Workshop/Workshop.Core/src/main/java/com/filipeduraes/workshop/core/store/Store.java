@@ -5,9 +5,11 @@ package com.filipeduraes.workshop.core.store;
 import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.catalog.ProductCatalog;
 import com.filipeduraes.workshop.core.catalog.StoreItem;
+import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +22,12 @@ import java.util.UUID;
 public class Store
 {
     private final ProductCatalog catalog = new ProductCatalog();
+    private final CrudRepository<Purchase> currentMonthPurchasesRepository;
+
+    public Store()
+    {
+        currentMonthPurchasesRepository = new CrudRepository<>(WorkshopPaths.getPurchasesCurrentMonthPath(), Purchase.class);
+    }
 
     /**
      * Obtém a instância do catálogo de produtos da loja.
@@ -47,19 +55,18 @@ public class Store
             return null;
         }
 
-        CrudRepository<Purchase> purchasesRepository = new CrudRepository<>(WorkshopPaths.PURCHASES_PATH, Purchase.class);
         Purchase newPurchase = new Purchase(storeItem, quantity);
 
         StoreItem coppiedStoreItem = new StoreItem(storeItem);
         coppiedStoreItem.setStockAmount(coppiedStoreItem.getStockAmount() - quantity);
         boolean stockUpdateWasSuccessful = catalog.getStoreItemsRepository().updateEntity(coppiedStoreItem);
 
-        if(!stockUpdateWasSuccessful)
+        if (!stockUpdateWasSuccessful)
         {
             return null;
         }
 
-        purchasesRepository.registerEntity(newPurchase);
+        currentMonthPurchasesRepository.registerEntity(newPurchase);
         return newPurchase;
     }
 
@@ -68,12 +75,28 @@ public class Store
      *
      * @return lista com todas as compras do mês atual
      */
-    public List<Purchase> fetchMonthPurchases()
+    public List<Purchase> getCurrentMonthPurchases()
     {
-        CrudRepository<Purchase> purchasesRepository = new CrudRepository<>(WorkshopPaths.PURCHASES_PATH, Purchase.class);
-        LocalDateTime currentDate = LocalDateTime.now();
+        return currentMonthPurchasesRepository.getAllEntities();
+    }
 
-        return purchasesRepository.findEntitiesWithPredicate(purchase -> purchaseIsWithinSameMonth(purchase, currentDate));
+    /**
+     * Recupera todas as compras realizadas no mês especificado.
+     *
+     * @param date data de referência para buscar as compras do mês
+     * @return lista com todas as compras do mês especificado, ou uma lista vazia se não houver compras
+     */
+    public List<Purchase> getMonthPurchases(LocalDateTime date)
+    {
+        String purchasesMonthPath = WorkshopPaths.getPurchasesMonthPath(date);
+
+        if (!Persistence.hasFile(purchasesMonthPath))
+        {
+            return new ArrayList<>();
+        }
+
+        CrudRepository<Purchase> monthPurchasesRepository = new CrudRepository<>(purchasesMonthPath, Purchase.class);
+        return monthPurchasesRepository.getAllEntities();
     }
 
     private static boolean purchaseIsWithinSameMonth(Purchase purchase, LocalDateTime date)
