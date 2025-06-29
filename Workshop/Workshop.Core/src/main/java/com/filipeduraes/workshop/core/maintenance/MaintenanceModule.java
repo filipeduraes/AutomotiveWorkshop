@@ -5,7 +5,7 @@ import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
-import com.filipeduraes.workshop.core.store.Purchase;
+import com.filipeduraes.workshop.core.store.Sale;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
@@ -176,9 +176,9 @@ public class MaintenanceModule
      * @param serviceID ID do serviço a ser finalizado
      * @param detailedDescription descrição do trabalho realizado
      * @param services lista de produtos utilizados no serviço
-     * @param purchase informações da compra associada ao serviço
+     * @param sale informações da compra associada ao serviço
      */
-    public boolean finishMaintenance(UUID serviceID, String shortDescription, String detailedDescription, ArrayList<PricedItem> services, Purchase purchase)
+    public boolean finishMaintenance(UUID serviceID, String shortDescription, String detailedDescription, ArrayList<PricedItem> services, Sale sale)
     {
         ServiceOrder serviceOrder = serviceOrderRepository.getEntityWithID(serviceID);
         ServiceStep currentStep = serviceOrder.getCurrentStep();
@@ -186,7 +186,7 @@ public class MaintenanceModule
         currentStep.setDetailedDescription(detailedDescription);
         currentStep.finishStep();
 
-        serviceOrder.finish(services, purchase);
+        serviceOrder.finish(services, sale);
 
         Set<UUID> finishedServices = Persistence.loadFile(WorkshopPaths.FINISHED_SERVICES_PATH, serviceIDSetType, new HashSet<>());
         finishedServices.add(serviceID);

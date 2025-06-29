@@ -42,12 +42,12 @@ public class RegisterPurchaseMenu implements IWorkshopMenu
         String message = String.format("Insira a quantidade do item vendido. Maximo: %d", stockAmount);
         int quantity = ConsoleInput.readLineInteger(message, 1, stockAmount);
 
-        inventoryViewModel.setPurchaseQuantity(quantity);
+        inventoryViewModel.setSaleQuantity(quantity);
         inventoryViewModel.OnRegisterPurchaseRequest.broadcast();
 
         if(inventoryViewModel.getRequestWasSuccessful())
         {
-            System.out.printf("Venda registrada com sucesso!%n > ID: %s%n > Preco total: %s", inventoryViewModel.getPurchaseID(), inventoryViewModel.getPurchaseTotalPrice());
+            System.out.printf("Venda registrada com sucesso!%n > ID: %s%n > Preco total: %s", inventoryViewModel.getSaleID(), inventoryViewModel.getSaleTotalPrice());
         }
         else
         {

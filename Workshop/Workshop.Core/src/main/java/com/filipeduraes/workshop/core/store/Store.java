@@ -15,18 +15,22 @@ import java.util.UUID;
 
 /**
  * Gerencia as operações de vendas da loja, permitindo o registro
- * e consulta de compras realizadas.
+ * e consulta de vendas realizadas, além de manter o catálogo de produtos.
  *
  * @author Filipe Durães
  */
 public class Store
 {
     private final ProductCatalog catalog = new ProductCatalog();
-    private final CrudRepository<Purchase> currentMonthPurchasesRepository;
+    private final CrudRepository<Sale> currentMonthPurchasesRepository;
 
+    /**
+     * Cria uma nova instância da loja, inicializando o repositório
+     * de vendas do mês atual.
+     */
     public Store()
     {
-        currentMonthPurchasesRepository = new CrudRepository<>(WorkshopPaths.getPurchasesCurrentMonthPath(), Purchase.class);
+        currentMonthPurchasesRepository = new CrudRepository<>(WorkshopPaths.getPurchasesCurrentMonthPath(), Sale.class);
     }
 
     /**
@@ -40,13 +44,13 @@ public class Store
     }
 
     /**
-     * Registra uma nova compra de um item do catálogo.
+     * Registra uma nova venda de um item do catálogo.
      *
-     * @param storeItemID identificador único do item comprado
-     * @param quantity quantidade comprada do item
-     * @return Optional contendo o ID da compra se foi registrada com sucesso, ou empty caso contrário
+     * @param storeItemID identificador único do item vendido
+     * @param quantity quantidade vendida do item
+     * @return Sale contendo os dados da venda registrada, ou null se a venda não puder ser realizada
      */
-    public Purchase registerPurchase(UUID storeItemID, int quantity)
+    public Sale registerPurchase(UUID storeItemID, int quantity)
     {
         StoreItem storeItem = catalog.getStoreItemsRepository().getEntityWithID(storeItemID);
 
@@ -55,7 +59,7 @@ public class Store
             return null;
         }
 
-        Purchase newPurchase = new Purchase(storeItem, quantity);
+        Sale newSale = new Sale(storeItem, quantity);
 
         StoreItem coppiedStoreItem = new StoreItem(storeItem);
         coppiedStoreItem.setStockAmount(coppiedStoreItem.getStockAmount() - quantity);
@@ -66,41 +70,43 @@ public class Store
             return null;
         }
 
-        currentMonthPurchasesRepository.registerEntity(newPurchase);
-        return newPurchase;
+        currentMonthPurchasesRepository.registerEntity(newSale);
+        return newSale;
     }
 
     /**
-     * Recupera todas as compras realizadas no mês atual.
+     * Recupera todas as vendas realizadas no mês atual.
      *
-     * @return lista com todas as compras do mês atual
+     * @return lista com todas as vendas do mês atual
      */
-    public List<Purchase> getCurrentMonthPurchases()
+    public List<Sale> getCurrentMonthSales()
     {
-        return currentMonthPurchasesRepository.getAllEntities();
+        List<Sale> allSales = currentMonthPurchasesRepository.getAllEntities();
+        allSales.sort(new SaleComparator());
+        return allSales;
     }
 
     /**
-     * Recupera todas as compras realizadas no mês especificado.
+     * Recupera todas as vendas realizadas no mês especificado.
      *
-     * @param date data de referência para buscar as compras do mês
-     * @return lista com todas as compras do mês especificado, ou uma lista vazia se não houver compras
+     * @param date data de referência para buscar as vendas do mês
+     * @return lista com todas as vendas do mês especificado, ou uma lista vazia se não houver vendas
      */
-    public List<Purchase> getMonthPurchases(LocalDateTime date)
+    public List<Sale> getMonthSales(LocalDateTime date)
     {
-        String purchasesMonthPath = WorkshopPaths.getPurchasesMonthPath(date);
+        String salesMonthPath = WorkshopPaths.getPurchasesMonthPath(date);
 
-        if (!Persistence.hasFile(purchasesMonthPath))
+        if (!Persistence.hasFile(salesMonthPath))
         {
             return new ArrayList<>();
         }
 
-        CrudRepository<Purchase> monthPurchasesRepository = new CrudRepository<>(purchasesMonthPath, Purchase.class);
+        CrudRepository<Sale> monthPurchasesRepository = new CrudRepository<>(salesMonthPath, Sale.class);
         return monthPurchasesRepository.getAllEntities();
     }
 
-    private static boolean purchaseIsWithinSameMonth(Purchase purchase, LocalDateTime date)
+    private static boolean saleIsWithinSameMonth(Sale sale, LocalDateTime date)
     {
-        return purchase.getDate().getMonth() == date.getMonth() && purchase.getDate().getYear() == date.getYear();
+        return sale.getDate().getMonth() == date.getMonth() && sale.getDate().getYear() == date.getYear();
     }
 }

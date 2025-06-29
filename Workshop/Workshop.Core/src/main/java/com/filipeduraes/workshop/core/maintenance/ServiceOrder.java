@@ -3,7 +3,7 @@ package com.filipeduraes.workshop.core.maintenance;
 
 import com.filipeduraes.workshop.core.WorkshopEntity;
 import com.filipeduraes.workshop.core.catalog.PricedItem;
-import com.filipeduraes.workshop.core.store.Purchase;
+import com.filipeduraes.workshop.core.store.Sale;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ public class ServiceOrder extends WorkshopEntity
     private final List<ServiceStep> steps = new ArrayList<>();
     private List<PricedItem> services = new ArrayList<>();
 
-    private Purchase purchase;
+    private Sale sale;
     private UUID clientID;
     private UUID vehicleID;
     private boolean finished = false;
@@ -46,7 +46,7 @@ public class ServiceOrder extends WorkshopEntity
     {
         vehicleID = serviceOrder.vehicleID;
         clientID = serviceOrder.clientID;
-        purchase = serviceOrder.purchase;
+        sale = serviceOrder.sale;
         finished = serviceOrder.finished;
         services = serviceOrder.services;
 
@@ -126,12 +126,12 @@ public class ServiceOrder extends WorkshopEntity
      * Finaliza a ordem de serviço.
      *
      * @param services lista de produtos/serviços utilizados
-     * @param purchase informações da compra associada
+     * @param sale informações da compra associada
      */
-    public void finish(ArrayList<PricedItem> services, Purchase purchase)
+    public void finish(ArrayList<PricedItem> services, Sale sale)
     {
         this.services = services;
-        this.purchase = purchase;
+        this.sale = sale;
         finishCurrentStep();
 
         finished = true;

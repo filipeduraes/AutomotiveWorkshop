@@ -48,14 +48,13 @@ public final class Persistence
      *
      * @param adapters lista de grupos de adaptadores de serialização
      */
-    public static void registerCustomSerializationAdapters(List<SerializationAdapterGroup> adapters)
+    public static void registerCustomSerializationAdapters(List<SerializationAdapter> adapters)
     {
         GsonBuilder builder = new GsonBuilder();
 
-        for (SerializationAdapterGroup group : adapters)
+        for (SerializationAdapter adapter : adapters)
         {
-            builder.registerTypeAdapter(group.getType(), group.getSerializer());
-            builder.registerTypeAdapter(group.getType(), group.getDeserializer());
+            builder.registerTypeAdapter(adapter.getType(), adapter.getAdapter());
         }
 
         gson = builder.create();

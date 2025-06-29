@@ -11,13 +11,17 @@ import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.catalog.ProductCatalog;
 import com.filipeduraes.workshop.core.catalog.StoreItem;
-import com.filipeduraes.workshop.core.store.Purchase;
+import com.filipeduraes.workshop.core.store.Sale;
 import com.filipeduraes.workshop.core.store.Store;
 import com.filipeduraes.workshop.utils.TextUtils;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Controlador responsável pelo gerenciamento do inventário da loja,
@@ -51,6 +55,7 @@ public class InventoryController
         inventoryViewModel.OnItemRestockRequest.addListener(this::restockItem);
         inventoryViewModel.OnEditRequest.addListener(this::editItem);
         inventoryViewModel.OnRegisterPurchaseRequest.addListener(this::registerPurchase);
+        inventoryViewModel.OnMonthSalesReportRequest.addListener(this::generateMonthSalesReport);
     }
 
     /**
@@ -65,6 +70,7 @@ public class InventoryController
         inventoryViewModel.OnItemRestockRequest.removeListener(this::restockItem);
         inventoryViewModel.OnEditRequest.removeListener(this::editItem);
         inventoryViewModel.OnRegisterPurchaseRequest.removeListener(this::registerPurchase);
+        inventoryViewModel.OnMonthSalesReportRequest.removeListener(this::generateMonthSalesReport);
     }
 
     private void registerInventoryItem()
@@ -188,11 +194,11 @@ public class InventoryController
         loadSelectedItemData();
 
         StoreItemDTO selectedDTO = inventoryViewModel.getSelectedDTO();
-        int purchaseQuantity = inventoryViewModel.getPurchaseQuantity();
+        int saleQuantity = inventoryViewModel.getSaleQuantity();
 
-        Purchase purchase = store.registerPurchase(selectedDTO.getId(), purchaseQuantity);
+        Sale sale = store.registerPurchase(selectedDTO.getId(), saleQuantity);
 
-        if(purchase == null)
+        if(sale == null)
         {
             inventoryViewModel.setRequestWasSuccessful(false);
             return;
@@ -200,8 +206,8 @@ public class InventoryController
 
         refreshSelectedItem();
 
-        inventoryViewModel.setPurchaseID(purchase.getID());
-        inventoryViewModel.setPurchaseTotalPrice(TextUtils.formatPrice(purchase.getTotalPrice()));
+        inventoryViewModel.setSaleID(sale.getID());
+        inventoryViewModel.setSaleTotalPrice(TextUtils.formatPrice(sale.getTotalPrice()));
 
         inventoryViewModel.setRequestWasSuccessful(true);
     }
@@ -212,5 +218,36 @@ public class InventoryController
         StoreItem storeItem = catalog.getStoreItemsRepository().getEntityWithID(selectedDTO.getId());
         queriedStoreItems.set(inventoryViewModel.getSelectedIndex(), storeItem);
         loadSelectedItemData();
+    }
+
+    private void generateMonthSalesReport()
+    {
+        List<Sale> monthSales;
+        int selectedMonth = inventoryViewModel.getSelectedMonth();
+
+        if(selectedMonth < 0 || selectedMonth > 12)
+        {
+            monthSales = store.getCurrentMonthSales();
+        }
+        else
+        {
+            int selectedYear = inventoryViewModel.getSelectedYear();
+            LocalDateTime date = LocalDateTime.of(selectedYear, selectedMonth, 1, 0, 0);
+            monthSales = store.getMonthSales(date);
+        }
+
+        BigDecimal totalPrice = new BigDecimal("0.0");
+
+        for(Sale sale : monthSales)
+        {
+            totalPrice = totalPrice.add(sale.getTotalPrice());
+        }
+
+        String report = monthSales.stream()
+                                  .map(Sale::toString)
+                                  .collect(Collectors.joining(String.format("%n%s%n", "_".repeat(43))));
+
+        inventoryViewModel.setMonthSaleReport(report);
+        inventoryViewModel.setSaleTotalPrice(TextUtils.formatPrice(totalPrice));
     }
 }

@@ -9,7 +9,7 @@ import java.util.UUID;
 
 /**
  * ViewModel responsável por gerenciar os dados da interface de inventário,
- * permitindo operações de reestoque e registro de compras de itens.
+ * permitindo operações de reestoque e registro de vendas de itens.
  *
  * @author Filipe Durães
  */
@@ -21,14 +21,24 @@ public class InventoryViewModel extends EntityViewModel<StoreItemDTO>
     public final Observer OnItemRestockRequest = new Observer();
 
     /**
-     * Evento disparado quando é solicitado o registro de uma nova compra.
+     * Evento disparado quando é solicitado o registro de uma nova venda.
      */
     public final Observer OnRegisterPurchaseRequest = new Observer();
 
-    private UUID purchaseID;
-    private String purchaseTotalPrice = "";
+    /**
+     * Evento disparado quando o relatório de vendas do mês é solicitado.
+     */
+    public final Observer OnMonthSalesReportRequest = new Observer();
+
+    private UUID saleID;
+    private String saleTotalPrice = "";
+    private String monthSaleReport = "";
+
+    private int saleQuantity = 1;
     private int restockAmount = 1;
-    private int purchaseQuantity = 1;
+
+    private int selectedYear = -1;
+    private int selectedMonth = -1;
 
     /**
      * Obtém a quantidade de itens para reestoque.
@@ -54,65 +64,135 @@ public class InventoryViewModel extends EntityViewModel<StoreItemDTO>
     }
 
     /**
-     * Obtém a quantidade de itens para compra.
+     * Obtém a quantidade de itens para venda.
      *
-     * @return quantidade para compra
+     * @return quantidade para venda
      */
-    public int getPurchaseQuantity()
+    public int getSaleQuantity()
     {
-        return purchaseQuantity;
+        return saleQuantity;
     }
 
     /**
-     * Define a quantidade de itens para compra.
+     * Define a quantidade de itens para venda.
      *
-     * @param purchaseQuantity quantidade maior que zero para compra
+     * @param saleQuantity quantidade maior que zero para venda
      */
-    public void setPurchaseQuantity(int purchaseQuantity)
+    public void setSaleQuantity(int saleQuantity)
     {
-        if (purchaseQuantity > 0)
+        if (saleQuantity > 0)
         {
-            this.purchaseQuantity = purchaseQuantity;
+            this.saleQuantity = saleQuantity;
         }
     }
 
     /**
-     * Obtém o ID da compra registrada.
+     * Obtém o ID da venda registrada.
      *
-     * @return ID único da compra
+     * @return ID único da venda
      */
-    public UUID getPurchaseID()
+    public UUID getSaleID()
     {
-        return purchaseID;
+        return saleID;
     }
 
     /**
-     * Define o ID da compra registrada.
+     * Define o ID da venda registrada.
      *
-     * @param purchaseID ID único da compra
+     * @param saleID ID único da venda
      */
-    public void setPurchaseID(UUID purchaseID)
+    public void setSaleID(UUID saleID)
     {
-        this.purchaseID = purchaseID;
+        this.saleID = saleID;
     }
 
     /**
-     * Obtém o preço total da compra formatado.
+     * Obtém o preço total da venda formatado.
      *
-     * @return preço total da compra em formato string
+     * @return preço total da venda em formato string
      */
-    public String getPurchaseTotalPrice()
+    public String getSaleTotalPrice()
     {
-        return purchaseTotalPrice;
+        return saleTotalPrice;
     }
 
     /**
-     * Define o preço total da compra.
+     * Define o preço total da venda.
      *
-     * @param purchaseTotalPrice preço total da compra em formato string
+     * @param saleTotalPrice preço total da venda em formato string
      */
-    public void setPurchaseTotalPrice(String purchaseTotalPrice)
+    public void setSaleTotalPrice(String saleTotalPrice)
     {
-        this.purchaseTotalPrice = purchaseTotalPrice;
+        this.saleTotalPrice = saleTotalPrice;
+    }
+
+    /**
+     * Obtém o relatório de vendas do mês.
+     *
+     * @return relatório de vendas do mês em formato string
+     */
+    public String getMonthSaleReport()
+    {
+        return monthSaleReport;
+    }
+
+    /**
+     * Define o relatório de vendas do mês.
+     *
+     * @param monthSaleReport relatório de vendas do mês em formato string
+     */
+    public void setMonthSaleReport(String monthSaleReport)
+    {
+        this.monthSaleReport = monthSaleReport;
+    }
+
+    /**
+     * Obtém o ano selecionado para filtro.
+     *
+     * @return ano selecionado ou −1 se nenhum ano estiver selecionado
+     */
+    public int getSelectedYear()
+    {
+        return selectedYear;
+    }
+
+    /**
+     * Define o ano selecionado para filtro.
+     *
+     * @param selectedYear ano a ser selecionado
+     */
+    public void setSelectedYear(int selectedYear)
+    {
+        this.selectedYear = selectedYear;
+    }
+
+    /**
+     * Obtém o mês selecionado para filtro.
+     *
+     * @return mês selecionado ou −1 se nenhum mês estiver selecionado
+     */
+    public int getSelectedMonth()
+    {
+        return selectedMonth;
+    }
+
+    /**
+     * Define o mês selecionado para filtro.
+     *
+     * @param selectedMonth mês a ser selecionado
+     */
+    public void setSelectedMonth(int selectedMonth)
+    {
+        this.selectedMonth = selectedMonth;
+    }
+
+    /**
+     * Reinicia a data selecionada para os valores padrão.
+     * O ano e mês selecionados são definidos como −1.
+     */
+    public void resetSelectedDate()
+    {
+        selectedYear = -1;
+        selectedMonth = -1;
     }
 }

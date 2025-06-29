@@ -8,9 +8,9 @@ import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.persistence.Persistence;
-import com.filipeduraes.workshop.core.persistence.SerializationAdapterGroup;
+import com.filipeduraes.workshop.core.persistence.SerializationAdapter;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
-import com.filipeduraes.workshop.core.persistence.serializers.DateTimeSerializer;
+import com.filipeduraes.workshop.core.persistence.serializers.LocalDateTimeAdapter;
 import com.filipeduraes.workshop.core.store.Store;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
 
@@ -25,10 +25,10 @@ import java.util.UUID;
  */
 public class Workshop
 {
-    private final AuthModule authModule = new AuthModule();
+    private final AuthModule authModule;
     private final CrudRepository<Client> clientRepository;
     private final CrudRepository<Vehicle> vehicleRepository;
-    private final Store store = new Store();
+    private final Store store;
     private MaintenanceModule maintenanceModule;
 
     /**
@@ -39,11 +39,11 @@ public class Workshop
      */
     public Workshop(boolean useObfuscation)
     {
-        DateTimeSerializer dateTimeSerializer = new DateTimeSerializer();
+        LocalDateTimeAdapter localDateTimeAdapter = new LocalDateTimeAdapter();
 
-        List<SerializationAdapterGroup> adapters = List.of
+        List<SerializationAdapter> adapters = List.of
         (
-            new SerializationAdapterGroup(LocalDateTime.class, dateTimeSerializer, dateTimeSerializer)
+            new SerializationAdapter(LocalDateTime.class, localDateTimeAdapter)
         );
 
         Persistence.setUseObfuscation(useObfuscation);
@@ -51,6 +51,8 @@ public class Workshop
 
         vehicleRepository = new CrudRepository<>(WorkshopPaths.REGISTERED_VEHICLES_PATH, Vehicle.class);
         clientRepository = new CrudRepository<>(WorkshopPaths.REGISTERED_CLIENTS_PATH, Client.class);
+        authModule = new AuthModule();
+        store = new Store();
 
         authModule.OnUserLogged.addListener(this::initializeUserData);
         vehicleRepository.OnEntityRegistered.addListener(this::registerVehicleToOwner);

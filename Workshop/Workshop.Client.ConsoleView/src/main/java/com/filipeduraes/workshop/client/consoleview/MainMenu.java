@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.client.consoleview.employee.EmployeeDetailsMenu
 import com.filipeduraes.workshop.client.consoleview.employee.RegisterEmployeeMenu;
 import com.filipeduraes.workshop.client.consoleview.client.ClientDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.client.ClientRegistrationMenu;
+import com.filipeduraes.workshop.client.consoleview.financial.ShowMonthSalesMenu;
 import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
 import com.filipeduraes.workshop.client.consoleview.inventorymanagement.RegisterNewStoreItemMenu;
 import com.filipeduraes.workshop.client.consoleview.inventorymanagement.RegisterPurchaseMenu;
@@ -87,6 +88,14 @@ public class MainMenu extends RedirectMenu
         }
     );
 
+    private static final RedirectMenu financialMenu = new RedirectMenu
+    (
+        "Financeiro", new IWorkshopMenu[]
+        {
+            new ShowMonthSalesMenu()
+        }
+    );
+
     private final static IWorkshopMenu[] regularMenus =
     {
         serviceMenu,
@@ -97,7 +106,8 @@ public class MainMenu extends RedirectMenu
 
     private final static IWorkshopMenu[] administratorMenus =
     {
-        employeeMenu
+        employeeMenu,
+        financialMenu
     };
 
     public MainMenu(MenuManager menuManager)
