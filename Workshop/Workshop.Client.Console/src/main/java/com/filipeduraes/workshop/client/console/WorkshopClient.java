@@ -5,6 +5,7 @@ package com.filipeduraes.workshop.client.console;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.administrator.FirstAccessMenu;
 import com.filipeduraes.workshop.client.consoleview.employee.LogInMenu;
+import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.model.*;
 
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
@@ -33,6 +34,12 @@ public class WorkshopClient
      */
     public static void main(String[] args)
     {
+        if(ConsoleInput.readConfirmation("Deseja iniciar a Demo?"))
+        {
+            TestQuestions testQuestions = new TestQuestions();
+            testQuestions.test();
+        }
+
         String title = """
          ___________ _____ _____ _____ _   _   ___
         |  _  |  ___|_   _/  __ \\_   _| \\ | | / _ \\

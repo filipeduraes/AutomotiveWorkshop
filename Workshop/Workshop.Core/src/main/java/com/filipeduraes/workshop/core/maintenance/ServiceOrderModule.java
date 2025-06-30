@@ -129,7 +129,7 @@ public class ServiceOrderModule
      * Inicia o processo de inspeção de um serviço agendado, usando um elevador.
      *
      * @param serviceID ID do serviço a ser inspecionado
-     * @param usedElevatorType Tipo do elevador a ser utilizado
+     * @param usedElevatorType tipo do elevador a ser utilizado
      */
     public boolean startInspection(UUID serviceID, ElevatorType usedElevatorType)
     {
@@ -194,6 +194,17 @@ public class ServiceOrderModule
      * Inicia o processo de manutenção de um serviço após a inspeção.
      *
      * @param serviceID ID do serviço a ser iniciado
+     */
+    public boolean startMaintenance(UUID serviceID)
+    {
+        return startMaintenance(serviceID, null);
+    }
+
+    /**
+     * Inicia o processo de manutenção de um serviço após a inspeção.
+     *
+     * @param serviceID ID do serviço a ser iniciado
+     * @param usedElevatorType tipo do elevador a ser utilizado
      */
     public boolean startMaintenance(UUID serviceID, ElevatorType usedElevatorType)
     {

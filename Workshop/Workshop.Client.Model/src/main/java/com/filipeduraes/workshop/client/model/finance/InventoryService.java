@@ -189,7 +189,7 @@ public class InventoryService
         StoreItemDTO selectedDTO = inventoryViewModel.getSelectedDTO();
         int saleQuantity = inventoryViewModel.getSaleQuantity();
 
-        Sale sale = store.registerPurchase(selectedDTO.getId(), saleQuantity);
+        Sale sale = store.registerSale(selectedDTO.getId(), saleQuantity);
 
         if(sale == null)
         {

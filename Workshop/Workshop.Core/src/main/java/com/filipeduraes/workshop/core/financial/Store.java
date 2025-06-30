@@ -50,7 +50,7 @@ public class Store
      * @param quantity quantidade vendida do item
      * @return Sale contendo os dados da venda registrada, ou null se a venda não puder ser realizada
      */
-    public Sale registerPurchase(UUID storeItemID, int quantity)
+    public Sale registerSale(UUID storeItemID, int quantity)
     {
         StoreItem storeItem = catalog.getStoreItemsRepository().getEntityWithID(storeItemID);
 
