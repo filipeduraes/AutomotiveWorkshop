@@ -69,10 +69,10 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceOrderViewModel,
             String optionDisplayName = String.format("Iniciar %s", getDesiredStepName(viewModel.getSelectedDTO()));
             newOptions.add(new MenuOption(optionDisplayName, this::startStep));
         }
-        else
+        else if(!viewModel.getSelectedDTO().isFinished())
         {
             String optionDisplayName = String.format("Finalizar %s", getDesiredStepName(viewModel.getSelectedDTO()));
-            newOptions.add(new MenuOption(optionDisplayName, this::finishStep));
+            newOptions.add(new MenuOption(optionDisplayName, this::redirectToFinishStep));
         }
 
         newOptions.add(new MenuOption("Editar ordem de servico", this::editService));
@@ -118,28 +118,16 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceOrderViewModel,
         return MenuResult.none();
     }
 
-    private MenuResult finishStep(MenuManager menuManager)
-    {
-        ServiceOrderDTO selectedDTO = getViewModel().getSelectedDTO();
-
-        if (selectedDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
-        {
-            return MenuResult.push(new FinishAssessmentMenu());
-        }
-        else if (selectedDTO.getServiceStep() == ServiceStepTypeDTO.MAINTENANCE)
-        {
-            return MenuResult.push(new FinishMaintenanceMenu());
-        }
-
-        System.out.println("Nao e possivel finalizar a etapa atual.");
-        return MenuResult.none();
-    }
-
     private MenuResult editService(MenuManager menuManager)
     {
         menuManager.getViewModelRegistry().getClientViewModel().resetSelectedDTO();
         menuManager.getViewModelRegistry().getVehicleViewModel().resetSelectedDTO();
         return MenuResult.push(new EditServiceMenu());
+    }
+
+    private MenuResult redirectToFinishStep(MenuManager menuManager)
+    {
+        return MenuResult.push(new FinishStepMenu());
     }
 
     private MenuResult redirectToAddService(MenuManager menuManager)

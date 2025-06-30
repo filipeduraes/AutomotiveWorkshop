@@ -4,6 +4,7 @@ package com.filipeduraes.workshop.client.viewmodel.service;
 
 import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
+import com.filipeduraes.workshop.client.viewmodel.FieldType;
 import com.filipeduraes.workshop.utils.ConsumerObserver;
 import com.filipeduraes.workshop.utils.Observer;
 
@@ -57,7 +58,6 @@ public class ServiceOrderViewModel extends EntityViewModel<ServiceOrderDTO>
     public final Observer OnAddSaleRequested = new Observer();
 
     private ServiceQueryType queryType = ServiceQueryType.GENERAL;
-    private ServiceFilterType filterType = ServiceFilterType.NONE;
     private String descriptionQueryPattern;
     private int selectedStepIndex = -1;
     private int selectedElevatorTypeIndex = -1;
@@ -83,26 +83,6 @@ public class ServiceOrderViewModel extends EntityViewModel<ServiceOrderDTO>
     public void setQueryType(ServiceQueryType queryType)
     {
         this.queryType = queryType;
-    }
-
-    /**
-     * Obtém o tipo de filtro atual do serviço.
-     *
-     * @return tipo do filtro atual
-     */
-    public ServiceFilterType getFilterType()
-    {
-        return filterType;
-    }
-
-    /**
-     * Define o tipo de filtro do serviço.
-     *
-     * @param filterType novo tipo de filtro
-     */
-    public void setFilterType(ServiceFilterType filterType)
-    {
-        this.filterType = filterType;
     }
 
     /**
@@ -212,7 +192,7 @@ public class ServiceOrderViewModel extends EntityViewModel<ServiceOrderDTO>
     public void resetQuery()
     {
         queryType = ServiceQueryType.GENERAL;
-        filterType = ServiceFilterType.NONE;
+        setFieldType(FieldType.NONE);
         descriptionQueryPattern = "";
     }
 }

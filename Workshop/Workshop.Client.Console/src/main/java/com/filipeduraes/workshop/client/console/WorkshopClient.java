@@ -9,6 +9,7 @@ import com.filipeduraes.workshop.client.model.*;
 
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 
+import com.filipeduraes.workshop.client.model.serviceorder.ServiceOrderController;
 import com.filipeduraes.workshop.client.viewmodel.*;
 
 import com.filipeduraes.workshop.core.Workshop;

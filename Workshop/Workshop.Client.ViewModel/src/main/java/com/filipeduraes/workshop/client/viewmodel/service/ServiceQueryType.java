@@ -11,17 +11,35 @@ package com.filipeduraes.workshop.client.viewmodel.service;
 public enum ServiceQueryType
 {
     /**
-     * Representa consultas por serviços que estão atualmente abertos/em andamento.
+     * Representa consultas por serviços que estão atualmente abertos.
      */
-    OPENED,
+    OPENED("Servicos Abertos"),
 
     /**
      * Representa consultas por serviços associados ao usuário logado.
      */
-    USER,
+    USER("Servicos do Usuario"),
 
     /**
      * Representa consultas gerais por serviços, sem filtros específicos.
      */
-    GENERAL
+    GENERAL("Servicos Gerais"),
+
+    /**
+     * Representa consultas por serviços já finalizados.
+     */
+    CLOSED("Servicos Finalizados");
+
+    private final String displayName;
+
+    ServiceQueryType(String displayName)
+    {
+        this.displayName = displayName;
+    }
+
+    @Override
+    public String toString()
+    {
+        return displayName;
+    }
 }

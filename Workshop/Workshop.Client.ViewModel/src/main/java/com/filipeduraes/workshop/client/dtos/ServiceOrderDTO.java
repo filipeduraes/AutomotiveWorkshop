@@ -133,6 +133,10 @@ public class ServiceOrderDTO
         return vehicleID;
     }
 
+    public boolean isFinished()
+    {
+        return getServiceStep() == ServiceStepTypeDTO.MAINTENANCE && steps.get(steps.size() - 1).getHasBeenFinished();
+    }
 
 
     /**
@@ -148,9 +152,10 @@ public class ServiceOrderDTO
         StringBuilder builder = new StringBuilder();
 
         builder.append(String.format("  ID:        %s%n", getID()));
-        builder.append(String.format("  Estado:    %s%n", getServiceStep()));
+        builder.append(String.format("  Estado:    %s%n", isFinished() ? "Finalizada" : getServiceStep()));
         builder.append(String.format("  Cliente:   %s%n", getClientName()));
         builder.append(String.format("  Veiculo:   %s%n", getVehicleDescription()));
+
         builder.append(SUB_SEPARATOR).append("\n");
 
         appendSection(builder, "ETAPAS DO SERVICO", getStepsDisplay());

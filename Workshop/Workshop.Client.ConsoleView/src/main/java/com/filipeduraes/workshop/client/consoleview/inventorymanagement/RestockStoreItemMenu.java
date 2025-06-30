@@ -5,15 +5,12 @@ package com.filipeduraes.workshop.client.consoleview.inventorymanagement;
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
-import com.filipeduraes.workshop.client.consoleview.PopupMenuRedirector;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
 import com.filipeduraes.workshop.client.viewmodel.InventoryViewModel;
 
 public class RestockStoreItemMenu implements IWorkshopMenu
 {
-    PopupMenuRedirector redirector = new PopupMenuRedirector(new SearchStoreItemMenu());
-
     @Override
     public String getMenuDisplayName()
     {
@@ -25,22 +22,13 @@ public class RestockStoreItemMenu implements IWorkshopMenu
     {
         InventoryViewModel inventoryViewModel = menuManager.getViewModelRegistry().getInventoryViewModel();
 
-        if(!inventoryViewModel.hasValidSelectedIndex())
-        {
-            return redirector.redirect();
-        }
-
-        redirector.reset();
-
-        StoreItemDTO selectedItemDTO = inventoryViewModel.getSelectedDTO();
-        System.out.printf("Item selecionado: %s%n", selectedItemDTO);
-
         int addedStockAmount = ConsoleInput.readLineInteger("Insira a quantidade que deseja adicionar no estoque", 1);
         inventoryViewModel.setRestockAmount(addedStockAmount);
         inventoryViewModel.OnItemRestockRequest.broadcast();
 
         if(inventoryViewModel.getRequestWasSuccessful())
         {
+            StoreItemDTO selectedItemDTO = inventoryViewModel.getSelectedDTO();
             System.out.printf("Estoque do item %s reposto com sucesso! Novo estoque: %d%n", selectedItemDTO.getName(), selectedItemDTO.getStockAmount());
         }
         else

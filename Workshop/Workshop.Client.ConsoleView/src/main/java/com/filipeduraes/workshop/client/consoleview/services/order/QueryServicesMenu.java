@@ -7,10 +7,10 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.client.ClientSearchMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
+import com.filipeduraes.workshop.client.viewmodel.FieldType;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
-import com.filipeduraes.workshop.client.viewmodel.service.ServiceFilterType;
-import com.filipeduraes.workshop.utils.TextUtils;
+import com.filipeduraes.workshop.client.viewmodel.service.ServiceQueryType;
 
 /**
  * Menu de consulta de serviços da oficina.
@@ -20,7 +20,7 @@ import com.filipeduraes.workshop.utils.TextUtils;
  */
 public class QueryServicesMenu implements IWorkshopMenu
 {
-    private ServiceFilterType lastSelectedFilter = ServiceFilterType.NONE;
+    private FieldType lastSelectedFilter = FieldType.NONE;
 
     /**
      * Obtém o nome de exibição do menu.
@@ -30,7 +30,7 @@ public class QueryServicesMenu implements IWorkshopMenu
     @Override
     public String getMenuDisplayName()
     {
-        return "Consultar";
+        return "Consultar Servicos";
     }
 
     /**
@@ -46,22 +46,32 @@ public class QueryServicesMenu implements IWorkshopMenu
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
         ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
 
-        if (lastSelectedFilter == ServiceFilterType.NONE)
+        if (lastSelectedFilter == FieldType.NONE)
         {
-            ServiceFilterType filterType = selectFilterOption();
+            FieldType filterType = selectFilterOption();
             lastSelectedFilter = filterType;
-            serviceOrderViewModel.setFilterType(filterType);
+            serviceOrderViewModel.setFieldType(filterType);
 
-            if (filterType == ServiceFilterType.CLIENT)
+            if (filterType == FieldType.CLIENT)
             {
                 return MenuResult.push(new ClientSearchMenu());
             }
-            else if (filterType == ServiceFilterType.DESCRIPTION_PATTERN)
+            else if (filterType == FieldType.DESCRIPTION)
             {
                 String pattern = ConsoleInput.readLine("Insira o padrao procurado na descricao:");
                 serviceOrderViewModel.setDescriptionQueryPattern(pattern);
             }
         }
+
+        int selectedGroupIndex = ConsoleInput.readOptionFromList("Qual grupo de servicos deseja consultar?", ServiceQueryType.values(), true);
+
+        if(selectedGroupIndex >= ServiceQueryType.values().length)
+        {
+            System.out.println("Operacao cancelada! Voltando...");
+            return MenuResult.pop();
+        }
+
+        serviceOrderViewModel.setQueryType(ServiceQueryType.values()[selectedGroupIndex]);
 
         serviceOrderViewModel.OnSearchRequest.broadcast();
 
@@ -75,7 +85,7 @@ public class QueryServicesMenu implements IWorkshopMenu
 
         if (servicesDescriptions.length == 0)
         {
-            lastSelectedFilter = ServiceFilterType.NONE;
+            lastSelectedFilter = FieldType.NONE;
             boolean tryAgain = ConsoleInput.readConfirmation("Nenhum servico encontrado, deseja tentar novamente?");
             return tryAgain ? MenuResult.none() : MenuResult.pop();
         }
@@ -98,24 +108,17 @@ public class QueryServicesMenu implements IWorkshopMenu
         return MenuResult.pop();
     }
 
-    private ServiceFilterType selectFilterOption()
+    private FieldType selectFilterOption()
     {
-        boolean filterService = ConsoleInput.readConfirmation("Deseja filtrar os servicos?");
-        int selectedFilterOption = -1;
+        FieldType[] selectableFieldTypes = { FieldType.NONE, FieldType.CLIENT, FieldType.DESCRIPTION };;
 
-        ServiceFilterType[] filterTypes = ServiceFilterType.values();
-        String[] filterTypesDisplayNames = TextUtils.convertToStringArray(filterTypes, 1);
+        int selectedFilterOption = ConsoleInput.readOptionFromList("Qual filtro deseja usar?", selectableFieldTypes, true);
 
-        if (filterService)
+        if (selectedFilterOption >= selectableFieldTypes.length)
         {
-            selectedFilterOption = ConsoleInput.readOptionFromList("Qual filtro deseja usar?", filterTypesDisplayNames, true);
-
-            if (selectedFilterOption >= filterTypesDisplayNames.length)
-            {
-                selectedFilterOption = -1;
-            }
+            selectedFilterOption = -1;
         }
 
-        return filterTypes[selectedFilterOption + 1];
+        return selectableFieldTypes[selectedFilterOption];
     }
 }

@@ -7,18 +7,19 @@ import com.filipeduraes.workshop.client.consoleview.PopupMenuRedirector;
 import com.filipeduraes.workshop.client.consoleview.employee.EmployeeSearchMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.input.MaxCharactersValidator;
+import com.filipeduraes.workshop.client.dtos.ServiceStepTypeDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 
-public class FinishAssessmentMenu implements IWorkshopMenu
+public class FinishStepMenu implements IWorkshopMenu
 {
     private final PopupMenuRedirector redirector = new PopupMenuRedirector(new EmployeeSearchMenu());
 
     @Override
     public String getMenuDisplayName()
     {
-        return "Finalizar inspecao";
+        return "Finalizar Etapa";
     }
 
     @Override
@@ -26,20 +27,15 @@ public class FinishAssessmentMenu implements IWorkshopMenu
     {
         ViewModelRegistry viewModelRegistry = menuManager.getViewModelRegistry();
         ServiceOrderViewModel serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
-        EmployeeViewModel employeeViewModel = viewModelRegistry.getEmployeeViewModel();
 
-        if(!employeeViewModel.hasValidSelectedIndex())
+        if(serviceOrderViewModel.getSelectedDTO().getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
         {
-            return redirector.redirect();
-        }
+            MenuResult menuResult = selectEmployeeForAssessmentFinish(menuManager);
 
-        redirector.reset();
-        employeeViewModel.OnLoadDataRequest.broadcast();
-
-        if(!employeeViewModel.getRequestWasSuccessful())
-        {
-            System.out.println("Nao foi possivel finalizar a inspecao, tente novamente.");
-            return MenuResult.pop();
+            if(menuResult != null)
+            {
+                return menuResult;
+            }
         }
 
         String shortDescription = ConsoleInput.readValidatedLine("Escreva uma descricao curta do que foi encontrado", new MaxCharactersValidator(30));
@@ -59,5 +55,26 @@ public class FinishAssessmentMenu implements IWorkshopMenu
         }
 
         return MenuResult.pop();
+    }
+
+    private MenuResult selectEmployeeForAssessmentFinish(MenuManager menuManager)
+    {
+        EmployeeViewModel employeeViewModel = menuManager.getViewModelRegistry().getEmployeeViewModel();
+
+        if(!employeeViewModel.hasValidSelectedIndex())
+        {
+            return redirector.redirect();
+        }
+
+        redirector.reset();
+        employeeViewModel.OnLoadDataRequest.broadcast();
+
+        if(!employeeViewModel.getRequestWasSuccessful())
+        {
+            System.out.println("Nao foi possivel finalizar a inspecao, tente novamente.");
+            return MenuResult.pop();
+        }
+
+        return null;
     }
 }

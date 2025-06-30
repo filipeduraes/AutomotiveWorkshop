@@ -82,6 +82,16 @@ public class MaintenanceModule
     }
 
     /**
+     * Carrega o conjunto de IDs dos serviços já finalizados.
+     *
+     * @return conjunto de IDs dos fechados
+     */
+    public Set<UUID> loadClosedServices()
+    {
+        return Persistence.loadFile(WorkshopPaths.FINISHED_SERVICES_PATH, serviceIDSetType, new HashSet<>());
+    }
+
+    /**
      * Registra um novo agendamento de serviço na oficina.
      *
      * @param clientID ID do cliente solicitante do serviço
@@ -224,7 +234,7 @@ public class MaintenanceModule
         currentStep.finishStep();
         serviceOrder.finish();
 
-        Set<UUID> finishedServices = Persistence.loadFile(WorkshopPaths.FINISHED_SERVICES_PATH, serviceIDSetType, new HashSet<>());
+        Set<UUID> finishedServices = loadClosedServices();
         finishedServices.add(serviceID);
 
         removeServiceOrderFromEmployeeServices(serviceID);

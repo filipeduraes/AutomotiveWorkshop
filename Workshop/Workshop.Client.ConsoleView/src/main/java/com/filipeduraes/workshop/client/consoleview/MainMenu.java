@@ -12,10 +12,7 @@ import com.filipeduraes.workshop.client.consoleview.inventorymanagement.Register
 import com.filipeduraes.workshop.client.consoleview.inventorymanagement.StoreItemDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.services.item.RegisterServiceItemMenu;
 import com.filipeduraes.workshop.client.consoleview.services.item.ServiceItemDetailsMenu;
-import com.filipeduraes.workshop.client.consoleview.services.order.CreateServiceOrderMenu;
-import com.filipeduraes.workshop.client.consoleview.services.order.QueryGeneralServicesMenu;
-import com.filipeduraes.workshop.client.consoleview.services.order.QueryOpenedServicesMenu;
-import com.filipeduraes.workshop.client.consoleview.services.order.QueryUserServicesMenu;
+import com.filipeduraes.workshop.client.consoleview.services.order.*;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.RegisterVehicleMenu;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleDetailsMenu;
 import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
@@ -38,9 +35,7 @@ public class MainMenu extends RedirectMenu
         "Ordem de Servico", new IWorkshopMenu[]
         {
             new CreateServiceOrderMenu(),
-            new QueryOpenedServicesMenu(),
-            new QueryUserServicesMenu(),
-            new QueryGeneralServicesMenu()
+            new QueryServicesMenu(),
         }
     );
 

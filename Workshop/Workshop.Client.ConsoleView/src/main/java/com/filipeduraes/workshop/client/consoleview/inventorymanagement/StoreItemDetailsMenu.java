@@ -44,7 +44,7 @@ public class StoreItemDetailsMenu extends EntityDetailsMenu<EntityViewModel<Stor
         (
             new MenuOption("Editar item do inventario", this::redirectToEditMenu),
             new MenuOption("Repor Estoque", this::redirectToRestockMenu),
-            new MenuOption("Registrar Compra", this::redirectToPurchaseMenu)
+            new MenuOption("Registrar Venda", this::redirectToPurchaseMenu)
         );
 
         options.addAll(0, storeItemOptions);
