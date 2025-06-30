@@ -3,6 +3,8 @@
 package com.filipeduraes.workshop.client.model.serviceorder;
 
 import com.filipeduraes.workshop.client.dtos.*;
+import com.filipeduraes.workshop.client.dtos.service.ServiceOrderDTO;
+import com.filipeduraes.workshop.client.dtos.service.ServiceStepTypeDTO;
 import com.filipeduraes.workshop.client.model.mappers.ServiceOrderMapper;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;

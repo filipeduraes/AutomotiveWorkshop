@@ -23,6 +23,7 @@ public class ViewModelRegistry
     private final EntityViewModel<VehicleDTO> vehicleViewModel;
     private final EntityViewModel<PricedItemDTO> serviceItemsViewModel;
     private final InventoryViewModel inventoryViewModel;
+    private final ExpenseViewModel expenseViewModel;
 
     /**
      * Inicializa um novo registro de ViewModels.
@@ -36,6 +37,7 @@ public class ViewModelRegistry
         vehicleViewModel = new EntityViewModel<>();
         serviceItemsViewModel = new EntityViewModel<>();
         inventoryViewModel = new InventoryViewModel();
+        expenseViewModel = new ExpenseViewModel();
     }
 
     /**
@@ -96,5 +98,15 @@ public class ViewModelRegistry
     public InventoryViewModel getInventoryViewModel()
     {
         return inventoryViewModel;
+    }
+
+    /**
+     * Obtém o ViewModel para operações relacionadas às despesas.
+     *
+     * @return o ViewModel de despesas
+     */
+    public ExpenseViewModel getExpenseViewModel()
+    {
+        return expenseViewModel;
     }
 }

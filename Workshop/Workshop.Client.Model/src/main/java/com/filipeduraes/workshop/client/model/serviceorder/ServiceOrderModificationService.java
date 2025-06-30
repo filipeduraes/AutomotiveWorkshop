@@ -3,6 +3,7 @@
 package com.filipeduraes.workshop.client.model.serviceorder;
 
 import com.filipeduraes.workshop.client.dtos.*;
+import com.filipeduraes.workshop.client.dtos.service.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.model.mappers.ServiceItemMapper;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
@@ -16,7 +17,7 @@ import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.maintenance.ServiceStep;
-import com.filipeduraes.workshop.core.store.Sale;
+import com.filipeduraes.workshop.core.financial.Sale;
 
 import java.util.UUID;
 

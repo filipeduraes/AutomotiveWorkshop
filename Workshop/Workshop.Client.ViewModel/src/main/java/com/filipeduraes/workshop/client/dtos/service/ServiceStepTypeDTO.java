@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.client.dtos;
+package com.filipeduraes.workshop.client.dtos.service;
 
 /**
  * Representa os diferentes tipos de etapas no processo de serviço da oficina.

@@ -1,9 +1,7 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.core.auth;
+package com.filipeduraes.workshop.core.employee;
 
 import com.filipeduraes.workshop.core.WorkshopEntity;
-
-import java.util.UUID;
 
 /**
  * Representa um funcionário com ID único, nome, email e cargo.
@@ -16,6 +14,7 @@ public class Employee extends WorkshopEntity
     private String name;
     private String email;
     private EmployeeRole role;
+    private ClockInType lastClockIn = ClockInType.OUT;
 
     /**
      * Cria uma instância de Employee com o nome, email e cargo especificados.
@@ -29,6 +28,22 @@ public class Employee extends WorkshopEntity
         this.name = name;
         this.email = email;
         this.role = role;
+    }
+
+    /**
+     * Cria uma instância de Employee, copiando outro colaborador.
+     * Construtor de cópia.
+     *
+     * @param employee colaborador a ser copiado
+     */
+    public Employee(Employee employee)
+    {
+        super(employee);
+
+        name = employee.getName();
+        email = employee.getEmail();
+        role = employee.getRole();
+        lastClockIn = employee.getLastClockIn();
     }
 
     /**
@@ -101,5 +116,31 @@ public class Employee extends WorkshopEntity
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+
+    /**
+     * Retorna o último ponto batido pelo colaborador.
+     *
+     * @return último ponto batido
+     */
+    public ClockInType getLastClockIn()
+    {
+        if(lastClockIn == null)
+        {
+            lastClockIn = ClockInType.OUT;
+        }
+
+        return lastClockIn;
+    }
+
+    /**
+     * Atribui o último ponto batido pelo colaborador.
+     *
+     * @param lastClockIn último ponto batido
+     */
+    public void setLastClockIn(ClockInType lastClockIn)
+    {
+        this.lastClockIn = lastClockIn;
     }
 }

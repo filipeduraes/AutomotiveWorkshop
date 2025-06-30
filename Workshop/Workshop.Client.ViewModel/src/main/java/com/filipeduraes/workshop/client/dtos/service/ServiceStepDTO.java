@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.client.dtos;
+package com.filipeduraes.workshop.client.dtos.service;
 
 /**
  * Representa uma etapa de serviço no sistema da oficina.

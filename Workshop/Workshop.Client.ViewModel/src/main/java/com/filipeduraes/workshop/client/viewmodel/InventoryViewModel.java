@@ -13,7 +13,7 @@ import java.util.UUID;
  *
  * @author Filipe Durães
  */
-public class InventoryViewModel extends EntityViewModel<StoreItemDTO>
+public class InventoryViewModel extends EntityViewModel<StoreItemDTO> implements IMonthReportViewModel
 {
     /**
      * Evento disparado quando é solicitado o reabastecimento de um item no estoque.
@@ -131,7 +131,8 @@ public class InventoryViewModel extends EntityViewModel<StoreItemDTO>
      *
      * @return relatório de vendas do mês em formato string
      */
-    public String getMonthSaleReport()
+    @Override
+    public String getReport()
     {
         return monthSaleReport;
     }
@@ -141,7 +142,7 @@ public class InventoryViewModel extends EntityViewModel<StoreItemDTO>
      *
      * @param monthSaleReport relatório de vendas do mês em formato string
      */
-    public void setMonthSaleReport(String monthSaleReport)
+    public void setReport(String monthSaleReport)
     {
         this.monthSaleReport = monthSaleReport;
     }
@@ -161,6 +162,7 @@ public class InventoryViewModel extends EntityViewModel<StoreItemDTO>
      *
      * @param selectedYear ano a ser selecionado
      */
+    @Override
     public void setSelectedYear(int selectedYear)
     {
         this.selectedYear = selectedYear;
@@ -181,9 +183,16 @@ public class InventoryViewModel extends EntityViewModel<StoreItemDTO>
      *
      * @param selectedMonth mês a ser selecionado
      */
+    @Override
     public void setSelectedMonth(int selectedMonth)
     {
         this.selectedMonth = selectedMonth;
+    }
+
+    @Override
+    public void broadcastReportRequest()
+    {
+        OnMonthSalesReportRequest.broadcast();
     }
 
     /**

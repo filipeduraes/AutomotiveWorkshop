@@ -1,5 +1,5 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.core.auth;
+package com.filipeduraes.workshop.core.employee;
 
 /**
  * Representa os diferentes cargos que um funcionário pode ter na oficina automotiva.

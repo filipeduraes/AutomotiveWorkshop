@@ -1,10 +1,14 @@
 // Copyright Filipe Durães. All rights reserved.
-package com.filipeduraes.workshop.core.auth;
+package com.filipeduraes.workshop.core.employee;
 
 import com.filipeduraes.workshop.core.CrudRepository;
+import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 import com.filipeduraes.workshop.utils.Observer;
 
+import java.lang.reflect.ParameterizedType;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -118,5 +122,35 @@ public class AuthModule
     public Employee getUserFromID(UUID userID)
     {
         return employeeRepository.getEntityWithID(userID);
+    }
+
+    public void registerClockIn(ClockInType clockInType)
+    {
+        loggedUser.setLastClockIn(clockInType);
+        employeeRepository.saveCurrentEntities();
+
+        List<ClockIn> clockInRegistry = loadCurrentMonthClockIns();
+        clockInRegistry.add(new ClockIn(clockInType, loggedUser.getID()));
+
+        String path = WorkshopPaths.getClockInCurrentMonthPath();
+        Persistence.saveFile(clockInRegistry, path);
+    }
+
+    public List<ClockIn> loadCurrentMonthClockIns()
+    {
+        ParameterizedType type = Persistence.createParameterizedType(ArrayList.class, ClockIn.class);
+        String path = WorkshopPaths.getClockInCurrentMonthPath();
+
+        return Persistence.loadFile(path, type, new ArrayList<>());
+    }
+
+    public List<ClockIn> loadMonthClockIns(int month, int year)
+    {
+        ParameterizedType type = Persistence.createParameterizedType(ArrayList.class, ClockIn.class);
+
+        LocalDateTime localDateTime = LocalDateTime.of(year, month, 1, 0, 0);
+        String path = WorkshopPaths.getClockInMonthPath(localDateTime);
+
+        return Persistence.loadFile(path, type, new ArrayList<>());
     }
 }

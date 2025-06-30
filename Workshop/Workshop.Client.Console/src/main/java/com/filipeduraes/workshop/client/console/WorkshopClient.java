@@ -9,6 +9,7 @@ import com.filipeduraes.workshop.client.model.*;
 
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 
+import com.filipeduraes.workshop.client.model.finance.FinanceController;
 import com.filipeduraes.workshop.client.model.serviceorder.ServiceOrderController;
 import com.filipeduraes.workshop.client.viewmodel.*;
 
@@ -50,8 +51,7 @@ public class WorkshopClient
         ClientController clientController = new ClientController(viewModelRegistry.getClientViewModel(), workshop.getClientRepository());
         VehicleController vehicleController = new VehicleController(viewModelRegistry, workshop);
         ServiceOrderController serviceOrderController = new ServiceOrderController(viewModelRegistry, workshop);
-        InventoryController inventoryController = new InventoryController(viewModelRegistry, workshop);
-        ServiceItemController serviceItemController = new ServiceItemController(viewModelRegistry, workshop);
+        FinanceController financeController = new FinanceController(viewModelRegistry, workshop);
 
         boolean isFirstAccess = workshop.getAuthModule().isFirstAccess();
         IWorkshopMenu initialMenu = isFirstAccess ? new FirstAccessMenu() : new LogInMenu();
@@ -63,8 +63,7 @@ public class WorkshopClient
         clientController.dispose();
         vehicleController.dispose();
         serviceOrderController.dispose();
-        inventoryController.dispose();
-        serviceItemController.dispose();
+        financeController.dispose();
 
         workshop.dispose();
     }

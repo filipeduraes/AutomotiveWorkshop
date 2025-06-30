@@ -7,7 +7,7 @@ import com.filipeduraes.workshop.client.consoleview.PopupMenuRedirector;
 import com.filipeduraes.workshop.client.consoleview.employee.EmployeeSearchMenu;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.consoleview.input.MaxCharactersValidator;
-import com.filipeduraes.workshop.client.dtos.ServiceStepTypeDTO;
+import com.filipeduraes.workshop.client.dtos.service.ServiceStepTypeDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;

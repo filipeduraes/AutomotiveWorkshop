@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.core.store;
+package com.filipeduraes.workshop.core.financial;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;

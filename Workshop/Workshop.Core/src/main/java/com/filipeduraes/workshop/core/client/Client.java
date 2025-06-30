@@ -43,6 +43,8 @@ public class Client extends WorkshopEntity
 
     public Client(Client client)
     {
+        super(client);
+
         name = client.name;
         email = client.email;
         phoneNumber = client.phoneNumber;
@@ -51,8 +53,6 @@ public class Client extends WorkshopEntity
 
         ownedVehiclesIDs = client.ownedVehiclesIDs;
         serviceOrdersIDs = client.serviceOrdersIDs;
-
-        assignID(client.getID());
     }
 
     /**

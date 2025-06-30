@@ -4,7 +4,7 @@ package com.filipeduraes.workshop.core.maintenance;
 import com.filipeduraes.workshop.core.WorkshopEntity;
 import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.catalog.ServiceItem;
-import com.filipeduraes.workshop.core.store.Sale;
+import com.filipeduraes.workshop.core.financial.Sale;
 
 import java.util.*;
 
@@ -45,6 +45,8 @@ public class ServiceOrder extends WorkshopEntity
      */
     public ServiceOrder(ServiceOrder serviceOrder)
     {
+        super(serviceOrder);
+
         vehicleID = serviceOrder.vehicleID;
         clientID = serviceOrder.clientID;
         sales = serviceOrder.sales;
@@ -60,8 +62,6 @@ public class ServiceOrder extends WorkshopEntity
         {
             services.add(new ServiceItem(service));
         }
-
-        assignID(serviceOrder.getID());
     }
 
     /**

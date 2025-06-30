@@ -14,6 +14,7 @@ public class EmployeeDTO
     private String name = "";
     private String email = "";
     private EmployeeRoleDTO role = EmployeeRoleDTO.COSTUMER_SERVICE;
+    private ClockInTypeDTO lastClockIn = ClockInTypeDTO.OUT;
     private int passwordHash = -1;
 
     /**
@@ -51,6 +52,15 @@ public class EmployeeDTO
         this.name = name;
         this.email = email;
         this.role = role;
+    }
+
+    public EmployeeDTO(UUID id, String name, String email, EmployeeRoleDTO role, ClockInTypeDTO lastClockIn)
+    {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.lastClockIn = lastClockIn;
     }
 
     /**
@@ -170,6 +180,26 @@ public class EmployeeDTO
     }
 
     /**
+     * Obtém o último ponto batido pelo colaborador.
+     *
+     * @return último ponto batido
+     */
+    public ClockInTypeDTO getLastClockIn()
+    {
+        return lastClockIn;
+    }
+
+    /**
+     * Define o último ponto batido pelo colaborador.
+     *
+     * @param lastClockIn último ponto batido
+     */
+    public void setLastClockIn(ClockInTypeDTO lastClockIn)
+    {
+        this.lastClockIn = lastClockIn;
+    }
+
+    /**
      * Retorna uma representação em string do funcionário.
      * A string contém o nome, cargo e email do funcionário em formato de lista.
      *
@@ -180,10 +210,12 @@ public class EmployeeDTO
     {
         return String.format
         (
-            " - Nome: %s%n - Cargo: %s%n - Email: %s",
+            " - ID: %s%n - Nome: %s%n - Cargo: %s%n - Email: %s%n - Ultimo Ponto: %s",
+            getID(),
             getName(),
             getRole(),
-            getEmail()
+            getEmail(),
+            getLastClockIn()
         );
     }
 }

@@ -5,8 +5,7 @@ package com.filipeduraes.workshop.client.model.mappers;
 import com.filipeduraes.workshop.client.dtos.SaleDTO;
 import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
 import com.filipeduraes.workshop.core.catalog.StoreItem;
-import com.filipeduraes.workshop.core.store.Sale;
-import com.filipeduraes.workshop.utils.TextUtils;
+import com.filipeduraes.workshop.core.financial.Sale;
 
 public class InventoryMapper
 {

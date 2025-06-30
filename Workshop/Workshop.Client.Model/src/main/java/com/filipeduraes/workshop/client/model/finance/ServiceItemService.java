@@ -1,9 +1,8 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.client.model;
+package com.filipeduraes.workshop.client.model.finance;
 
 import com.filipeduraes.workshop.client.dtos.PricedItemDTO;
-import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
 import com.filipeduraes.workshop.client.model.mappers.ServiceItemMapper;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
@@ -11,20 +10,19 @@ import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.catalog.ProductCatalog;
-import com.filipeduraes.workshop.core.catalog.StoreItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ServiceItemController
+public class ServiceItemService
 {
     private final EntityViewModel<PricedItemDTO> serviceItemsViewModel;
     private final ProductCatalog catalog;
     private final CrudRepository<PricedItem> catalogRepository;
     private List<PricedItem> queriedServiceItems;
 
-    public ServiceItemController(ViewModelRegistry viewModelRegistry, Workshop workshop)
+    public ServiceItemService(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
         serviceItemsViewModel = viewModelRegistry.getServiceItemsViewModel();
         catalog = workshop.getStore().getCatalog();

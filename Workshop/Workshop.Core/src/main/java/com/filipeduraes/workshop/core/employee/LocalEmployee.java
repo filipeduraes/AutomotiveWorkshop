@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.core.auth;
+package com.filipeduraes.workshop.core.employee;
 
 /**
  * Representa um funcionário no sistema com suas credenciais de acesso.
@@ -35,8 +35,7 @@ public class LocalEmployee extends Employee
      */
     public LocalEmployee(LocalEmployee localEmployee)
     {
-        super(localEmployee.getName(), localEmployee.getEmail(), localEmployee.getRole());
-        assignID(localEmployee.getID());
+        super(localEmployee);
         hashPassword = localEmployee.hashPassword;
     }
 

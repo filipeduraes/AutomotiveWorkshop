@@ -89,17 +89,44 @@ public final class WorkshopPaths
         return String.format("%sServices/%s_Services%s", DATA_DIRECTORY_PATH, userID.toString(), FILE_EXTENSION);
     }
 
+
     public static String getPurchasesCurrentMonthPath()
     {
         LocalDateTime currentDate = LocalDateTime.now();
-        return getPurchasesMonthPath(currentDate);
+        return getSalesMonthPath(currentDate);
     }
 
-    public static String getPurchasesMonthPath(LocalDateTime time)
+    public static String getClockInCurrentMonthPath()
+    {
+        LocalDateTime currentDate = LocalDateTime.now();
+        return getClockInMonthPath(currentDate);
+    }
+
+    public static String getExpensesCurrentMonthPath()
+    {
+        LocalDateTime currentDate = LocalDateTime.now();
+        return getExpensesMonthPath(currentDate);
+    }
+
+
+    public static String getClockInMonthPath(LocalDateTime time)
     {
         String monthDirectory = getMonthDirectory(time);
-        return String.format("%s/Purchases%s", monthDirectory, FILE_EXTENSION);
+        return String.format("%s/ClockIn%s", monthDirectory, FILE_EXTENSION);
     }
+
+    public static String getSalesMonthPath(LocalDateTime time)
+    {
+        String monthDirectory = getMonthDirectory(time);
+        return String.format("%s/Sales%s", monthDirectory, FILE_EXTENSION);
+    }
+
+    public static String getExpensesMonthPath(LocalDateTime time)
+    {
+        String monthDirectory = getMonthDirectory(time);
+        return String.format("%s/Expenses%s", monthDirectory, FILE_EXTENSION);
+    }
+
 
     private static String getMonthDirectory(LocalDateTime time)
     {

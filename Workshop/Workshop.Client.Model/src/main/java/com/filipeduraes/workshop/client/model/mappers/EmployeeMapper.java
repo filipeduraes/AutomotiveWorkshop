@@ -2,11 +2,13 @@
 
 package com.filipeduraes.workshop.client.model.mappers;
 
+import com.filipeduraes.workshop.client.dtos.ClockInTypeDTO;
 import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
-import com.filipeduraes.workshop.core.auth.Employee;
-import com.filipeduraes.workshop.core.auth.EmployeeRole;
-import com.filipeduraes.workshop.core.auth.LocalEmployee;
+import com.filipeduraes.workshop.core.employee.ClockInType;
+import com.filipeduraes.workshop.core.employee.Employee;
+import com.filipeduraes.workshop.core.employee.EmployeeRole;
+import com.filipeduraes.workshop.core.employee.LocalEmployee;
 
 /**
  * Classe responsável por mapear objetos entre as classes de domínio Employee e seus DTOs correspondentes.
@@ -29,7 +31,8 @@ public class EmployeeMapper
             employee.getID(),
             employee.getName(),
             employee.getEmail(),
-            toEmployeeRoleDTO(employee.getRole())
+            toEmployeeRoleDTO(employee.getRole()),
+            toClockInTypeDTO(employee.getLastClockIn())
         );
     }
 
@@ -97,6 +100,28 @@ public class EmployeeMapper
             case MECHANIC -> EmployeeRole.MECHANIC;
             case SPECIALIST_MECHANIC -> EmployeeRole.SPECIALIST_MECHANIC;
             case ADMINISTRATOR -> EmployeeRole.ADMINISTRATOR;
+        };
+    }
+
+    public static ClockInTypeDTO toClockInTypeDTO(ClockInType clockInType)
+    {
+        return switch (clockInType)
+        {
+            case IN -> ClockInTypeDTO.IN;
+            case START_BREAK -> ClockInTypeDTO.START_BREAK;
+            case END_BREAK -> ClockInTypeDTO.END_BREAK;
+            case OUT -> ClockInTypeDTO.OUT;
+        };
+    }
+
+    public static ClockInType fromClockInTypeDTO(ClockInTypeDTO clockInType)
+    {
+        return switch (clockInType)
+        {
+            case IN -> ClockInType.IN;
+            case START_BREAK -> ClockInType.START_BREAK;
+            case END_BREAK -> ClockInType.END_BREAK;
+            case OUT -> ClockInType.OUT;
         };
     }
 }

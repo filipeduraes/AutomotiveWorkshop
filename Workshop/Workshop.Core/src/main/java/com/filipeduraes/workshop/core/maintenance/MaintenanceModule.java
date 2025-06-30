@@ -2,10 +2,8 @@
 package com.filipeduraes.workshop.core.maintenance;
 
 import com.filipeduraes.workshop.core.CrudRepository;
-import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
-import com.filipeduraes.workshop.core.store.Sale;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.*;

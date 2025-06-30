@@ -3,11 +3,26 @@ package com.filipeduraes.workshop.core;
 import java.util.UUID;
 
 /**
- * Base para todas as entidades que são identificáveis por um ID.
+ * Base para todas as entidades identificáveis por um ID.
  */
 public class WorkshopEntity
 {
     private UUID id;
+
+    /**
+     * Cria uma entidade sem nenhum ID definido.
+     */
+    public WorkshopEntity(){}
+
+    /**
+     * Construtor de cópia para entidades identificáveis.
+     *
+     * @param other entidade a ser copiada
+     */
+    public WorkshopEntity(WorkshopEntity other)
+    {
+        assignID(other.getID());
+    }
 
     /**
      * Atribui um identificador único à entidade.

@@ -15,6 +15,9 @@ import com.filipeduraes.workshop.client.consoleview.input.MaxCharactersValidator
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.RegisterVehicleMenu;
 import com.filipeduraes.workshop.client.consoleview.vehiclemodule.VehicleSelectionFromClientMenu;
 import com.filipeduraes.workshop.client.dtos.*;
+import com.filipeduraes.workshop.client.dtos.service.ServiceOrderDTO;
+import com.filipeduraes.workshop.client.dtos.service.ServiceStepDTO;
+import com.filipeduraes.workshop.client.dtos.service.ServiceStepTypeDTO;
 import com.filipeduraes.workshop.client.viewmodel.*;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 

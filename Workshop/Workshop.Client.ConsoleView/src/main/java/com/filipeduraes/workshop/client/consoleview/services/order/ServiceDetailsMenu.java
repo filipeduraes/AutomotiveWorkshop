@@ -7,8 +7,8 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.general.MenuOption;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
-import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
-import com.filipeduraes.workshop.client.dtos.ServiceStepTypeDTO;
+import com.filipeduraes.workshop.client.dtos.service.ServiceOrderDTO;
+import com.filipeduraes.workshop.client.dtos.service.ServiceStepTypeDTO;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 import com.filipeduraes.workshop.utils.TextUtils;
 

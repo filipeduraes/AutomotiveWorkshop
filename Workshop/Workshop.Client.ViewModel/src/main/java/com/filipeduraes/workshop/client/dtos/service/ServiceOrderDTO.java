@@ -1,5 +1,7 @@
-package com.filipeduraes.workshop.client.dtos;
+package com.filipeduraes.workshop.client.dtos.service;
 
+import com.filipeduraes.workshop.client.dtos.PricedItemDTO;
+import com.filipeduraes.workshop.client.dtos.SaleDTO;
 import com.filipeduraes.workshop.utils.TextUtils;
 
 import java.math.BigDecimal;

@@ -14,14 +14,19 @@ import java.util.UUID;
  *
  * @author Filipe Durães
  */
-public class EmployeeViewModel extends EntityViewModel<EmployeeDTO>
+public class EmployeeViewModel extends EntityViewModel<EmployeeDTO> implements IMonthReportViewModel
 {
     /**
      * Evento disparado quando uma solicitação de login é feita.
      */
     public final Observer OnLoginRequested = new Observer();
+    public final Observer OnClockInRequested = new Observer();
+    public final Observer OnMonthClockInReportRequested = new Observer();
 
     private EmployeeDTO loggedUser;
+    private String clockInReport = "";
+    private int selectedMonth = -1;
+    private int selectedYear = -1;
 
     /**
      * Obtém o usuário atualmente logado no sistema.
@@ -53,6 +58,45 @@ public class EmployeeViewModel extends EntityViewModel<EmployeeDTO>
         UUID selectedUserID = getSelectedDTO().getID();
         UUID loggedUserID = getLoggedUser().getID();
         return hasLoggedUser() && hasLoadedDTO() && loggedUserID.equals(selectedUserID);
+    }
+
+    @Override
+    public void setSelectedMonth(int month)
+    {
+        selectedMonth = month;
+    }
+
+    public int getSelectedMonth()
+    {
+        return selectedMonth;
+    }
+
+    @Override
+    public void setSelectedYear(int year)
+    {
+        selectedYear = year;
+    }
+
+    public int getSelectedYear()
+    {
+        return selectedYear;
+    }
+
+    @Override
+    public void broadcastReportRequest()
+    {
+        OnMonthClockInReportRequested.broadcast();
+    }
+
+    @Override
+    public String getReport()
+    {
+        return clockInReport;
+    }
+
+    public void setReport(String clockInReport)
+    {
+        this.clockInReport = clockInReport;
     }
 
     /**

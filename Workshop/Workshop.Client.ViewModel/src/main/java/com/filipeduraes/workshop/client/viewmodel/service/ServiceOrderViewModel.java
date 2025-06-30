@@ -2,10 +2,9 @@
 
 package com.filipeduraes.workshop.client.viewmodel.service;
 
-import com.filipeduraes.workshop.client.dtos.ServiceOrderDTO;
+import com.filipeduraes.workshop.client.dtos.service.ServiceOrderDTO;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
-import com.filipeduraes.workshop.utils.ConsumerObserver;
 import com.filipeduraes.workshop.utils.Observer;
 
 /**

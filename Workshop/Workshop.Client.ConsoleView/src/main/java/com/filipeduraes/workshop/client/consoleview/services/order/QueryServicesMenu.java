@@ -112,12 +112,7 @@ public class QueryServicesMenu implements IWorkshopMenu
     {
         FieldType[] selectableFieldTypes = { FieldType.NONE, FieldType.CLIENT, FieldType.DESCRIPTION };;
 
-        int selectedFilterOption = ConsoleInput.readOptionFromList("Qual filtro deseja usar?", selectableFieldTypes, true);
-
-        if (selectedFilterOption >= selectableFieldTypes.length)
-        {
-            selectedFilterOption = -1;
-        }
+        int selectedFilterOption = ConsoleInput.readOptionFromList("Qual filtro deseja usar?", selectableFieldTypes);
 
         return selectableFieldTypes[selectedFilterOption];
     }

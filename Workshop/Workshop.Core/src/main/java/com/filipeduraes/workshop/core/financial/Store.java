@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.core.store;
+package com.filipeduraes.workshop.core.financial;
 
 import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.catalog.ProductCatalog;
@@ -94,7 +94,7 @@ public class Store
      */
     public List<Sale> getMonthSales(LocalDateTime date)
     {
-        String salesMonthPath = WorkshopPaths.getPurchasesMonthPath(date);
+        String salesMonthPath = WorkshopPaths.getSalesMonthPath(date);
 
         if (!Persistence.hasFile(salesMonthPath))
         {

@@ -2,10 +2,14 @@
 
 package com.filipeduraes.workshop.client.consoleview;
 
+import com.filipeduraes.workshop.client.consoleview.employee.ClockInMenu;
 import com.filipeduraes.workshop.client.consoleview.employee.EmployeeDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.employee.RegisterEmployeeMenu;
 import com.filipeduraes.workshop.client.consoleview.client.ClientDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.client.ClientRegistrationMenu;
+import com.filipeduraes.workshop.client.consoleview.employee.ShowMonthClockInMenu;
+import com.filipeduraes.workshop.client.consoleview.financial.RegisterExpenseMenu;
+import com.filipeduraes.workshop.client.consoleview.financial.ShowMonthExpensesMenu;
 import com.filipeduraes.workshop.client.consoleview.financial.ShowMonthSalesMenu;
 import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
 import com.filipeduraes.workshop.client.consoleview.inventorymanagement.RegisterStoreItemMenu;
@@ -79,7 +83,8 @@ public class MainMenu extends RedirectMenu
         "Colaborador", new IWorkshopMenu[]
         {
             new RegisterEmployeeMenu(),
-            new EmployeeDetailsMenu()
+            new EmployeeDetailsMenu(),
+            new ShowMonthClockInMenu()
         }
     );
 
@@ -87,16 +92,19 @@ public class MainMenu extends RedirectMenu
     (
         "Financeiro", new IWorkshopMenu[]
         {
-            new ShowMonthSalesMenu()
+            new ShowMonthSalesMenu(),
+            new ShowMonthExpensesMenu()
         }
     );
 
     private final static IWorkshopMenu[] regularMenus =
     {
+        new ClockInMenu(),
         serviceMenu,
         clientMenu,
         vehicleMenu,
-        inventoryManagementMenu
+        inventoryManagementMenu,
+        new RegisterExpenseMenu()
     };
 
     private final static IWorkshopMenu[] administratorMenus =

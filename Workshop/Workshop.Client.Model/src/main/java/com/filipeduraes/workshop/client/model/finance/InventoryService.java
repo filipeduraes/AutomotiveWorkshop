@@ -1,6 +1,6 @@
 // Copyright Filipe Durães. All rights reserved.
 
-package com.filipeduraes.workshop.client.model;
+package com.filipeduraes.workshop.client.model.finance;
 
 import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
 import com.filipeduraes.workshop.client.model.mappers.InventoryMapper;
@@ -11,14 +11,13 @@ import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.catalog.ProductCatalog;
 import com.filipeduraes.workshop.core.catalog.StoreItem;
-import com.filipeduraes.workshop.core.store.Sale;
-import com.filipeduraes.workshop.core.store.Store;
+import com.filipeduraes.workshop.core.financial.Sale;
+import com.filipeduraes.workshop.core.financial.Store;
 import com.filipeduraes.workshop.utils.TextUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
  *
  * @author Filipe Durães
  */
-public class InventoryController
+public class InventoryService
 {
     private final InventoryViewModel inventoryViewModel;
 
@@ -43,7 +42,7 @@ public class InventoryController
      * @param viewModelRegistry registro central dos view models da aplicação
      * @param workshop instância principal do sistema da oficina
      */
-    public InventoryController(ViewModelRegistry viewModelRegistry, Workshop workshop)
+    public InventoryService(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
         inventoryViewModel = viewModelRegistry.getInventoryViewModel();
         store = workshop.getStore();
@@ -218,14 +217,19 @@ public class InventoryController
     {
         List<Sale> monthSales;
         int selectedMonth = inventoryViewModel.getSelectedMonth();
+        int selectedYear = inventoryViewModel.getSelectedYear();
 
         if(selectedMonth < 0 || selectedMonth > 12)
         {
             monthSales = store.getCurrentMonthSales();
         }
+        else if(selectedYear < 0)
+        {
+            LocalDateTime date = LocalDateTime.of(LocalDateTime.now().getYear(), selectedMonth, 1, 0, 0);
+            monthSales = store.getMonthSales(date);
+        }
         else
         {
-            int selectedYear = inventoryViewModel.getSelectedYear();
             LocalDateTime date = LocalDateTime.of(selectedYear, selectedMonth, 1, 0, 0);
             monthSales = store.getMonthSales(date);
         }
@@ -241,7 +245,7 @@ public class InventoryController
                                   .map(Sale::toString)
                                   .collect(Collectors.joining(String.format("%n%s%n", "_".repeat(43))));
 
-        inventoryViewModel.setMonthSaleReport(report);
+        inventoryViewModel.setReport(report);
         inventoryViewModel.setSaleTotalPrice(TextUtils.formatPrice(totalPrice));
     }
 

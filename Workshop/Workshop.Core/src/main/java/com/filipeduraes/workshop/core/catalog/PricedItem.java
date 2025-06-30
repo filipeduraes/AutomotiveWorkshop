@@ -41,11 +41,11 @@ public class PricedItem extends WorkshopEntity
      */
     public PricedItem(PricedItem pricedItem)
     {
+        super(pricedItem);
+
         name = pricedItem.name;
         description = pricedItem.description;
         price = pricedItem.price;
-
-        assignID(pricedItem.getID());
     }
 
     /**

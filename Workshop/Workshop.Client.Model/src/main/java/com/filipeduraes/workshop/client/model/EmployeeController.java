@@ -2,18 +2,19 @@
 
 package com.filipeduraes.workshop.client.model;
 
+import com.filipeduraes.workshop.client.dtos.ClockInTypeDTO;
 import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.model.mappers.EmployeeMapper;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.core.CrudRepository;
-import com.filipeduraes.workshop.core.auth.AuthModule;
-import com.filipeduraes.workshop.core.auth.Employee;
-import com.filipeduraes.workshop.core.auth.EmployeeRole;
-import com.filipeduraes.workshop.core.auth.LocalEmployee;
+import com.filipeduraes.workshop.core.employee.*;
+import com.filipeduraes.workshop.utils.TextUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Controlador responsável por gerenciar a autenticação e registro de usuários no sistema.
@@ -44,6 +45,8 @@ public class EmployeeController
         this.viewModel.OnLoadDataRequest.addListener(this::loadUserData);
         this.viewModel.OnEditRequest.addListener(this::editUserData);
         this.viewModel.OnDeleteRequest.addListener(this::deleteUser);
+        this.viewModel.OnClockInRequested.addListener(this::clockIn);
+        this.viewModel.OnMonthClockInReportRequested.addListener(this::buildMonthClockInReport);
     }
 
     /**
@@ -57,6 +60,8 @@ public class EmployeeController
         this.viewModel.OnLoadDataRequest.removeListener(this::loadUserData);
         this.viewModel.OnEditRequest.removeListener(this::editUserData);
         this.viewModel.OnDeleteRequest.removeListener(this::deleteUser);
+        this.viewModel.OnClockInRequested.removeListener(this::clockIn);
+        this.viewModel.OnMonthClockInReportRequested.removeListener(this::buildMonthClockInReport);
     }
 
     private void login()
@@ -184,6 +189,52 @@ public class EmployeeController
         LocalEmployee deletedUser = authModule.getEmployeeRepository().deleteEntityWithID(selectedUserID);
 
         viewModel.setRequestWasSuccessful(deletedUser != null);
+    }
+
+    private void clockIn()
+    {
+        ClockInTypeDTO lastClockIn = viewModel.getLoggedUser().getLastClockIn();
+        ClockInType clockInType = EmployeeMapper.fromClockInTypeDTO(lastClockIn);
+        authModule.registerClockIn(clockInType);
+        viewModel.setRequestWasSuccessful(true);
+    }
+
+    private void buildMonthClockInReport()
+    {
+        List<ClockIn> clockIns;
+
+        if(viewModel.getSelectedMonth() < 0)
+        {
+            clockIns = authModule.loadCurrentMonthClockIns();
+        }
+        else if(viewModel.getSelectedYear() < 0)
+        {
+            clockIns = authModule.loadMonthClockIns(viewModel.getSelectedMonth(), LocalDateTime.now().getYear());
+        }
+        else
+        {
+            clockIns = authModule.loadMonthClockIns(viewModel.getSelectedMonth(), viewModel.getSelectedYear());
+        }
+
+        String report = clockIns.stream()
+                                .map(this::getClockInDescription)
+                                .collect(Collectors.joining("\n"));
+
+        viewModel.setReport(report);
+        viewModel.setRequestWasSuccessful(true);
+    }
+
+    private String getClockInDescription(ClockIn clockIn)
+    {
+        LocalEmployee employee = authModule.getEmployeeRepository().getEntityWithID(clockIn.getEmployeeID());
+
+        return String.format
+        (
+            " > %s - %s - %s",
+            clockIn.getType(),
+            employee.getName(),
+            TextUtils.formatDate(clockIn.getTimestamp())
+        );
     }
 
     private static String getEmployeeDescription(Employee employee)
