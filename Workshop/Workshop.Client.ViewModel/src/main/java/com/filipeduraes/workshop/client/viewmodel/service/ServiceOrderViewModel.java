@@ -51,6 +51,11 @@ public class ServiceOrderViewModel extends EntityViewModel<ServiceOrderDTO>
      */
     public final Observer OnAddServiceItemRequested = new Observer();
 
+    /**
+     * Evento disparado quando há uma solicitação para adicionar uma venda na ordem de serviço.
+     */
+    public final Observer OnAddSaleRequested = new Observer();
+
     private ServiceQueryType queryType = ServiceQueryType.GENERAL;
     private ServiceFilterType filterType = ServiceFilterType.NONE;
     private String descriptionQueryPattern;

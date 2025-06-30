@@ -109,4 +109,9 @@ public class Store
     {
         return sale.getDate().getMonth() == date.getMonth() && sale.getDate().getYear() == date.getYear();
     }
+
+    public Sale getSaleWithID(UUID saleID)
+    {
+        return currentMonthPurchasesRepository.getEntityWithID(saleID);
+    }
 }

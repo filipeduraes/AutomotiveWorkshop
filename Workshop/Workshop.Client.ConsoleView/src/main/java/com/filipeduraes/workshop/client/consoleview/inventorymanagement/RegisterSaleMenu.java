@@ -9,7 +9,7 @@ import com.filipeduraes.workshop.client.consoleview.PopupMenuRedirector;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.viewmodel.InventoryViewModel;
 
-public class RegisterPurchaseMenu implements IWorkshopMenu
+public class RegisterSaleMenu implements IWorkshopMenu
 {
     private final PopupMenuRedirector redirector = new PopupMenuRedirector(new SearchStoreItemMenu());
 
@@ -23,6 +23,7 @@ public class RegisterPurchaseMenu implements IWorkshopMenu
     public MenuResult showMenu(MenuManager menuManager)
     {
         InventoryViewModel inventoryViewModel = menuManager.getViewModelRegistry().getInventoryViewModel();
+        inventoryViewModel.setSaleID(null);
 
         if(!inventoryViewModel.hasValidSelectedIndex())
         {

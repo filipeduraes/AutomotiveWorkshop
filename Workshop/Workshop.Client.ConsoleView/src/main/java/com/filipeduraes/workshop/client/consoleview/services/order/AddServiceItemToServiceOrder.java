@@ -6,28 +6,13 @@ import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
 import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.PopupMenuRedirector;
-import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
-import com.filipeduraes.workshop.client.consoleview.services.item.CreateTemporaryServiceItemMenu;
-import com.filipeduraes.workshop.client.consoleview.services.item.RegisterServiceItemMenu;
-import com.filipeduraes.workshop.client.consoleview.services.item.SearchServiceItemMenu;
+import com.filipeduraes.workshop.client.consoleview.services.item.SelectServiceItem;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 
 public class AddServiceItemToServiceOrder implements IWorkshopMenu
 {
-    PopupMenuRedirector selectServiceItemRedirector = new PopupMenuRedirector
-    (
-        new RedirectMenu
-        (
-            "Selecionar item de sevico",
-            new IWorkshopMenu[]
-            {
-                new SearchServiceItemMenu(),
-                new CreateTemporaryServiceItemMenu(),
-                new RegisterServiceItemMenu()
-            }
-        )
-    );
+    PopupMenuRedirector selectServiceItemRedirector = new PopupMenuRedirector(new SelectServiceItem());
 
     @Override
     public String getMenuDisplayName()

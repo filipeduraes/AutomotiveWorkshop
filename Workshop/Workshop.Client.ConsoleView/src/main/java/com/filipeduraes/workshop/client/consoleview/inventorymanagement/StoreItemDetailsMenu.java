@@ -69,6 +69,6 @@ public class StoreItemDetailsMenu extends EntityDetailsMenu<EntityViewModel<Stor
 
     private MenuResult redirectToPurchaseMenu(MenuManager menuManager)
     {
-        return MenuResult.replace(new RegisterPurchaseMenu());
+        return MenuResult.replace(new RegisterSaleMenu());
     }
 }

@@ -133,6 +133,8 @@ public class ServiceOrderDTO
         return vehicleID;
     }
 
+
+
     /**
      * Retorna uma representação em string da ordem de serviço.
      * A string contém o ID, estado atual, cliente, veículo e todas as etapas
@@ -151,92 +153,69 @@ public class ServiceOrderDTO
         builder.append(String.format("  Veiculo:   %s%n", getVehicleDescription()));
         builder.append(SUB_SEPARATOR).append("\n");
 
-        builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
-        builder.append("ETAPAS DO SERVICO\n");
-        builder.append(SECTION_HEADER_SEPARATOR).append("\n");
-        builder.append(getStepsDisplay());
-        builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+        appendSection(builder, "ETAPAS DO SERVICO", getStepsDisplay());
 
         if(!serviceItems.isEmpty())
         {
-            builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
-            builder.append("SERVICOS PRESTADOS\n");
-            builder.append(SECTION_HEADER_SEPARATOR).append("\n");
-            builder.append(getServicesPerformedDisplay());
-            builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+            appendSection(builder, "SERVICOS PRESTADOS", getServicesPerformedDisplay());
         }
 
         if(!sales.isEmpty())
         {
-            builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
-            builder.append("PRODUTOS USADOS\n");
-            builder.append(SECTION_HEADER_SEPARATOR).append("\n");
-            builder.append(getProductsUsedDisplay());
-            builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+            appendSection(builder, "PRODUTOS USADOS", getProductsUsedDisplay());
         }
 
-        builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
-        builder.append("RESUMO FINANCEIRO\n");
-        builder.append(SECTION_HEADER_SEPARATOR).append("\n");
-        builder.append(getFinancialSummaryDisplay());
-        builder.append(SECTION_HEADER_SEPARATOR);
+        appendSection(builder, "RESUMO FINANCEIRO", getFinancialSummaryDisplay());
 
         return builder.toString();
     }
 
-    /**
-     * Formata a exibição das etapas.
-     * @return string formatada das etapas
-     */
+    private void appendSection(StringBuilder builder, String sectionTitle, String display)
+    {
+        builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
+        builder.append(String.format("%s\n", sectionTitle));
+        builder.append(SECTION_HEADER_SEPARATOR).append("\n");
+        builder.append(display);
+        builder.append(SECTION_HEADER_SEPARATOR);
+    }
+
     private String getStepsDisplay()
     {
         StringBuilder builder = new StringBuilder();
 
-        if (getSteps() == null || getSteps().isEmpty())
+        for (int i = 0; i < getSteps().size(); i++)
         {
-            builder.append("Nenhuma etapa registrada para esta Ordem de Servico.\n");
-        }
-        else
-        {
-            for (int i = 0; i < getSteps().size(); i++)
+            ServiceStepDTO serviceStepDTO = getSteps().get(i);
+            ServiceStepTypeDTO serviceStepTypeDisplay = ServiceStepTypeDTO.values()[i + 1];
+
+            if (i > 0)
             {
-                ServiceStepDTO serviceStepDTO = getSteps().get(i);
-                ServiceStepTypeDTO serviceStepTypeDisplay = ServiceStepTypeDTO.values()[i + 1];
-
-                if (i > 0)
-                {
-                    builder.append(SUB_SEPARATOR).append("\n");
-                }
-
-                builder.append("### ").append(serviceStepTypeDisplay.toString()).append(" ###\n");
-
-                if (serviceStepDTO.getHasBeenFinished())
-                {
-                    builder.append(String.format("  > Descricao Curta:     %s%n", serviceStepDTO.getShortDescription()));
-                    builder.append(String.format("  > Descricao Detalhada: %s%n", serviceStepDTO.getDetailedDescription()));
-                    builder.append(String.format("  > Responsavel:         %s%n", serviceStepDTO.getOwner()));
-                    builder.append(String.format("  > Data de Inicio:      %s%n", serviceStepDTO.getStartDate()));
-                    builder.append(String.format("  > Data de Termino:     %s%n", serviceStepDTO.getEndDate()));
-                    builder.append(String.format("  > Estado:              Finalizada%n"));
-                }
-                else
-                {
-                    builder.append("  > Descricao:           Indisponivel\n");
-                    builder.append("  > Descricao Curta:     Indisponivel\n");
-                    builder.append(String.format("  > Responsavel:         %s%n", serviceStepDTO.getOwner()));
-                    builder.append(String.format("  > Data de Inicio:      %s%n", serviceStepDTO.getStartDate()));
-                    builder.append(String.format("  > Estado:              Em andamento%n"));
-                }
+                builder.append(SUB_SEPARATOR).append("\n");
             }
+
+            builder.append("### ").append(serviceStepTypeDisplay.toString()).append(" ###\n");
+
+            if (serviceStepDTO.getHasBeenFinished())
+            {
+                builder.append(String.format("  > Descricao Curta:     %s%n", serviceStepDTO.getShortDescription()));
+                builder.append(String.format("  > Descricao Detalhada: %s%n", serviceStepDTO.getDetailedDescription()));
+            }
+
+            builder.append(String.format("  > Responsavel:         %s%n", serviceStepDTO.getOwner()));
+            builder.append(String.format("  > Data de Inicio:      %s%n", serviceStepDTO.getStartDate()));
+
+            if(serviceStepDTO.getHasBeenFinished())
+            {
+                builder.append(String.format("  > Data de Termino:     %s%n", serviceStepDTO.getEndDate()));
+            }
+
+            String status = serviceStepDTO.getHasBeenFinished() ? "Finalizada" : "Em andamento";
+            builder.append(String.format("  > Estado:              %s%n", status));
         }
+
         return builder.toString();
     }
 
-    /**
-     * Formata a exibição dos serviços prestados (PricedItemDTO).
-     *
-     * @return string formatada dos serviços prestados
-     */
     private String getServicesPerformedDisplay()
     {
         StringBuilder builder = new StringBuilder();
@@ -249,15 +228,11 @@ public class ServiceOrderDTO
         }
 
         builder.append(SUB_SEPARATOR).append("\n");
-        builder.append(String.format("TOTAL SERVICOS:          | %s%n", TextUtils.formatPrice(totalServices)));
+        builder.append(String.format("TOTAL SERVICOS:             | %s%n", TextUtils.formatPrice(totalServices)));
 
         return builder.toString();
     }
 
-    /**
-     * Formata a exibição dos produtos usados (SaleDTO).
-     * @return string formatada dos produtos usados
-     */
     private String getProductsUsedDisplay()
     {
         StringBuilder builder = new StringBuilder();
@@ -271,16 +246,11 @@ public class ServiceOrderDTO
         }
 
         builder.append(SUB_SEPARATOR).append("\n");
-        builder.append(String.format("TOTAL PRODUTOS:          | %s%n", TextUtils.formatPrice(totalProducts)));
+        builder.append(String.format("TOTAL PRODUTOS:             | %s%n", TextUtils.formatPrice(totalProducts)));
 
         return builder.toString();
     }
 
-    /**
-     * Formata o resumo financeiro.
-     *
-     * @return string formatada do resumo financeiro
-     */
     private String getFinancialSummaryDisplay()
     {
         StringBuilder builder = new StringBuilder();

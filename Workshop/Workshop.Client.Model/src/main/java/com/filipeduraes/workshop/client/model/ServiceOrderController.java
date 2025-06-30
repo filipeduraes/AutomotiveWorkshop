@@ -7,6 +7,7 @@ import com.filipeduraes.workshop.client.model.mappers.ServiceItemMapper;
 import com.filipeduraes.workshop.client.model.mappers.ServiceOrderMapper;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
+import com.filipeduraes.workshop.client.viewmodel.InventoryViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceFilterType;
@@ -14,12 +15,12 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceQueryType;
 import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.catalog.PricedItem;
-import com.filipeduraes.workshop.core.catalog.ServiceItem;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.maintenance.ElevatorType;
 import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.maintenance.ServiceStep;
+import com.filipeduraes.workshop.core.store.Sale;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
 import com.filipeduraes.workshop.utils.TextUtils;
 
@@ -42,6 +43,7 @@ public class ServiceOrderController
     private final EntityViewModel<ClientDTO> clientViewModel;
     private final EntityViewModel<PricedItemDTO> serviceItemViewModel;
     private final EmployeeViewModel employeeViewModel;
+    private final InventoryViewModel inventoyViewModel;
     private final Workshop workshop;
 
     private List<ServiceOrder> queriedEntities = new ArrayList<>();
@@ -61,6 +63,7 @@ public class ServiceOrderController
         clientViewModel = viewModelRegistry.getClientViewModel();
         employeeViewModel = viewModelRegistry.getEmployeeViewModel();
         serviceItemViewModel = viewModelRegistry.getServiceItemsViewModel();
+        inventoyViewModel = viewModelRegistry.getInventoryViewModel();
 
         this.workshop = workshop;
 
@@ -74,6 +77,7 @@ public class ServiceOrderController
         serviceOrderViewModel.OnDeleteRequest.addListener(this::deleteSelectedService);
         serviceOrderViewModel.OnElevatorTypeCheckRequest.addListener(this::checkElevatorAvailability);
         serviceOrderViewModel.OnAddServiceItemRequested.addListener(this::addServiceItem);
+        serviceOrderViewModel.OnAddSaleRequested.addListener(this::addSale);
     }
 
     /**
@@ -92,6 +96,7 @@ public class ServiceOrderController
         serviceOrderViewModel.OnDeleteRequest.removeListener(this::deleteSelectedService);
         serviceOrderViewModel.OnElevatorTypeCheckRequest.removeListener(this::checkElevatorAvailability);
         serviceOrderViewModel.OnAddServiceItemRequested.removeListener(this::addServiceItem);
+        serviceOrderViewModel.OnAddSaleRequested.removeListener(this::addSale);
     }
 
     private void registerNewService()
@@ -232,9 +237,11 @@ public class ServiceOrderController
             return;
         }
 
-        ServiceOrder serviceOrder = queriedEntities.get(selectedMaintenanceIndex);
+        ServiceOrder queriedServiceOrder = queriedEntities.get(selectedMaintenanceIndex);
+        ServiceOrder serviceOrder = workshop.getMaintenanceModule().getServiceOrderRepository().getEntityWithID(queriedServiceOrder.getID());
         ServiceOrderDTO serviceOrderDTO = ServiceOrderMapper.toDTO(serviceOrder, workshop);
 
+        queriedEntities.set(selectedMaintenanceIndex, serviceOrder);
         serviceOrderViewModel.setSelectedDTO(serviceOrderDTO);
         serviceOrderViewModel.setRequestWasSuccessful(true);
     }
@@ -366,6 +373,41 @@ public class ServiceOrderController
         boolean couldUpdate = maintenanceModule.getServiceOrderRepository().updateEntity(serviceOrder);
 
         serviceOrderViewModel.setRequestWasSuccessful(couldUpdate);
+        requestDetailedServiceInfo();
+    }
+
+    private void addSale()
+    {
+        if(!serviceOrderViewModel.hasLoadedDTO() || !inventoyViewModel.hasLoadedDTO())
+        {
+            serviceOrderViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrderDTO serviceOrderDTO = serviceOrderViewModel.getSelectedDTO();
+        ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(serviceOrderDTO.getID());
+
+        if(serviceOrder == null)
+        {
+            serviceOrderViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        UUID saleID = inventoyViewModel.getSaleID();
+        Sale sale = workshop.getStore().getSaleWithID(saleID);
+
+        if(sale == null)
+        {
+            serviceOrderViewModel.setRequestWasSuccessful(false);
+            return;
+        }
+
+        serviceOrder.registerSale(sale);
+        boolean couldUpdate = maintenanceModule.getServiceOrderRepository().updateEntity(serviceOrder);
+
+        serviceOrderViewModel.setRequestWasSuccessful(couldUpdate);
+        requestDetailedServiceInfo();
     }
 
     private ServiceOrder applyEditingsToServiceOrderStep(ServiceOrder originalServiceOrder, int selectedStepIndex)

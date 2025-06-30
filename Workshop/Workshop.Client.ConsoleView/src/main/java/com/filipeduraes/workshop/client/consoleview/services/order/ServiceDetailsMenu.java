@@ -76,7 +76,8 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceOrderViewModel,
         }
 
         newOptions.add(new MenuOption("Editar ordem de servico", this::editService));
-        newOptions.add(new MenuOption("Adicionar servico Prestado", this::redirectToAddService));
+        newOptions.add(new MenuOption("Adicionar servico prestado", this::redirectToAddService));
+        newOptions.add(new MenuOption("Adicionar peca utilizada", this::redirectToAddSale));
 
         options.addAll(0, newOptions);
         return options;
@@ -144,6 +145,11 @@ public class ServiceDetailsMenu extends EntityDetailsMenu<ServiceOrderViewModel,
     private MenuResult redirectToAddService(MenuManager menuManager)
     {
         return MenuResult.push(new AddServiceItemToServiceOrder());
+    }
+
+    private MenuResult redirectToAddSale(MenuManager menuManager)
+    {
+        return MenuResult.push(new AddSaleToServiceOrder());
     }
 
     private boolean canStartNextStep(ServiceOrderDTO service)
