@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.WorkshopPaths;
 
 import java.lang.reflect.ParameterizedType;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -15,7 +16,7 @@ import java.util.function.Predicate;
  *
  * @author Filipe Durães
  */
-public class MaintenanceModule
+public class ServiceOrderModule
 {
     private final CrudRepository<ServiceOrder> serviceOrderRepository;
     private final Set<UUID> userServices;
@@ -29,7 +30,7 @@ public class MaintenanceModule
      *
      * @param loggedEmployeeID ID do funcionário que está logado no sistema
      */
-    public MaintenanceModule(UUID loggedEmployeeID)
+    public ServiceOrderModule(UUID loggedEmployeeID)
     {
         this.loggedEmployeeID = loggedEmployeeID;
 
@@ -84,9 +85,9 @@ public class MaintenanceModule
      *
      * @return conjunto de IDs dos fechados
      */
-    public Set<UUID> loadClosedServices()
+    public Set<UUID> loadClosedServicesInMonth(LocalDateTime month)
     {
-        return Persistence.loadFile(WorkshopPaths.FINISHED_SERVICES_PATH, serviceIDSetType, new HashSet<>());
+        return Persistence.loadFile(WorkshopPaths.getFinishedServicesMonthPath(month), serviceIDSetType, new HashSet<>());
     }
 
     /**
@@ -189,11 +190,6 @@ public class MaintenanceModule
         return false;
     }
 
-    public boolean startMaintenance(UUID serviceID)
-    {
-        return startMaintenance(serviceID, null);
-    }
-
     /**
      * Inicia o processo de manutenção de um serviço após a inspeção.
      *
@@ -232,11 +228,11 @@ public class MaintenanceModule
         currentStep.finishStep();
         serviceOrder.finish();
 
-        Set<UUID> finishedServices = loadClosedServices();
+        Set<UUID> finishedServices = loadClosedServicesInMonth(LocalDateTime.now());
         finishedServices.add(serviceID);
 
         removeServiceOrderFromEmployeeServices(serviceID);
-        Persistence.saveFile(finishedServices, WorkshopPaths.FINISHED_SERVICES_PATH);
+        Persistence.saveFile(finishedServices, WorkshopPaths.getFinishedServicesCurrentMonthPath());
         return serviceOrderRepository.updateEntity(serviceOrder);
     }
 

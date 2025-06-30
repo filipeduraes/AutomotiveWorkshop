@@ -90,6 +90,12 @@ public final class WorkshopPaths
     }
 
 
+    public static String getFinishedServicesCurrentMonthPath()
+    {
+        LocalDateTime currentDate = LocalDateTime.now();
+        return getFinishedServicesMonthPath(currentDate);
+    }
+
     public static String getPurchasesCurrentMonthPath()
     {
         LocalDateTime currentDate = LocalDateTime.now();
@@ -108,6 +114,12 @@ public final class WorkshopPaths
         return getExpensesMonthPath(currentDate);
     }
 
+
+    public static String getFinishedServicesMonthPath(LocalDateTime time)
+    {
+        String monthDirectory = getMonthDirectory(time);
+        return String.format("%s/FinishedServices%s", monthDirectory, FILE_EXTENSION);
+    }
 
     public static String getClockInMonthPath(LocalDateTime time)
     {

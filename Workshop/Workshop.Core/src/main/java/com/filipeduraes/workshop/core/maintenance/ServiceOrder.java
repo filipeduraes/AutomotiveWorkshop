@@ -6,6 +6,7 @@ import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.catalog.ServiceItem;
 import com.filipeduraes.workshop.core.financial.Sale;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -251,5 +252,39 @@ public class ServiceOrder extends WorkshopEntity
         {
             getCurrentStep().finishStep();
         }
+    }
+
+    public BigDecimal getTotalPrice()
+    {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        totalPrice = totalPrice.add(getSalesPrice());
+        totalPrice = totalPrice.add(getServicesPrice());
+
+        return totalPrice;
+    }
+
+    public BigDecimal getSalesPrice()
+    {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        for(Sale sale : getSales())
+        {
+            totalPrice = totalPrice.add(sale.getTotalPrice());
+        }
+
+        return totalPrice;
+    }
+
+    public BigDecimal getServicesPrice()
+    {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        for(ServiceItem service : getServices())
+        {
+            totalPrice = totalPrice.add(service.getPrice());
+        }
+
+        return totalPrice;
     }
 }

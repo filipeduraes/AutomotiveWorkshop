@@ -11,7 +11,7 @@ import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.maintenance.ElevatorType;
-import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
+import com.filipeduraes.workshop.core.maintenance.ServiceOrderModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 
 import java.util.UUID;
@@ -51,7 +51,7 @@ public class ServiceOrderLifecycleService
 
     private void registerNewService()
     {
-        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
 
         if (vehicleViewModel.hasLoadedDTO())
         {
@@ -60,8 +60,8 @@ public class ServiceOrderLifecycleService
             String detailedDescription = serviceOrderViewModel.getCurrentStepDetailedDescription();
             ClientDTO selectedClient = clientViewModel.getSelectedDTO();
 
-            UUID serviceOrderID = maintenanceModule.registerNewAppointment(selectedClient.getID(), selectedVehicle.getID(), shortDescription, detailedDescription);
-            ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(serviceOrderID);
+            UUID serviceOrderID = serviceOrderModule.registerNewAppointment(selectedClient.getID(), selectedVehicle.getID(), shortDescription, detailedDescription);
+            ServiceOrder serviceOrder = serviceOrderModule.getServiceOrderRepository().getEntityWithID(serviceOrderID);
 
             serviceOrderViewModel.setSelectedIndex(0);
             serviceOrderViewModel.setSelectedDTO(ServiceOrderMapper.toDTO(serviceOrder, workshop));
@@ -72,10 +72,10 @@ public class ServiceOrderLifecycleService
     private void startNextStep()
     {
         ServiceOrderDTO serviceOrderDTO = serviceOrderViewModel.getSelectedDTO();
-        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
         UUID selectedServiceOrderID = serviceOrderDTO.getID();
 
-        ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(selectedServiceOrderID);
+        ServiceOrder serviceOrder = serviceOrderModule.getServiceOrderRepository().getEntityWithID(selectedServiceOrderID);
         boolean canStartNextStep = serviceOrder.getCurrentStepWasFinished();
 
         int selectedElevatorTypeIndex = serviceOrderViewModel.getSelectedElevatorTypeIndex();
@@ -86,11 +86,11 @@ public class ServiceOrderLifecycleService
         {
             if (serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.APPOINTMENT)
             {
-                canStartNextStep = maintenanceModule.startInspection(selectedServiceOrderID, elevatorType);
+                canStartNextStep = serviceOrderModule.startInspection(selectedServiceOrderID, elevatorType);
             }
             else if (serviceOrderDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
             {
-                canStartNextStep = maintenanceModule.startMaintenance(selectedServiceOrderID, elevatorType);
+                canStartNextStep = serviceOrderModule.startMaintenance(selectedServiceOrderID, elevatorType);
             }
 
             queryService.refreshSelectedEntity();
@@ -114,7 +114,7 @@ public class ServiceOrderLifecycleService
 
         boolean wasSuccessful = false;
         UUID serviceID = selectedDTO.getID();
-        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
 
         if(selectedDTO.getServiceStep() == ServiceStepTypeDTO.ASSESSMENT)
         {
@@ -125,11 +125,11 @@ public class ServiceOrderLifecycleService
             }
 
             EmployeeDTO newEmployee = employeeViewModel.getSelectedDTO();
-            wasSuccessful = maintenanceModule.finishInspection(serviceID, newEmployee.getID(), shortDescription, detailedDescription);
+            wasSuccessful = serviceOrderModule.finishInspection(serviceID, newEmployee.getID(), shortDescription, detailedDescription);
         }
         else if(selectedDTO.getServiceStep() == ServiceStepTypeDTO.MAINTENANCE)
         {
-            wasSuccessful = maintenanceModule.finishMaintenance(serviceID, shortDescription, detailedDescription);
+            wasSuccessful = serviceOrderModule.finishMaintenance(serviceID, shortDescription, detailedDescription);
         }
 
         queryService.refreshSelectedEntity();

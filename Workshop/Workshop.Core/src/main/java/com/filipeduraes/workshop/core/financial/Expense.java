@@ -20,6 +20,21 @@ public class Expense
         registerTime = LocalDateTime.now();
     }
 
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public BigDecimal getAmount()
+    {
+        return amount;
+    }
+
+    public LocalDateTime getRegisterTime()
+    {
+        return registerTime;
+    }
+
     @Override
     public String toString()
     {

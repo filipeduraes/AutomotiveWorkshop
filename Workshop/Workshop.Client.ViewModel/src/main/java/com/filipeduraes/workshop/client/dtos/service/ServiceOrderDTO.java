@@ -28,9 +28,6 @@ public class ServiceOrderDTO
     private final List<SaleDTO> sales;
     private final boolean currentStepWasFinished;
 
-    private static final String SUB_SEPARATOR = "--------------------------------------------------------";
-    private static final String SECTION_HEADER_SEPARATOR = "========================================================";
-
     /**
      * Constrói uma nova ordem de serviço com os parâmetros fornecidos.
      *
@@ -158,32 +155,22 @@ public class ServiceOrderDTO
         builder.append(String.format("  Cliente:   %s%n", getClientName()));
         builder.append(String.format("  Veiculo:   %s%n", getVehicleDescription()));
 
-        builder.append(SUB_SEPARATOR).append("\n");
-
-        appendSection(builder, "ETAPAS DO SERVICO", getStepsDisplay());
+        TextUtils.appendSeparator(builder);
+        TextUtils.appendSection(builder, "ETAPAS DO SERVICO", getStepsDisplay());
 
         if(!serviceItems.isEmpty())
         {
-            appendSection(builder, "SERVICOS PRESTADOS", getServicesPerformedDisplay());
+            TextUtils.appendSection(builder, "SERVICOS PRESTADOS", getServicesPerformedDisplay());
         }
 
         if(!sales.isEmpty())
         {
-            appendSection(builder, "PRODUTOS USADOS", getProductsUsedDisplay());
+            TextUtils.appendSection(builder, "PRODUTOS USADOS", getProductsUsedDisplay());
         }
 
-        appendSection(builder, "RESUMO FINANCEIRO", getFinancialSummaryDisplay());
+        TextUtils.appendSection(builder, "RESUMO FINANCEIRO", getFinancialSummaryDisplay());
 
         return builder.toString();
-    }
-
-    private void appendSection(StringBuilder builder, String sectionTitle, String display)
-    {
-        builder.append("\n").append(SECTION_HEADER_SEPARATOR).append("\n");
-        builder.append(String.format("%s\n", sectionTitle));
-        builder.append(SECTION_HEADER_SEPARATOR).append("\n");
-        builder.append(display);
-        builder.append(SECTION_HEADER_SEPARATOR);
     }
 
     private String getStepsDisplay()
@@ -197,27 +184,27 @@ public class ServiceOrderDTO
 
             if (i > 0)
             {
-                builder.append(SUB_SEPARATOR).append("\n");
+                TextUtils.appendSeparator(builder);
             }
 
-            builder.append("### ").append(serviceStepTypeDisplay.toString()).append(" ###\n");
+            TextUtils.appendSubtitle(builder, serviceStepTypeDisplay.toString());
 
             if (serviceStepDTO.getHasBeenFinished())
             {
-                builder.append(String.format("  > Descricao Curta:     %s%n", serviceStepDTO.getShortDescription()));
-                builder.append(String.format("  > Descricao Detalhada: %s%n", serviceStepDTO.getDetailedDescription()));
+                TextUtils.appendFirstList(builder, String.format("Descricao Curta:     %s%n", serviceStepDTO.getShortDescription()));
+                TextUtils.appendFirstList(builder, String.format("Descricao Detalhada: %s%n", serviceStepDTO.getDetailedDescription()));
             }
 
-            builder.append(String.format("  > Responsavel:         %s%n", serviceStepDTO.getOwner()));
-            builder.append(String.format("  > Data de Inicio:      %s%n", serviceStepDTO.getStartDate()));
+            TextUtils.appendFirstList(builder, String.format("Responsavel:         %s%n", serviceStepDTO.getOwner()));
+            TextUtils.appendFirstList(builder, String.format("Data de Inicio:      %s%n", serviceStepDTO.getStartDate()));
 
             if(serviceStepDTO.getHasBeenFinished())
             {
-                builder.append(String.format("  > Data de Termino:     %s%n", serviceStepDTO.getEndDate()));
+                TextUtils.appendFirstList(builder, String.format("Data de Termino:     %s%n", serviceStepDTO.getEndDate()));
             }
 
             String status = serviceStepDTO.getHasBeenFinished() ? "Finalizada" : "Em andamento";
-            builder.append(String.format("  > Estado:              %s%n", status));
+            TextUtils.appendFirstList(builder, String.format("Estado:              %s%n", status));
         }
 
         return builder.toString();
@@ -234,7 +221,7 @@ public class ServiceOrderDTO
             totalServices = totalServices.add(service.getPrice());
         }
 
-        builder.append(SUB_SEPARATOR).append("\n");
+        TextUtils.appendSeparator(builder);
         builder.append(String.format("TOTAL SERVICOS:             | %s%n", TextUtils.formatPrice(totalServices)));
 
         return builder.toString();
@@ -252,7 +239,7 @@ public class ServiceOrderDTO
             totalProducts = totalProducts.add(sale.getSubtotal());
         }
 
-        builder.append(SUB_SEPARATOR).append("\n");
+        TextUtils.appendSeparator(builder);
         builder.append(String.format("TOTAL PRODUTOS:             | %s%n", TextUtils.formatPrice(totalProducts)));
 
         return builder.toString();
@@ -274,7 +261,9 @@ public class ServiceOrderDTO
 
         builder.append(String.format("  Servicos: %s%n", TextUtils.formatPrice(totalServices)));
         builder.append(String.format("  Produtos: %s%n", TextUtils.formatPrice(totalProducts)));
-        builder.append(SUB_SEPARATOR).append("\n");
+
+        TextUtils.appendSeparator(builder);
+
         builder.append(String.format("TOTAL GERAL OS: %s%n", TextUtils.formatPrice(grandTotal)));
         return builder.toString();
     }

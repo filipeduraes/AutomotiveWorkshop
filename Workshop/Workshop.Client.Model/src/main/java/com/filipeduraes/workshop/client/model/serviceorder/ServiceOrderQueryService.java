@@ -13,7 +13,7 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceQueryType;
 import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.client.Client;
-import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
+import com.filipeduraes.workshop.core.maintenance.ServiceOrderModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.maintenance.ServiceStep;
 import com.filipeduraes.workshop.core.vehicle.Vehicle;
@@ -55,10 +55,10 @@ public class ServiceOrderQueryService
     {
         if(serviceOrderViewModel.hasLoadedDTO() && serviceOrderViewModel.hasValidSelectedIndex())
         {
-            MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+            ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
 
             ServiceOrderDTO selectedDTO = serviceOrderViewModel.getSelectedDTO();
-            ServiceOrder updatedServiceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(selectedDTO.getID());
+            ServiceOrder updatedServiceOrder = serviceOrderModule.getServiceOrderRepository().getEntityWithID(selectedDTO.getID());
             ServiceOrderDTO updatedServiceOrderDTO = ServiceOrderMapper.toDTO(updatedServiceOrder, workshop);
 
             queriedEntities.set(serviceOrderViewModel.getSelectedIndex(), updatedServiceOrder);
@@ -178,16 +178,16 @@ public class ServiceOrderQueryService
 
     private List<ServiceOrder> getServicesFiltering(ServiceQueryType queryType, Predicate<ServiceOrder> filter)
     {
-        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrderModule maintenanceModule = workshop.getMaintenanceModule();
         final CrudRepository<ServiceOrder> serviceOrderModule = maintenanceModule.getServiceOrderRepository();
-        Set<UUID> loadedClosedServices = maintenanceModule.loadClosedServices();
+        Set<UUID> loadedClosedServices = maintenanceModule.loadClosedServicesInMonth(LocalDateTime.now());
 
         Predicate<ServiceOrder> typePredicate = switch (queryType)
         {
             case OPENED -> s -> maintenanceModule.getOpenedServices().contains(s.getID());
             case USER -> s -> maintenanceModule.getUserServices().contains(s.getID());
             case GENERAL -> s -> true;
-            case CLOSED -> s -> loadedClosedServices.contains(s.getID());
+            case CLOSED_IN_CURRENT_MONTH -> s -> loadedClosedServices.contains(s.getID());
         };
 
         return serviceOrderModule.findEntitiesWithPredicate(s -> typePredicate.test(s) && filter.test(s));

@@ -9,6 +9,7 @@ import com.filipeduraes.workshop.client.consoleview.client.ClientDetailsMenu;
 import com.filipeduraes.workshop.client.consoleview.client.ClientRegistrationMenu;
 import com.filipeduraes.workshop.client.consoleview.employee.ShowMonthClockInMenu;
 import com.filipeduraes.workshop.client.consoleview.financial.RegisterExpenseMenu;
+import com.filipeduraes.workshop.client.consoleview.financial.ShowMonthBalanceMenu;
 import com.filipeduraes.workshop.client.consoleview.financial.ShowMonthExpensesMenu;
 import com.filipeduraes.workshop.client.consoleview.financial.ShowMonthSalesMenu;
 import com.filipeduraes.workshop.client.consoleview.general.RedirectMenu;
@@ -93,7 +94,8 @@ public class MainMenu extends RedirectMenu
         "Financeiro", new IWorkshopMenu[]
         {
             new ShowMonthSalesMenu(),
-            new ShowMonthExpensesMenu()
+            new ShowMonthExpensesMenu(),
+            new ShowMonthBalanceMenu()
         }
     );
 

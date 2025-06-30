@@ -35,19 +35,30 @@ public abstract class ShowMonthReportMenu implements IWorkshopMenu
 
         employeeViewModel.broadcastReportRequest();
 
-        String clockInReport = employeeViewModel.getReport();
+        String report = employeeViewModel.getReport();
 
-        if(employeeViewModel.getRequestWasSuccessful() && clockInReport != null && !clockInReport.isBlank())
+        if(employeeViewModel.getRequestWasSuccessful() && report != null && !report.isBlank())
         {
-            System.out.println(clockInReport);
+            System.out.println(report);
         }
         else
         {
             System.out.println("Nao foi possivel obter o relatorio do mes selecionado.");
         }
 
+        if(canShowConfirmation())
+        {
+            System.out.println();
+            ConsoleInput.readOptionFromList("O que deseja fazer?", new String[]{"X Voltar"});
+        }
+
         return MenuResult.pop();
     }
 
     protected abstract IMonthReportViewModel getViewModel(MenuManager menuManager);
+
+    protected boolean canShowConfirmation()
+    {
+        return true;
+    }
 }

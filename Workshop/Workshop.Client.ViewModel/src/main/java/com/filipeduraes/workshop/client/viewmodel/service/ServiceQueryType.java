@@ -28,7 +28,7 @@ public enum ServiceQueryType
     /**
      * Representa consultas por serviços já finalizados.
      */
-    CLOSED("Servicos Finalizados");
+    CLOSED_IN_CURRENT_MONTH("Servicos Finalizados no Mes");
 
     private final String displayName;
 

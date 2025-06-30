@@ -6,17 +6,17 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.general.ShowMonthReportMenu;
 import com.filipeduraes.workshop.client.viewmodel.IMonthReportViewModel;
 
-public class ShowMonthExpensesMenu extends ShowMonthReportMenu
+public class ShowMonthBalanceMenu extends ShowMonthReportMenu
 {
     @Override
     public String getMenuDisplayName()
     {
-        return "Mostrar despesas do mes";
+        return "Mostrar balanco do mes";
     }
 
     @Override
     protected IMonthReportViewModel getViewModel(MenuManager menuManager)
     {
-        return menuManager.getViewModelRegistry().getExpenseViewModel();
+        return menuManager.getViewModelRegistry().getFinancialViewModel();
     }
 }

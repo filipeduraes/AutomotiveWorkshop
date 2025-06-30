@@ -6,7 +6,7 @@ import com.filipeduraes.workshop.core.employee.AuthModule;
 import com.filipeduraes.workshop.core.employee.Employee;
 import com.filipeduraes.workshop.core.client.Client;
 import com.filipeduraes.workshop.core.financial.FinancialModule;
-import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
+import com.filipeduraes.workshop.core.maintenance.ServiceOrderModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.persistence.Persistence;
 import com.filipeduraes.workshop.core.persistence.SerializationAdapter;
@@ -31,7 +31,7 @@ public class Workshop
     private final CrudRepository<Vehicle> vehicleRepository;
     private final Store store;
     private final FinancialModule financialModule;
-    private MaintenanceModule maintenanceModule;
+    private ServiceOrderModule serviceOrderModule;
 
     /**
      * Cria uma nova instância de oficina
@@ -66,9 +66,9 @@ public class Workshop
         authModule.OnUserLogged.removeListener(this::initializeUserData);
         vehicleRepository.OnEntityRegistered.removeListener(this::registerVehicleToOwner);
 
-        if (maintenanceModule != null)
+        if (serviceOrderModule != null)
         {
-            maintenanceModule.getServiceOrderRepository().OnEntityRegistered.removeListener(this::registerServiceOrderToOwner);
+            serviceOrderModule.getServiceOrderRepository().OnEntityRegistered.removeListener(this::registerServiceOrderToOwner);
         }
     }
 
@@ -107,9 +107,9 @@ public class Workshop
      *
      * @return módulo de manutenção
      */
-    public MaintenanceModule getMaintenanceModule()
+    public ServiceOrderModule getMaintenanceModule()
     {
-        return maintenanceModule;
+        return serviceOrderModule;
     }
 
     /**
@@ -136,8 +136,8 @@ public class Workshop
     {
         Employee loggedUser = authModule.getLoggedUser();
         WorkshopPaths.setCurrentLoggedUserID(loggedUser.getID());
-        maintenanceModule = new MaintenanceModule(loggedUser.getID());
-        maintenanceModule.getServiceOrderRepository().OnEntityRegistered.addListener(this::registerServiceOrderToOwner);
+        serviceOrderModule = new ServiceOrderModule(loggedUser.getID());
+        serviceOrderModule.getServiceOrderRepository().OnEntityRegistered.addListener(this::registerServiceOrderToOwner);
     }
 
     private void registerVehicleToOwner(Vehicle vehicle)

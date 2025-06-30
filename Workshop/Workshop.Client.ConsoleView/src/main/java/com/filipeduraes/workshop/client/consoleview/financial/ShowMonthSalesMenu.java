@@ -36,4 +36,10 @@ public class ShowMonthSalesMenu extends ShowMonthReportMenu
     {
         return menuManager.getViewModelRegistry().getInventoryViewModel();
     }
+
+    @Override
+    protected boolean canShowConfirmation()
+    {
+        return false;
+    }
 }

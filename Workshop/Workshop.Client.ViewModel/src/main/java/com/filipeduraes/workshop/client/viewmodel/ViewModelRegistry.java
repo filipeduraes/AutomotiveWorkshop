@@ -24,6 +24,7 @@ public class ViewModelRegistry
     private final EntityViewModel<PricedItemDTO> serviceItemsViewModel;
     private final InventoryViewModel inventoryViewModel;
     private final ExpenseViewModel expenseViewModel;
+    private final FinancialViewModel financialViewModel;
 
     /**
      * Inicializa um novo registro de ViewModels.
@@ -38,6 +39,7 @@ public class ViewModelRegistry
         serviceItemsViewModel = new EntityViewModel<>();
         inventoryViewModel = new InventoryViewModel();
         expenseViewModel = new ExpenseViewModel();
+        financialViewModel = new FinancialViewModel();
     }
 
     /**
@@ -108,5 +110,15 @@ public class ViewModelRegistry
     public ExpenseViewModel getExpenseViewModel()
     {
         return expenseViewModel;
+    }
+
+    /**
+     * Obtém o ViewModel para operações financeiras.
+     *
+     * @return o ViewModel de operações financeiras
+     */
+    public FinancialViewModel getFinancialViewModel()
+    {
+        return financialViewModel;
     }
 }

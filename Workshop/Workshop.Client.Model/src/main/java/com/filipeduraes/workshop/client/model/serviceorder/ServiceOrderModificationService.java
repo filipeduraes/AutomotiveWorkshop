@@ -14,7 +14,7 @@ import com.filipeduraes.workshop.core.CrudRepository;
 import com.filipeduraes.workshop.core.Workshop;
 import com.filipeduraes.workshop.core.catalog.PricedItem;
 import com.filipeduraes.workshop.core.client.Client;
-import com.filipeduraes.workshop.core.maintenance.MaintenanceModule;
+import com.filipeduraes.workshop.core.maintenance.ServiceOrderModule;
 import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 import com.filipeduraes.workshop.core.maintenance.ServiceStep;
 import com.filipeduraes.workshop.core.financial.Sale;
@@ -62,7 +62,7 @@ public class ServiceOrderModificationService
 
     private void editService()
     {
-        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrderModule maintenanceModule = workshop.getMaintenanceModule();
         CrudRepository<ServiceOrder> serviceOrderModule = maintenanceModule.getServiceOrderRepository();
         UUID selectedServiceID = serviceOrderViewModel.getSelectedDTO().getID();
         ServiceOrder serviceOrder = serviceOrderModule.getEntityWithID(selectedServiceID);
@@ -112,8 +112,8 @@ public class ServiceOrderModificationService
         }
 
         UUID id = serviceOrderDTO.getID();
-        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
-        ServiceOrder originalServiceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(id);
+        ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
+        ServiceOrder originalServiceOrder = serviceOrderModule.getServiceOrderRepository().getEntityWithID(id);
 
         if(originalServiceOrder == null)
         {
@@ -129,7 +129,7 @@ public class ServiceOrderModificationService
             return;
         }
 
-        boolean couldUpdate = maintenanceModule.getServiceOrderRepository().updateEntity(editedServiceOrder);
+        boolean couldUpdate = serviceOrderModule.getServiceOrderRepository().updateEntity(editedServiceOrder);
 
         queryService.refreshSelectedEntity();
         serviceOrderViewModel.setRequestWasSuccessful(couldUpdate);
@@ -143,9 +143,9 @@ public class ServiceOrderModificationService
             return;
         }
 
-        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
         ServiceOrderDTO serviceOrderDTO = serviceOrderViewModel.getSelectedDTO();
-        ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(serviceOrderDTO.getID());
+        ServiceOrder serviceOrder = serviceOrderModule.getServiceOrderRepository().getEntityWithID(serviceOrderDTO.getID());
 
         if(serviceOrder == null)
         {
@@ -157,7 +157,7 @@ public class ServiceOrderModificationService
         PricedItem pricedItem = ServiceItemMapper.fromDTO(serviceItemDTO);
 
         serviceOrder.registerService(pricedItem);
-        boolean couldUpdate = maintenanceModule.getServiceOrderRepository().updateEntity(serviceOrder);
+        boolean couldUpdate = serviceOrderModule.getServiceOrderRepository().updateEntity(serviceOrder);
 
         queryService.refreshSelectedEntity();
         serviceOrderViewModel.setRequestWasSuccessful(couldUpdate);
@@ -171,9 +171,9 @@ public class ServiceOrderModificationService
             return;
         }
 
-        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
+        ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
         ServiceOrderDTO serviceOrderDTO = serviceOrderViewModel.getSelectedDTO();
-        ServiceOrder serviceOrder = maintenanceModule.getServiceOrderRepository().getEntityWithID(serviceOrderDTO.getID());
+        ServiceOrder serviceOrder = serviceOrderModule.getServiceOrderRepository().getEntityWithID(serviceOrderDTO.getID());
 
         if(serviceOrder == null)
         {
@@ -191,7 +191,7 @@ public class ServiceOrderModificationService
         }
 
         serviceOrder.registerSale(sale);
-        boolean couldUpdate = maintenanceModule.getServiceOrderRepository().updateEntity(serviceOrder);
+        boolean couldUpdate = serviceOrderModule.getServiceOrderRepository().updateEntity(serviceOrder);
 
         queryService.refreshSelectedEntity();
         serviceOrderViewModel.setRequestWasSuccessful(couldUpdate);
@@ -200,8 +200,8 @@ public class ServiceOrderModificationService
     private void deleteService()
     {
         UUID selectedServiceID = serviceOrderViewModel.getSelectedDTO().getID();
-        MaintenanceModule maintenanceModule = workshop.getMaintenanceModule();
-        maintenanceModule.deleteServiceOrder(selectedServiceID);
+        ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
+        serviceOrderModule.deleteServiceOrder(selectedServiceID);
     }
 
     private ServiceOrder applyEditingsToServiceOrderStep(ServiceOrder originalServiceOrder, int selectedStepIndex)
