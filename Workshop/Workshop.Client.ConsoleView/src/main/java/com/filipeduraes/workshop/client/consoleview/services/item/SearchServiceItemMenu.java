@@ -12,6 +12,15 @@ import com.filipeduraes.workshop.client.viewmodel.FieldType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Menu de pesquisa de itens de serviço.
+ * Permite ao usuário buscar itens de serviço cadastrados no sistema por nome ou descrição,
+ * facilitando a localização e seleção de serviços para operações futuras.
+ *
+ * Este menu é utilizado para navegação e seleção de itens do catálogo de serviços.
+ *
+ * @author Filipe Durães
+ */
 public class SearchServiceItemMenu extends EntitySearchMenu<EntityViewModel<PricedItemDTO>, PricedItemDTO>
 {
     @Override

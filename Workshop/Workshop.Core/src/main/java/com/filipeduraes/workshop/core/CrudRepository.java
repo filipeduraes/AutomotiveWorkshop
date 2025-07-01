@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.core;
 
 import com.filipeduraes.workshop.core.persistence.Persistence;

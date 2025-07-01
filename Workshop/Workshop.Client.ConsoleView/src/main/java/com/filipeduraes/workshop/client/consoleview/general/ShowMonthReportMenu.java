@@ -8,8 +8,24 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.viewmodel.IMonthReportViewModel;
 
+/**
+ * Menu abstrato para exibição de relatórios mensais.
+ * Fornece funcionalidades comuns para solicitar período de relatório e exibir
+ * os dados formatados para o usuário, permitindo seleção de mês e ano específicos.
+ *
+ * Este menu serve como base para diferentes tipos de relatórios mensais do sistema.
+ *
+ * @author Filipe Durães
+ */
 public abstract class ShowMonthReportMenu implements IWorkshopMenu
 {
+    /**
+     * Exibe o menu de relatório mensal, permitindo ao usuário selecionar
+     * o período desejado e exibindo o relatório correspondente.
+     *
+     * @param menuManager gerenciador de menus que controla a navegação
+     * @return resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {
@@ -55,8 +71,22 @@ public abstract class ShowMonthReportMenu implements IWorkshopMenu
         return MenuResult.pop();
     }
 
+    /**
+     * Obtém o ViewModel responsável por gerar o relatório mensal.
+     * Deve ser implementado pelas classes filhas para fornecer o ViewModel
+     * específico do tipo de relatório.
+     *
+     * @param menuManager gerenciador de menus atual
+     * @return ViewModel do relatório mensal
+     */
     protected abstract IMonthReportViewModel getViewModel(MenuManager menuManager);
 
+    /**
+     * Verifica se deve exibir a confirmação de saída após mostrar o relatório.
+     * Pode ser sobrescrito pelas classes filhas para personalizar o comportamento.
+     *
+     * @return true se deve exibir confirmação, false caso contrário
+     */
     protected boolean canShowConfirmation()
     {
         return true;

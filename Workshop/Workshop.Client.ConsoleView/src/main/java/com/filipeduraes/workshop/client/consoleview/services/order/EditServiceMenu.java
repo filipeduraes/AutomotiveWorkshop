@@ -25,8 +25,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Menu para edição de serviços.
- * Permite modificar o cliente, veículo e etapa de um serviço existente.
+ * Menu para edição de ordens de serviço.
+ * Permite ao usuário modificar informações de uma ordem de serviço existente,
+ * incluindo cliente, veículo e etapas do serviço, oferecendo opções específicas para cada tipo de edição.
+ *
+ * Este menu centraliza as operações de manutenção e correção de dados de ordens de serviço.
  *
  * @author Filipe Durães
  */

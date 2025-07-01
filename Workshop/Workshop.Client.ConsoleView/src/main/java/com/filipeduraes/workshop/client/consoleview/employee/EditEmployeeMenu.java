@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.employee;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
@@ -10,6 +12,15 @@ import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
 
+/**
+ * Menu para edição dos dados de um colaborador.
+ * Permite ao usuário alterar informações cadastrais de um funcionário já registrado,
+ * como nome, email, cargo e senha.
+ *
+ * O menu apresenta as opções de campos editáveis e processa a alteração conforme a escolha do usuário.
+ *
+ * @author Filipe Durães
+ */
 public class EditEmployeeMenu implements IWorkshopMenu
 {
     private final FieldType[] editableFields =

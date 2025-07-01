@@ -14,8 +14,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Menu para realizar pesquisa e seleção de colaboradores no sistema.
- * Permite buscar colaboradores por nome, email ou cargo.
+ * Menu de pesquisa de colaboradores.
+ * Permite ao usuário buscar funcionários cadastrados no sistema por diferentes campos,
+ * como nome, email, cargo, entre outros, facilitando a localização e seleção de colaboradores
+ * para operações futuras.
  *
  * @author Filipe Durães
  */

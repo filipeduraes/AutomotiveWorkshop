@@ -14,8 +14,11 @@ import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
 
 /**
- * Menu para edição de dados do cliente.
- * Permite modificar as informações cadastrais de um cliente existente.
+ * Menu para edição dos dados de um cliente.
+ * Permite ao usuário alterar informações cadastrais de um cliente já registrado,
+ * como nome, email, CPF, endereço e telefone.
+ *
+ * O menu apresenta as opções de campos editáveis e processa a alteração conforme a escolha do usuário.
  *
  * @author Filipe Durães
  */

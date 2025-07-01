@@ -15,6 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Serviço responsável por gerenciar os itens de serviço do catálogo da oficina.
+ * Esta classe coordena as operações de registro, busca, edição e exclusão de
+ * itens de serviço, atuando como intermediária entre a interface do usuário
+ * e o catálogo de produtos da oficina.
+ *
+ * @author Filipe Durães
+ */
 public class ServiceItemService
 {
     private final EntityViewModel<PricedItemDTO> serviceItemsViewModel;
@@ -22,6 +30,14 @@ public class ServiceItemService
     private final CrudRepository<PricedItem> catalogRepository;
     private List<PricedItem> queriedServiceItems;
 
+    /**
+     * Constrói um novo serviço de itens de serviço.
+     * Inicializa as referências necessárias e registra os listeners para
+     * responder aos eventos da interface do usuário.
+     *
+     * @param viewModelRegistry registro contendo as referências para os ViewModels
+     * @param workshop instância principal da oficina contendo os módulos do sistema
+     */
     public ServiceItemService(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
         serviceItemsViewModel = viewModelRegistry.getServiceItemsViewModel();
@@ -35,6 +51,10 @@ public class ServiceItemService
         serviceItemsViewModel.OnDeleteRequest.addListener(this::deleteServiceItem);
     }
 
+    /**
+     * Remove todos os listeners registrados nos eventos dos ViewModels.
+     * Deve ser chamado quando o serviço não for mais necessário para evitar vazamento de memória.
+     */
     public void dispose()
     {
         serviceItemsViewModel.OnRegisterRequest.removeListener(this::registerServiceItem);
@@ -44,6 +64,10 @@ public class ServiceItemService
         serviceItemsViewModel.OnDeleteRequest.removeListener(this::deleteServiceItem);
     }
 
+    /**
+     * Registra um novo item de serviço no catálogo.
+     * Cria e adiciona um novo item de serviço com base nos dados fornecidos.
+     */
     private void registerServiceItem()
     {
         PricedItemDTO serviceItemDTO = serviceItemsViewModel.getSelectedDTO();
@@ -54,6 +78,10 @@ public class ServiceItemService
         serviceItemsViewModel.setRequestWasSuccessful(true);
     }
 
+    /**
+     * Busca itens de serviço com base nos critérios especificados.
+     * Executa a busca por nome ou descrição conforme o tipo de campo selecionado.
+     */
     private void searchServiceItems()
     {
         queriedServiceItems = new ArrayList<>();
@@ -69,6 +97,10 @@ public class ServiceItemService
         serviceItemsViewModel.setRequestWasSuccessful(true);
     }
 
+    /**
+     * Carrega os dados detalhados do item de serviço selecionado.
+     * Recupera e atualiza as informações completas do item escolhido.
+     */
     private void loadServiceItem()
     {
         if(!serviceItemsViewModel.hasValidSelectedIndex())
@@ -86,6 +118,10 @@ public class ServiceItemService
         serviceItemsViewModel.setRequestWasSuccessful(true);
     }
 
+    /**
+     * Edita o item de serviço selecionado.
+     * Atualiza as informações do item com base no tipo de campo modificado.
+     */
     private void editServiceItem()
     {
         PricedItem itemWithEditions = getItemWithEditions();
@@ -96,6 +132,10 @@ public class ServiceItemService
         loadServiceItem();
     }
 
+    /**
+     * Exclui o item de serviço selecionado.
+     * Remove permanentemente o item do catálogo de serviços.
+     */
     private void deleteServiceItem()
     {
         PricedItemDTO selectedDTO = serviceItemsViewModel.getSelectedDTO();
@@ -104,6 +144,12 @@ public class ServiceItemService
         serviceItemsViewModel.setRequestWasSuccessful(deletedItem != null);
     }
 
+    /**
+     * Aplica as edições ao item de serviço.
+     * Cria uma cópia do item original e aplica as modificações baseadas no tipo de campo.
+     *
+     * @return item de serviço com as edições aplicadas
+     */
     private PricedItem getItemWithEditions()
     {
         int selectedIndex = serviceItemsViewModel.getSelectedIndex();

@@ -21,6 +21,14 @@ import com.filipeduraes.workshop.core.financial.Sale;
 
 import java.util.UUID;
 
+/**
+ * Serviço responsável por gerenciar as modificações em ordens de serviço.
+ * Esta classe coordena operações de edição, adição de itens de serviço e vendas,
+ * e exclusão de ordens de serviço, atuando como intermediária entre a interface
+ * do usuário e o módulo de manutenção da oficina.
+ *
+ * @author Filipe Durães
+ */
 public class ServiceOrderModificationService
 {
     private final ServiceOrderViewModel serviceOrderViewModel;
@@ -32,6 +40,15 @@ public class ServiceOrderModificationService
     private final Workshop workshop;
     private final ServiceOrderQueryService queryService;
 
+    /**
+     * Constrói um novo serviço de modificação de ordens de serviço.
+     * Inicializa as referências necessárias e registra os listeners para
+     * responder aos eventos da interface do usuário.
+     *
+     * @param viewModelRegistry registro contendo as referências para os ViewModels
+     * @param workshop instância principal da oficina contendo os módulos do sistema
+     * @param queryService serviço de consulta de ordens de serviço
+     */
     public ServiceOrderModificationService(ViewModelRegistry viewModelRegistry, Workshop workshop, ServiceOrderQueryService queryService)
     {
         serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
@@ -51,6 +68,10 @@ public class ServiceOrderModificationService
         serviceOrderViewModel.OnDeleteRequest.addListener(this::deleteService);
     }
 
+    /**
+     * Remove todos os listeners registrados nos eventos dos ViewModels.
+     * Deve ser chamado quando o serviço não for mais necessário para evitar vazamento de memória.
+     */
     public void dispose()
     {
         serviceOrderViewModel.OnEditServiceRequest.removeListener(this::editService);
@@ -60,6 +81,10 @@ public class ServiceOrderModificationService
         serviceOrderViewModel.OnDeleteRequest.removeListener(this::deleteService);
     }
 
+    /**
+     * Edita informações básicas do serviço (cliente ou veículo).
+     * Atualiza os dados do serviço com base no tipo de campo selecionado.
+     */
     private void editService()
     {
         ServiceOrderModule maintenanceModule = workshop.getMaintenanceModule();
@@ -100,6 +125,10 @@ public class ServiceOrderModificationService
         queryService.refreshSelectedEntity();
     }
 
+    /**
+     * Edita uma etapa específica do serviço.
+     * Atualiza as descrições da etapa selecionada com base nos dados fornecidos.
+     */
     private void editServiceStep()
     {
         int selectedStepIndex = serviceOrderViewModel.getSelectedStepIndex();
@@ -135,6 +164,10 @@ public class ServiceOrderModificationService
         serviceOrderViewModel.setRequestWasSuccessful(couldUpdate);
     }
 
+    /**
+     * Adiciona um item de serviço à ordem de serviço.
+     * Registra um novo item de serviço na ordem de serviço selecionada.
+     */
     private void addServiceItem()
     {
         if(!serviceOrderViewModel.hasLoadedDTO() || !serviceItemViewModel.hasLoadedDTO())
@@ -163,6 +196,10 @@ public class ServiceOrderModificationService
         serviceOrderViewModel.setRequestWasSuccessful(couldUpdate);
     }
 
+    /**
+     * Adiciona uma venda à ordem de serviço.
+     * Registra uma venda existente na ordem de serviço selecionada.
+     */
     private void addSale()
     {
         if(!serviceOrderViewModel.hasLoadedDTO() || inventoryViewModel.getSaleID() == null)
@@ -197,6 +234,10 @@ public class ServiceOrderModificationService
         serviceOrderViewModel.setRequestWasSuccessful(couldUpdate);
     }
 
+    /**
+     * Exclui a ordem de serviço selecionada.
+     * Remove permanentemente a ordem de serviço do sistema.
+     */
     private void deleteService()
     {
         UUID selectedServiceID = serviceOrderViewModel.getSelectedDTO().getID();
@@ -204,6 +245,15 @@ public class ServiceOrderModificationService
         serviceOrderModule.deleteServiceOrder(selectedServiceID);
     }
 
+    /**
+     * Aplica as edições à etapa específica da ordem de serviço.
+     * Cria uma cópia da ordem de serviço original e aplica as modificações
+     * na etapa selecionada com base no tipo de campo.
+     *
+     * @param originalServiceOrder ordem de serviço original
+     * @param selectedStepIndex índice da etapa a ser editada
+     * @return ordem de serviço editada ou null se a edição não for possível
+     */
     private ServiceOrder applyEditingsToServiceOrderStep(ServiceOrder originalServiceOrder, int selectedStepIndex)
     {
         ServiceOrder editedServiceOrder = new ServiceOrder(originalServiceOrder);

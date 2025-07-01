@@ -80,6 +80,26 @@ public class VehicleDTO
     }
 
     /**
+     * Obtém o identificador do proprietário do veículo.
+     *
+     * @return identificador do proprietário
+     */
+    public UUID getOwnerID()
+    {
+        return ownerID;
+    }
+
+    /**
+     * Define o identificador do proprietário do veículo.
+     *
+     * @param ownerID novo identificador do proprietário
+     */
+    public void setOwnerID(UUID ownerID)
+    {
+        this.ownerID = ownerID;
+    }
+
+    /**
      * Obtém o modelo do veículo.
      *
      * @return modelo do veículo

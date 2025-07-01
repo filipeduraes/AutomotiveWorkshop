@@ -8,8 +8,11 @@ import com.filipeduraes.workshop.client.consoleview.MenuResult;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 
 /**
- * Menu inicial exibido no primeiro acesso ao sistema.
- * Responsável por iniciar o processo de registro do administrador.
+ * Menu de primeiro acesso ao sistema.
+ * Exibido quando o sistema é acessado pela primeira vez, apresentando uma mensagem
+ * de boas-vindas e direcionando o usuário para o registro do administrador inicial.
+ *
+ * Este menu é responsável pela configuração inicial do sistema da oficina.
  *
  * @author Filipe Durães
  */

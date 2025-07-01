@@ -27,9 +27,13 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
- * Menu principal do sistema que permite a navegação entre os diferentes módulos.
- * Responsável por apresentar e gerenciar as opções de acesso aos módulos de
- * manutenção e cliente.
+ * Menu principal do sistema da oficina.
+ * Este menu é o ponto de entrada para a navegação entre os diferentes módulos do sistema,
+ * como ordens de serviço, clientes, veículos, inventário, colaboradores e financeiro.
+ * As opções apresentadas são adaptadas conforme o perfil do usuário logado (administrador ou não).
+ *
+ * Permite ao usuário acessar rapidamente as principais funcionalidades do sistema,
+ * centralizando a navegação e o fluxo de trabalho.
  *
  * @author Filipe Durães
  */

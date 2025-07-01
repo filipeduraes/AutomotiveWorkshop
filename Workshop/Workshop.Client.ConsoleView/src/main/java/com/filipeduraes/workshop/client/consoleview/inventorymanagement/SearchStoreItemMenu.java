@@ -12,6 +12,15 @@ import com.filipeduraes.workshop.client.viewmodel.FieldType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Menu de pesquisa de itens do inventário.
+ * Permite ao usuário buscar itens cadastrados no inventário por nome ou descrição,
+ * facilitando a localização e seleção de produtos para operações futuras.
+ *
+ * Este menu é utilizado para navegação e seleção de itens do catálogo.
+ *
+ * @author Filipe Durães
+ */
 public class SearchStoreItemMenu extends EntitySearchMenu<EntityViewModel<StoreItemDTO>, StoreItemDTO>
 {
     @Override

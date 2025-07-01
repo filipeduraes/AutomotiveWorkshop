@@ -10,6 +10,15 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.viewmodel.IMonthReportViewModel;
 import com.filipeduraes.workshop.client.viewmodel.InventoryViewModel;
 
+/**
+ * Menu de exibição do relatório mensal de vendas.
+ * Permite ao usuário visualizar todas as vendas registradas no mês atual,
+ * incluindo o valor total das vendas realizadas.
+ *
+ * Este menu é utilizado para controle financeiro e análise de receitas.
+ *
+ * @author Filipe Durães
+ */
 public class ShowMonthSalesMenu extends ShowMonthReportMenu
 {
     @Override

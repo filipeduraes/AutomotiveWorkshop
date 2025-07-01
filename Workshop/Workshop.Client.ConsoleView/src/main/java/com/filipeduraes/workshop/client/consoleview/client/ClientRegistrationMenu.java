@@ -13,8 +13,11 @@ import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 
 /**
- * Menu responsável pelo cadastro de novos clientes no sistema.
- * Coleta informações básicas do cliente como nome, telefone, email, endereço e CPF.
+ * Menu de cadastro de novos clientes.
+ * Responsável por coletar e validar informações básicas do cliente, como nome, telefone,
+ * email, endereço e CPF, para registro no sistema da oficina.
+ *
+ * Este menu centraliza o processo de inclusão de novos clientes na base de dados.
  *
  * @author Filipe Durães
  */

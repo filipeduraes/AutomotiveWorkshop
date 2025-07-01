@@ -54,6 +54,15 @@ public class EmployeeDTO
         this.role = role;
     }
 
+    /**
+     * Cria uma nova instância de EmployeeDTO com informações completas incluindo último ponto.
+     *
+     * @param id Identificador único do funcionário
+     * @param name Nome do funcionário
+     * @param email Email do funcionário
+     * @param role Cargo do funcionário
+     * @param lastClockIn Último tipo de ponto registrado pelo funcionário
+     */
     public EmployeeDTO(UUID id, String name, String email, EmployeeRoleDTO role, ClockInTypeDTO lastClockIn)
     {
         this.id = id;

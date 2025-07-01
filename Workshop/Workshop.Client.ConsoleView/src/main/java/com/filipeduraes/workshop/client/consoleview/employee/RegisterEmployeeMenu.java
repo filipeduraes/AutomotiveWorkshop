@@ -11,8 +11,11 @@ import com.filipeduraes.workshop.client.dtos.EmployeeRoleDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 
 /**
- * Menu responsável pelo cadastro de novos colaboradores no sistema.
- * Coleta e valida informações pessoais e profissionais para registro.
+ * Menu de cadastro de novos colaboradores.
+ * Responsável por coletar e validar informações pessoais e profissionais do funcionário
+ * para registro no sistema da oficina.
+ *
+ * Este menu centraliza o processo de inclusão de novos membros na equipe.
  *
  * @author Filipe Durães
  */

@@ -11,6 +11,15 @@ import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 
 import java.math.BigDecimal;
 
+/**
+ * Menu de registro de novos itens de serviço.
+ * Permite ao usuário registrar novos itens de serviço no catálogo da oficina,
+ * coletando informações como nome, descrição e preço do serviço.
+ *
+ * Este menu centraliza o processo de inclusão de novos serviços no catálogo.
+ *
+ * @author Filipe Durães
+ */
 public class RegisterServiceItemMenu implements IWorkshopMenu
 {
     @Override

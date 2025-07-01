@@ -10,6 +10,15 @@ import com.filipeduraes.workshop.client.dtos.ClockInTypeDTO;
 import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 
+/**
+ * Menu para registro de ponto do colaborador.
+ * Permite ao usuário registrar entrada, saída ou pausas, apresentando apenas as opções
+ * válidas de acordo com o último status registrado do colaborador.
+ *
+ * Este menu é utilizado para controle de jornada e pausas dos funcionários da oficina.
+ *
+ * @author Filipe Durães
+ */
 public class ClockInMenu implements IWorkshopMenu
 {
     @Override

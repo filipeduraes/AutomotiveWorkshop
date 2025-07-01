@@ -11,6 +11,15 @@ import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 
 import java.math.BigDecimal;
 
+/**
+ * Menu de registro de novos itens no inventário.
+ * Permite ao usuário registrar novos itens no inventário da oficina, coletando
+ * informações como nome, descrição, preço e quantidade inicial em estoque.
+ *
+ * Este menu centraliza o processo de inclusão de novos produtos no catálogo.
+ *
+ * @author Filipe Durães
+ */
 public class RegisterStoreItemMenu implements IWorkshopMenu
 {
     @Override

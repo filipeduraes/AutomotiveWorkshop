@@ -10,6 +10,15 @@ import com.filipeduraes.workshop.client.dtos.PricedItemDTO;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
 
+/**
+ * Menu para edição dos dados de um item de serviço.
+ * Permite ao usuário alterar informações de um item de serviço já registrado,
+ * como nome, descrição e preço.
+ *
+ * O menu apresenta as opções de campos editáveis e processa a alteração conforme a escolha do usuário.
+ *
+ * @author Filipe Durães
+ */
 public class EditServiceItemMenu implements IWorkshopMenu
 {
     private final FieldType[] editableFields = { FieldType.NAME, FieldType.DESCRIPTION, FieldType.PRICE };

@@ -22,10 +22,21 @@ import com.filipeduraes.workshop.utils.TextUtils;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * Classe de testes que demonstra funcionalidades específicas do sistema da oficina.
+ * Implementa exemplos práticos de uso das principais funcionalidades, incluindo
+ * iteração, ordenação, busca e operações de CRUD completas.
+ *
+ * @author Filipe Durães
+ */
 public class TestQuestions
 {
     private final Workshop testWorkshop = new Workshop(false);
 
+    /**
+     * Executa todos os testes demonstrativos do sistema.
+     * Inclui exemplos de iteração, ordenação, busca e operações completas de CRUD.
+     */
     public void test()
     {
         CrudRepository<Client> clientRepository = testWorkshop.getClientRepository();

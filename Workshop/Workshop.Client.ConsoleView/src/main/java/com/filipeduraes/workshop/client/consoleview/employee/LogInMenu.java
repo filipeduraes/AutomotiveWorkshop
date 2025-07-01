@@ -10,8 +10,11 @@ import com.filipeduraes.workshop.client.dtos.EmployeeDTO;
 import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 
 /**
- * Implementa o menu de login do sistema da oficina.
- * Gerencia a interface de entrada de credenciais do usuário para autenticação.
+ * Menu de autenticação do sistema.
+ * Responsável por solicitar as credenciais do usuário (email e senha) e processar o login.
+ * Em caso de falha na autenticação, permite nova tentativa ou saída do sistema.
+ *
+ * Este menu é o ponto de entrada para o acesso ao sistema da oficina.
  *
  * @author Filipe Durães
  */

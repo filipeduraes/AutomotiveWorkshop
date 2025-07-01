@@ -50,6 +50,14 @@ public class ProductCatalog
         return storeItemsRepository;
     }
 
+    /**
+     * Adiciona estoque a um item da loja.
+     * Verifica se o item existe e se a quantidade a ser adicionada é válida.
+     *
+     * @param itemID identificador único do item a ser reabastecido
+     * @param addedStockAmount quantidade de estoque a ser adicionada
+     * @return true se o reabastecimento foi bem-sucedido, false caso contrário
+     */
     public boolean restockStoreItem(UUID itemID, int addedStockAmount)
     {
         StoreItem originalStoreItem = storeItemsRepository.getEntityWithID(itemID);

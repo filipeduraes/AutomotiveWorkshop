@@ -16,9 +16,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Menu responsável por pesquisar e exibir clientes cadastrados no sistema.
- * Permite que o usuário busque clientes pelo nome, visualize os resultados
- * da pesquisa e selecione um cliente específico para ver seus detalhes.
+ * Menu de pesquisa de clientes.
+ * Permite ao usuário buscar clientes cadastrados no sistema por diferentes campos,
+ * como nome, CPF, email e telefone, facilitando a localização e seleção de clientes
+ * para operações futuras.
  *
  * @author Filipe Durães
  */

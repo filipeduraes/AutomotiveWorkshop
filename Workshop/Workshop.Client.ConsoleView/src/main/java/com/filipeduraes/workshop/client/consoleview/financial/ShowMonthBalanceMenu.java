@@ -6,6 +6,15 @@ import com.filipeduraes.workshop.client.consoleview.MenuManager;
 import com.filipeduraes.workshop.client.consoleview.general.ShowMonthReportMenu;
 import com.filipeduraes.workshop.client.viewmodel.IMonthReportViewModel;
 
+/**
+ * Menu de exibição do balanço financeiro mensal.
+ * Permite ao usuário visualizar o balanço financeiro da oficina no mês atual,
+ * mostrando a diferença entre receitas e despesas.
+ *
+ * Este menu é utilizado para análise da performance financeira da oficina.
+ *
+ * @author Filipe Durães
+ */
 public class ShowMonthBalanceMenu extends ShowMonthReportMenu
 {
     @Override

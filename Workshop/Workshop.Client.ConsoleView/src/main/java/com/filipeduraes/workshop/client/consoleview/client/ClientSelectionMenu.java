@@ -10,8 +10,11 @@ import com.filipeduraes.workshop.client.dtos.ClientDTO;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 
 /**
- * Menu de seleção de clientes que gerencia as operações de escolha de cliente.
- * Fornece acesso aos submenus de registro e pesquisa para seleção de clientes.
+ * Menu de seleção de clientes.
+ * Gerencia as operações de escolha de cliente, fornecendo acesso aos submenus de registro
+ * e pesquisa. Se um cliente já estiver selecionado, exibe suas informações e retorna ao menu anterior.
+ *
+ * Este menu facilita o processo de identificação e seleção de clientes para operações futuras.
  *
  * @author Filipe Durães
  */

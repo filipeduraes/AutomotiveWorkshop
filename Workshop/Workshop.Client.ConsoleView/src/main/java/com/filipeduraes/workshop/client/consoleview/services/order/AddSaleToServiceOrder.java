@@ -10,16 +10,36 @@ import com.filipeduraes.workshop.client.consoleview.inventorymanagement.Register
 import com.filipeduraes.workshop.client.viewmodel.InventoryViewModel;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 
+/**
+ * Menu para adicionar vendas a uma ordem de serviço.
+ * Permite registrar uma nova venda e associá-la à ordem de serviço atual,
+ * redirecionando para o menu de registro de venda se necessário.
+ *
+ * @author Filipe Durães
+ */
 public class AddSaleToServiceOrder implements IWorkshopMenu
 {
     private final PopupMenuRedirector redirector = new PopupMenuRedirector(new RegisterSaleMenu());
 
+    /**
+     * Obtém o nome de exibição do menu.
+     *
+     * @return nome do menu para exibição
+     */
     @Override
     public String getMenuDisplayName()
     {
         return "Adicionar venda a ordem de servico";
     }
 
+    /**
+     * Exibe o menu de adição de venda à ordem de serviço.
+     * Se não houver uma venda selecionada, redireciona para o menu de registro.
+     * Caso contrário, adiciona a venda à ordem de serviço atual.
+     *
+     * @param menuManager gerenciador de menus que controla a navegação
+     * @return resultado da operação do menu
+     */
     @Override
     public MenuResult showMenu(MenuManager menuManager)
     {

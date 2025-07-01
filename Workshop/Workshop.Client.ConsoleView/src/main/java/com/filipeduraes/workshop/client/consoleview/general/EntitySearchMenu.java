@@ -11,6 +11,15 @@ import com.filipeduraes.workshop.client.viewmodel.FieldType;
 
 import java.util.Map;
 
+/**
+ * Menu abstrato para busca de entidades no sistema.
+ * Fornece funcionalidades comuns de busca, incluindo seleção de campo de busca,
+ * entrada de dados e seleção de resultados encontrados.
+ *
+ * @param <TViewModel> tipo do ViewModel que gerencia os dados da entidade
+ * @param <TEntityDTO> tipo do DTO que representa a entidade
+ * @author Filipe Durães
+ */
 public abstract class EntitySearchMenu<TViewModel extends EntityViewModel<TEntityDTO>, TEntityDTO> implements IWorkshopMenu
 {
     private boolean alreadyRedirected = false;
@@ -100,7 +109,23 @@ public abstract class EntitySearchMenu<TViewModel extends EntityViewModel<TEntit
         return MenuResult.pop();
     }
 
+    /**
+     * Obtém as estratégias de entrada de busca disponíveis para cada tipo de campo.
+     * Deve ser implementado pelas classes filhas para definir como cada campo
+     * deve ser tratado durante a busca.
+     *
+     * @return mapa associando tipos de campo às suas estratégias de entrada
+     */
     protected abstract Map<FieldType, SearchInputStrategy> getSearchInputStrategies();
+    
+    /**
+     * Obtém o ViewModel responsável por gerenciar os dados da entidade.
+     * Deve ser implementado pelas classes filhas para fornecer o ViewModel
+     * específico da entidade sendo buscada.
+     *
+     * @param menuManager gerenciador de menus atual
+     * @return ViewModel da entidade
+     */
     protected abstract TViewModel getViewModel(MenuManager menuManager);
 
 }

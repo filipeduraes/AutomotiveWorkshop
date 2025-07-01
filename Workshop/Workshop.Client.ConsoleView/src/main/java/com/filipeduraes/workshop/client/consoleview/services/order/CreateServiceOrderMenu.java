@@ -17,8 +17,10 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 
 /**
  * Menu para criação de ordens de serviço.
- * Permite selecionar cliente, veículo e registrar descrições do problema
- * para criar uma nova ordem de serviço.
+ * Permite ao usuário criar novas ordens de serviço, selecionando cliente, veículo
+ * e registrando descrições do problema para iniciar o processo de manutenção.
+ *
+ * Este menu centraliza o processo de abertura de novos serviços na oficina.
  *
  * @author Filipe Durães
  */

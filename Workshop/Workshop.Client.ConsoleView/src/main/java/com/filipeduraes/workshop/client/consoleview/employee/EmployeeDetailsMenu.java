@@ -12,9 +12,11 @@ import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import java.util.List;
 
 /**
- * Menu para exibição e gerenciamento de detalhes de funcionários.
- * Fornece funcionalidades para visualizar informações detalhadas de um funcionário
- * e realizar operações relacionadas.
+ * Menu para exibição e gerenciamento dos detalhes de um colaborador.
+ * Permite visualizar informações detalhadas do funcionário selecionado e acessar opções
+ * para edição de dados. Caso nenhum colaborador esteja selecionado, redireciona para o menu de busca.
+ *
+ * Este menu centraliza as operações de consulta e manutenção de dados de funcionários.
  *
  * @author Filipe Durães
  */

@@ -14,7 +14,10 @@ import com.filipeduraes.workshop.client.viewmodel.service.ServiceQueryType;
 
 /**
  * Menu de consulta de serviços da oficina.
- * Permite buscar e visualizar serviços utilizando diferentes tipos de filtros.
+ * Permite ao usuário buscar e visualizar serviços utilizando diferentes tipos de filtros,
+ * como cliente ou descrição, facilitando a localização e seleção de serviços para operações futuras.
+ *
+ * Este menu centraliza as operações de consulta e busca de ordens de serviço.
  *
  * @author Filipe Durães
  */

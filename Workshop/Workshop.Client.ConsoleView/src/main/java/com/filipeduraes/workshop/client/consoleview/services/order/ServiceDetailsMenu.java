@@ -17,7 +17,10 @@ import java.util.List;
 
 /**
  * Menu para visualização e manipulação dos detalhes de uma ordem de serviço.
- * Permite iniciar e finalizar etapas do serviço, além de editar informações da ordem.
+ * Permite ao usuário iniciar e finalizar etapas do serviço, editar informações da ordem
+ * e adicionar serviços prestados ou peças utilizadas durante o processo.
+ *
+ * Este menu centraliza as operações de controle e acompanhamento de ordens de serviço.
  *
  * @author Filipe Durães
  */

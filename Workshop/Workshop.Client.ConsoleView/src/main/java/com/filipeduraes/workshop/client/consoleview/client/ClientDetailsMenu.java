@@ -14,7 +14,10 @@ import java.util.List;
 
 /**
  * Menu para exibição e gerenciamento dos detalhes de um cliente.
- * Permite visualizar informações detalhadas e editar dados do cliente selecionado.
+ * Permite visualizar informações detalhadas do cliente selecionado e acessar opções
+ * para edição de dados. Caso nenhum cliente esteja selecionado, redireciona para o menu de busca.
+ *
+ * Este menu centraliza as operações de consulta e manutenção de dados de clientes.
  *
  * @author Filipe Durães
  */

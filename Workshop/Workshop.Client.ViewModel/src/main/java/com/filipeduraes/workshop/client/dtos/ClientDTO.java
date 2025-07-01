@@ -21,6 +21,9 @@ public class ClientDTO
     private String address = "";
     private String cpf = "";
 
+    /**
+     * Cria uma nova instância vazia de ClientDTO.
+     */
     public ClientDTO() { }
 
     /**
@@ -69,6 +72,16 @@ public class ClientDTO
     public UUID getID()
     {
         return id;
+    }
+
+    /**
+     * Define o identificador único do cliente.
+     *
+     * @param id novo identificador único do cliente
+     */
+    public void setID(UUID id)
+    {
+        this.id = id;
     }
 
     /**
@@ -169,11 +182,6 @@ public class ClientDTO
     public void setCpf(String cpf)
     {
         this.cpf = cpf;
-    }
-
-    public void setID(UUID id)
-    {
-        this.id = id;
     }
 
     /**

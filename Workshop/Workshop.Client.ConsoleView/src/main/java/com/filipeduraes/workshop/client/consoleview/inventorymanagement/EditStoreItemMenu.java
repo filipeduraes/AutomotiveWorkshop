@@ -10,6 +10,15 @@ import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
 import com.filipeduraes.workshop.client.viewmodel.FieldType;
 import com.filipeduraes.workshop.client.viewmodel.InventoryViewModel;
 
+/**
+ * Menu para edição dos dados de um item do inventário.
+ * Permite ao usuário alterar informações de um item já registrado no inventário,
+ * como nome, descrição e preço.
+ *
+ * O menu apresenta as opções de campos editáveis e processa a alteração conforme a escolha do usuário.
+ *
+ * @author Filipe Durães
+ */
 public class EditStoreItemMenu implements IWorkshopMenu
 {
     private final FieldType[] editableFields = { FieldType.NAME, FieldType.DESCRIPTION, FieldType.PRICE };

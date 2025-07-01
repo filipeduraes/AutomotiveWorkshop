@@ -132,6 +132,13 @@ public class ServiceOrderDTO
         return vehicleID;
     }
 
+    /**
+     * Verifica se a ordem de serviço foi finalizada.
+     * Uma ordem é considerada finalizada quando está na etapa de manutenção
+     * e a última etapa foi concluída.
+     *
+     * @return true se a ordem de serviço foi finalizada, false caso contrário
+     */
     public boolean isFinished()
     {
         return getServiceStep() == ServiceStepTypeDTO.MAINTENANCE && steps.get(steps.size() - 1).getHasBeenFinished();

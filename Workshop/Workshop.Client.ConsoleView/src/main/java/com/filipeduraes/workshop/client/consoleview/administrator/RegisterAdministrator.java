@@ -14,8 +14,11 @@ import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 
 /**
- * Menu para cadastro de um novo administrador no sistema.
- * Permite a criação de uma nova conta de administrador com nome, email e senha.
+ * Menu de cadastro de administrador.
+ * Permite ao usuário cadastrar um novo administrador no sistema, coletando nome, email e senha.
+ * Após o cadastro bem-sucedido, o usuário é automaticamente logado e redirecionado para o menu principal.
+ *
+ * Este menu é utilizado para configuração inicial do sistema e criação de contas administrativas.
  *
  * @author Filipe Durães
  */

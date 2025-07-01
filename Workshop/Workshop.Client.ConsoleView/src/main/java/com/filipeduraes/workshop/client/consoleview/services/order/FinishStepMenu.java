@@ -1,3 +1,5 @@
+// Copyright Filipe Durães. All rights reserved.
+
 package com.filipeduraes.workshop.client.consoleview.services.order;
 
 import com.filipeduraes.workshop.client.consoleview.IWorkshopMenu;
@@ -12,6 +14,15 @@ import com.filipeduraes.workshop.client.viewmodel.EmployeeViewModel;
 import com.filipeduraes.workshop.client.viewmodel.ViewModelRegistry;
 import com.filipeduraes.workshop.client.viewmodel.service.ServiceOrderViewModel;
 
+/**
+ * Menu para finalização de etapas de uma ordem de serviço.
+ * Permite ao usuário finalizar etapas de uma ordem de serviço, coletando descrições
+ * do trabalho realizado e, quando necessário, selecionando o funcionário responsável pela etapa.
+ *
+ * Este menu centraliza o processo de conclusão de etapas de manutenção.
+ *
+ * @author Filipe Durães
+ */
 public class FinishStepMenu implements IWorkshopMenu
 {
     private final PopupMenuRedirector redirector = new PopupMenuRedirector(new EmployeeSearchMenu());

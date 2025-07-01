@@ -9,6 +9,15 @@ import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.dtos.StoreItemDTO;
 import com.filipeduraes.workshop.client.viewmodel.InventoryViewModel;
 
+/**
+ * Menu de reposição de estoque de itens.
+ * Permite ao usuário repor o estoque de um item do inventário, adicionando
+ * uma quantidade específica ao estoque atual do item selecionado.
+ *
+ * Este menu é utilizado para controle de inventário e gestão de estoque.
+ *
+ * @author Filipe Durães
+ */
 public class RestockStoreItemMenu implements IWorkshopMenu
 {
     @Override

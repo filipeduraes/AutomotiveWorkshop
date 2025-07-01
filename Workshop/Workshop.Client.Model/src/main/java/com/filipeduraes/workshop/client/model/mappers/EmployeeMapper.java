@@ -103,6 +103,12 @@ public class EmployeeMapper
         };
     }
 
+    /**
+     * Converte um tipo de registro de ponto do domínio para sua representação DTO.
+     *
+     * @param clockInType o tipo de registro de ponto a ser convertido
+     * @return o DTO correspondente ao tipo de registro
+     */
     public static ClockInTypeDTO toClockInTypeDTO(ClockInType clockInType)
     {
         return switch (clockInType)
@@ -114,6 +120,12 @@ public class EmployeeMapper
         };
     }
 
+    /**
+     * Converte um DTO de tipo de registro de ponto para um objeto ClockInType do domínio.
+     *
+     * @param clockInType o DTO do tipo de registro a ser convertido
+     * @return o objeto ClockInType correspondente
+     */
     public static ClockInType fromClockInTypeDTO(ClockInTypeDTO clockInType)
     {
         return switch (clockInType)

@@ -16,6 +16,14 @@ import com.filipeduraes.workshop.core.maintenance.ServiceOrder;
 
 import java.util.UUID;
 
+/**
+ * Serviço responsável por gerenciar o ciclo de vida das ordens de serviço.
+ * Esta classe coordena as operações de criação, início e finalização de etapas
+ * dos serviços, atuando como intermediária entre a interface do usuário e o módulo
+ * de manutenção da oficina.
+ *
+ * @author Filipe Durães
+ */
 public class ServiceOrderLifecycleService
 {
     private final EntityViewModel<VehicleDTO> vehicleViewModel;
@@ -27,6 +35,15 @@ public class ServiceOrderLifecycleService
 
     private final ServiceOrderQueryService queryService;
 
+    /**
+     * Constrói um novo serviço de ciclo de vida de ordens de serviço.
+     * Inicializa as referências necessárias e registra os listeners para
+     * responder aos eventos da interface do usuário.
+     *
+     * @param viewModelRegistry registro contendo as referências para os ViewModels
+     * @param workshop instância principal da oficina contendo os módulos do sistema
+     * @param queryService serviço de consulta de ordens de serviço
+     */
     public ServiceOrderLifecycleService(ViewModelRegistry viewModelRegistry, Workshop workshop, ServiceOrderQueryService queryService)
     {
         serviceOrderViewModel = viewModelRegistry.getServiceOrderViewModel();
@@ -42,6 +59,10 @@ public class ServiceOrderLifecycleService
         serviceOrderViewModel.OnFinishStepRequest.addListener(this::finishCurrentStep);
     }
 
+    /**
+     * Remove todos os listeners registrados nos eventos dos ViewModels.
+     * Deve ser chamado quando o serviço não for mais necessário para evitar vazamento de memória.
+     */
     public void dispose()
     {
         serviceOrderViewModel.OnRegisterAppointmentRequest.removeListener(this::registerNewService);
@@ -49,6 +70,10 @@ public class ServiceOrderLifecycleService
         serviceOrderViewModel.OnFinishStepRequest.removeListener(this::finishCurrentStep);
     }
 
+    /**
+     * Registra um novo agendamento de serviço.
+     * Cria uma nova ordem de serviço com base nos dados selecionados na interface.
+     */
     private void registerNewService()
     {
         ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
@@ -69,6 +94,10 @@ public class ServiceOrderLifecycleService
         }
     }
 
+    /**
+     * Inicia a próxima etapa do serviço.
+     * Avança o serviço para a próxima etapa disponível (inspeção ou manutenção).
+     */
     private void startNextStep()
     {
         ServiceOrderDTO serviceOrderDTO = serviceOrderViewModel.getSelectedDTO();
@@ -99,6 +128,10 @@ public class ServiceOrderLifecycleService
         serviceOrderViewModel.setRequestWasSuccessful(canStartNextStep);
     }
 
+    /**
+     * Finaliza a etapa atual do serviço.
+     * Completa a etapa atual (inspeção ou manutenção) com as descrições fornecidas.
+     */
     private void finishCurrentStep()
     {
         String shortDescription = serviceOrderViewModel.getCurrentStepShortDescription();

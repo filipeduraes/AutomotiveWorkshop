@@ -8,6 +8,15 @@ import com.filipeduraes.workshop.client.consoleview.general.EntityDetailsMenu;
 import com.filipeduraes.workshop.client.dtos.VehicleDTO;
 import com.filipeduraes.workshop.client.viewmodel.EntityViewModel;
 
+/**
+ * Menu para exibição dos detalhes de um veículo.
+ * Permite visualizar informações detalhadas do veículo selecionado. Caso nenhum veículo
+ * esteja selecionado, redireciona para o menu de busca de veículos.
+ *
+ * Este menu centraliza as operações de consulta de dados de veículos.
+ *
+ * @author Filipe Durães
+ */
 public class VehicleDetailsMenu extends EntityDetailsMenu<EntityViewModel<VehicleDTO>, VehicleDTO>
 {
     private boolean alreadyRedirected = false;

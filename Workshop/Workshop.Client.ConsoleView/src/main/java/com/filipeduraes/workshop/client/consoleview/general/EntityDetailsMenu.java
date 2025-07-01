@@ -14,7 +14,10 @@ import java.util.List;
 
 /**
  * Menu abstrato para exibição e manipulação de detalhes de uma entidade.
- * Permite visualizar informações detalhadas e executar operações sobre a entidade selecionada.
+ * Fornece funcionalidades comuns para visualizar informações detalhadas e executar
+ * operações sobre a entidade selecionada, como exclusão e outras ações específicas.
+ *
+ * Este menu serve como base para diferentes tipos de entidades do sistema.
  *
  * @param <TViewModel> tipo do ViewModel que gerencia os dados da entidade
  * @param <TEntityDTO> tipo do DTO que representa a entidade

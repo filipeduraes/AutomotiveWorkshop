@@ -9,6 +9,16 @@ import com.filipeduraes.workshop.client.consoleview.PopupMenuRedirector;
 import com.filipeduraes.workshop.client.consoleview.input.ConsoleInput;
 import com.filipeduraes.workshop.client.viewmodel.InventoryViewModel;
 
+/**
+ * Menu de registro de vendas de itens.
+ * Permite ao usuário registrar vendas de itens do inventário, coletando a quantidade
+ * vendida e processando a transação. O menu verifica a disponibilidade em estoque
+ * antes de permitir a venda.
+ *
+ * Este menu centraliza o processo de controle de vendas e atualização de estoque.
+ *
+ * @author Filipe Durães
+ */
 public class RegisterSaleMenu implements IWorkshopMenu
 {
     private final PopupMenuRedirector redirector = new PopupMenuRedirector(new SearchStoreItemMenu());

@@ -22,12 +22,19 @@ import com.filipeduraes.workshop.utils.TextUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Controlador responsável por gerenciar todas as operações financeiras da oficina.
+ * Esta classe coordena o registro de despesas, geração de relatórios financeiros
+ * e balanços mensais, atuando como intermediária entre a interface do usuário
+ * e os módulos financeiros da oficina.
+ *
+ * @author Filipe Durães
+ */
 public class FinanceController
 {
     private final InventoryService inventoryService;
@@ -40,6 +47,14 @@ public class FinanceController
     private final Store store;
     private final Workshop workshop;
 
+    /**
+     * Constrói um novo controlador financeiro.
+     * Inicializa os serviços de inventário e itens de serviço, e registra os listeners
+     * para responder aos eventos da interface do usuário.
+     *
+     * @param viewModelRegistry registro contendo as referências para os ViewModels
+     * @param workshop instância principal da oficina contendo os módulos do sistema
+     */
     public FinanceController(ViewModelRegistry viewModelRegistry, Workshop workshop)
     {
         this.workshop = workshop;
@@ -57,6 +72,10 @@ public class FinanceController
         financialViewModel.OnBalanceReportRequested.addListener(this::generateMonthBalanceReport);
     }
 
+    /**
+     * Remove todos os listeners registrados nos eventos dos ViewModels.
+     * Deve ser chamado quando o controlador não for mais necessário para evitar vazamento de memória.
+     */
     public void dispose()
     {
         expenseViewModel.OnExpenseRegisterRequested.removeListener(this::registerExpense);
@@ -67,6 +86,10 @@ public class FinanceController
         serviceItemService.dispose();
     }
 
+    /**
+     * Registra uma nova despesa no sistema financeiro.
+     * Cria e adiciona uma nova despesa com base nos dados fornecidos.
+     */
     private void registerExpense()
     {
         ExpenseDTO expenseDTO = expenseViewModel.getSelectedExpense();
@@ -75,6 +98,10 @@ public class FinanceController
         expenseViewModel.setRequestWasSuccessful(true);
     }
 
+    /**
+     * Gera o relatório de despesas do mês selecionado.
+     * Recupera todas as despesas do período e formata em um relatório legível.
+     */
     private void generateExpensesMonthReport()
     {
         LocalDateTime date = getTimeFromMonthAndYear(expenseViewModel.getSelectedMonth(), expenseViewModel.getSelectedYear());
@@ -88,6 +115,11 @@ public class FinanceController
         expenseViewModel.setRequestWasSuccessful(true);
     }
 
+    /**
+     * Gera o relatório de balanço mensal completo.
+     * Calcula receitas (vendas diretas e ordens de serviço) e despesas,
+     * apresentando um balanço detalhado do período.
+     */
     private void generateMonthBalanceReport()
     {
         ServiceOrderModule serviceOrderModule = workshop.getMaintenanceModule();
@@ -138,6 +170,14 @@ public class FinanceController
         financialViewModel.setRequestWasSuccessful(true);
     }
 
+    /**
+     * Adiciona as vendas diretas da loja ao relatório.
+     * Formata e inclui as vendas que não estão associadas a ordens de serviço.
+     *
+     * @param builder StringBuilder para construir o relatório
+     * @param detachedSales lista de vendas diretas da loja
+     * @param totalPrice preço total das vendas formatado
+     */
     private static void appendDetachedSales(StringBuilder builder, List<Sale> detachedSales, String totalPrice)
     {
         TextUtils.appendSubtitle(builder, "Vendas Diretas na Loja");
@@ -165,6 +205,14 @@ public class FinanceController
         TextUtils.appendFirstList(builder, String.format("TOTAL VENDAS LOJA: %s%n", totalPrice), '+');
     }
 
+    /**
+     * Adiciona as receitas das ordens de serviço concluídas ao relatório.
+     * Formata e inclui os detalhes de cada ordem de serviço finalizada.
+     *
+     * @param builder StringBuilder para construir o relatório
+     * @param closedServiceOrders lista de ordens de serviço concluídas
+     * @param totalPrice preço total das ordens formatado
+     */
     private void appendServiceOrders(StringBuilder builder, List<ServiceOrder> closedServiceOrders, String totalPrice)
     {
         TextUtils.appendSubtitle(builder, "Receitas de Ordens de Servico Concluidas");
@@ -200,6 +248,14 @@ public class FinanceController
         TextUtils.appendFirstList(builder, String.format("TOTAL OS: %s", totalPrice), '+');
     }
 
+    /**
+     * Adiciona as despesas do mês ao relatório.
+     * Formata e inclui todas as despesas registradas no período.
+     *
+     * @param builder StringBuilder para construir o relatório
+     * @param monthExpenses lista de despesas do mês
+     * @param totalPrice preço total das despesas formatado
+     */
     private void appendExpenses(StringBuilder builder, List<Expense> monthExpenses, String totalPrice)
     {
         TextUtils.appendSectionTitle(builder, "- DESPESAS");
@@ -226,6 +282,12 @@ public class FinanceController
         builder.append(String.format("TOTAL DESPESAS: %s", totalPrice));
     }
 
+    /**
+     * Calcula o preço total de uma lista de vendas.
+     *
+     * @param sales lista de vendas para calcular o total
+     * @return valor total das vendas
+     */
     private BigDecimal getTotalSalesPrice(List<Sale> sales)
     {
         return sales.stream()
@@ -233,6 +295,12 @@ public class FinanceController
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    /**
+     * Calcula o preço total de uma lista de ordens de serviço.
+     *
+     * @param serviceOrders lista de ordens de serviço para calcular o total
+     * @return valor total das ordens de serviço
+     */
     private BigDecimal getTotalServiceOrdersPrice(List<ServiceOrder> serviceOrders)
     {
         return serviceOrders.stream()
@@ -240,6 +308,12 @@ public class FinanceController
                             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    /**
+     * Calcula o valor total de uma lista de despesas.
+     *
+     * @param expenses lista de despesas para calcular o total
+     * @return valor total das despesas
+     */
     private BigDecimal getTotalExpenses(List<Expense> expenses)
     {
         return expenses.stream()
@@ -247,6 +321,15 @@ public class FinanceController
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    /**
+     * Converte mês e ano em uma data LocalDateTime.
+     * Se o mês for inválido, retorna a data atual.
+     * Se o ano for inválido, usa o ano atual.
+     *
+     * @param month mês (1-12)
+     * @param year ano
+     * @return LocalDateTime representando o primeiro dia do mês/ano especificado
+     */
     private LocalDateTime getTimeFromMonthAndYear(int month, int year)
     {
         if(month <= 0)

@@ -14,8 +14,10 @@ import com.filipeduraes.workshop.client.viewmodel.FieldType;
 import java.util.Map;
 
 /**
- * Menu para seleção de veículo já cadastrado para um cliente.
- * Permite visualizar e selecionar veículos registrados no sistema.
+ * Menu de seleção de veículos para um cliente.
+ * Permite ao usuário visualizar e selecionar veículos já cadastrados no sistema
+ * para um cliente específico, facilitando a identificação e escolha de veículos
+ * para operações futuras.
  *
  * @author Filipe Durães
  */

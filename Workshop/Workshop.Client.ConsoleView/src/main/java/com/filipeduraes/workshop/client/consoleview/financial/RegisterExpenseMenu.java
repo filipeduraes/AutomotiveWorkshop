@@ -11,6 +11,15 @@ import com.filipeduraes.workshop.client.viewmodel.ExpenseViewModel;
 
 import java.math.BigDecimal;
 
+/**
+ * Menu de registro de despesas.
+ * Permite ao usuário registrar novas despesas no sistema, coletando descrição
+ * e valor da despesa para controle financeiro da oficina.
+ *
+ * Este menu centraliza o processo de inclusão de gastos na base de dados.
+ *
+ * @author Filipe Durães
+ */
 public class RegisterExpenseMenu implements IWorkshopMenu
 {
     @Override
