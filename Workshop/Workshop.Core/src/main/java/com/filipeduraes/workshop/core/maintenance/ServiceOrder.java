@@ -195,7 +195,8 @@ public class ServiceOrder extends WorkshopEntity
     }
 
     /**
-     * Registra uma nova venda realizada para a ordem de serviço
+     * Registra uma nova venda realizada para a ordem de serviço.
+     * Adiciona a venda à lista de vendas associadas a esta ordem.
      *
      * @param sale venda realizada
      */
@@ -205,7 +206,8 @@ public class ServiceOrder extends WorkshopEntity
     }
 
     /**
-     * Registra um novo serviço realizado e atribui o responsável atual a ele
+     * Registra um novo serviço realizado e atribui o responsável atual a ele.
+     * Cria um ServiceItem com o serviço e o funcionário responsável pela etapa atual.
      *
      * @param service serviço realizado
      */
@@ -218,8 +220,9 @@ public class ServiceOrder extends WorkshopEntity
 
     /**
      * Obtém todos os serviços prestados na ordem de serviço.
+     * Inicializa a lista se ela for null antes de retornar.
      *
-     * @return os serviços prestados
+     * @return lista dos serviços prestados
      */
     public List<ServiceItem> getServices()
     {
@@ -233,8 +236,9 @@ public class ServiceOrder extends WorkshopEntity
 
     /**
      * Obtém todas as vendas realizadas na ordem de serviço.
+     * Inicializa a lista se ela for null antes de retornar.
      *
-     * @return as vendas realizadas
+     * @return lista das vendas realizadas
      */
     public List<Sale> getSales()
     {
@@ -246,6 +250,10 @@ public class ServiceOrder extends WorkshopEntity
         return sales;
     }
 
+    /**
+     * Finaliza a etapa atual do serviço.
+     * Chama o método finishStep() da etapa atual se existir alguma etapa.
+     */
     private void finishCurrentStep()
     {
         if (!steps.isEmpty())
@@ -254,6 +262,12 @@ public class ServiceOrder extends WorkshopEntity
         }
     }
 
+    /**
+     * Calcula o preço total da ordem de serviço.
+     * Soma o valor total das vendas com o valor total dos serviços.
+     *
+     * @return valor total da ordem de serviço
+     */
     public BigDecimal getTotalPrice()
     {
         BigDecimal totalPrice = BigDecimal.ZERO;
@@ -264,6 +278,12 @@ public class ServiceOrder extends WorkshopEntity
         return totalPrice;
     }
 
+    /**
+     * Calcula o preço total das vendas realizadas na ordem de serviço.
+     * Soma o valor total de todas as vendas registradas.
+     *
+     * @return valor total das vendas
+     */
     public BigDecimal getSalesPrice()
     {
         BigDecimal totalPrice = BigDecimal.ZERO;
@@ -276,6 +296,12 @@ public class ServiceOrder extends WorkshopEntity
         return totalPrice;
     }
 
+    /**
+     * Calcula o preço total dos serviços prestados na ordem de serviço.
+     * Soma o valor de todos os serviços registrados.
+     *
+     * @return valor total dos serviços
+     */
     public BigDecimal getServicesPrice()
     {
         BigDecimal totalPrice = BigDecimal.ZERO;
