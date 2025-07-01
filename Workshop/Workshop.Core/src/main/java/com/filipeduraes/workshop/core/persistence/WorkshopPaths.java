@@ -32,10 +32,6 @@ public final class WorkshopPaths
      */
     public static final String ELEVATORS_PATH = DATA_DIRECTORY_PATH + "Elevators" + FILE_EXTENSION;
     /**
-     * Caminho para o arquivo de serviços finalizados
-     */
-    public static final String FINISHED_SERVICES_PATH = DATA_DIRECTORY_PATH + "FinishedServices" + FILE_EXTENSION;
-    /**
      * Caminho para o arquivo de clientes registrados
      */
     public static final String REGISTERED_CLIENTS_PATH = DATA_DIRECTORY_PATH + "Clients" + FILE_EXTENSION;

@@ -22,7 +22,6 @@ public class Vehicle extends WorkshopEntity
     private String vinNumber;
     private String licensePlate;
     private int year;
-    private VehicleStatus status = VehicleStatus.RECEIVED;
 
     public Vehicle()
     {
@@ -80,26 +79,6 @@ public class Vehicle extends WorkshopEntity
     public String getLicensePlate()
     {
         return licensePlate;
-    }
-
-    /**
-     * Obtém o status atual do veículo na oficina.
-     *
-     * @return status atual do veículo
-     */
-    public VehicleStatus getStatus()
-    {
-        return status;
-    }
-
-    /**
-     * Atualiza o status do veículo na oficina.
-     *
-     * @param status novo status do veículo
-     */
-    public void setStatus(VehicleStatus status)
-    {
-        this.status = status;
     }
 
     /**

@@ -17,7 +17,7 @@ public enum EmployeeRole
     /**
      * O nome de exibição do cargo
      */
-    private String displayName;
+    private final String displayName;
 
     /**
      * Constrói um EmployeeRole com o nome de exibição especificado.

@@ -19,12 +19,12 @@ public class SerializationAdapter
      * Inicializa um novo grupo de adaptadores de serialização.
      *
      * @param type O tipo da classe a ser serializada/deserializada
-     * @param serializer O adaptador de serialização JSON para o tipo especificado
+     * @param adapter O adaptador de serialização JSON para o tipo especificado
      */
-    public SerializationAdapter(Class<?> type, TypeAdapter<?> serializer)
+    public SerializationAdapter(Class<?> type, TypeAdapter<?> adapter)
     {
         this.type = type;
-        this.adapter = serializer;
+        this.adapter = adapter;
     }
 
     /**
